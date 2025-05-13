@@ -1,22 +1,26 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import FacultyTable from "./components/FacultyTable";
 import TimeTable from "./components/TimeTable";
 
-function convertToSlot(timetable: IFacultyData[][]): ITimeTable[] {
-  const slots: ITimeTable[] = [];
+function convertToSlot(timetable: IFacultyData[]): slot[] {
+  const slots: slot[] = [];
   return slots;
 }
 export default function TimeTableFacultyShowcase({
   initialFacultyData,
 }: {
-  initialFacultyData: IFacultyData[][];
+  initialFacultyData: IFacultyData[];
 }) {
   const [facultyData, setFacultyData] =
-    useState<IFacultyData[][]>(initialFacultyData);
-  const [timetable, setTimetable] = useState<ITimeTable[]>([]);
+    useState<IFacultyData[]>(initialFacultyData);
+  const [timetable, setTimetable] = useState<slot[]>([]);
   useEffect(() => {
-    setTimetable(convertToSlot(initialFacultyData));
-  }, []);
+    setTimetable(convertToSlot(facultyData));
+  }, [facultyData]);
+  useEffect(() => {
+    setFacultyData(initialFacultyData);
+  }, [initialFacultyData]);
   return (
     <div>
       <TimeTable data={timetable}></TimeTable>

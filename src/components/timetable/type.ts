@@ -5,8 +5,7 @@ type IFacultyData = {
 };
 
 type slot = {
-  rowStart: number;
-  rowEnd: number;
-  col: number;
+  colStart: number;
+  colEnd: number;
+  row: number;
 };
-type ITimeTable = slot[];
