@@ -1,4 +1,5 @@
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"; // Import shadcn table components
+import { IFacultyData } from "../type";
 
 export default function FacultyTable({ data }: { data: IFacultyData[] }) {
   return (

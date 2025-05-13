@@ -1,4 +1,3 @@
-import Image from "next/image";
 import TimeTableFacultyShowcase from "../components/timetable/TimeTableFacultyShowcase";
 
 export default function Home() {

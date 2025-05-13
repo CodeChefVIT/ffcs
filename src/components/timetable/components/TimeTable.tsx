@@ -1,4 +1,5 @@
 import React from 'react';
+import { slot } from '../type';
 
 
 export default function TimeTable({ data }: {data: slot[]}) {

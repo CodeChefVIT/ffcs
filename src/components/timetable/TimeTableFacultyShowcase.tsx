@@ -2,9 +2,11 @@
 import React, { useEffect, useState } from "react";
 import FacultyTable from "./components/FacultyTable";
 import TimeTable from "./components/TimeTable";
+import { IFacultyData, slot } from "./type";
 
 function convertToSlot(timetable: IFacultyData[]): slot[] {
   const slots: slot[] = [];
+  console.log(timetable);
   return slots;
 }
 export default function TimeTableFacultyShowcase({
