@@ -37,6 +37,6 @@ const initialFacultyData = [
     ],
 ];
 
-export default function Landing() {
+export default function view() {
     return <TimeTableFacultyShowcase initialFacultyData={initialFacultyData[0]} ></TimeTableFacultyShowcase>
 }

@@ -6,9 +6,9 @@ import LandingMobile from './landing-mobile'
 
 
 export default function Home() {
-  const size = useScreenSize()
+	const size = useScreenSize()
 
-  // if (!size) return null // or loading
-  if (size === 'mobile') return <LandingMobile />
-  return <Landing />
+	// if (!size) return null // or loading
+	if (size === 'mobile') return <LandingMobile />
+	return <Landing />
 }
