@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-export default function  useScreenSize() {
+
+export default function useScreenSize() {
   const [size, setSize] = useState<'mobile' | 'desktop' | null>(null)
 
   useEffect(() => {
@@ -8,9 +9,7 @@ export default function  useScreenSize() {
       else return 'desktop'
     }
 
-    const handleResize = () => {
-      setSize(getSize(window.innerWidth))
-    }
+    const handleResize = () => setSize(getSize(window.innerWidth))
 
     handleResize()
     window.addEventListener('resize', handleResize)
