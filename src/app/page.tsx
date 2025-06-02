@@ -1,7 +1,7 @@
+"use client"
 import TimeTableFacultyShowcase from "../components/timetable/TimeTableFacultyShowcase";
-
-export default function Home() {
-  const initialFacultyData = [
+import useScreenSize from "./hooks/useScreenSize";
+const initialFacultyData = [
     [
       {
         faculty: "John Doe",
@@ -37,9 +37,16 @@ export default function Home() {
       },
     ],
   ];
-  return (
-    <div className="">
+
+export default function Home() {
+  const size = useScreenSize()
+
+  if (!size) return null // or loading
+
+  if (size === 'mobile') return <><div>hi</div></>
+  return <><div className="">
       <TimeTableFacultyShowcase initialFacultyData={initialFacultyData[0]} ></TimeTableFacultyShowcase>
-    </div>
-  );
+    </div></>
+
 }
+
