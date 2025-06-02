@@ -15,7 +15,7 @@ export default function TimeTable({ data }: {data: slot[]}) {
             gridRow: slot.row,
           }}
         >
-          Slot {index + 1}
+          {slot.slotName}
         </div>
       ))}
     </div>
