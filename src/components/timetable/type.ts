@@ -8,4 +8,5 @@ export type slot = {
   colStart: number;
   colEnd: number;
   row: number;
+  slotName: string;
 };
