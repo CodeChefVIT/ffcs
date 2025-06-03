@@ -1,3 +1,5 @@
+import CourseCard from "../components/CourseCard";
+
 export default function view() {
-    return <div>Landing Mobile</div>
+    return <CourseCard/>;
 }
