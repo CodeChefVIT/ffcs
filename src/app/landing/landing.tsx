@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import TimeTable from '@/components/timetable/TimeTable';
 import FacultyTable from '@/components/ui/FacultyTable';
 import { IFacultyData, tableFacingSlot } from '@/lib/type';
-import styles from './landing.module.css';
 
 const extractSlotNames = (facultyData: IFacultyData[]): tableFacingSlot[] => {
   const slotSet = new Set<string>();
@@ -19,7 +18,7 @@ const extractSlotNames = (facultyData: IFacultyData[]): tableFacingSlot[] => {
 };
 
 const initialFacultyData: IFacultyData[][] = [
- [
+  [
   {
     _id: '1',
     faculty: 'DHIVYAA C R',
@@ -86,14 +85,13 @@ const initialFacultyData: IFacultyData[][] = [
     facultySlot: ['F1+TF1'],
     subject: 'BSTS101P - Quantitative Skills Practice I'
   }
-]
-, 
+],
   [
-    { faculty: 'John Doe', facultySlot: ['A1+TA1', 'A1+TA1+TAA1'], _id: '1' },
-    { faculty: 'Jane Smith', facultySlot: ['B1+TB1'], _id: '2' },
-    { faculty: 'Raj Patel', facultySlot: ['C1+TC1', 'C1+TC1+TCC1'], _id: '3' },
-    { faculty: 'Emily Davis', facultySlot: ['D1+TD1'], _id: '4' },
-    { faculty: 'Michael Brown', facultySlot: ['E1+TE1'], _id: '5' },
+    { faculty: 'John Doe', facultySlot: ['A1+TA1+TAA1'], _id: '1' },
+    { faculty: 'Jane Smith', facultySlot: ['B2', 'L1+L2'], _id: '2' },
+    { faculty: 'f3', facultySlot: ['A2'], _id: '3' },
+    { faculty: 'f4', facultySlot: ['B1'], _id: '4' },
+    { faculty: 'f5', facultySlot: ['D1+TD1', 'E1+TE1'], _id: '5' },
   ],
   [
     { faculty: 'Alice Johnson', facultySlot: ['C1', 'C2'], _id: '6' },
@@ -108,37 +106,45 @@ export default function View() {
   const slotNames: tableFacingSlot[] = extractSlotNames(selectedData);
 
   return (
-    <div className={styles.pageContainer}>
-    <h1 className={styles.pageTitle}>Your Timetables</h1>
-      <div className={styles.outerWrapper}>
-        <div className={styles.mainContent}>
-          <div className={styles.timeTableWrapper}>
-            
+    <div className="h-screen w-screen overflow-hidden bg-[#a7d5d7]">
+      <div className="flex flex-col h-full max-w-[1600px] mx-auto min-w-[1000px] px-6 py-4 box-border">
+        
+        
+        <h1 className="text-[2.5vw] font-bold leading-tight mb-4 text-left">
+          Your TimeTable
+        </h1>
+        
+        <div className="flex flex-1 gap-6 overflow-hidden">
+          <div className="flex-[2] overflow-auto rounded  p-2">
             <TimeTable slotNames={slotNames} />
           </div>
-           
-          <div className={styles.facultyTableWrapper}>
-            
+          <div className="flex-1 overflow-auto rounded p-2">
             <FacultyTable list={selectedData} />
-          
           </div>
         </div>
-      </div>
 
-      <div className={styles.buttonGroup}>
-        {initialFacultyData.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setSelectedIndex(i)}
-            className={`px-4 py-2 rounded border ${
-              selectedIndex === i
-                ? 'bg-blue-600 text-white'
-                : 'bg-white text-blue-600 border-blue-600'
-            }`}
-          >
-            {i + 1}
-          </button>
-        ))}
+        
+        <div className="mt-4 flex gap-2 justify-start">
+          {initialFacultyData.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setSelectedIndex(i)}
+              className={`px-4 py-2 rounded border ${
+                selectedIndex === i
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-blue-600 border-blue-600'
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+         
+        </div>
+        <footer className="mt-4 border-t border-black pt-8 pb-8">
+          <div className="flex flex-wrap gap-4">
+            <h1 className="text-xl font-semibold">REPLACEMENT COMPONENT</h1>
+          </div>
+        </footer>
       </div>
     </div>
   );
