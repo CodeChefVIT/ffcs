@@ -1,0 +1,62 @@
+.pageContainer {
+  background-color: #a7d5d7;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.outerWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.mainContent {
+ height: 75%;
+  width: 90%;
+  max-width: 1600px;
+  aspect-ratio: 25 / 12;
+  min-width: 1000px;
+  min-height: 480px;
+  display: flex;
+  gap: 2rem;
+  align-items: stretch; 
+}
+
+.timeTableWrapper {
+  height: 75%;
+  
+  display: flex;
+  flex-direction: column;
+}
+
+.facultyTableWrapper {
+  
+  height: 75%;
+  
+  display: flex;
+  flex-direction: column;
+}
+
+.timeTableWrapper {
+  flex: 2;
+}
+
+.facultyTableWrapper {
+  flex: 1;
+}
+
+.buttonGroup {
+  margin-top: -8rem;
+  display: flex;
+  gap: 0.5rem;
+  margin-right: 30%;
+  margin-left:10%;
+  justify-content: left;
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  margin-left: 5%;
+}
