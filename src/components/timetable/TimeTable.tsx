@@ -136,8 +136,8 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
                 }}
             >
                 <img
-                    src="/next.svg"
-                    alt="Next.js Logo"
+                    src="/cclogo.svg"
+                    alt="CodeChef VIT Logo"
                     style={{ width: '50%', height: 'auto', display: 'block' }}
                 />
             </div>
