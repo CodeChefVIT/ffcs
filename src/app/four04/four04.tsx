@@ -1,3 +1,8 @@
-export default function view() {
-    return <div>404 Desktop</div>
+import CourseCard from "@/components/ui/CourseCard";
+
+export default function View() {
+    return <div>
+        404 Desktop
+        <CourseCard />
+    </div>
 }

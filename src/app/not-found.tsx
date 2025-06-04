@@ -1,6 +1,6 @@
 "use client"
 
-import useScreenSize from "./hooks/useScreenSize";
+import useScreenSize from '@/hooks/useScreenSize'
 import Four04 from './four04/four04'
 import Four04Mobile from './four04/four04-mobile'
 
