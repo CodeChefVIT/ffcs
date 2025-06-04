@@ -13,7 +13,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
     const COLUMNS = 69;
     const ROW_WEIGHTS = [5, 5, 2, 5, 5, 2, 5, 5, 2, 5, 5, 2, 5, 5, 2, 5, 5];
     const COLUMN_WEIGHTS = Array(69).fill(1).map((v, i) => (i === 0 ? 5 : 1));
-    //const LAB_ROWS = [5, 8, 11, 14, 17]; // Rows where labs are located
+    const LAB_ROWS = [5, 8, 11, 14, 17]; // Rows where labs are located
 
     const totalRowWeight = ROW_WEIGHTS.reduce((a, b) => a + b, 0);
     const gridTemplateRows = ROW_WEIGHTS.map(w => `${(w / totalRowWeight) * 100}%`).join(' ');
