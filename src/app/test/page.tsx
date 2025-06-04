@@ -1,20 +1,29 @@
-"use client"
+"use client";
+
+import { useState } from "react";
+import GoogleLoginPopup from "@/components/ui/login_popup"; // Adjust path if needed
 
 export default function Home() {
-    return (
-        <div>
-            
-            <button className="text-white bg-blue-700 hover:bg-blue-900 focus:outilne-none text-sm rounded-lg px-5 py-2.5 text-centermr-5">
-                Gululu
-            </button>
+  const [showPopup, setShowPopup] = useState(false);
 
-             <button className="text-white bg-blue-700 hover:bg-blue-900 focus:outilne-none text-sm rounded-lg px-5 py-2.5 text-centermr-5">
-                remove
-            </button>
+  return (
+    <div className="p-10">
+      <button
+        onClick={() => setShowPopup(true)}
+        className="text-white bg-blue-700 hover:bg-blue-900 focus:outline-none text-sm rounded-lg px-5 py-2.5 mr-5"
+      >
+        Gululu
+      </button>
 
-             <button className="text-white bg-blue-700 hover:bg-blue-900 focus:outilne-none text-sm rounded-lg px-5 py-2.5 text-centermr-5">
-                main report
-            </button>
-        </div>
-    )
+      <button className="text-white bg-blue-700 hover:bg-blue-900 focus:outline-none text-sm rounded-lg px-5 py-2.5 mr-5">
+        Remove
+      </button>
+
+      <button className="text-white bg-blue-700 hover:bg-blue-900 focus:outline-none text-sm rounded-lg px-5 py-2.5 mr-5">
+        Main report
+      </button>
+
+      {showPopup && <GoogleLoginPopup onClose={() => setShowPopup(false)} />}
+    </div>
+  );
 }
