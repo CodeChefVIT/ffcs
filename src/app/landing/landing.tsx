@@ -108,6 +108,7 @@ export default function View() {
   const total = initialFacultyData.length;
   const selectedData = initialFacultyData[selectedIndex];
   const slotNames: tableFacingSlot[] = extractSlotNames(selectedData);
+  const timetableCount = initialFacultyData.length;
 
   const handleLeft = () => {
     if (visibleStart > 0) setVisibleStart(visibleStart - 1);
@@ -123,11 +124,22 @@ export default function View() {
   ).filter((i) => i < total);
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-[#a7d5d7]">
+    <div className="h-screen w-screen overflow-hidden bg-[#a7d5d7] font-poppins">
       <div className="flex flex-col h-full max-w-[1600px] mx-auto min-w-[1000px] px-6 py-4 box-border">
-        <h1 className="text-[2.5vw] font-bold leading-tight mb-4 text-left">
-          Your TimeTable
-        </h1>
+        <div className="flex items-center mb-4 ml-2">
+          <h1
+            className="text-[3vw] font-pangolin leading-tight text-left"
+            style={{ fontFamily: 'Pangolin, cursive' }}
+          >
+            Your Timetables
+          </h1>
+          <span
+            className=" text-[1.5vw] ml-7 text-base font-normal"
+            //style={{ fontFamily: 'Pangolin, cursive', color: 'black' }} checkout this 
+          >
+            ({timetableCount} timetables were generated)
+          </span>
+        </div>
 
         <div className="flex flex-1 gap-6 overflow-hidden">
           <div className="flex-[2] overflow-auto p-2">
@@ -138,16 +150,22 @@ export default function View() {
           <div className="flex-1 overflow-auto rounded p-2">
             <FacultyTable list={selectedData} />
           </div>
+        </div> 
+
+        
+         <div className="flex justify-between items-left ml-8  mt-1">
+        <div className="mt-2 text-left">
+          <TimetableSwitcher
+            visibleStart={visibleStart}
+            maxVisible={maxVisible}
+            total={total}
+            selectedIndex={selectedIndex}
+            onSelect={setSelectedIndex}
+            onLeft={handleLeft}
+            onRight={handleRight}
+          />
         </div>
-        <TimetableSwitcher
-          visibleStart={visibleStart}
-          maxVisible={maxVisible}
-          total={total}
-          selectedIndex={selectedIndex}
-          onSelect={setSelectedIndex}
-          onLeft={handleLeft}
-          onRight={handleRight}
-        />
+        </div>
 
         <footer className="mt-6 border-t border-black pt-8 pb-8">
           <div className="flex flex-wrap gap-4">
