@@ -1,6 +1,6 @@
 "use client"
 
-import useScreenSize from "../hooks/useScreenSize";
+import useScreenSize from '@/hooks/useScreenSize'
 import Slots from './slots'
 import SlotsMobile from './slots-mobile'
 

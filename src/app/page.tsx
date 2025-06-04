@@ -1,8 +1,8 @@
 "use client"
 
-import useScreenSize from "./hooks/useScreenSize";
-import Landing from './landing'
-import LandingMobile from './landing-mobile'
+import useScreenSize from '@/hooks/useScreenSize'
+import Landing from './landing/landing'
+import LandingMobile from './landing/landing-mobile'
 
 
 export default function Home() {

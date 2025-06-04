@@ -1,6 +1,6 @@
 "use client"
 
-import useScreenSize from "../hooks/useScreenSize";
+import useScreenSize from '@/hooks/useScreenSize'
 import Shared from './saved'
 import SharedMobile from './saved-mobile'
 
