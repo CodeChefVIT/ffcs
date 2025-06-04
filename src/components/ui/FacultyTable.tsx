@@ -8,8 +8,8 @@ interface Props {
 
 export default function FacultyTable({ list }: Props) {
   return (
-    <div className="h-full w-full bg-blue-100 border border-black rounded-3xl p-4 flex flex-col overflow-hidden">
-      <h2 className="text-xl font-bold mb-4">Faculty List</h2>
+    <div className="h-full w-full bg-blue-100 border border-black rounded-2xl p-4 flex flex-col overflow-hidden">
+
       <ul
         className="space-y-2 flex-1 w-full"
         style={{
@@ -28,12 +28,14 @@ export default function FacultyTable({ list }: Props) {
         {list.map((fac, idx) => (
           <li
             key={idx}
-            className="text-sm border-b border-black/10 pb-1 flex justify-between items-center w-full"
+            className="border-b border-black pb-1 flex justify-between items-center w-full"
             style={{ minWidth: 0 }}
           >
             <span
-              className="font-semibold text-left ml-2"
+              className="text-left ml-2"
               style={{
+                fontWeight: 'normal',
+                fontSize: '1rem',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
@@ -46,8 +48,10 @@ export default function FacultyTable({ list }: Props) {
               {fac.faculty}
             </span>
             <span
-              className="text-right text-blue-900 mr-2"
+              className="text-right text-black mr-3"
               style={{
+                fontWeight: 'normal',
+                fontSize: '1rem',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
