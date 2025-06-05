@@ -5,6 +5,7 @@ import TimeTable from "@/components/timetable/TimeTable";
 import FacultyTable from "@/components/ui/FacultyTable";
 import TimetableSwitcher from "@/components/timetable/components/TimeTableSwitcher";
 import { IFacultyData, tableFacingSlot } from "@/lib/type";
+import FacultySelector from "@/components/ui/FacultySelector";
 
 const extractSlotNames = (facultyData: IFacultyData[]): tableFacingSlot[] => {
   const slotSet = new Set<string>();
@@ -135,7 +136,7 @@ export default function View() {
           </h1>
           <span
             className=" text-[1.5vw] ml-7 text-base font-normal"
-            //style={{ fontFamily: 'Pangolin, cursive', color: 'black' }} checkout this 
+          //style={{ fontFamily: 'Pangolin, cursive', color: 'black' }} checkout this 
           >
             ({timetableCount} timetables were generated)
           </span>
@@ -150,21 +151,21 @@ export default function View() {
           <div className="flex-1 overflow-auto rounded p-2">
             <FacultyTable list={selectedData} />
           </div>
-        </div> 
-
-        
-         <div className="flex justify-between items-left ml-8  mt-1">
-        <div className="mt-2 text-left">
-          <TimetableSwitcher
-            visibleStart={visibleStart}
-            maxVisible={maxVisible}
-            total={total}
-            selectedIndex={selectedIndex}
-            onSelect={setSelectedIndex}
-            onLeft={handleLeft}
-            onRight={handleRight}
-          />
         </div>
+
+
+        <div className="flex justify-between items-left ml-8  mt-1">
+          <div className="mt-2 text-left">
+            <TimetableSwitcher
+              visibleStart={visibleStart}
+              maxVisible={maxVisible}
+              total={total}
+              selectedIndex={selectedIndex}
+              onSelect={setSelectedIndex}
+              onLeft={handleLeft}
+              onRight={handleRight}
+            />
+          </div>
         </div>
 
         <footer className="mt-6 border-t border-black pt-8 pb-8">
