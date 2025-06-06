@@ -115,7 +115,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
                 width: '100%',
                 height: '100%',
                 padding: '1px',
-                // border: '1px solid #000000',
+                //border: '1px solid #000000',
                 userSelect: 'none',
             }}
         >
@@ -138,7 +138,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
                 <img
                     src="/cclogo.svg"
                     alt="CodeChef VIT Logo"
-                    style={{ width: '50%', height: 'auto', display: 'block' }}
+                    style={{ width: '80%', height: 'auto', display: 'block' }}
                 />
             </div>
 
@@ -222,7 +222,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
 
 
             {slots.map((slot, i) => (
-                // if slot name starts with L then green color bgt else blue
+                
                 <div
                 key={`slot-${i}`}
                 style={{
@@ -230,7 +230,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
                     gridColumnEnd: slot.colEnd,
                     gridRowStart: slot.rowStart,
                     gridRowEnd: slot.rowEnd,
-                    backgroundColor: slot.slotName.startsWith('L') ? '#96FFC8' : '#64C8FF',
+                    backgroundColor: slot.slotName.startsWith('L') ? '#96FFCA' : '#86d7FF',
                     border: '0.5px solid #000000',
                     boxSizing: 'border-box',
                     display: 'flex',
@@ -248,7 +248,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            fontSize: 'clamp(8px, 0.8vw, 18px)', // Responsive font size
+                            fontSize: 'clamp(8px, 0.8vw, 18px)', 
                             whiteSpace: 'nowrap',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
@@ -265,3 +265,4 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
 		
     );
 }
+

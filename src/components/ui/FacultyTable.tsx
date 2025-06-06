@@ -8,8 +8,9 @@ interface Props {
 
 export default function FacultyTable({ list }: Props) {
   return (
-    <div className="h-full w-full bg-blue-100 border border-black rounded-2xl p-4 flex flex-col overflow-hidden">
-
+    <div className="h-full w-full border-2 border-black rounded-2xl p-4 flex flex-col overflow-hidden"
+      style={{ backgroundColor: "#e5f9fa" }}
+    >
       <ul
         className="space-y-2 flex-1 w-full"
         style={{
