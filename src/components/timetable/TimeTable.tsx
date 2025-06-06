@@ -222,7 +222,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
 
 
             {slots.map((slot, i) => (
-                // if slot name starts with L then green color bgt else blue
+                
                 <div
                 key={`slot-${i}`}
                 style={{
@@ -230,7 +230,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
                     gridColumnEnd: slot.colEnd,
                     gridRowStart: slot.rowStart,
                     gridRowEnd: slot.rowEnd,
-                    backgroundColor: slot.slotName.startsWith('L') ? '#96FFC8' : '#64C8FF',
+                    backgroundColor: slot.slotName.startsWith('L') ? '#96FFCA' : '#86d7FF',
                     border: '0.5px solid #000000',
                     boxSizing: 'border-box',
                     display: 'flex',
@@ -248,7 +248,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            fontSize: 'clamp(8px, 0.8vw, 18px)', // Responsive font size
+                            fontSize: 'clamp(8px, 0.8vw, 18px)', 
                             whiteSpace: 'nowrap',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
@@ -265,3 +265,4 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
 		
     );
 }
+

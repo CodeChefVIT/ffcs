@@ -27,7 +27,7 @@ export default function TimetableSwitcher({
   ).filter((i) => i < total);
 
   return (
-    <div className="mt-6 w-full flex justify-center">
+    <div className=" w-full flex justify-center">
       <div
         style={{
           display: 'flex',

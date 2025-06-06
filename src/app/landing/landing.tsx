@@ -113,17 +113,12 @@ export default function View() {
   const timetableCount = initialFacultyData.length;
 
   const handleLeft = () => {
-    if (visibleStart > 0) setVisibleStart(visibleStart - 1);
+    if (selectedIndex > 0) setSelectedIndex(selectedIndex - 1);
   };
 
   const handleRight = () => {
-    if (visibleStart + maxVisible < total) setVisibleStart(visibleStart + 1);
+    if (selectedIndex < total - 1) setSelectedIndex(selectedIndex + 1);
   };
-
-  const visibleIndexes = Array.from(
-    { length: maxVisible },
-    (_, i) => visibleStart + i
-  ).filter((i) => i < total);
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-[#a7d5d7] font-poppins">
@@ -131,32 +126,28 @@ export default function View() {
         <div className="flex items-center mb-4 ml-2">
           <h1
             className="text-[3vw] font-pangolin leading-tight text-left"
-            style={{ fontFamily: 'Pangolin, cursive' }}
+            style={{ fontFamily: "Pangolin, cursive" }}
           >
             Your Timetables
           </h1>
-          <span
-            className=" text-[1.5vw] ml-7 text-base font-normal"
-          //style={{ fontFamily: 'Pangolin, cursive', color: 'black' }} checkout this 
-          >
+          <span className="text-[1.5vw] ml-7 text-base font-normal">
             ({timetableCount} timetables were generated)
           </span>
         </div>
 
         <div className="flex flex-1 gap-6 overflow-hidden">
           <div className="flex-[2] overflow-auto p-2">
-          
-              <TimeTable slotNames={slotNames} />
-          
+            <TimeTable slotNames={slotNames} />
           </div>
           <div className="flex-1 overflow-auto rounded p-2">
             <FacultyTable list={selectedData} />
           </div>
         </div>
 
-
-        <div className="flex items-left ml-3 gap-4" style={{ height: 64 }}>
-          <div className="flex items-center h-full">
+        
+        <div className=" mt-1 flex items-center justify-between px-8" style={{ height: 64 }}>
+          
+          <div className="flex items-center">
             <TimetableSwitcher
               visibleStart={visibleStart}
               maxVisible={maxVisible}
@@ -167,16 +158,16 @@ export default function View() {
               onRight={handleRight}
             />
           </div>
-          <div className="flex-1" />
-          <div className="flex items-center justify-end h-full" style={{ minWidth: 240 }}>
+
+          
+          <div className="flex items-center" style={{ minWidth: 240 }}>
             <ActionButtons />
           </div>
         </div>
-       
 
         <footer className="mt-6 border-t border-black pt-8 pb-8">
           <div className="flex flex-wrap gap-4">
-            <h1 className="text-xl font-semibold">REPLACEMENT COMPONENT</h1>
+            <h1 className="text-2xl font-semibold">REPLACEMENT COMPONENT</h1>
           </div>
         </footer>
       </div>
