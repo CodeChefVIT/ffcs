@@ -47,6 +47,7 @@ export default function TimetableSwitcher({
             width: 48,
             height: 48,
             background: '#75E5EA',
+
             fontSize: 20,
             fontWeight: 700,
             cursor: visibleStart === 0 ? 'not-allowed' : 'pointer',

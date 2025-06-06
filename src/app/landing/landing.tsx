@@ -160,7 +160,7 @@ export default function View() {
           </div>
 
           
-          <div className="flex items-center" style={{ minWidth: 240 }}>
+          <div className="flex items-center" >
             <ActionButtons />
           </div>
         </div>

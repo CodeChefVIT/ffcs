@@ -115,7 +115,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
                 width: '100%',
                 height: '100%',
                 padding: '1px',
-                // border: '1px solid #000000',
+                //border: '1px solid #000000',
                 userSelect: 'none',
             }}
         >
@@ -138,7 +138,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
                 <img
                     src="/cclogo.svg"
                     alt="CodeChef VIT Logo"
-                    style={{ width: '50%', height: 'auto', display: 'block' }}
+                    style={{ width: '80%', height: 'auto', display: 'block' }}
                 />
             </div>
 
