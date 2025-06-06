@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
 interface TimetableSwitcherProps {
   visibleStart: number;
@@ -30,29 +30,29 @@ export default function TimetableSwitcher({
     <div className="mt-6 w-full flex justify-center">
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
-          height: 60,
-          background: "#75E5EA",
-          borderRadius: 20,
-          border: "2px solid black",
-          boxShadow: "6px 6px 0px black",
-          overflow: "hidden",
+          display: 'flex',
+          alignItems: 'center',
+          height: 48,
+          background: '#75E5EA',
+          borderRadius: 12,
+          border: '2px solid black',
+          boxShadow: '3px 3px 0px black',
+          overflow: 'hidden',
         }}
       >
         <button
           onClick={onLeft}
           disabled={visibleStart === 0}
           style={{
-            width: 60,
-            height: 60,
-            background: "#75E5EA",
-            fontSize: 28,
-            fontWeight: "bold",
-            cursor: visibleStart === 0 ? "not-allowed" : "pointer",
+            width: 48,
+            height: 48,
+            background: '#75E5EA',
+            fontSize: 20,
+            fontWeight: 700,
+            cursor: visibleStart === 0 ? 'not-allowed' : 'pointer',
             opacity: visibleStart === 0 ? 0.4 : 1,
-            borderRight: "2px solid black",
-            border: "none",
+            border: 'none',
+            borderRight: '2px solid black',
           }}
         >
           ‹
@@ -63,19 +63,19 @@ export default function TimetableSwitcher({
             key={i}
             onClick={() => onSelect(i)}
             style={{
-              width: 48,
-              height: 60,
+              width: 40,
+              height: 48,
               background:
-                selectedIndex === i ? "rgba(255,255,255,0.4)" : "#75E5EA",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 24,
-              fontWeight: "700",
-              fontFamily: "Poppins",
-              cursor: "pointer",
-              borderRight: "2px solid black",
-              borderLeft: idx === 0 ? "2px solid black" : "none",
+                selectedIndex === i ? 'rgba(255,255,255,0.4)' : '#75E5EA',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 18,
+              fontWeight: 700,
+              fontFamily: 'Poppins',
+              cursor: 'pointer',
+              borderRight: '2px solid black',
+              borderLeft: idx === 0 ? '2px solid black' : 'none',
             }}
           >
             {i + 1}
@@ -86,16 +86,16 @@ export default function TimetableSwitcher({
           onClick={onRight}
           disabled={visibleStart + maxVisible >= total}
           style={{
-            width: 60,
-            height: 60,
-            background: "#75E5EA",
-            fontSize: 28,
-            fontWeight: "bold",
+            width: 48,
+            height: 48,
+            background: '#75E5EA',
+            fontSize: 20,
+            fontWeight: 700,
             cursor:
-              visibleStart + maxVisible >= total ? "not-allowed" : "pointer",
+              visibleStart + maxVisible >= total ? 'not-allowed' : 'pointer',
             opacity: visibleStart + maxVisible >= total ? 0.4 : 1,
-            borderLeft: "2px solid black",
-            border: "none",
+            border: 'none',
+            borderLeft: '2px solid black',
           }}
         >
           ›

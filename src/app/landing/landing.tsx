@@ -6,6 +6,7 @@ import FacultyTable from "@/components/ui/FacultyTable";
 import TimetableSwitcher from "@/components/timetable/components/TimeTableSwitcher";
 import { IFacultyData, tableFacingSlot } from "@/lib/type";
 import FacultySelector from "@/components/ui/FacultySelector";
+import ActionButtons from "@/components/timetable/components/ActionButtons";
 
 const extractSlotNames = (facultyData: IFacultyData[]): tableFacingSlot[] => {
   const slotSet = new Set<string>();
@@ -144,9 +145,9 @@ export default function View() {
 
         <div className="flex flex-1 gap-6 overflow-hidden">
           <div className="flex-[2] overflow-auto p-2">
-            <div className="bg-white border-2 border-black rounded-xl p-4 h-full">
+          
               <TimeTable slotNames={slotNames} />
-            </div>
+          
           </div>
           <div className="flex-1 overflow-auto rounded p-2">
             <FacultyTable list={selectedData} />
@@ -154,8 +155,8 @@ export default function View() {
         </div>
 
 
-        <div className="flex justify-between items-left ml-8  mt-1">
-          <div className="mt-2 text-left">
+        <div className="flex items-left ml-3 gap-4" style={{ height: 64 }}>
+          <div className="flex items-center h-full">
             <TimetableSwitcher
               visibleStart={visibleStart}
               maxVisible={maxVisible}
@@ -166,7 +167,12 @@ export default function View() {
               onRight={handleRight}
             />
           </div>
+          <div className="flex-1" />
+          <div className="flex items-center justify-end h-full" style={{ minWidth: 240 }}>
+            <ActionButtons />
+          </div>
         </div>
+       
 
         <footer className="mt-6 border-t border-black pt-8 pb-8">
           <div className="flex flex-wrap gap-4">
