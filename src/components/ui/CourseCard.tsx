@@ -4,7 +4,7 @@ interface Course {
   id: string;
   codes: string[];
   names: string[];
-  rooms: string;
+  slots: string;
 }
 
 const initialCourses: Course[] = [
@@ -12,37 +12,37 @@ const initialCourses: Course[] = [
     id: "course1",
     codes: ["BBRT101L", "BBRT101P"],
     names: ["Engineering Rizzology", "Engineering Rizzology Lab"],
-    rooms: "B2, D2, G2",
+    slots: "B2, D2, G2",
   },
   {
     id: "course2",
     codes: ["BBRT102L"],
     names: ["Sigma Theory"],
-    rooms: "A1+TA1, F1+TF1",
+    slots: "A1+TA1, F1+TF1",
   },
   {
     id: "course3",
     codes: ["BBRT103P"],
     names: ["Skibidi Programming Lab"],
-    rooms: "L22+L23",
+    slots: "L22+L23",
   },
   {
     id: "course4",
     codes: ["BBRT104E"],
     names: ["Delulu NPC Studies"],
-    rooms: "TG2",
+    slots: "TG2",
   },
   {
     id: "course5",
     codes: ["BBRT101S"],
     names: ["Testing extra "],
-    rooms: "TG2, TG3",
+    slots: "TG2, TG3",
   },
   {
     id: "course6",
     codes: ["BCSE101L"],
     names: ["OOPS with Rizz"],
-    rooms: "G1,G2",
+    slots: "G1,G2",
   },
 ];
 
@@ -51,8 +51,14 @@ export const CourseCard: React.FC = () => {
   const draggedItemIndex = useRef<number | null>(null);
   const dragOverItemIndex = useRef<number | null>(null);
 
-  const handleDragStart = (index: number) => {
+  const resetDragRefs = () => {
+    draggedItemIndex.current = null;
+    dragOverItemIndex.current = null;
+  };
+
+  const handleDragStart = (e: React.DragEvent, index: number) => {
     draggedItemIndex.current = index;
+    e.dataTransfer.effectAllowed = "move";
   };
 
   const handleDragEnter = (index: number) => {
@@ -68,8 +74,7 @@ export const CourseCard: React.FC = () => {
       dragOverIdx === null ||
       draggedIdx === dragOverIdx
     ) {
-      draggedItemIndex.current = null;
-      dragOverItemIndex.current = null;
+      resetDragRefs();
       return;
     }
 
@@ -77,9 +82,7 @@ export const CourseCard: React.FC = () => {
     const [draggedCourse] = updatedCourses.splice(draggedIdx, 1);
     updatedCourses.splice(dragOverIdx, 0, draggedCourse);
     setCourses(updatedCourses);
-
-    draggedItemIndex.current = null;
-    dragOverItemIndex.current = null;
+    resetDragRefs();
   };
 
   const deleteCourse = (id: string) => {
@@ -113,6 +116,8 @@ export const CourseCard: React.FC = () => {
     );
   };
 
+  
+
   return (
     <>
       <style>
@@ -138,8 +143,7 @@ export const CourseCard: React.FC = () => {
         <div className="flex justify-between items-start">
           <h2 className="text-2xl font-pangolin">Your Courses</h2>
           <p className="text-xs text-red-700 max-w-xs text-right">
-            *Use arrows or drag-drop to set course priority, multiple timetables
-            will be generated.
+            *Use arrows or drag-drop to set course priority, multiple timetables will be generated.
           </p>
         </div>
 
@@ -149,10 +153,10 @@ export const CourseCard: React.FC = () => {
         >
           {courses.map((course, index) => (
             <div
-              key={course.id}
+              key={`${course.id}-${index}`}
               className="course-row bg-[#FBFDFC66] rounded-3xl px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 sm:space-x-4 w-full"
               draggable
-              onDragStart={() => handleDragStart(index)}
+              onDragStart={(e) => handleDragStart(e, index)}
               onDragEnter={() => handleDragEnter(index)}
               onDragEnd={handleDragEnd}
               onDragOver={(e) => e.preventDefault()}
@@ -186,11 +190,11 @@ export const CourseCard: React.FC = () => {
                 </div>
               </div>
 
-              {/* Rooms */}
+              {/* Slots */}
               <div className="flex items-center sm:min-w-[120px] text-sm text-right text-black">
                 <div className="flex flex-col justify-center">
-                  {course.rooms.split("\n").map((room, idx) => (
-                    <div key={idx}>{room}</div>
+                  {course.slots.split("\n").map((slot, idx) => (
+                    <div key={idx}>{slot}</div>
                   ))}
                 </div>
               </div>
@@ -199,9 +203,10 @@ export const CourseCard: React.FC = () => {
               <div className="flex items-center justify-end gap-2">
                 <button
                   onClick={() => deleteCourse(course.id)}
+                  aria-label="Delete Course"
                   className="bg-[#FFFFFF80] hover:bg-[#F08585] text-black p-2 rounded-lg shadow transition"
-                  title="Delete Course"
                   type="button"
+                  title="Delete Course"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -222,9 +227,10 @@ export const CourseCard: React.FC = () => {
                 <div className="flex flex-col bg-[#FFFFFF80] rounded-lg shadow-sm overflow-hidden leading-none gap-0 p-1">
                   <button
                     onClick={() => moveCourseUp(index)}
+                    aria-label="Move Course Up"
                     className="hover:bg-gray-200 p-0 m-0 leading-none transition rounded-t-lg"
-                    title="Move Up"
                     type="button"
+                    title="Move Up"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -243,9 +249,10 @@ export const CourseCard: React.FC = () => {
                   </button>
                   <button
                     onClick={() => moveCourseDown(index)}
-                    className="hover:bg-gray-200  p-0 m-0 leading-none transition rounded-b-lg"
-                    title="Move Down"
+                    aria-label="Move Course Down"
+                    className="hover:bg-gray-200 p-0 m-0 leading-none transition rounded-b-lg"
                     type="button"
+                    title="Move Down"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -298,4 +305,3 @@ export const CourseCard: React.FC = () => {
 };
 
 export default CourseCard;
-  
