@@ -24,11 +24,11 @@ const SelectField = ({
     return (
         <div className="relative">
             <select
-                className="w-full p-2 pl-3 pr-10 rounded-md border-2 border-black bg-white font-semibold text-[#000000B2] outline-none appearance-none"
+                className="w-full p-2 pl-3 pr-10 rounded-xl border-3 border-black bg-white font-semibold text-[#000000B2] outline-none appearance-none"
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
             >
-                <option value="">{`Select ${label}`}</option>
+                <option value="">{`Select ${label}:`}</option>
                 {options.map((option, index) => (
                     <option key={`${index}+${option}`} value={option}>
                         {option}
@@ -36,9 +36,9 @@ const SelectField = ({
                 ))}
             </select>
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black text-xl pointer-events-none">
-                <img src="/chevron-down.svg" alt="icon" className="w-3 h-3" />
+                <img src="/chevron-down.svg" alt="icon" className="w-5 h-5" />
             </div>
-            <div className="absolute right-9 top-0 h-full w-[2px] bg-black" />
+            <div className="absolute right-11 top-0 h-full w-[3px] bg-black" />
         </div>
     );
 };
@@ -130,7 +130,7 @@ export default function FacultySelector({
                 .scrollbar-thin::-webkit-scrollbar-track { background-color: transparent; }
             `}</style>
 
-            {/* Main container with cartoon shadow */}
+            {/* Main container */}
             <div className="relative inline-block">
                 <div className="absolute inset-0 bg-black rounded-xl translate-x-1.5 translate-y-1.5 z-0" />
 
@@ -160,25 +160,24 @@ export default function FacultySelector({
                     {/* Divider */}
                     <div className="w-full h-[4px] bg-black mb-4" />
 
-                    {/* Main content area: Faculties & Priority */}
+                    {/* Faculties & Priority */}
                     <div className="grid grid-cols-2 gap-4 px-4 pb-4 h-full">
-
                         {/* Faculty selection list */}
                         <div className="bg-[#FBFDFC66] rounded-xl overflow-hidden flex flex-col">
                             <div className="bg-[#FFFFFF99] text-center text-[#000000B2] p-4 font-semibold text-lg">Select Faculties</div>
                             <div className="pt-4 pb-4 px-6 overflow-y-auto space-y-2 scrollbar-thin h-86">
                                 {faculties.map((faculty, index) => (
                                     <div key={index}>
-                                        <div className="flex items-center justify-between py-2">
+                                        <div className="flex items-center justify-between py-1">
                                             <span className='text-[#000000B2]'>{faculty}</span>
-                                            <label className="inline-flex items-center gap-2 cursor-pointer">
+                                            <label className="inline-flex items-center gap-1 cursor-pointer">
                                                 <input
                                                     type="checkbox"
                                                     checked={selectedFaculties.includes(faculty)}
                                                     onChange={() => toggleFaculty(faculty)}
                                                     className="peer hidden"
                                                 />
-                                                <div className="w-5 h-5 rounded border-2 border-black flex items-center justify-center peer-checked:bg-[#C1FF83] peer-checked:before:content-['✔'] peer-checked:before:text-black peer-checked:before:text-sm peer-checked:before:font-bold" />
+                                                <div className="w-7 h-7 rounded-md border-2 border-black flex items-center justify-center peer-checked:bg-[#C1FF83] peer-checked:before:content-['✔'] peer-checked:before:text-black peer-checked:before:text-sm peer-checked:before:font-bold" />
                                             </label>
                                         </div>
                                         <div className="w-full h-[1px] bg-black mt-1" />
@@ -216,7 +215,7 @@ export default function FacultySelector({
                                                         <img src={index !== 0 ? "/chevron-up.svg" : "/chevron-up-grey.svg"} alt="up" className="w-3 h-3" />
                                                     </button>
                                                     <button onClick={() => moveDown(index)} className="text-sm text-black">
-                                                        <img src={index !== priorityList.length - 1 ? "/chevron-down.svg" : "/chevron-up-grey.svg"} alt="down" className={`w-3 h-3 ${index === priorityList.length - 1 ? 'rotate-180' : ''}`} />
+                                                        <img src={index !== priorityList.length - 1 ? "/chevron-down.svg" : "/chevron-down-grey.svg"} alt="down" className={`w-3 h-3`} />
                                                     </button>
                                                 </div>
                                             </div>
@@ -224,7 +223,7 @@ export default function FacultySelector({
                                         </div>
                                     ))}
                                 </div>
-                                <p className="text-xs text-red-500 mt-5 mb-2 text-center font-semibold whitespace-nowrap">
+                                <p className="text-xs text-red-500 p-3 text-center font-semibold">
                                     *Use arrows or drag-drop to set faculty priority.
                                 </p>
                             </div>
@@ -236,7 +235,7 @@ export default function FacultySelector({
                                     <div className="absolute inset-0 bg-black rounded-lg translate-x-1 translate-y-1 z-0"></div>
                                     <button
                                         onClick={handleReset}
-                                        className="relative z-10 w-full flex items-center justify-around gap-2 bg-[#ffb3a7] hover:bg-[#ffa08e] border-2 border-black px-4 py-2 rounded-lg font-semibold border-l-[3px] border-t-[3px]"
+                                        className="relative z-10 w-full flex items-center cursor-pointer justify-around gap-2 bg-[#ffb3a7] hover:bg-[#ffa08e] border-2 border-black px-4 py-2 rounded-lg font-semibold border-l-[3px] border-t-[3px]"
                                     >
                                         Reset <img src="/reset.svg" alt="reset" className="w-5 h-5" />
                                     </button>
@@ -246,7 +245,7 @@ export default function FacultySelector({
                                 <div className="relative flex-1">
                                     <div className="absolute inset-0 bg-black rounded-lg translate-x-1 translate-y-1 z-0"></div>
                                     <button onClick={handleConfirm}
-                                        className="relative z-10 w-full flex items-center justify-around gap-2 bg-lime-300 hover:bg-lime-400 border-2 border-black px-4 py-2 rounded-lg font-semibold border-l-[3px] border-t-[3px]"
+                                        className="relative z-10 w-full cursor-pointer flex items-center justify-around gap-2 bg-lime-300 hover:bg-lime-400 border-2 border-black px-4 py-2 rounded-lg font-semibold border-l-[3px] border-t-[3px]"
                                     >
                                         Confirm <img src="/check.svg" alt="confirm" className="w-5 h-5" />
                                     </button>
