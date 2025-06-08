@@ -46,10 +46,40 @@ const initialCourses: Course[] = [
   },
 ];
 
+// Simulated backend save with validation
+const saveCourses = (courses: Course[]): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      for (const course of courses) {
+        if (
+          !course.id ||
+          !Array.isArray(course.codes) ||
+          course.codes.length === 0 ||
+          course.codes.some((code) => !code || code.trim() === "") ||
+          !Array.isArray(course.names) ||
+          course.names.length === 0 ||
+          course.names.some((name) => !name || name.trim() === "") ||
+          !course.slots ||
+          course.slots.trim() === ""
+        ) {
+          reject(
+            new Error(
+              `Invalid course data detected for course with id "${course.id}". Please check all fields.`
+            )
+          );
+          return;
+        }
+      }
+      resolve();
+    }, 1000);
+  });
+};
+
 export const CourseCard: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>(initialCourses);
   const draggedItemIndex = useRef<number | null>(null);
   const dragOverItemIndex = useRef<number | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const resetDragRefs = () => {
     draggedItemIndex.current = null;
@@ -109,14 +139,22 @@ export const CourseCard: React.FC = () => {
     setCourses(updatedCourses);
   };
 
-  const handleGenerate = () => {
-    alert(
-      "Course order:\n" +
-        courses.map((c, i) => `${i + 1}. ${c.codes.join(", ")}`).join("\n")
-    );
+  const handleGenerate = async () => {
+    setSaving(true);
+    try {
+      await saveCourses(courses);
+      alert(
+        "Courses saved successfully!\n\nCourse order:\n" +
+          courses.map((c, i) => `${i + 1}. ${c.codes.join(", ")}`).join("\n")
+      );
+    }  catch (error) {
+  if (error instanceof Error) {
+    alert("Failed to save courses:\n" + error.message);
+  } else {
+    alert("Failed to save courses due to an unknown error.");
+  }
+}
   };
-
-  
 
   return (
     <>
@@ -278,11 +316,14 @@ export const CourseCard: React.FC = () => {
         <div className="text-center mt-8">
           <button
             id="generate-btn"
-            className="border-2 border-black bg-[#7ce5e5] hover:bg-[#67d2d2] text-black font-semibold text-lg px-6 py-2 rounded-full shadow-[4px_4px_0_0_black] transition flex items-center justify-center gap-2 mx-auto"
+            className={`border-2 border-black bg-[#7ce5e5] hover:bg-[#67d2d2] text-black font-semibold text-lg px-6 py-2 rounded-full shadow-[4px_4px_0_0_black] transition flex items-center justify-center gap-2 mx-auto ${
+              saving ? "opacity-60 cursor-not-allowed" : ""
+            }`}
             onClick={handleGenerate}
             type="button"
+            disabled={saving}
           >
-            <span>Generate</span>
+            <span>{saving ? "Saving..." : "Generate"}</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="w-5 h-5"
