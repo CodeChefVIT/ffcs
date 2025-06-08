@@ -20,14 +20,17 @@ const GoogleLoginPopup: React.FC<GoogleLoginPopupProps> = ({ onClose }) => {
           </span>
           <button
             onClick={onClose}
-            className="w-10 h-14 bg-red-300 rounded-tr-3xl outline outline-4 outline-offset-[-2px] outline-black text-xl font-bold relative left-4"
+            className="w-13 h-14 flex items-center justify-center bg-red-300 rounded-tr-3xl outline outline-4 outline-offset-[-2px] outline-black text-xl font-bold relative left-4"
           >
-            ×
+            <img
+              src="./x.svg"
+              alt="x"
+              className="felx justify-center w-8 h-8" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="text-center mt-6 px-4">
+        <div className="text-center mt-6 px-4 py-4">
           <p className="text-black text-2xl font-normal font-['Poppins']">
             Please log in to save and share your time-tables
           </p>

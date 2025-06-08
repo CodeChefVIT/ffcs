@@ -1,10 +1,10 @@
 import React from "react";
 
-interface EmailLoginPopupProps {
+interface EmailPopupProps {
   onClose: () => void;
 }
 
-const EmailLoginPopup: React.FC<EmailLoginPopupProps> = ({ onClose }) => {
+const EmailPopup: React.FC<EmailPopupProps> = ({ onClose }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#3f595a] z-50 px-4">
       <div className="w-full max-w-md sm:max-w-xl md:max-w-xl bg-sky-100 rounded-3xl shadow-[7px_7px_7px_rgba(0,0,0,1.00)] outline outline-4 outline-offset-[-2px] outline-black">
@@ -22,14 +22,14 @@ const EmailLoginPopup: React.FC<EmailLoginPopupProps> = ({ onClose }) => {
         </div>
 
         {/* Content */}
-        <div className="text-center mt-6 px-4">
+        <div className="text-center mt-6 px-4 py-4">
           <p className="text-black  md:text-2xl font-normal font-['Poppins'] leading-relaxed">
             A Report has been sent to your email ID
           </p>
         </div>
 
         {/*OK Button */}
-        <div className="flex justify-center mt-6 px-4">
+        <div className="flex justify-center mt-6 px-4 py-2">
           <button 
           onClick={onClose}
           className="flex items-center justify-center gap-4 w-1/5 max-w-sm h-14 bg-blue-300 rounded-3xl shadow-[5px_5px_0px_rgba(0,0,0,1.00)] outline outline-4 outline-black px-4">
@@ -46,4 +46,4 @@ const EmailLoginPopup: React.FC<EmailLoginPopupProps> = ({ onClose }) => {
   );
 };
 
-export default EmailLoginPopup;
+export default EmailPopup;
