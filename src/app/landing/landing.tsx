@@ -7,6 +7,7 @@ import TimetableSwitcher from "@/components/timetable/components/TimeTableSwitch
 import { IFacultyData, tableFacingSlot } from "@/lib/type";
 import FacultySelector from "@/components/ui/FacultySelector";
 import ActionButtons from "@/components/timetable/components/ActionButtons";
+import ReplaceSlot from "@/components/timetable/components/QuickModify";
 
 const extractSlotNames = (facultyData: IFacultyData[]): tableFacingSlot[] => {
   const slotSet = new Set<string>();
@@ -165,10 +166,8 @@ export default function View() {
           </div>
         </div>
 
-        <footer className="mt-6 border-t border-black pt-8 pb-8">
-          <div className="flex flex-wrap gap-4">
-            <h1 className="text-2xl font-semibold">REPLACEMENT COMPONENT</h1>
-          </div>
+        <footer className="mt-4 border-t-3 border-black pt-2 pb-2">
+         <ReplaceSlot/>
         </footer>
       </div>
     </div>
