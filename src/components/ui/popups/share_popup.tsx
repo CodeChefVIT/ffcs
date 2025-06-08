@@ -6,7 +6,7 @@ interface SharePopupProps {
 
 const SharePopup: React.FC<SharePopupProps> = ({ onClose }) => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-[#3f595a] z-50 px-4">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/25 backdrop-blur-sm z-50 px-4">
       <div className="w-full max-w-md sm:max-w-xl md:max-w-xl bg-lime-50 rounded-3xl shadow-[7px_7px_7px_rgba(0,0,0,1.00)] outline outline-4 outline-offset-[-2px] outline-black">
         {/* Header */}
         <div className="flex justify-between items-center h-14 bg-amber-400 rounded-t-3xl outline-4 outline-offset-[-2px] outline-black px-4">

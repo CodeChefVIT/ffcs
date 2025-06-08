@@ -6,7 +6,7 @@ interface SavePopupProps {
 
 const SavePopup: React.FC<SavePopupProps> = ({ onClose }) => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-[#3f595a] z-50 px-4">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/25 backdrop-blur-sm z-50 px-4">
       <div className="w-full max-w-md sm:max-w-xl md:max-w-xl bg-green-100 rounded-3xl shadow-[7px_7px_7px_rgba(0,0,0,1.00)] outline outline-4 outline-offset-[-2px] outline-black">
         {/* Header */}
         <div className="flex justify-between items-center h-14 bg-green-300 rounded-t-3xl outline-4 outline-offset-[-2px] outline-black px-4">
@@ -37,29 +37,28 @@ const SavePopup: React.FC<SavePopupProps> = ({ onClose }) => {
           </p>
         </div>
 
-{/* Text Input + Remove Button Side-by-Side */}
-<div className="flex justify-center gap-10 mt-6 px-4 py-4">
-  {/* Text Input */}
-  <input
-    type="text"
-    defaultValue="Untitled timetable 1"
-    className="px-4 py-3 rounded-3xl shadow-[5px_5px_0px_rgba(0,0,0,1.00)] outline outline-4 outline-black text-black text-lg sm:text-xl md:text-2xl font-['Poppins'] w-full max-w-xs bg-white"
-  />
-
-  {/* Save Button */}
-  <button 
-    className="flex items-center justify-center gap-4 px-6 py-3 bg-lime-300 rounded-3xl shadow-[5px_5px_0px_rgba(0,0,0,1.00)] outline outline-4 outline-black">
-    <span className="text-black text-lg sm:text-xl md:text-2xl font-bold font-['Poppins']">
+{/* Input + Save Button + Error Message Wrapper */}
+<div className="flex flex-col items-center mt-6 px-4 py-4 w-full">
+  {/* Input + Save Button (Responsive Wrapping) */}
+  <div className="flex flex-col sm:flex-row justify-center gap-4 w-full max-w-md">
+    <input
+      type="text"
+      defaultValue="Untitled timetable 1"
+      className="flex-1 px-4 py-3 rounded-3xl shadow-[5px_5px_0px_rgba(0,0,0,1.00)] outline outline-4 outline-black text-black text-lg sm:text-xl md:text-2xl font-['Poppins'] bg-white"
+    />
+    <button 
+      className="px-6 py-3 bg-lime-300 rounded-3xl shadow-[5px_5px_0px_rgba(0,0,0,1.00)] outline outline-4 outline-black text-black text-lg sm:text-xl md:text-2xl font-bold font-['Poppins']">
       Save
-    </span>
-  </button>
+    </button>
+  </div>
+
+  {/* Duplicate Message */}
+  <div className="mt-2 w-full max-w-md text-left">
+    <p className="text-red-600 text-sm sm:text-base font-normal font-['Poppins'] px-2">
+      *A timetable with this name already exists
+    </p>
+  </div>
 </div>
-
-
-        {/* Duplicate Message */}
-        <div className="w-96 h-10 justify-center text-red-600 text-lg font-normal font-['Poppins'] px-4">*A timetable with this name already exists</div>
-
-
 
 
         {/* Bottom Padding */}
