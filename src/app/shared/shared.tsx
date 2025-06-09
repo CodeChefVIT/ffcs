@@ -1,3 +1,3 @@
-export default function view() {
-    return <div>Shared Desktop</div>
+export default function View() {
+  return <div>Shared Desktop</div>
 }

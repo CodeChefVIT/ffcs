@@ -1,3 +1,3 @@
-export default function view() {
-    return <div>Slots Mobile</div>
+export default function View() {
+  return <div>Slots Mobile</div>
 }
