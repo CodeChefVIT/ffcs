@@ -8,6 +8,7 @@ import { facultyData, tableFacingSlot } from "@/lib/type";
 // import FacultySelector from "@/components/ui/FacultySelector";
 import ActionButtons from "@/components/timetable/components/ActionButtons";
 import ReplaceSlot from "@/components/timetable/components/QuickModify";
+import Header from "@/components/ui/Header";
 
 const extractSlotNames = (facultyData: facultyData[]): tableFacingSlot[] => {
   const slotSet = new Set<string>();
