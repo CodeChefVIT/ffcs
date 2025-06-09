@@ -1,3 +1,3 @@
-export default function view() {
-    return <div>Slots Desktop</div>
+export default function View() {
+  return <div>Slots Desktop</div>
 }
