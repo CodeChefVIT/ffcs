@@ -21,7 +21,7 @@ const ActionButtons = () => {
           className="flex items-center gap-2 px-6 py-2 border-2 border-black rounded-lg shadow-[3px_3px_0_0_black] hover:brightness-105 active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
         >
           <span className="text-lg font-medium">{btn.label}</span>
-          <Image src={btn.icon} alt={btn.label} className="w-4 h-4" />
+          <Image src={btn.icon} alt={btn.label} className="w-4 h-4" width={120} height={80} />
         </button>
       ))}
     </div>

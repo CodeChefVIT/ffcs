@@ -138,6 +138,8 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
         <Image
           src="/ffcs.svg"
           alt="logo of FFCS Platform by CodeChef-VIT"
+          width={120}
+          height={80}
           style={{ width: 'auto', height: '67%', display: 'block', opacity: 0.92 }}
         />
       </div>

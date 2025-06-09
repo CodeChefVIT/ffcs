@@ -37,7 +37,7 @@ const SelectField = ({
         ))}
       </select>
       <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black text-xl pointer-events-none">
-        <Image src="/chevron-down.svg" alt="icon" className="w-5 h-5" />
+        <Image src="/chevron-down.svg" alt="icon" className="w-5 h-5" width={120} height={80} />
       </div>
       <div className="absolute right-11 top-0 h-full w-[3px] bg-black" />
     </div>
@@ -213,10 +213,12 @@ export default function FacultySelector({
                         <span className="text-[#000000B2]">{faculty}</span>
                         <div className="flex flex-col items-center gap-1 bg-[#FFFFFF80] px-2 py-1 rounded-lg">
                           <button onClick={() => moveUp(index)} className="text-sm text-black">
-                            <Image src={index !== 0 ? "/chevron-up.svg" : "/chevron-up-grey.svg"} alt="up" className="w-3 h-3" />
+                            <Image src={index !== 0 ? "/chevron-up.svg" : "/chevron-up-grey.svg"} width={120}
+                              height={80} alt="up" className="w-3 h-3" />
                           </button>
                           <button onClick={() => moveDown(index)} className="text-sm text-black">
-                            <Image src={index !== priorityList.length - 1 ? "/chevron-down.svg" : "/chevron-down-grey.svg"} alt="down" className={`w-3 h-3`} />
+                            <Image width={120}
+                              height={80} src={index !== priorityList.length - 1 ? "/chevron-down.svg" : "/chevron-down-grey.svg"} alt="down" className={`w-3 h-3`} />
                           </button>
                         </div>
                       </div>
@@ -238,7 +240,8 @@ export default function FacultySelector({
                     onClick={handleReset}
                     className="relative z-10 w-full flex items-center cursor-pointer justify-around gap-2 bg-[#ffb3a7] hover:bg-[#ffa08e] border-2 border-black px-4 py-2 rounded-lg font-semibold border-l-[3px] border-t-[3px]"
                   >
-                    Reset <Image src="/reset.svg" alt="reset" className="w-5 h-5" />
+                    Reset <Image src="/reset.svg" alt="reset" className="w-5 h-5" width={120}
+                      height={80} />
                   </button>
                 </div>
 
@@ -248,7 +251,7 @@ export default function FacultySelector({
                   <button onClick={handleConfirm}
                     className="relative z-10 w-full cursor-pointer flex items-center justify-around gap-2 bg-lime-300 hover:bg-lime-400 border-2 border-black px-4 py-2 rounded-lg font-semibold border-l-[3px] border-t-[3px]"
                   >
-                    Confirm <Image src="/check.svg" alt="confirm" className="w-5 h-5" />
+                    Confirm <Image src="/check.svg" alt="confirm" className="w-5 h-5" width={120} height={80} />
                   </button>
                 </div>
               </div>
