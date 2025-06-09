@@ -118,6 +118,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
         padding: '1px',
         //border: '1px solid #000000',
         userSelect: 'none',
+        fontFamily: 'var(--font-inter), Inter, sans-serif',
       }}
     >
       {cells}
@@ -171,7 +172,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
               alignItems: 'center',
               justifyContent: 'center',
               fontSize: 'clamp(8px, 0.8vw, 18px)', // Responsive font size
-              fontWeight: 'bold',
+              fontWeight: "bold",
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
