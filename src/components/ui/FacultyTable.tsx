@@ -1,9 +1,9 @@
 import React from 'react';
-import { facultyData } from '@/lib/type';
+import { IFacultyData } from '@/lib/type';
 
 interface Props {
-  facultyData?: facultyData;
-  list: facultyData[];
+  facultyData?: IFacultyData;
+  list: IFacultyData[];
 }
 
 export default function FacultyTable({ list }: Props) {

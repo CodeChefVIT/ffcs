@@ -1,5 +1,16 @@
-import { Pangolin, Poppins, Inter } from "next/font/google";
+import type { Metadata } from "next";
+import { Geist, Geist_Mono, Pangolin, Poppins } from "next/font/google";
 import "./globals.css";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 const pangolin = Pangolin({
   weight: "400",
@@ -9,24 +20,16 @@ const pangolin = Pangolin({
 });
 
 const poppins = Poppins({
-  weight: ["400", "600"],
+  weight: ["400", "600"], 
   subsets: ["latin"],
   variable: "--font-poppins",
   display: "swap",
 });
 
-const inter = Inter({
-  weight: ["400", "600"],
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-
 export const metadata = {
   title: 'FFCS-inator',
   description: '',
-  icons: {
+ icons: {
     icon: '/favicon.svg',
   },
 };
@@ -40,7 +43,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${pangolin.variable} ${poppins.variable} ${inter.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} ${pangolin.variable} ${poppins.variable}`}
     >
       <body className="antialiased">{children}</body>
     </html>

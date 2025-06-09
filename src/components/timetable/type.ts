@@ -10,9 +10,3 @@ export type tableFacingSlot = {
   slotName: string;
   showName: boolean;
 };
-export type IFacultyData = {
-  faculty: string;
-  facultySlot: string[];
-  _id?: string;
-  subject?: string;
-};
