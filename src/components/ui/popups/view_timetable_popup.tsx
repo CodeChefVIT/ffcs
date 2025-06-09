@@ -44,10 +44,9 @@ const SharePopup: React.FC<ViewTimetableProps> = ({ onClose }) => {
   const slotNames = extractSlotNames(savedTimetable.facultyData);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/25 backdrop-blur-sm z-50 px-4 sm:px-12">
-      <div className="w-full max-w-6xl bg-lime-50 rounded-3xl shadow-[7px_7px_7px_rgba(0,0,0,1.00)] outline-4 outline-offset-[-2px] outline-black">
-        
-        <div className="flex justify-between items-center h-14 bg-amber-400 rounded-t-3xl outline-4 outline-offset-[-2px] outline-black px-4">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/25 backdrop-blur-sm z-50 px-4 sm:px-12 h-full">
+      <div className="w-full max-w-6xl bg-[#e2f2f9] rounded-3xl shadow-[7px_7px_7px_rgba(0,0,0,1.00)] outline-4 outline-offset-[-2px] outline-black min-h-[60vh] flex flex-col h-[80vh]">
+        <div className="flex justify-between items-center h-14 bg-[#8bd5ff] rounded-t-3xl outline-4 outline-offset-[-2px] outline-black px-4">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-black/50 rounded-full" />
             <div className="w-3 h-3 bg-black/50 rounded-full" />
@@ -70,21 +69,19 @@ const SharePopup: React.FC<ViewTimetableProps> = ({ onClose }) => {
           </button>
         </div>
 
-        
         <div
-          className={`p-6 sm:p-8 flex gap-6 ${
+          className={`p-6 sm:p-8 flex gap-6 flex-1 ${
             screenSize === "mobile" ? "flex-col" : "flex-row"
           }`}
         >
-          <div className="overflow-auto basis-2/3">
+          <div className="overflow-auto basis-2/3 h-full flex-1">
             <Timetable slotNames={slotNames} />
           </div>
-          <div className="overflow-auto basis-1/3">
+          <div className="overflow-auto basis-1/3 h-full flex-1">
             <FacultyTable list={savedTimetable.facultyData} />
           </div>
         </div>
 
-        
         <div className="h-6" />
       </div>
     </div>
