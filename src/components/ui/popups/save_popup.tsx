@@ -26,6 +26,8 @@ const SavePopup: React.FC<SavePopupProps> = ({ onClose }) => {
             <Image
               src="./x.svg"
               alt="x"
+              width={120}
+              height={80}
               className="felx justify-center w-8 h-8"
             />
           </button>

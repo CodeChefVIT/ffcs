@@ -26,6 +26,8 @@ const GoogleLoginPopup: React.FC<GoogleLoginPopupProps> = ({ onClose }) => {
             <Image
               src="./x.svg"
               alt="x"
+              width={120}
+              height={80}
               className="felx justify-center w-8 h-8" />
           </button>
         </div>
@@ -43,6 +45,8 @@ const GoogleLoginPopup: React.FC<GoogleLoginPopupProps> = ({ onClose }) => {
             <Image
               src="./google.svg"
               alt="Google"
+              width={120}
+              height={80}
               className="w-6 h-6"
             />
             <span className="text-black text-lg sm:text-xl md:text-2xl font-bold font-['Poppins']">
