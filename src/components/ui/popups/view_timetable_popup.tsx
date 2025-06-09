@@ -38,7 +38,12 @@ const extractSlotNames = (facultyData: facultyData[]): tableFacingSlot[] => {
   });
   return Array.from(slotSet).map((slotName) => ({ slotName, showName: true }));
 };
+const buttons = [
 
+ 
+  { label: 'Share', bg: '#C1FF83', icon: '/Send.svg' },
+  { label: 'Download', bg: '#FFEA79', icon: '/download.svg' },
+];
 const SharePopup: React.FC<ViewTimetableProps> = ({ onClose }) => {
   const screenSize = useScreenSize();
   const slotNames = extractSlotNames(savedTimetable.facultyData);
@@ -81,6 +86,19 @@ const SharePopup: React.FC<ViewTimetableProps> = ({ onClose }) => {
             <FacultyTable list={savedTimetable.facultyData} />
           </div>
         </div>
+        <div className="flex gap-9 w-full justify-center items-center">
+              {buttons.map((btn, index) => (
+                <button
+                  key={index}
+                  style={{ backgroundColor: btn.bg }}
+                  className="flex items-center gap-2 px-6 py-2 border-2 border-black rounded-lg shadow-[3px_3px_0_0_black] hover:brightness-105 active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
+                >
+                  <span className="text-lg font-medium">{btn.label}</span>
+                  <Image src={btn.icon} alt={btn.label} className="w-4 h-4" width={120} height={80} />
+                </button>
+              ))}
+            </div>
+         
 
         <div className="h-6" />
       </div>
