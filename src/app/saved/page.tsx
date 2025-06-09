@@ -1,13 +1,14 @@
 "use client"
 
 import useScreenSize from '@/hooks/useScreenSize'
-import Saved from './saved'
-import SavedMobile from './saved-mobile'
+import Shared from './saved'
+import SharedMobile from './saved-mobile'
 
 
-export default function Page() {
-  const size = useScreenSize()
+export default function Home() {
+    const size = useScreenSize()
 
-  if (size === 'mobile') return <SavedMobile />
-  return <Saved />
+    // if (!size) return null // or loading
+    if (size === 'mobile') return <SharedMobile />
+    return <Shared />
 }

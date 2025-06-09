@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import TimeTable from "@/components/timetable/TimeTable";
 import FacultyTable from "@/components/ui/FacultyTable";
 import TimetableSwitcher from "@/components/timetable/components/TimeTableSwitcher";
-import { facultyData, tableFacingSlot } from "@/lib/type";
-// import FacultySelector from "@/components/ui/FacultySelector";
+import { IFacultyData, tableFacingSlot } from "@/lib/type";
+import FacultySelector from "@/components/ui/FacultySelector";
 import ActionButtons from "@/components/timetable/components/ActionButtons";
 import ReplaceSlot from "@/components/timetable/components/QuickModify";
 
-const extractSlotNames = (facultyData: facultyData[]): tableFacingSlot[] => {
+const extractSlotNames = (facultyData: IFacultyData[]): tableFacingSlot[] => {
   const slotSet = new Set<string>();
   facultyData.forEach((faculty) => {
     faculty.facultySlot.forEach((group) => {
@@ -21,19 +21,74 @@ const extractSlotNames = (facultyData: facultyData[]): tableFacingSlot[] => {
   return Array.from(slotSet).map((slotName) => ({ slotName, showName: true }));
 };
 
-const initialFacultyData: facultyData[][] = [
+const initialFacultyData: IFacultyData[][] = [
   [
-    { _id: "1", faculty: "DHIVYAA C R", facultySlot: ["G1"], subject: "BCSE102P", },
-    { _id: "2", faculty: "DHIVYAA C R", facultySlot: ["L43+L44+L53+L54"], subject: "BENG101L", },
-    { _id: "3", faculty: "SOUMEN MUKHERJEE", facultySlot: ["B1"], subject: "BENG101P", },
-    { _id: "4", faculty: "SOUMEN MUKHERJEE", facultySlot: ["L45+L46"], subject: "BHUM101N", },
-    { _id: "5", faculty: "BHUVANESWARI M", facultySlot: ["NIL"], subject: "BHUM220L", },
-    { _id: "6", faculty: "SAVITHA N", facultySlot: ["C1+TC1"], subject: "BMAT101L", },
-    { _id: "7", faculty: "ARUN KUMAR BADAJENA", facultySlot: ["D1+TD1"], subject: "BMAT101P", },
-    { _id: "8", faculty: "ARUN KUMAR BADAJENA", facultySlot: ["L35+L36"], subject: "BPHY101L", },
-    { _id: "9", faculty: "KANHAIYA LAL PANDEY", facultySlot: ["E1+TE1"], subject: "BPHY101P", },
-    { _id: "10", faculty: "KANHAIYA LAL PANDEY", facultySlot: ["L47+L48"], subject: "BSTS101P", },
-    { _id: "11", faculty: "SIXPHRASE (APT)", facultySlot: ["F1+TF1"], subject: "BSTS101P", },
+    {
+      _id: "1",
+      faculty: "DHIVYAA C R",
+      facultySlot: ["G1"],
+      subject: "BCSE102P",
+    },
+    {
+      _id: "2",
+      faculty: "DHIVYAA C R",
+      facultySlot: ["L43+L44+L53+L54"],
+      subject: "BENG101L",
+    },
+    {
+      _id: "3",
+      faculty: "SOUMEN MUKHERJEE",
+      facultySlot: ["B1"],
+      subject: "BENG101P",
+    },
+    {
+      _id: "4",
+      faculty: "SOUMEN MUKHERJEE",
+      facultySlot: ["L45+L46"],
+      subject: "BHUM101N",
+    },
+    {
+      _id: "5",
+      faculty: "BHUVANESWARI M",
+      facultySlot: ["NIL"],
+      subject: "BHUM220L",
+    },
+    {
+      _id: "6",
+      faculty: "SAVITHA N",
+      facultySlot: ["C1+TC1"],
+      subject: "BMAT101L",
+    },
+    {
+      _id: "7",
+      faculty: "ARUN KUMAR BADAJENA",
+      facultySlot: ["D1+TD1"],
+      subject: "BMAT101P",
+    },
+    {
+      _id: "8",
+      faculty: "ARUN KUMAR BADAJENA",
+      facultySlot: ["L35+L36"],
+      subject: "BPHY101L",
+    },
+    {
+      _id: "9",
+      faculty: "KANHAIYA LAL PANDEY",
+      facultySlot: ["E1+TE1"],
+      subject: "BPHY101P",
+    },
+    {
+      _id: "10",
+      faculty: "KANHAIYA LAL PANDEY",
+      facultySlot: ["L47+L48"],
+      subject: "BSTS101P",
+    },
+    {
+      _id: "11",
+      faculty: "SIXPHRASE (APT)",
+      facultySlot: ["F1+TF1"],
+      subject: "BSTS101P",
+    },
   ],
   [
     { faculty: "John Doe", facultySlot: ["A1+TA1+TAA1"], _id: "1" },
@@ -51,7 +106,7 @@ const initialFacultyData: facultyData[][] = [
 
 export default function View() {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const visibleStart = useState(0)[0];
+  const [visibleStart, setVisibleStart] = useState(0);
   const maxVisible = 4;
   const total = initialFacultyData.length;
   const selectedData = initialFacultyData[selectedIndex];
@@ -90,9 +145,9 @@ export default function View() {
           </div>
         </div>
 
-
+        
         <div className=" mt-1 flex items-center justify-between px-8" style={{ height: 64 }}>
-
+          
           <div className="flex items-center">
             <TimetableSwitcher
               visibleStart={visibleStart}
@@ -105,14 +160,14 @@ export default function View() {
             />
           </div>
 
-
+          
           <div className="flex items-center" >
             <ActionButtons />
           </div>
         </div>
 
         <footer className="mt-4 border-t-3 border-black pt-2 pb-2">
-          <ReplaceSlot />
+         <ReplaceSlot/>
         </footer>
       </div>
     </div>
