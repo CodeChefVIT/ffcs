@@ -5,9 +5,63 @@ import TimeTable from "@/components/timetable/TimeTable";
 import FacultyTable from "@/components/ui/FacultyTable";
 import TimetableSwitcher from "@/components/timetable/components/TimeTableSwitcher";
 import { facultyData, tableFacingSlot } from "@/lib/type";
-// import FacultySelector from "@/components/ui/FacultySelector";
 import ActionButtons from "@/components/timetable/components/ActionButtons";
 import ReplaceSlot from "@/components/timetable/components/QuickModify";
+
+type APIFaculty = {
+  faculty: string;
+  facultySlot: string[];
+};
+
+type APIResponse = {
+  message: string;
+  result: APIFaculty[][];
+  courseNames: string[];
+};
+
+const apiResponse: APIResponse = {
+  message: "success",
+  result: [
+    [
+      {
+        faculty: "SRIDHAR RAJ S",
+        facultySlot: ["L11", "L12", "L27", "L28"],
+      },
+      {
+        faculty: "DIVYA LAKSHMI K",
+        facultySlot: ["L13", "L14", "L23", "L24"],
+      },
+    ],
+    [
+      {
+        faculty: "SRIDHAR RAJ S",
+        facultySlot: ["L11", "L12", "L27", "L28"],
+      },
+      {
+        faculty: "SREETHAR S",
+        facultySlot: ["L13", "L14", "L23", "L24"],
+      },
+    ],
+  ],
+  courseNames: ["SJT621 - java", "SJT418/SJT419 - java"],
+};
+
+const transformAPIResponseToFacultyData = (
+  response: APIResponse
+): facultyData[][] => {
+  return response.result.map((timetable, ttIndex) =>
+    timetable.map((facultyObj, index) => ({
+      _id: `${ttIndex}-${index}`,
+      faculty: facultyObj.faculty,
+      facultySlot: [
+        facultyObj.facultySlot.length > 0
+          ? facultyObj.facultySlot.join("+")
+          : "NIL",
+      ],
+      subject: response.courseNames[ttIndex] || "Unknown",
+    }))
+  );
+};
 
 const extractSlotNames = (facultyData: facultyData[]): tableFacingSlot[] => {
   const slotSet = new Set<string>();
@@ -21,35 +75,9 @@ const extractSlotNames = (facultyData: facultyData[]): tableFacingSlot[] => {
   return Array.from(slotSet).map((slotName) => ({ slotName, showName: true }));
 };
 
-const initialFacultyData: facultyData[][] = [
-  [
-    { _id: "1", faculty: "DHIVYAA C R", facultySlot: ["G1"], subject: "BCSE102P", },
-    { _id: "2", faculty: "DHIVYAA C R", facultySlot: ["L43+L44+L53+L54"], subject: "BENG101L", },
-    { _id: "3", faculty: "SOUMEN MUKHERJEE", facultySlot: ["B1"], subject: "BENG101P", },
-    { _id: "4", faculty: "SOUMEN MUKHERJEE", facultySlot: ["L45+L46"], subject: "BHUM101N", },
-    { _id: "5", faculty: "BHUVANESWARI M", facultySlot: ["NIL"], subject: "BHUM220L", },
-    { _id: "6", faculty: "SAVITHA N", facultySlot: ["C1+TC1"], subject: "BMAT101L", },
-    { _id: "7", faculty: "ARUN KUMAR BADAJENA", facultySlot: ["D1+TD1"], subject: "BMAT101P", },
-    { _id: "8", faculty: "ARUN KUMAR BADAJENA", facultySlot: ["L35+L36"], subject: "BPHY101L", },
-    { _id: "9", faculty: "KANHAIYA LAL PANDEY", facultySlot: ["E1+TE1"], subject: "BPHY101P", },
-    { _id: "10", faculty: "KANHAIYA LAL PANDEY", facultySlot: ["L47+L48"], subject: "BSTS101P", },
-    { _id: "11", faculty: "SIXPHRASE (APT)", facultySlot: ["F1+TF1"], subject: "BSTS101P", },
-  ],
-  [
-    { faculty: "John Doe", facultySlot: ["A1+TA1+TAA1"], _id: "1" },
-    { faculty: "Jane Smith", facultySlot: ["B2", "L1+L2"], _id: "2" },
-    { faculty: "f3", facultySlot: ["A2"], _id: "3" },
-    { faculty: "f4", facultySlot: ["B1"], _id: "4" },
-    { faculty: "f5", facultySlot: ["D1+TD1", "E1+TE1"], _id: "5" },
-  ],
-  [
-    { faculty: "Alice Johnson", facultySlot: ["C1", "C2"], _id: "6" },
-    { faculty: "Tom Hardy", facultySlot: ["L1+L2", "A2"], _id: "7" },
-    { faculty: "Priya Kumar", facultySlot: ["B1", "C2"], _id: "8" },
-  ],
-];
-
 export default function View() {
+  const initialFacultyData = transformAPIResponseToFacultyData(apiResponse);
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const visibleStart = useState(0)[0];
   const maxVisible = 4;
@@ -90,9 +118,7 @@ export default function View() {
           </div>
         </div>
 
-
-        <div className=" mt-1 flex items-center justify-between px-8" style={{ height: 64 }}>
-
+        <div className="mt-1 flex items-center justify-between px-8" style={{ height: 64 }}>
           <div className="flex items-center">
             <TimetableSwitcher
               visibleStart={visibleStart}
@@ -105,8 +131,7 @@ export default function View() {
             />
           </div>
 
-
-          <div className="flex items-center" >
+          <div className="flex items-center">
             <ActionButtons />
           </div>
         </div>
