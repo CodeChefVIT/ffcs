@@ -5,7 +5,7 @@ import TimeTable from "@/components/timetable/TimeTable";
 import FacultyTable from "@/components/ui/FacultyTable";
 import TimetableSwitcher from "@/components/timetable/components/TimeTableSwitcher";
 import { facultyData, tableFacingSlot } from "@/lib/type";
-import FacultySelector from "@/components/ui/FacultySelector";
+// import FacultySelector from "@/components/ui/FacultySelector";
 import ActionButtons from "@/components/timetable/components/ActionButtons";
 import ReplaceSlot from "@/components/timetable/components/QuickModify";
 
@@ -49,7 +49,7 @@ const initialFacultyData: facultyData[][] = [
   ],
 ];
 
-export default function view() {
+export default function View() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [visibleStart, setVisibleStart] = useState(0);
   const maxVisible = 4;
