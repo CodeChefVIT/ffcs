@@ -6,8 +6,8 @@ import SharedMobile from './shared-mobile'
 
 
 export default function Page() {
-    const size = useScreenSize()
+  const size = useScreenSize()
 
-    if (size === 'mobile') return <SharedMobile />
-    return <Shared />
+  if (size === 'mobile') return <SharedMobile />
+  return <Shared />
 }

@@ -6,8 +6,8 @@ import Four04Mobile from './four04/four04-mobile'
 
 
 export default function NotFound() {
-    const size = useScreenSize()
+  const size = useScreenSize()
 
-    if (size === 'mobile') return <Four04Mobile />
-    return <Four04 />
+  if (size === 'mobile') return <Four04Mobile />
+  return <Four04 />
 }

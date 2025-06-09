@@ -51,7 +51,7 @@ const initialFacultyData: facultyData[][] = [
 
 export default function View() {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [visibleStart, setVisibleStart] = useState(0);
+  const visibleStart = useState(0)[0];
   const maxVisible = 4;
   const total = initialFacultyData.length;
   const selectedData = initialFacultyData[selectedIndex];

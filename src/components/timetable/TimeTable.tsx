@@ -3,6 +3,7 @@
 import React from 'react';
 import { slot, tableFacingSlot } from '@/lib/type';
 import { getSlot, getAllSlots } from '@/lib/slots';
+import Image from 'next/image';
 
 export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] }) {
 
@@ -134,7 +135,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
           justifyContent: 'center',
         }}
       >
-        <img
+        <Image
           src="/ffcs.svg"
           alt="logo of FFCS Platform by CodeChef-VIT"
           style={{ width: 'auto', height: '67%', display: 'block', opacity: 0.92 }}

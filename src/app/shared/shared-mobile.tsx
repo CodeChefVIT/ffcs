@@ -1,3 +1,3 @@
 export default function View() {
-    return <div>Shared Mobile</div>
+  return <div>Shared Mobile</div>
 }
