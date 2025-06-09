@@ -1,3 +1,3 @@
-export default function view() {
-    return <div>404 Mobile</div>
+export default function View() {
+  return <div>404 Mobile</div>
 }
