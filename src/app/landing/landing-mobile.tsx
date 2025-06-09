@@ -1,3 +1,3 @@
-export default function view() {
-    return <div>Landing Mobile</div>
+export default function View() {
+  return <div>Landing Mobile</div>
 }
