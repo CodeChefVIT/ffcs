@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import DeletePopup from "./popups/delete_popup";
 
 interface Course {
   id: string;
@@ -81,9 +82,21 @@ export const CourseCard: React.FC = () => {
   const dragOverItemIndex = useRef<number | null>(null);
   const [saving, setSaving] = useState(false);
 
+  const [deletePopupOpen, setDeletePopupOpen] = useState(false);
+
+  const [courseToDelete, setCourseToDelete] = useState<Course | null>(null);
+
   const resetDragRefs = () => {
     draggedItemIndex.current = null;
     dragOverItemIndex.current = null;
+  };
+
+  const confirmDeleteCourse = () => {
+    if (courseToDelete) {
+      setCourses((prev) => prev.filter((c) => c.id !== courseToDelete.id));
+    }
+    setDeletePopupOpen(false);
+    setCourseToDelete(null);
   };
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
@@ -115,9 +128,7 @@ export const CourseCard: React.FC = () => {
     resetDragRefs();
   };
 
-  const deleteCourse = (id: string) => {
-    setCourses((prev) => prev.filter((c) => c.id !== id));
-  };
+  // Instead of deleting immediately, open popup
 
   const moveCourseUp = (index: number) => {
     if (index === 0) return;
@@ -145,7 +156,7 @@ export const CourseCard: React.FC = () => {
       await saveCourses(courses);
       alert(
         "Courses saved successfully!\n\nCourse order:\n" +
-        courses.map((c, i) => `${i + 1}. ${c.codes.join(", ")}`).join("\n")
+          courses.map((c, i) => `${i + 1}. ${c.codes.join(", ")}`).join("\n")
       );
     } catch (error) {
       if (error instanceof Error) {
@@ -154,13 +165,18 @@ export const CourseCard: React.FC = () => {
         alert("Failed to save courses due to an unknown error.");
       }
     }
+    setSaving(false);
   };
 
   return (
     <>
       <style>
         {`
+          @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Pangolin&display=swap');
         .font-pangolin { font-family: "Pangolin", cursive; }
+        .font-poppins { font-family: "Poppins", sans-serif; }
+
         .scrollbar-custom::-webkit-scrollbar { width: 16px; background: transparent; }
         .scrollbar-custom::-webkit-scrollbar-track {
           background: transparent; border-radius: 12px;
@@ -174,14 +190,15 @@ export const CourseCard: React.FC = () => {
           background-color: rgba(75, 85, 99, 0.7); 
         }
         .scrollbar-custom { scrollbar-width: thin; scrollbar-color: rgba(107, 114, 128, 0.3) transparent; }
-        `}
+      `}
       </style>
 
-      <div className="bg-[#A7D5D7] m-4 rounded-2xl border-[3px] border-black p-6 text-black font-medium">
+      <div className="bg-[#A7D5D7] m-4 font-poppins rounded-2xl border-[3px] border-black p-6 text-black font-medium">
         <div className="flex justify-between items-start">
-          <h2 className="text-2xl font-pangolin">Your Courses</h2>
-          <p className="text-xs text-red-700 max-w-xs text-right">
-            *Use arrows or drag-drop to set course priority, multiple timetables will be generated.
+          <h2 className="text-xl font-pangolin">Your Courses</h2>
+          <p className="text-sm text-red-700 max-w-xs text-right">
+            *Use arrows or drag-drop to set course priority, multiple timetables
+            will be generated.
           </p>
         </div>
 
@@ -200,12 +217,15 @@ export const CourseCard: React.FC = () => {
               onDragOver={(e) => e.preventDefault()}
             >
               {/* Codes */}
-              <div className="flex items-center sm:min-w-[70px] text-sm text-black">
+              <div className="flex items-center sm:min-w-[70px] text-sm text-black font-normal">
                 <div className="flex items-start">
-                  <div className="w-6 text-right mr-2 text-sm">{index + 1}.</div>
+                  <div className="w-6 text-right mr-2 text-sm">
+                    {index + 1}.
+                  </div>
                   <div
-                    className={`flex flex-col px-4 ${course.codes.length > 1 ? "space-y-1" : ""
-                      }`}
+                    className={`flex flex-col px-4 ${
+                      course.codes.length > 1 ? "space-y-1" : ""
+                    }`}
                   >
                     {course.codes.map((code) => (
                       <p key={code}>{code}</p>
@@ -215,10 +235,11 @@ export const CourseCard: React.FC = () => {
               </div>
 
               {/* Names */}
-              <div className="flex items-center sm:min-w-[200px] text-sm text-black">
+              <div className="flex items-center sm:min-w-[200px] text-sm text-black font-normal">
                 <div
-                  className={`flex flex-col justify-center ${course.names.length > 1 ? "space-y-1" : ""
-                    }`}
+                  className={`flex flex-col justify-center ${
+                    course.names.length > 1 ? "space-y-1" : ""
+                  }`}
                 >
                   {course.names.map((name, i) => (
                     <p key={i}>{name}</p>
@@ -227,7 +248,7 @@ export const CourseCard: React.FC = () => {
               </div>
 
               {/* Slots */}
-              <div className="flex items-center sm:min-w-[120px] text-sm text-right text-black">
+              <div className="flex items-center sm:min-w-[120px] text-sm text-right text-black font-normal">
                 <div className="flex flex-col justify-center">
                   {course.slots.split("\n").map((slot, idx) => (
                     <div key={idx}>{slot}</div>
@@ -238,7 +259,10 @@ export const CourseCard: React.FC = () => {
               {/* Buttons */}
               <div className="flex items-center justify-end gap-2">
                 <button
-                  onClick={() => deleteCourse(course.id)}
+                  onClick={() => {
+                    setCourseToDelete(course);
+                    setDeletePopupOpen(true);
+                  }}
                   aria-label="Delete Course"
                   className="bg-[#FFFFFF80] hover:bg-[#F08585] text-black p-2 rounded-lg shadow transition"
                   type="button"
@@ -314,8 +338,9 @@ export const CourseCard: React.FC = () => {
         <div className="text-center mt-8">
           <button
             id="generate-btn"
-            className={`border-2 border-black bg-[#7ce5e5] hover:bg-[#67d2d2] text-black font-semibold text-lg px-6 py-2 rounded-full shadow-[4px_4px_0_0_black] transition flex items-center justify-center gap-2 mx-auto ${saving ? "opacity-60 cursor-not-allowed" : ""
-              }`}
+            className={`border-2 border-black bg-[#7ce5e5] hover:bg-[#67d2d2] text-black font-semibold text-lg px-6 py-2 rounded-full shadow-[4px_4px_0_0_black] transition flex items-center justify-center gap-2 mx-auto ${
+              saving ? "opacity-60 cursor-not-allowed" : ""
+            }`}
             onClick={handleGenerate}
             type="button"
             disabled={saving}
@@ -338,6 +363,28 @@ export const CourseCard: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {deletePopupOpen && courseToDelete && (
+        <DeletePopup
+          onConfirm={confirmDeleteCourse}
+          onClose={() => {
+            setDeletePopupOpen(false);
+            setCourseToDelete(null);
+          }}
+          title="Delete This Course"
+          message={
+            <>
+              Are you sure you want to delete{" "}
+              <span className="font-semibold">
+                {courseToDelete.names.join(", ")}
+              </span>{" "}
+              from your timetable?
+            </>
+          }
+          confirmText="Delete"
+          cancelText="Cancel"
+        />
+      )}
     </>
   );
 };
