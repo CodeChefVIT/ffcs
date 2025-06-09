@@ -1,10 +1,4 @@
 import React from 'react';
-import { Poppins } from 'next/font/google';
-
-const poppins = Poppins({
-    subsets: ['latin'],
-    weight: ['400', '600'],
-});
 
 export default function Header() {
     return (
@@ -32,7 +26,7 @@ export default function Header() {
 
                     <h1 className="text-4xl lg:text-5xl font-[400] mb-2 tracking-wide font-[Pangolin]">FFCS-inator</h1>
 
-                    <p className={`${poppins.className} font-normal text-base text-black/70 mb-4 max-w-xl font-poppins`}>
+                    <p className="font-poppins font-normal text-base text-black/70 mb-4 max-w-xl font-poppins">
                         FFCS-inator generates priority-based timetables in seconds. <br />
                         No more clashes, no more stress.
                     </p>
@@ -41,14 +35,14 @@ export default function Header() {
                         Create Your Ideal Timetable!
                     </h2>
 
-                    <button className={`${poppins.className} font-normal bg-[#A9CFFF] px-6 py-1 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 font-normal flex items-center gap-5 text-2xl`}>
+                    <button className="font-poppins font-normal bg-[#A9CFFF] px-6 py-1 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 font-normal flex items-center gap-5 text-2xl">
                         Start
                         <img src="/arrow-down.svg" alt="down" className="w-7 h-7" />
                     </button>
                 </div>
             </div>
 
-            <div className={`${poppins.className} font-normal absolute top-6 right-6 flex flex-col sm:flex-row gap-2 sm:gap-4 z-30`}>
+            <div className="font-poppins font-normal absolute top-6 right-6 flex flex-col sm:flex-row gap-2 sm:gap-4 z-30">
                 <button className="bg-[#75E5EA] px-6 py-2  cursor-pointer rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-semibold text-sm sm:text-base">
                     Saved Timetables
                 </button>
@@ -57,7 +51,7 @@ export default function Header() {
                 </button>
             </div>
 
-            <div className={`${poppins.className} font-normal absolute top-6 left-6 flex items-center gap-4 z-30`}>
+            <div className="font-poppins font-normal absolute top-6 left-6 flex items-center gap-4 z-30">
                 <img src="/cc-border.svg" alt="Logo" className="w-12 h-12" />
                 <button className="bg-[#FFEA79] cursor-pointer px-6 py-2 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-semibold text-sm sm:text-base">
                     Slot View
