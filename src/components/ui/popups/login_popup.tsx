@@ -37,7 +37,7 @@ const GoogleLoginPopup: React.FC<GoogleLoginPopupProps> = ({ onClose }) => {
         </div>
 
         {/* Google Login Button */}
-        <div className="flex justify-center mt-6 px-18">
+        <div className="flex justify-center mt-2 px-18">
           <button className="flex items-center justify-center gap-4 w-full max-w-80 h-14 bg-white rounded-3xl shadow-[5px_5px_0px_rgba(0,0,0,1.00)] outline outline-4 outline-black px-4">
             <img
               src="./google.svg"
@@ -65,7 +65,7 @@ const GoogleLoginPopup: React.FC<GoogleLoginPopupProps> = ({ onClose }) => {
                />
         </div>
 
-        <div className="absolute bottom-0 left-8 w-18 h-16">
+        <div className="absolute -bottom-2 left-8 w-18 h-16">
           <img
               src="./curved.svg"
               alt=""
