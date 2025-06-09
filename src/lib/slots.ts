@@ -1,9 +1,5 @@
 import { slot } from "@/lib/type";
 
-function mergeSlots(target: Record<string, slot[]>, newKey: string, keysToMerge: string[]) {
-    target[newKey] = keysToMerge.flatMap(key => target[key] || []);
-}
-
 const slotMap: Record<string, slot[]> = {
     'A1': [{ rowStart: 4, rowEnd: 5, colStart: 2, colEnd: 7, slotName: 'A1' }, { rowStart: 10, rowEnd: 11, colStart: 8, colEnd: 13, slotName: 'A1' }],
     'TA1': [{ rowStart: 16, rowEnd: 17, colStart: 14, colEnd: 19, slotName: 'TA1' }],
@@ -73,27 +69,6 @@ const slotMap: Record<string, slot[]> = {
     'L57': [{ rowStart: 17, rowEnd: 18, colStart: 49, colEnd: 59, slotName: 'L57+L58' }],
     'L59': [{ rowStart: 17, rowEnd: 18, colStart: 60, colEnd: 70, slotName: 'L59+L60' }],
 };
-
-mergeSlots(slotMap, 'A1+TA1', ['A1', 'TA1']);
-mergeSlots(slotMap, 'A1+TA1+TAA1', ['A1', 'TA1', 'TAA1']);
-mergeSlots(slotMap, 'B1+TB1', ['B1', 'TB1']);
-mergeSlots(slotMap, 'C1+TC1', ['C1', 'TC1']);
-mergeSlots(slotMap, 'C1+TC1+TCC1', ['C1', 'TC1', 'TCC1']);
-mergeSlots(slotMap, 'D1+TD1', ['D1', 'TD1']);
-mergeSlots(slotMap, 'E1+TE1', ['E1', 'TE1']);
-mergeSlots(slotMap, 'F1+TF1', ['F1', 'TF1']);
-mergeSlots(slotMap, 'G1+TG1', ['G1', 'TG1']);
-mergeSlots(slotMap, 'A2+TA2', ['A2', 'TA2']);
-mergeSlots(slotMap, 'A2+TA2+TAA2', ['A2', 'TA2', 'TAA2']);
-mergeSlots(slotMap, 'B2+TB2', ['B2', 'TB2']);
-mergeSlots(slotMap, 'B2+TB2+TBB2', ['B2', 'TB2', 'TBB2']);
-mergeSlots(slotMap, 'C2+TC2', ['C2', 'TC2']);
-mergeSlots(slotMap, 'C2+TC2+TCC2', ['C2', 'TC2', 'TCC2']);
-mergeSlots(slotMap, 'D2+TD2', ['D2', 'TD2']);
-mergeSlots(slotMap, 'D2+TD2+TDD2', ['D2', 'TD2', 'TDD2']);
-mergeSlots(slotMap, 'E2+TE2', ['E2', 'TE2']);
-mergeSlots(slotMap, 'F2+TF2', ['F2', 'TF2']);
-mergeSlots(slotMap, 'G2+TG2', ['G2', 'TG2']);
 
 export function getSlot(slot: string, withName: boolean = true): slot[] {
     const slots = slotMap[slot] || [];

@@ -5,10 +5,9 @@ import Slots from './slots'
 import SlotsMobile from './slots-mobile'
 
 
-export default function Home() {
+export default function slots() {
     const size = useScreenSize()
 
-    // if (!size) return null // or loading
     if (size === 'mobile') return <SlotsMobile />
     return <Slots />
 }

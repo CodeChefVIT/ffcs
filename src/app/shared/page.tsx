@@ -5,10 +5,9 @@ import Shared from './shared'
 import SharedMobile from './shared-mobile'
 
 
-export default function Home() {
+export default function shared() {
     const size = useScreenSize()
 
-    // if (!size) return null // or loading
     if (size === 'mobile') return <SharedMobile />
     return <Shared />
 }
