@@ -42,10 +42,12 @@ const GoogleLoginPopup: React.FC<GoogleLoginPopupProps> = ({ onClose }) => {
         {/* Google Login Button */}
         <div className="flex justify-center mt-2 px-18">
           <button className="flex items-center justify-center gap-4 w-full max-w-80 h-14 bg-white rounded-3xl shadow-[5px_5px_0px_rgba(0,0,0,1.00)] outline outline-4 outline-black px-4">
-            <img
+            <Image
               src="./google.svg"
               alt="Google"
               className="w-10 h-10"
+              width={120}
+              height={80}
             />
             <span className="text-black text-lg sm:text-xl md:text-lg font-bold font-['Poppins']">
               Login with Google
@@ -55,30 +57,38 @@ const GoogleLoginPopup: React.FC<GoogleLoginPopupProps> = ({ onClose }) => {
         
         {/*doodles */}
         <div className="absolute top-18 left-10 w-10 h-10">
-          <img
+          <Image
               src="./sparkle.svg"
               alt=""
+              width={120}
+              height={80}
                />
         </div>
 
         <div className="absolute top-20 right-11 w-10 h-10">
-          <img
+          <Image
               src="./scribble.svg"
               alt=""
+              width={120}
+              height={80}
                />
         </div>
 
         <div className="absolute -bottom-2 left-8 w-18 h-16">
-          <img
+          <Image
               src="./curved.svg"
               alt=""
+              width={120}
+              height={80}
                />
         </div>
 
         <div className="absolute -bottom-4 rotate-6 right-8 w-18 h-18">
-          <img
+          <Image
               src="./loop.svg"
               alt=""
+              width={120}
+              height={80}
                />
         </div>
 
