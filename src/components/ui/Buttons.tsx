@@ -46,10 +46,72 @@ export function RegularButton({ text, color, image, onClick, disabled = false, c
       `}
     >
       {text}
-      {image && <Image src={image} alt="" width={24} height={24} />}
+      {image && (
+        <span style={{ pointerEvents: 'none', display: 'flex' }}>
+          <Image src={image} alt="" width={24} height={4} />
+        </span>
+      )}
     </button>
   );
 }
+
+export function LargeButton({ text, color, image, onClick, disabled = false, clicked = false }: ButtonProps) {
+  return (
+    <button
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
+      style={{
+        backgroundColor: disabled ? colorMap['gray'] : clicked ? colorMap['green_2'] : colorMap[color],
+        fontFamily: 'Poppins, sans-serif',
+        height: '60px',
+        borderRadius: '20px',
+        userSelect: 'none',
+      }}
+      className={`  
+      text-black  
+      px-8 py-4  
+      border-3 border-black  
+      font-semibold  
+      text-2xl
+      ${disabled ? 'cursor-normal' : 'cursor-pointer'}  
+      flex items-center justify-center text-center gap-6 
+      transition duration-100  
+      shadow-[4px_4px_0_0_black]  
+      ${disabled ? '' : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'}  
+      `}
+    >
+      {text}
+      {image && (
+        <span style={{ pointerEvents: 'none', display: 'flex' }}>
+          <Image src={image} alt="" width={28} height={28} />
+        </span>
+      )}
+    </button>
+  );
+}
+
+export function CCButton() {
+  return (
+    <a
+      href="https://codechefvit.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ display: 'flex', pointerEvents: 'auto' }}
+    >
+      <Image
+        src="/logo_cc.png"
+        alt="CC Button"
+        width={80}
+        height={80}
+        style={{
+          cursor: 'pointer',
+        }}
+      />
+    </a>
+  );
+}
+
+
 
 type ToggleButtonProps = {
   onToggle?: (selected: string) => void;

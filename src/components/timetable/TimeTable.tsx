@@ -8,7 +8,6 @@ import Image from 'next/image';
 export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] }) {
 
   const slots: slot[] = slotNames.map(slotNames => getSlot(slotNames.slotName, slotNames.showName)).flat();
-  console.log('Slots:', slots);
 
   const ROWS = 17
   const COLUMNS = 69;
@@ -72,7 +71,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
 
   const MERGE_CELLS_SLOTS: slot[] = [];
   const allSlotsWithoutName: slot[] = getAllSlots().map(slotName => getSlot(slotName, true)).flat();
-  console.log('ttSlot Names:', slotNames);
+
   MERGE_CELLS_SLOTS.push(
     ...allSlotsWithoutName.map(slot => ({
       colStart: slot.colStart,
