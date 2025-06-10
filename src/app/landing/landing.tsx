@@ -8,6 +8,7 @@ import { facultyData, tableFacingSlot } from "@/lib/type";
 import ActionButtons from "@/components/timetable/components/ActionButtons";
 import ReplaceSlot from "@/components/timetable/components/QuickModify";
 import Header from "@/components/ui/Header";
+import Footer from "@/components/ui/Footer";
 
 type APIFaculty = {
   faculty: string;
