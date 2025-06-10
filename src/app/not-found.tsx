@@ -8,5 +8,5 @@ export default function NotFound() {
   const size = useScreenSize();
 
   if (size === 'mobile') return <Four04Mobile />
-      return <Four04 />
+  return <Four04 />
 }

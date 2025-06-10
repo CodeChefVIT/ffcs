@@ -36,7 +36,7 @@ export default function View() {
       <div className="mt-4">
         <ToggleButton onToggle={setSelected} />
       </div>
-      
+
       {selected === "Theory" && (
         <div className="flex gap-16 mt-6">
           {/* Morning Theory */}

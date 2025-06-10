@@ -86,7 +86,7 @@ export function ToggleButton({ onToggle }: ToggleButtonProps) {
 
   return (
     <div
-    style={{
+      style={{
         fontFamily: 'Poppins, sans-serif',
         height: '56px',
         borderRadius: '18px',
