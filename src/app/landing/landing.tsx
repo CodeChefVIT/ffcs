@@ -96,7 +96,8 @@ export default function View() {
   };
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-[#a7d5d7] font-poppins">
+    <div className="w-screen overflow-hidden bg-[#a7d5d7] font-poppins">
+      <Header />
       <div className="flex flex-col h-full max-w-[1600px] mx-auto min-w-[1000px] px-6 py-4 box-border">
         <div className="flex items-center mb-4 ml-2">
           <h1

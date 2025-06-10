@@ -32,18 +32,17 @@ export function RegularButton({ text, color, image, onClick, disabled = false, c
         borderRadius: '16px',
         userSelect: 'none',
       }}
-      className={`
-      text-black
-      px-5 py-2
-      m-2
-      border-3 border-black
-      font-semibold
-      text-base
-      ${disabled ? 'cursor-normal' : 'cursor-pointer'}
-      flex items-center gap-2.5
-      transition duration-100
-      shadow-[4px_4px_0_0_black]
-      ${disabled ? '' : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'}
+      className={`  
+      text-black  
+        px-4 py-2  
+        border-3 border-black  
+        font-semibold  
+        text-base  
+        ${disabled ? 'cursor-normal' : 'cursor-pointer'}  
+        flex items-center justify-center text-center gap-2.5  
+        transition duration-100  
+        shadow-[4px_4px_0_0_black]  
+        ${disabled ? '' : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'}  
       `}
     >
       {text}
@@ -83,15 +82,20 @@ export function ToggleButton({ onToggle }: ToggleButtonProps) {
     onToggle?.(label);
   };
 
-  const [isActive, setIsActive] = useState(false);
+  const setIsActive = useState(false)[1];
 
   return (
     <div
+    style={{
+        fontFamily: 'Poppins, sans-serif',
+        height: '56px',
+        borderRadius: '18px',
+        userSelect: 'none',
+        cursor: "pointer",
+      }}
       className={`
-        h-16
         relative flex items-center
         border-[3px] border-black
-        rounded-3xl
         shadow-[4px_4px_0_0_black]
         transition-all duration-100
         bg-[${colorMap['yellow']}]
@@ -100,7 +104,6 @@ export function ToggleButton({ onToggle }: ToggleButtonProps) {
         active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]
       `}
       onClick={() => handleSelect(selected === toggleOptions[0] ? toggleOptions[1] : toggleOptions[0])}
-      style={{ cursor: "pointer", userSelect: "none" }}
       onMouseDown={() => setIsActive(true)}
       onMouseUp={() => setIsActive(false)}
       onMouseLeave={() => setIsActive(false)}
@@ -110,11 +113,12 @@ export function ToggleButton({ onToggle }: ToggleButtonProps) {
       {/* White highlight that wraps text */}
       {sizes[selected] && (
         <div
-          className="absolute top-1/2 -translate-y-1/2 h-[80%] bg-white border border-black rounded-2xl transition-all duration-100 ease-in-out"
+          className="absolute top-1/2 -translate-y-1/2 h-[80%] bg-white border border-black transition-all duration-100 ease-in-out"
           style={{
             left: sizes[selected].left,
             width: sizes[selected].width,
             zIndex: 1,
+            borderRadius: '15px',
           }}
         />
       )}
@@ -128,6 +132,7 @@ export function ToggleButton({ onToggle }: ToggleButtonProps) {
           className="relative z-10 px-4 py-0 text-base font-semibold transition-colors duration-200"
           style={{
             fontFamily: "Poppins, sans-serif",
+            fontWeight: "700",
             background: "none",
             border: "none",
             cursor: "pointer",
