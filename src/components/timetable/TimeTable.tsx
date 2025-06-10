@@ -123,25 +123,16 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
     >
       {cells}
       <div
-        key={`image-cell`}
-        style={{
-          gridColumn: 1,
-          gridRowStart: 1,
-          gridRowEnd: 3,
-          backgroundColor: '#ffffff',
-          border: '0.5px solid #000000',
-          boxSizing: 'border-box',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
+        key="image-cell"
+        className="col-[1] row-start-[1] row-end-[3] bg-white border border-black box-border flex items-center justify-center"
       >
         <Image
           src="/ffcs.svg"
           alt="logo of FFCS Platform by CodeChef-VIT"
           width={120}
           height={80}
-          style={{ width: 'auto', height: '67%', display: 'block', opacity: 0.92 }}
+          className="w-auto h-2/3 block opacity-90 select-none pointer-events-none"
+          draggable={false}
         />
       </div>
 
