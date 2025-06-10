@@ -8,7 +8,7 @@ interface GoogleLoginPopupProps {
 const GoogleLoginPopup: React.FC<GoogleLoginPopupProps> = ({ onClose }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/25 backdrop-blur-sm z-50 px-4">
-      <div className="relative w-full max-w-md sm:max-w-xl md:max-w-xl bg-lime-50 rounded-3xl shadow-[7px_7px_7px_rgba(0,0,0,1.00)] outline outline-4 outline-offset-[-2px] outline-black">
+      <div className="relative w-full max-w-md sm:max-w-xl md:max-w-xl bg-lime-50 rounded-3xl shadow-[7px_7px_7px_rgba(0,0,0,1.00)] outline-4 outline-offset-[-2px] outline-black">
         {/* Header */}
         <div className="flex justify-between items-center h-14 bg-amber-400 rounded-t-3xl outline-4 outline-offset-[-2px] outline-black px-4">
           <div className="flex items-center gap-2">
@@ -41,7 +41,7 @@ const GoogleLoginPopup: React.FC<GoogleLoginPopupProps> = ({ onClose }) => {
 
         {/* Google Login Button */}
         <div className="flex justify-center mt-2 px-18">
-          <button className="flex items-center justify-center gap-4 w-full max-w-80 h-14 bg-white rounded-3xl shadow-[5px_5px_0px_rgba(0,0,0,1.00)] outline outline-4 outline-black px-4">
+          <button className="flex items-center justify-center gap-4 w-full max-w-80 h-14 bg-white rounded-3xl shadow-[5px_5px_0px_rgba(0,0,0,1.00)] outline-4 outline-black px-4">
             <Image
               src="./google.svg"
               alt="Google"

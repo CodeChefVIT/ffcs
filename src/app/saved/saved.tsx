@@ -20,7 +20,7 @@ export default function Saved() {
   const [timetable] = useState(dummyTimetables);
 
   if (size === "mobile") {
-    return <SavedMobile/>;
+    return <SavedMobile />;
   }
 
   return (

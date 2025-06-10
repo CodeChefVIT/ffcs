@@ -143,6 +143,7 @@ export default function View() {
           <ReplaceSlot />
         </footer>
       </div>
+      <Footer />
     </div>
   );
 }
