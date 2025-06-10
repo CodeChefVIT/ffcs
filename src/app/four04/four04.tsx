@@ -1,3 +1,4 @@
+
 "use client"
 
 import useScreenSize from "@/hooks/useScreenSize";
@@ -58,5 +59,6 @@ export default function NotFound() {
     <footer> </footer>
 
     </>
+
   );
 }

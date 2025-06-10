@@ -8,10 +8,11 @@ import SavePopup from "@/components/ui/popups/save_popup";
 import RenamePopup from "@/components/ui/popups/rename_popup";
 import SharePopup from "@/components/ui/popups/share_popup";
 import DeletePopup from "@/components/ui/popups/delete_popup";
+import ViewTimetablePopup from "@/components/ui/popups/view_timetable_popup"; 
 
 
 export default function Home() {
-  const [popupType, setPopupType] = useState<"google" | "email" | "remove" | "save" | "rename" | "share" | "delete" | null>(null);
+  const [popupType, setPopupType] = useState<"google" | "email" | "remove" | "save" | "rename" | "share" | "delete" | "view_timetable" | null>(null);
 
   const closePopup = () => setPopupType(null);
 
@@ -60,6 +61,13 @@ export default function Home() {
         Delete Timetable
       </button>
 
+      <button
+        onClick={() => setPopupType("view_timetable")}
+        className="text-white bg-blue-700 hover:bg-blue-900 focus:outline-none text-sm rounded-lg px-5 py-2.5 mr-5"
+      >
+        View Timetable
+      </button>
+
     {popupType === "delete" && <DeletePopup onClose={closePopup} />}
      {popupType === "share" && <SharePopup onClose={closePopup} />}
      {popupType === "rename" && <RenamePopup onClose={closePopup} />}
@@ -67,6 +75,7 @@ export default function Home() {
      {popupType === "remove" && <RemovePopup onClose={closePopup} />}
      {popupType === "google" && <GoogleLoginPopup onClose={closePopup} />}
      {popupType === "email" && <EmailPopup onClose={closePopup} />}
+     {popupType === "view_timetable" && <ViewTimetablePopup onClose={closePopup} />} 
     </div>
   );
 }
