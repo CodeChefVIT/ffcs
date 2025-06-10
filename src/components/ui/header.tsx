@@ -35,7 +35,7 @@ export default function Header() {
                         Create Your Ideal Timetable!
                     </h2>
 
-                    <button className="font-poppins font-normal bg-[#A9CFFF] px-6 py-1 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 font-normal flex items-center gap-5 text-2xl">
+                    <button className="font-poppins font-normal bg-[#A9CFFF] px-6 py-1 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 flex items-center gap-5 text-2xl">
                         Start
                         <img src="/arrow-down.svg" alt="down" className="w-7 h-7" />
                     </button>
