@@ -32,17 +32,12 @@ export const metadata = {
 };
 
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
   return (
-    <html
-      lang="en"
-      className={`${pangolin.variable} ${poppins.variable} ${inter.variable}`}
-    >
-      <body className="antialiased">{children}</body>
+    <html lang="en"    >
+      <body className={`${pangolin.variable} ${poppins.variable} ${inter.variable} antialiased`}>
+        {children}
+      </body>
     </html>
   );
 }
