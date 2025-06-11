@@ -3,23 +3,23 @@
 import Image from "next/image";
 import { LargeButton } from "@/components/ui/Buttons";
 import { Navbar } from "@/components/ui/Navbar";
-import Footer from "@/components/ui/Footer";
+import { Footer } from "@/components/ui/Footer";
 
 export default function NotFound() {
   return (
     <div className="flex flex-col min-h-screen relative select-none">
-      <div className="absolute inset-0 -z-10">
+      <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
         <Image
           src="/bg_dots.svg"
           alt="Background"
           fill
           priority
           sizes="100vw"
-          className="object-top object-cover"
+          className="object-top object-contain w-full h-full"
         />
       </div>
 
-      <Navbar page="404" loggedin={true} />
+      <Navbar page="404" loggedin={false} />
 
 
       <div className="flex-grow mt-24 flex flex-col items-center text-center relative">

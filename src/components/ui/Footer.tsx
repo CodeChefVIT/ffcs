@@ -1,7 +1,8 @@
 import React from "react";
 import Image from "next/image";
+import { CCButton } from "./Buttons";
 
-export default function Footer() {
+export function Footer() {
   return (
     <footer className="w-full bg-[#CEE4E5] font-[poppins] text-black relative overflow-hidden flex items-center flex-col select-none">
       <div className="px-8 py-8 sm:py-6 xs:py-4 flex flex-col md:flex-row items-start justify-between relative z-10 w-full bg-[#A7D5D7] border-t-2 border-black gap-y-6">
@@ -89,3 +90,35 @@ export default function Footer() {
     </footer>
   );
 }
+
+
+export function FooterMobile() {
+  return (
+    <footer className="w-full bg-[#CEE4E5] text-center mt-auto relative overflow-hidden">
+      {/* Foreground Content */}
+      <div className="relative z-10 flex flex-col items-center justify-center pt-12 pb-4 px-4">
+        <div className="mb-4">
+          <CCButton />
+        </div>
+        <p className="text-sm text-black font-poppins font-semibold">
+          Made with ❤ by CodeChef-VIT
+        </p>
+      </div>
+
+      {/* Full-width Wave Background */}
+      <div className="absolute bottom-0 left-0 right-0 z-0">
+        <Image
+          src="/footer_mobile.svg"
+          alt="Wave Design"
+          width={1920}
+          height={1080}
+          className="w-full h-auto"
+          priority
+        />
+      </div>
+    </footer>
+  );
+}
+
+
+export default { Footer, FooterMobile };

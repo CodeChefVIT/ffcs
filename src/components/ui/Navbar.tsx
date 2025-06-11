@@ -57,14 +57,14 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
         {/* B4: Login Logout */}
         {(page === 'landing' || page === '404' || page == 'slots') && (!loggedin) && (
           <LongButton
-            text="Login"
+            text="Log In"
             color='green'
             onClick={() => window.location.href = '/login'}
           />
         )}
         {((page === 'saved') || ((page === 'landing' || page === '404' || page == 'slots') && (loggedin))) && (
           <LongButton
-            text="Logout"
+            text="Log Out"
             color="red"
             onClick={() => window.location.href = '/logout'}
           />
