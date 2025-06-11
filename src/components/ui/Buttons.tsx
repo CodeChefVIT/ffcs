@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
@@ -35,6 +37,41 @@ export function RegularButton({ text, color, image, onClick, disabled = false, c
       className={`  
       text-black  
         px-4 py-2  
+        border-3 border-black  
+        font-semibold  
+        text-base  
+        ${disabled ? 'cursor-normal' : 'cursor-pointer'}  
+        flex items-center justify-center text-center gap-2.5  
+        transition duration-100  
+        shadow-[4px_4px_0_0_black]  
+        ${disabled ? '' : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'}  
+      `}
+    >
+      {text}
+      {image && (
+        <span style={{ pointerEvents: 'none', display: 'flex' }}>
+          <Image src={image} alt="" width={24} height={4} />
+        </span>
+      )}
+    </button>
+  );
+}
+
+export function LongButton({ text, color, image, onClick, disabled = false, clicked = false }: ButtonProps) {
+  return (
+    <button
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
+      style={{
+        backgroundColor: disabled ? colorMap['gray'] : clicked ? colorMap['green_2'] : colorMap[color],
+        fontFamily: 'Poppins, sans-serif',
+        height: '48px',
+        borderRadius: '16px',
+        userSelect: 'none',
+      }}
+      className={`  
+      text-black  
+        px-8 py-2  
         border-3 border-black  
         font-semibold  
         text-base  
@@ -103,14 +140,24 @@ export function CCButton() {
         alt="CC Button"
         width={80}
         height={80}
-        style={{
-          cursor: 'pointer',
-        }}
+        className="cursor-pointer select-none"
       />
     </a>
   );
 }
 
+export function FFCSButton() {
+  return (
+    <Image
+      src="/FFCS.svg"
+      alt="CC Button"
+      width={80}
+      height={80}
+      className="cursor-pointer select-none"
+      onClick={() => window.location.href = '/'}
+    />
+  );
+}
 
 
 type ToggleButtonProps = {
