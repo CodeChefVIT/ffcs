@@ -9,6 +9,8 @@ import ActionButtons from "@/components/timetable/components/ActionButtons";
 import ReplaceSlot from "@/components/timetable/components/QuickModify";
 import Header from "@/components/ui/header";
 import Footer from "@/components/ui/footer";
+import FacultySelector from "@/components/ui/FacultySelector";
+import CourseCard from "@/components/ui/CourseCard";
 
 type APIFaculty = {
   faculty: string;
@@ -99,6 +101,17 @@ export default function View() {
   return (
     <div className="w-screen overflow-hidden bg-[#a7d5d7] font-poppins">
       <Header />
+
+      <FacultySelector
+        domains={[]}
+        subjects={[]}
+        slots={[]}
+        faculties={["a", "b", "c"]}
+        onConfirm={() => {}}
+        onReset={() => {}}
+      />
+      <CourseCard/>
+      
       <div className="flex flex-col h-full max-w-[1600px] mx-auto min-w-[1000px] px-6 py-4 box-border">
         <div className="flex items-center mb-4 ml-2">
           <h1
