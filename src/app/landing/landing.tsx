@@ -12,7 +12,8 @@ import FacultySelector from "@/components/ui/FacultySelector";
 import CourseCard from "@/components/ui/CourseCard";
 import Image from "next/image";
 import { Navbar } from "@/components/ui/Navbar";
-import Footer from "@/components/ui/Footer";
+import { Footer } from "@/components/ui/Footer";
+
 type APIFaculty = {
   faculty: string;
   facultySlot: string[];

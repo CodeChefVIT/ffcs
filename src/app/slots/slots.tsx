@@ -1,6 +1,11 @@
+"use client";
+
 import TimeTable from "@/components/timetable/TimeTable";
 import { RegularButton, ToggleButton } from "@/components/ui/Buttons";
+import { Footer } from "@/components/ui/Footer";
+import { Navbar } from "@/components/ui/Navbar";
 import { clashMap, getAllSlots } from "@/lib/slots";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function View() {
@@ -31,9 +36,23 @@ export default function View() {
 
   return (
 
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col min-h-screen relative select-none items-center">
+      <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
+        <Image
+          src="/bg_dots.svg"
+          alt="Background"
+          fill
+          priority
+          sizes="100vw"
+          className="object-top object-contain w-full h-full"
+        />
+      </div>
 
-      <div className="mt-4">
+      <Navbar page="slots" loggedin={false} />
+
+      <div className="text-6xl mt-36 mb-4 font-pangolin text-black">Slot View</div>
+
+      <div className="mt-8 mb-8">
         <ToggleButton onToggle={setSelected} />
       </div>
 
@@ -225,13 +244,16 @@ export default function View() {
         </div>
       )}
 
-      <div className="mx-auto mt-10 mb-10 w-full max-w-[1000px]">
+      <div className="mx-auto mt-12 mb-10 w-full max-w-[1000px]">
         <div className="overflow-x-auto">
           <div className="min-w-[1000px] h-[480px]">
             <TimeTable slotNames={active.map(i => ({ slotName: buttonTexts[i], showName: true }))} />
           </div>
         </div>
       </div>
+
+      <div className="h-12" />
+      <Footer />
 
     </div >
   );

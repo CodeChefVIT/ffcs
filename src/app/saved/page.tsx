@@ -5,8 +5,9 @@ import Saved from './saved'
 import SavedMobile from './saved-mobile'
 
 export default function View() {
-    const size = useScreenSize()
+  const size = useScreenSize()
 
-    if (size === 'mobile') return <SavedMobile />
-    return <Saved />
+  if (size === null) return <div>Loading...</div>;
+  if (size === 'mobile') return <SavedMobile />
+  return <Saved />
 }

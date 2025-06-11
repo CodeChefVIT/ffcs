@@ -7,6 +7,7 @@ import Four04 from "./four04/four04";
 export default function NotFound() {
   const size = useScreenSize();
 
-  if (size === 'mobile') return <Four04Mobile />
-  return <Four04 />
+  if (size === null) return <div>Loading...</div>;
+  if (size === 'mobile') return <Four04Mobile />;
+  return <Four04 />;
 }
