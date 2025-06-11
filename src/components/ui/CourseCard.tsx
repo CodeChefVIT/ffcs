@@ -193,9 +193,9 @@ export const CourseCard: React.FC = () => {
       `}
       </style>
 
-      <div className="bg-[#A7D5D7] m-4 font-poppins rounded-2xl border-[3px] border-black p-6 text-black font-medium">
-        <div className="flex justify-between items-start">
-          <h2 className="text-xl font-pangolin">Your Courses</h2>
+      <div className="bg-[#A7D5D7] m-4 font-poppins rounded-2xl border-[3px] border-black p-6 text-black font-medium px-12 mb-16">
+        <div className="flex justify-between items-start mt-4">
+          <h2 className="text-3xl font-pangolin">Your Courses</h2>
           <p className="text-sm text-red-700 max-w-xs text-right">
             *Use arrows or drag-drop to set course priority, multiple timetables
             will be generated.
@@ -204,7 +204,7 @@ export const CourseCard: React.FC = () => {
 
         <div
           id="course-list"
-          className="mt-6 space-y-4 max-h-[350px] overflow-y-auto pr-2 font-poppins scrollbar-custom"
+          className="mt-6 space-y-4 max-h-[350px] overflow-y-auto pr-2 font-poppins scrollbar-custom w-full"
         >
           {courses.map((course, index) => (
             <div
@@ -217,7 +217,7 @@ export const CourseCard: React.FC = () => {
               onDragOver={(e) => e.preventDefault()}
             >
               {/* Codes */}
-              <div className="flex items-center sm:min-w-[70px] text-sm text-black font-normal">
+              <div className="flex items-center sm:min-w-[400px] text-sm text-black font-normal">
                 <div className="flex items-start">
                   <div className="w-6 text-right mr-2 text-sm">
                     {index + 1}.

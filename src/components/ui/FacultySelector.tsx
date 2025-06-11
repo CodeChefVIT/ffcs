@@ -23,7 +23,7 @@ const SelectField = ({
   onChange: (value: string) => void;
 }) => {
   return (
-    <div className="relative">
+    <div className="relative ">
       <select
         className="w-full p-2 pl-3 pr-10 rounded-xl border-3 border-black bg-white font-semibold text-[#000000B2] outline-none appearance-none"
         value={value}
@@ -132,7 +132,7 @@ export default function FacultySelector({
             `}</style>
 
       {/* Main container */}
-      <div className="relative inline-block">
+      <div className="relative inline-block mb-20">
         <div className="absolute inset-0 bg-black rounded-xl translate-x-1.5 translate-y-1.5 z-0" />
 
         <div className={`${poppins.className} relative bg-[#A7D5D7] rounded-xl max-w-[51rem] border border-black border-l-[3px] border-t-[3px] mx-auto overflow-hidden`}>

@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function Header() {
   return (
-    <div className="relative w-full flex flex-col items-center justify-center px-4 text-center bg-[#CEE4E5] overflow-hidden h-screen">
+    <div className="relative w-full flex flex-col items-center justify-center px-4 text-center bg-[#CEE4E5] overflow-hidden h-screen mb-16">
 
       <Image
         src="/background.svg"
