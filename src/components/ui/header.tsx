@@ -90,7 +90,7 @@ export default function Header() {
 
           <h1 className="text-4xl lg:text-5xl font-[400] mb-2 tracking-wide font-[Pangolin]">FFCS-inator</h1>
 
-          <p className="font-poppins font-normal text-base text-black/70 mb-4 max-w-xl font-poppins">
+          <p className="font-poppins font-normal text-base text-black/70 mb-4 max-w-xl">
             FFCS-inator generates priority-based timetables in seconds. <br />
             No more clashes, no more stress.
           </p>
