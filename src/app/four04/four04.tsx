@@ -3,74 +3,55 @@
 import Image from "next/image";
 import { LargeButton } from "@/components/ui/Buttons";
 import { Navbar } from "@/components/ui/Navbar";
-import Footer from "@/components/ui/footer";
+import Footer from "@/components/ui/Footer";
 
 export default function NotFound() {
   return (
+    <div className="flex flex-col min-h-screen relative select-none">
+      <div className="absolute inset-0 -z-10">
+        <Image
+          src="/bg_dots.svg"
+          alt="Background"
+          fill
+          priority
+          sizes="100vw"
+          className="object-top object-cover"
+        />
+      </div>
 
-    <div className="relative w-full">
-      <Image
-        src="/bgffcs.jpg"
-        alt="Background"
-        width={0}
-        height={0}
-        className="w-full h-auto object-top object-cover"
-        priority
-        sizes="100vw"
-      />
+      <Navbar page="404" loggedin={true} />
 
-      <Navbar page="404" loggedin={false} />
 
-      <div className="absolute inset-x-0 top-40 flex flex-col items-center text-center">
-        <div className="relative">
+      <div className="flex-grow mt-24 flex flex-col items-center text-center relative">
+
+        <div className="relative w-fit h-fit mb-4">
           {/* 45° Shadow layer */}
           <span
-            className="absolute inset-0 select-none pointer-events-none"
+            className="absolute left-2 top-2 select-none pointer-events-none font-poppins font-extrabold text-[160px] z-0 text-black"
             style={{
-              fontFamily: "'Poppins', sans-serif",
               WebkitTextStroke: '16px black',
-              color: 'black',
-              fontSize: '160px',
-              fontWeight: 800,
-              left: 8,
-              top: 8,
-              zIndex: 0,
             }}
           >
             404
           </span>
           {/* Stroke layer */}
           <span
-            className="absolute inset-0 select-none pointer-events-none"
+            className="absolute left-0 top-0 select-none pointer-events-none font-poppins font-extrabold text-[160px] z-10 text-transparent"
             style={{
-              fontFamily: "'Poppins', sans-serif",
               WebkitTextStroke: '16px black',
-              color: 'transparent',
-              fontSize: '160px',
-              fontWeight: 800,
-              left: 0,
-              top: 0,
-              zIndex: 1,
             }}
           >
             404
           </span>
           {/* Fill layer */}
           <span
-            className="relative select-none pointer-events-none"
-            style={{
-              fontFamily: "'Poppins', sans-serif",
-              color: '#90BDFF',
-              fontSize: '160px',
-              fontWeight: 800,
-              zIndex: 2,
-            }}
+            className="relative select-none pointer-events-none font-poppins font-extrabold text-[160px] z-20 text-[#90BDFF]"
           >
             404
           </span>
         </div>
 
-        <h2 className="text-3xl mb-8" style={{ fontFamily: "'Pangolin', cursive", color: 'black' }}>
+        <h2 className="text-3xl mb-8 font-pangolin text-black">
           OOPS! You have found this secret page!<br />
           We have nothing to show here...
         </h2>
@@ -81,10 +62,11 @@ export default function NotFound() {
           image="/icon_home.svg"
           onClick={() => { window.location.href = '/'; }}
         />
-
       </div>
 
-      <Footer/>
+      <div className="h-24" />
+
+      <Footer />
     </div>
   );
 }

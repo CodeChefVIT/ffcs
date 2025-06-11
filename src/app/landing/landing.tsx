@@ -7,12 +7,12 @@ import TimetableSwitcher from "@/components/timetable/components/TimeTableSwitch
 import { facultyData, tableFacingSlot } from "@/lib/type";
 import ActionButtons from "@/components/timetable/components/ActionButtons";
 import ReplaceSlot from "@/components/timetable/components/QuickModify";
-import Header from "@/components/ui/header";
-import Footer from "@/components/ui/footer";
+import Header from "@/components/ui/Header";
 import FacultySelector from "@/components/ui/FacultySelector";
 import CourseCard from "@/components/ui/CourseCard";
 import Image from "next/image";
 import { Navbar } from "@/components/ui/Navbar";
+import Footer from "@/components/ui/Footer";
 type APIFaculty = {
   faculty: string;
   facultySlot: string[];
