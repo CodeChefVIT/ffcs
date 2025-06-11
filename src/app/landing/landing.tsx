@@ -12,6 +12,7 @@ import Footer from "@/components/ui/footer";
 import FacultySelector from "@/components/ui/FacultySelector";
 import CourseCard from "@/components/ui/CourseCard";
 import Image from "next/image";
+import { Navbar } from "@/components/ui/Navbar";
 type APIFaculty = {
   faculty: string;
   facultySlot: string[];
@@ -100,20 +101,46 @@ export default function View() {
 
   return (
     <div className="w-screen bg-[#CEE4E5] font-poppins flex items-center justify-center flex-col">
-      
-      <Header />
-  
 
-      <FacultySelector
-        domains={[]}
-        subjects={[]}
-        slots={[]}
-        faculties={["a", "b", "c"]}
-        onConfirm={() => {}}
-        onReset={() => {}}
-      />
-      <CourseCard/>
-      
+      <Header />
+
+      <Navbar page="landing" loggedin={false} />
+
+      <div className="relative w-full flex justify-center">
+        <Image
+          src="/e.svg"
+          alt="E"
+          width={32}
+          height={32}
+          className="absolute left-[4%] top-16 sm:top-16 z-10 lg:w-11 select-none"
+        />
+        <Image
+          src="/f.svg"
+          alt="F"
+          width={32}
+          height={32}
+          className="absolute right-[8%] top-60 sm:top-60 z-10 lg:w-11 select-none"
+        />
+        <Image
+          src="/c.svg"
+          alt="C"
+          width={32}
+          height={32}
+          className="absolute bottom-36 left-[10%] z-10 lg:w-11 select-none"
+        />
+
+        <FacultySelector
+          domains={[]}
+          subjects={[]}
+          slots={[]}
+          faculties={["a", "b", "c"]}
+          onConfirm={() => { }}
+          onReset={() => { }}
+        />
+      </div>
+
+      <CourseCard />
+
       <div className="flex flex-col h-full max-w-[1600px] mx-auto min-w-[1000px] px-6 py-4 overflow-hidden bg-[#A7D5D7]">
         <div className="flex items-center mb-4 ml-2">
           <h1
@@ -157,19 +184,19 @@ export default function View() {
         <footer className="mt-4 border-t-3 border-black pt-2 pb-2">
           <ReplaceSlot />
         </footer>
-        
+
       </div>
       <div className="w-[80%] my-16">
-                <Image
-                  src="/footer.svg"
-                  alt="footer wave"
-                  width={0}
-                  height={0}
-                  sizes="100vw"
-                  className="w-full h-full"
-                  priority
-                />
-              </div>
+        <Image
+          src="/footer.svg"
+          alt="footer wave"
+          width={0}
+          height={0}
+          sizes="100vw"
+          className="w-full h-full"
+          priority
+        />
+      </div>
       <Footer />
     </div>
   );

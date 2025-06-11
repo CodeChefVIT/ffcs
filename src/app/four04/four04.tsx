@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import { LargeButton } from "@/components/ui/Buttons";
+import { Navbar } from "@/components/ui/Navbar";
+import Footer from "@/components/ui/footer";
 
 export default function NotFound() {
-
-
   return (
 
     <div className="relative w-full">
@@ -18,6 +18,9 @@ export default function NotFound() {
         priority
         sizes="100vw"
       />
+
+      <Navbar page="404" loggedin={false} />
+
       <div className="absolute inset-x-0 top-40 flex flex-col items-center text-center">
         <div className="relative">
           {/* 45° Shadow layer */}
@@ -80,6 +83,8 @@ export default function NotFound() {
         />
 
       </div>
-    </div >
+
+      <Footer/>
+    </div>
   );
 }

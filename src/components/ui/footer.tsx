@@ -3,8 +3,7 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#CEE4E5] text-black relative overflow-hidden flex items-center flex-col">
-
+    <footer className="w-full bg-[#CEE4E5] font-[poppins] text-black relative overflow-hidden flex items-center flex-col select-none">
       <div className="px-8 py-8 sm:py-6 xs:py-4 flex flex-col md:flex-row items-start justify-between relative z-10 w-full bg-[#A7D5D7] border-t-2 border-black gap-y-6">
         <div>
           <h2 className="text-6xl font-normal mb-4 font-[pangolin] md:text-4xl lg:text-6xl">FFCS-inator</h2>
@@ -26,15 +25,15 @@ export default function Footer() {
                 alt: "Github",
               },
               {
-                href: "https://www.instagram.com/codechefvit/",
-                src: "/instagram.svg",
-                alt: "Instagram",
-              },
-              {
                 href: "https://www.linkedin.com/company/codechefvit/mycompany/",
                 src: "/linkedin.svg",
                 alt: "LinkedIn",
               },
+              {
+                href: "https://www.instagram.com/codechefvit/",
+                src: "/instagram.svg",
+                alt: "Instagram",
+              }
             ].map(({ href, src, alt }) => (
               <a href={href} key={src} target="_blank">
                 <Image
@@ -85,7 +84,7 @@ export default function Footer() {
       </div>
 
       <div className="font-poppins font-semibold text-xl text-center py-4 bg-[#A7D5D7] w-full">
-        Made with ❤ by CodeChef–VIT
+        Made with <span className="font-[inter]">❤</span> by CodeChef–VIT
       </div>
     </footer>
   );

@@ -90,7 +90,7 @@ export default function Header() {
 
           <h1 className="text-4xl lg:text-5xl font-[400] mb-2 tracking-wide font-[Pangolin]">FFCS-inator</h1>
 
-          <p className="font-poppins font-normal text-base text-black/70 mb-4 max-w-xl font-poppins">
+          <p className="font-poppins font-normal text-base text-black/70 mb-4 max-w-xl">
             FFCS-inator generates priority-based timetables in seconds. <br />
             No more clashes, no more stress.
           </p>
@@ -112,26 +112,6 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="font-poppins font-normal absolute top-6 right-6 flex flex-col sm:flex-row gap-2 sm:gap-4 z-30">
-        <button className="bg-[#75E5EA] px-6 py-2  cursor-pointer rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-semibold text-sm sm:text-base">
-          Saved Timetables
-        </button>
-        <button className="bg-[#C1FF83] px-6 py-2 cursor-pointer rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-semibold text-sm sm:text-base">
-          Log In
-        </button>
-      </div>
-
-      <div className="font-poppins font-normal absolute top-6 left-6 flex items-center gap-4 z-30">
-        <Image
-          src="/cc-border.svg"
-          alt="Logo"
-          width={48} // w-12 = 48px
-          height={48} // h-12 = 48px
-        />
-        <button className="bg-[#FFEA79] cursor-pointer px-6 py-2 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] font-semibold text-sm sm:text-base">
-          Slot View
-        </button>
-      </div>
     </div>
   )
 }
