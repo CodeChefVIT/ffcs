@@ -4,17 +4,6 @@ import Image from "next/image";
 export default function Footer() {
   return (
     <footer className="w-full bg-[#CEE4E5] text-black relative overflow-hidden flex items-center flex-col">
-      <div className="w-[67%]">
-        <Image
-          src="/footer.svg"
-          alt="footer wave"
-          width={0}
-          height={0}
-          sizes="100vw"
-          className="w-full h-full"
-          priority
-        />
-      </div>
 
       <div className="px-8 py-8 sm:py-6 xs:py-4 flex flex-col md:flex-row items-start justify-between relative z-10 w-full bg-[#A7D5D7] border-t-2 border-black gap-y-6">
         <div>

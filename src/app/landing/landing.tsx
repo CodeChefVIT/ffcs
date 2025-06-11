@@ -11,7 +11,7 @@ import Header from "@/components/ui/header";
 import Footer from "@/components/ui/footer";
 import FacultySelector from "@/components/ui/FacultySelector";
 import CourseCard from "@/components/ui/CourseCard";
-
+import Image from "next/image";
 type APIFaculty = {
   faculty: string;
   facultySlot: string[];
@@ -99,8 +99,10 @@ export default function View() {
   };
 
   return (
-    <div className="w-screen overflow-hidden bg-[#a7d5d7] font-poppins">
+    <div className="w-screen bg-[#CEE4E5] font-poppins flex items-center justify-center flex-col">
+      
       <Header />
+  
 
       <FacultySelector
         domains={[]}
@@ -112,7 +114,7 @@ export default function View() {
       />
       <CourseCard/>
       
-      <div className="flex flex-col h-full max-w-[1600px] mx-auto min-w-[1000px] px-6 py-4 box-border">
+      <div className="flex flex-col h-full max-w-[1600px] mx-auto min-w-[1000px] px-6 py-4 overflow-hidden bg-[#A7D5D7]">
         <div className="flex items-center mb-4 ml-2">
           <h1
             className="text-[3vw] font-pangolin leading-tight text-left"
@@ -155,7 +157,19 @@ export default function View() {
         <footer className="mt-4 border-t-3 border-black pt-2 pb-2">
           <ReplaceSlot />
         </footer>
+        
       </div>
+      <div className="w-[80%] my-16">
+                <Image
+                  src="/footer.svg"
+                  alt="footer wave"
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  className="w-full h-full"
+                  priority
+                />
+              </div>
       <Footer />
     </div>
   );
