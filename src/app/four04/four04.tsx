@@ -51,10 +51,10 @@ export default function NotFound() {
           </span>
         </div>
 
-        <h2 className="text-3xl mb-8 font-pangolin text-black">
+        <div className="text-3xl mb-8 font-pangolin text-black">
           OOPS! You have found this secret page!<br />
           We have nothing to show here...
-        </h2>
+        </div>
 
         <LargeButton
           text="Home"
