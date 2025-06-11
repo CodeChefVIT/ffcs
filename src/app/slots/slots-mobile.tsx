@@ -1,3 +1,12 @@
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 export default function View() {
-  return <div>Slots Mobile</div>
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/");
+  }, [router]);
+
+  return null;
 }
