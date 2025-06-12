@@ -90,7 +90,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
           key={`cell-${row}-${col}`}
           style={{
             border: '0.5px solid #000000',
-            // boxShadow: '0 0 0 0.5px #000000',
+            //boxShadow: '0 0 0 0.5px #000000',
             width: '100%',
             height: '100%',
             boxSizing: 'border-box',

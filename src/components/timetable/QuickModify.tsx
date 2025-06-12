@@ -13,7 +13,6 @@ const ReplaceSlot = () => {
 
   const handleModify = () => {
     console.log("Replacing", fromSlot, "with", toSlot, "for", faculty);
-    // logic 
   };
 
   const arrow = (
@@ -23,15 +22,18 @@ const ReplaceSlot = () => {
   );
 
   return (
-    <div className="">
-      <div className="bg p-6 ml-8 flex items-center gap-8">
-        <span className="text-black font-semibold text-[1.7rem]">Replace</span>
+    <div className="w-full flex items-center justify-center px-2">
+      <div className="bg p-4 lg:p-6 w-full max-w-screen-xl flex flex-wrap lg:flex-nowrap items-center justify-center gap-3 lg:gap-8">
+        <span className="text-black font-semibold text-[1.4rem] lg:text-[1.7rem] whitespace-nowrap">
+          Replace
+        </span>
 
-        <div className="relative">
+        {/* From Slot */}
+        <div className="relative w-[45%] sm:w-[25%] lg:w-auto min-w-[100px]">
           <select
             value={fromSlot}
             onChange={(e) => setFromSlot(e.target.value)}
-            className="rounded-lg border-2 border-black px-8 py-2 pr-15 bg-white focus:outline-black text-[1.2rem] appearance-none"
+            className="w-full rounded-lg border-2 border-black px-6 py-2 pr-10 bg-white focus:outline-none text-[1.1rem] lg:text-[1.2rem] appearance-none"
           >
             <option value="">Select Slot:</option>
             {slotOptions.map((slot) => (
@@ -43,13 +45,16 @@ const ReplaceSlot = () => {
           {arrow}
         </div>
 
-        <span className="text-black font-semibold text-[1.7rem]">with</span>
+        <span className="text-black font-semibold text-[1.4rem] lg:text-[1.7rem] whitespace-nowrap">
+          with
+        </span>
 
-        <div className="relative">
+        {/* To Slot */}
+        <div className="relative w-[45%] sm:w-[25%] lg:w-auto min-w-[100px]">
           <select
             value={toSlot}
             onChange={(e) => setToSlot(e.target.value)}
-            className="rounded-lg border-2 border-black px-8 py-2 pr-15 bg-white focus:outline-none text-[1.2rem] appearance-none"
+            className="w-full rounded-lg border-2 border-black px-6 py-2 pr-10 bg-white focus:outline-none text-[1.1rem] lg:text-[1.2rem] appearance-none"
           >
             <option value="">Select Slot:</option>
             {slotOptions.map((slot) => (
@@ -61,13 +66,16 @@ const ReplaceSlot = () => {
           {arrow}
         </div>
 
-        <span className="text-black font-semibold text-[1.7rem]">Faculty:</span>
+        <span className="text-black font-semibold text-[1.4rem] lg:text-[1.7rem] whitespace-nowrap">
+          Faculty:
+        </span>
 
-        <div className="relative">
+        {/* Faculty */}
+        <div className="relative w-full sm:w-[30%] lg:w-auto min-w-[120px]">
           <select
             value={faculty}
             onChange={(e) => setFaculty(e.target.value)}
-            className="rounded-lg border-2 border-black px-12 py-2 pr-15 bg-white focus:outline-none text-[1.2rem] appearance-none"
+            className="w-full rounded-lg border-2 border-black px-6 py-2 pr-10 bg-white focus:outline-none text-[1.1rem] lg:text-[1.2rem] appearance-none"
           >
             <option value="">Select Faculty:</option>
             {facultyOptions.map((name) => (
@@ -79,9 +87,10 @@ const ReplaceSlot = () => {
           {arrow}
         </div>
 
+        {/* Button */}
         <button
           onClick={handleModify}
-          className="ml-8 px-6 py-2 bg-[#90BDFF] text-black font-semibold rounded-xl border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:brightness-95 transition-all flex items-center gap-1 text-[1.2rem]"
+          className="w-full sm:w-auto px-5 py-2 bg-[#90BDFF] text-black font-semibold rounded-xl border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:brightness-95 transition-all flex items-center justify-center gap-1 text-[1.1rem] lg:text-[1.2rem]"
         >
           Quick Modify
           <Image
