@@ -12,7 +12,7 @@ import ViewTimeTable from "@/components/timetable/ViewTimeTable";
 
 const Landing = () => {
   return (
-    <div className="w-full min-h-screen bg-[#CEE4E5] font-poppins flex flex-col items-center overflow-x-hidden">
+    <div className="w-full min-h-screen bg-[#CEE4E5] font-poppins flex flex-col items-center justify-center overflow-x-hidden">
       <Header />
 
       <Navbar page="landing" loggedin={false} />
@@ -40,7 +40,7 @@ const Landing = () => {
           className="absolute bottom-24 left-[5%] z-10 w-6 sm:w-8 md:w-10 lg:w-12 select-none"
         />
 
-        <div className="w-full max-w-6xl">
+        <div className="max-w-6xl">
           <FacultySelector
             domains={[]}
             subjects={[]}

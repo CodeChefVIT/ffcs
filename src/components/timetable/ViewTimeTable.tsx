@@ -7,7 +7,7 @@ import TimeTable from "@/components/timetable/TimeTable";
 import FacultyTable from "@/components/FacultyTable";
 import TimetableSwitcher from "@/components/timetable/TimeTableSwitcher";
 import ActionButtons from "@/components/timetable/ActionButtons";
-import ReplaceSlot from "@/components/timetable/QuickModify";
+// import ReplaceSlot from "@/components/timetable/QuickModify";
 
 type APIFaculty = {
   faculty: string;
@@ -140,9 +140,9 @@ export default function ViewTimeTable() {
       </div>
 
         
-        <footer className="mt-4 border-t-2 border-black pt-2 pb-2">
+        {/* <footer className="mt-4 border-t-2 border-black pt-2 pb-2">
           <ReplaceSlot />
-        </footer>
+        </footer> */}
       </div>
     </div>
   );
