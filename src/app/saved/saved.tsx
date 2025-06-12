@@ -8,6 +8,7 @@ import useScreenSize from "@/hooks/useScreenSize";
 import SavedMobile from "./saved-mobile";
 import { Navbar } from "@/components/ui/Navbar";
 import SharePopup from "@/components/popups/view_timetable_popup";
+import DeletePopup from "@/components/popups/delete_popup";
 import { Footer } from "@/components/ui/Footer";
 
 export default function Saved() {
@@ -20,12 +21,15 @@ export default function Saved() {
     "FFCS hatao desh bachao",
     "Abki baar vishu ki sarkar",
     "somethng",
-    "vit is the best"
+    "vit is the best",
   ]);
 
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editedName, setEditedName] = useState<string>("");
+
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState<boolean>(false);
+  const [indexToDelete, setIndexToDelete] = useState<number | null>(null);
 
   const handleDelete = (indexToDelete: number): void => {
     setTimetables((prev) => prev.filter((_, index) => index !== indexToDelete));
@@ -51,6 +55,19 @@ export default function Saved() {
     setEditedName("");
   };
 
+  const confirmDelete = () => {
+    if (indexToDelete !== null) {
+      handleDelete(indexToDelete);
+      setIsDeletePopupOpen(false);
+      setIndexToDelete(null);
+    }
+  };
+
+  const cancelDelete = () => {
+    setIsDeletePopupOpen(false);
+    setIndexToDelete(null);
+  };
+
   if (size === "mobile") {
     return <SavedMobile />;
   }
@@ -71,19 +88,21 @@ export default function Saved() {
           Saved Timetables
         </h1>
 
-        <div className="z-10 w-11/12 max-w-7xl rounded-[2rem] border-black border-3 bg-[#a6dde0]/90 p-6 shadow-lg backdrop-blur-md mb-20">
+        <div className="z-10 w-11/12 max-w-7xl rounded-[2rem] border-black border-3 bg-[#a6dde0]/90 p-6 backdrop-blur-md mb-20 shadow-[4px_4px_0_0_black]">
           <p className="mb-8 mt-2 ml-2 text-3xl font-light font-pangolin">
             Your Saved Timetables
           </p>
 
-          <ul className="space-y-3 max-h-[60vh] overflow-y-auto pr-2 font-poppins">
+          <ul className="space-y-3 max-h-[60vh] overflow-y-auto pr-2 font-poppins custom-scrollbar ">
             {timetables.length === 0 ? (
-              <li className="text-center text-lg text-gray-700">No timetables saved.</li>
+              <li className="text-center text-lg text-gray-700">
+                No timetables saved.
+              </li>
             ) : (
               timetables.map((name: string, index: number) => (
                 <li
                   key={index}
-                  className="flex items-center justify-between bg-[#d2f4f6] px-6 py-3 rounded-3xl"
+                  className="flex items-center justify-between bg-[#d2f4f6] px-6 py-3 rounded-3xl "
                 >
                   {editingIndex === index ? (
                     <input
@@ -93,9 +112,14 @@ export default function Saved() {
                       onChange={(e) => setEditedName(e.target.value)}
                     />
                   ) : (
-                    <span className="text-small">
-                      {index + 1}. {name}
+                    <p>
+                    <span className="text-xl m-2">
+                      {index + 1}.
                     </span>
+                    <span className="text-xl m-4">
+                    {name}
+                    </span>
+                    </p>
                   )}
 
                   <div className="flex space-x-2">
@@ -117,20 +141,25 @@ export default function Saved() {
                     ) : (
                       <>
                         <button
-                          className="bg-yellow-200 p-2 m-2 rounded-md hover:scale-110 cursor-pointer"
+                          className="bg-white p-2 m-2 rounded-md hover:bg-yellow-200 cursor-pointer transition-colors"
                           onClick={() => setIsPopupOpen(true)}
                         >
                           <Eye size={18} />
                         </button>
+
                         <button
-                          className="bg-blue-300 p-2 m-2 rounded-md hover:scale-110 cursor-pointer"
+                          className="bg-white p-2 m-2 rounded-md hover:bg-blue-300 cursor-pointer transition-colors"
                           onClick={() => handleRename(index)}
                         >
                           <Edit size={18} />
                         </button>
+
                         <button
-                          className="bg-red-300 p-2 m-2 rounded-md hover:scale-110 cursor-pointer"
-                          onClick={() => handleDelete(index)}
+                          className="bg-white p-2 m-2 rounded-md hover:bg-red-300 cursor-pointer transition-colors"
+                          onClick={() => {
+                            setIsDeletePopupOpen(true);
+                            setIndexToDelete(index);
+                          }}
                         >
                           <Trash2 size={18} />
                         </button>
@@ -145,6 +174,9 @@ export default function Saved() {
       </section>
       <Footer />
       {isPopupOpen && <SharePopup onClose={() => setIsPopupOpen(false)} />}
+      {isDeletePopupOpen && (
+        <DeletePopup onConfirm={confirmDelete} onClose={cancelDelete} />
+      )}
     </>
   );
 }
