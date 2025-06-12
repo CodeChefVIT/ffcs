@@ -39,6 +39,10 @@ export default function View() {
           Ideal Timetable!
         </div>
 
+        <div className="text-xl mb-8 font-poppins text-black">
+          Use PC or Tablet For All Features
+        </div>
+
         <RegularButton
           text="Saved Timetables"
           color="green"
@@ -46,7 +50,7 @@ export default function View() {
         />
       </div>
 
-      <div className="h-8" />
+      <div className="h-6" />
 
       <FooterMobile />
     </div>
