@@ -5,7 +5,7 @@ interface Course {
   id: string;
   codes: string[];
   names: string[];
-  slots: string;
+  slots: string | string[];
 }
 
 const initialCourses: Course[] = [
@@ -13,7 +13,7 @@ const initialCourses: Course[] = [
     id: "course1",
     codes: ["BBRT101L", "BBRT101P"],
     names: ["Engineering Rizzology", "Engineering Rizzology Lab"],
-    slots: "B2, D2, G2",
+    slots: ["B2+TB2", "L47+L48"],
   },
   {
     id: "course2",
@@ -60,8 +60,11 @@ const saveCourses = (courses: Course[]): Promise<void> => {
           !Array.isArray(course.names) ||
           course.names.length === 0 ||
           course.names.some((name) => !name || name.trim() === "") ||
-          !course.slots ||
-          course.slots.trim() === ""
+          !Array.isArray(course.slots) ||
+          course.slots.length === 0 ||
+          course.slots.some(
+            (slot) => typeof slot !== "string" || slot.trim() === ""
+          )
         ) {
           reject(
             new Error(
@@ -156,7 +159,7 @@ export const CourseCard: React.FC = () => {
       await saveCourses(courses);
       alert(
         "Courses saved successfully!\n\nCourse order:\n" +
-        courses.map((c, i) => `${i + 1}. ${c.codes.join(", ")}`).join("\n")
+          courses.map((c, i) => `${i + 1}. ${c.codes.join(", ")}`).join("\n")
       );
     } catch (error) {
       if (error instanceof Error) {
@@ -170,28 +173,7 @@ export const CourseCard: React.FC = () => {
 
   return (
     <>
-      <style>
-        {`
-          @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Pangolin&display=swap');
-        .font-pangolin { font-family: "Pangolin", cursive; }
-        .font-poppins { font-family: "Poppins", sans-serif; }
-
-        .scrollbar-custom::-webkit-scrollbar { width: 16px; background: transparent; }
-        .scrollbar-custom::-webkit-scrollbar-track {
-          background: transparent; border-radius: 12px;
-        }
-        .scrollbar-custom::-webkit-scrollbar-thumb {
-          background-color: rgba(107, 114, 128, 0.3); 
-          border-radius: 12px; border: 3px solid transparent;
-          background-clip: content-box; cursor: pointer;
-        }
-        .scrollbar-custom::-webkit-scrollbar-thumb:hover {
-          background-color: rgba(75, 85, 99, 0.7); 
-        }
-        .scrollbar-custom { scrollbar-width: thin; scrollbar-color: rgba(107, 114, 128, 0.3) transparent; }
-      `}
-      </style>
+      
 
       <div className="bg-[#A7D5D7] m-4 font-poppins rounded-2xl border-[3px] border-black p-6 text-black font-medium px-12 mb-16">
         <div className="flex justify-between items-start mt-4">
@@ -202,10 +184,11 @@ export const CourseCard: React.FC = () => {
           </p>
         </div>
 
-        <div
-          id="course-list"
-          className="mt-6 space-y-4 max-h-[350px] overflow-y-auto pr-2 font-poppins scrollbar-custom w-full"
-        >
+       <div
+  id="course-list"
+  className="mt-6 space-y-4 max-h-[350px] overflow-y-auto pr-2 font-poppins scrollbar-custom w-full"
+>
+
           {courses.map((course, index) => (
             <div
               key={`${course.id}-${index}`}
@@ -223,8 +206,9 @@ export const CourseCard: React.FC = () => {
                     {index + 1}.
                   </div>
                   <div
-                    className={`flex flex-col px-4 ${course.codes.length > 1 ? "space-y-1" : ""
-                      }`}
+                    className={`flex flex-col px-4 ${
+                      course.codes.length > 1 ? "space-y-1" : ""
+                    }`}
                   >
                     {course.codes.map((code) => (
                       <p key={code}>{code}</p>
@@ -234,10 +218,11 @@ export const CourseCard: React.FC = () => {
               </div>
 
               {/* Names */}
-              <div className="flex items-center sm:min-w-[200px] text-sm text-black font-normal">
+              <div className="flex items-start sm:min-w-[200px] text-sm text-black font-normal">
                 <div
-                  className={`flex flex-col justify-center ${course.names.length > 1 ? "space-y-1" : ""
-                    }`}
+                  className={`flex flex-col ${
+                    course.names.length > 1 ? "space-y-1" : ""
+                  }`}
                 >
                   {course.names.map((name, i) => (
                     <p key={i}>{name}</p>
@@ -247,10 +232,14 @@ export const CourseCard: React.FC = () => {
 
               {/* Slots */}
               <div className="flex items-center sm:min-w-[120px] text-sm text-right text-black font-normal">
-                <div className="flex flex-col justify-center">
-                  {course.slots.split("\n").map((slot, idx) => (
-                    <div key={idx}>{slot}</div>
-                  ))}
+                <div className="flex flex-col space-y-1">
+                  {Array.isArray(course.slots)
+                    ? course.slots.map((slot, idx) => (
+                        <div key={idx}>{slot}</div>
+                      ))
+                    : course.slots
+                        .split("\n")
+                        .map((slot, idx) => <div key={idx}>{slot}</div>)}
                 </div>
               </div>
 
@@ -336,8 +325,9 @@ export const CourseCard: React.FC = () => {
         <div className="text-center mt-8">
           <button
             id="generate-btn"
-            className={`border-2 border-black bg-[#7ce5e5] hover:bg-[#67d2d2] text-black font-semibold text-lg px-6 py-2 rounded-full shadow-[4px_4px_0_0_black] transition flex items-center justify-center gap-2 mx-auto ${saving ? "opacity-60 cursor-not-allowed" : ""
-              }`}
+            className={`border-2 border-black bg-[#7ce5e5] hover:bg-[#67d2d2] text-black font-semibold text-lg px-6 py-2 rounded-full shadow-[4px_4px_0_0_black] transition flex items-center justify-center gap-2 mx-auto ${
+              saving ? "opacity-60 cursor-not-allowed" : ""
+            }`}
             onClick={handleGenerate}
             type="button"
             disabled={saving}
