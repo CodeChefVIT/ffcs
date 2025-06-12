@@ -23,13 +23,13 @@ const inter = Inter({
 });
 
 
-// export const metadata = {
-//   title: 'FFCS-inator',
-//   // description: '',
-//   // icons: {
-//   //   icon: '/logo_FFCS.svg',
-//   // },
-// };
+export const metadata = {
+  title: 'FFCS-inator',
+  description: '',
+  icons: {
+    icon: '/logo_FFCS.svg',
+  },
+};
 
 
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
