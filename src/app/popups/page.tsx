@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { RegularButton } from "@/components/ui/Buttons";
-import Popup from "@/components/ui/popup";
+import Popup from "@/components/ui/Popup";
 
 type PopupType = | "google" | "email" | "remove" | "save" | "share" | "delete" | "view" | "shared" | null;
 

@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
-import Popup from "./ui/popup";
-// import DeletePopup from "./popups/delete_popup";
+import Popup from "./ui/Popup";
 
 interface Course {
   id: string;
