@@ -61,8 +61,8 @@ function copy(text: string) {
 export default function Popup({ type, dataTitle, dataBody, closeLink, action }: PopupProps) {
 
   const theme = colorMap[typeColorMap[type] as keyof typeof colorMap] || ['#E4E9FC', '#94ACFF'];
-  const title = typeTitleMap[type] || dataTitle || 'Popup Title';
-  const text = typeTextMap[type] || 'This is a generic popup message.';
+  const title = typeTitleMap[type] || dataTitle || '';
+  const text = typeTextMap[type] || '';
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#425D5F]/75 backdrop-blur-xs z-50 select-none">
@@ -81,6 +81,7 @@ export default function Popup({ type, dataTitle, dataBody, closeLink, action }: 
           min-w-120 min-h-48
         `}
       >
+
         <div
           style={{ backgroundColor: theme[1] }}
           className={`
@@ -225,9 +226,9 @@ export default function Popup({ type, dataTitle, dataBody, closeLink, action }: 
           {(type == 'view_tt') && (
             <div>
               <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
-                {dataBody && <span className="font-semibold">&quot;{dataBody}&quot;</span>}
+                {/* {dataBody && <span className="font-semibold">&quot;{dataBody}&quot;</span>} */}
+                {/* compound table here */}
               </div>
-
               <div className="flex flex-row items-center justify-center gap-4 mb-4">
                 <RegularButton text="Copy Link" color="green" image="/icons/send.svg" forceColor="#C1FF83" onClick={() => copy(dataBody || "")} />
                 <RegularButton text="Download" color="yellow" image="/icons/download.svg" forceColor="#FFEA79" onClick={action} />

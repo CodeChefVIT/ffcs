@@ -46,8 +46,8 @@ const Landing = () => {
             subjects={[]}
             slots={[]}
             faculties={["a", "b", "c"]}
-            onConfirm={() => {}}
-            onReset={() => {}}
+            onConfirm={() => { }}
+            onReset={() => { }}
           />
         </div>
       </div>
@@ -61,13 +61,12 @@ const Landing = () => {
         <ViewTimeTable />
       </div>
 
-      <div className="w-full max-w-6xl px-4 sm:px-6 lg:px-12 my-16">
+      <div className="w-full max-w-5xl px-4 sm:px-6 lg:px-12 m-32">
         <Image
           src="/art/graphic.svg"
           alt="footer wave"
           width={0}
           height={0}
-          sizes="100vw"
           className="w-full h-auto"
           priority
         />
