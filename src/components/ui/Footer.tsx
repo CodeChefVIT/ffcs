@@ -120,5 +120,5 @@ export function FooterMobile() {
   );
 }
 
-
-export default { Footer, FooterMobile };
+const FooterExports = { Footer, FooterMobile };
+export default FooterExports;
