@@ -1,6 +1,6 @@
 "use client";
 
-import { RegularButton } from "@/components/ui/Buttons";
+import { ZButton } from "@/components/ui/Buttons";
 import { FooterMobile } from "@/components/ui/Footer";
 import Image from "next/image";
 
@@ -17,7 +17,7 @@ export default function NotFound() {
           className="object-top object-contain w-full h-full"
         />
       </div>
-      
+
 
       <div className="flex-grow mt-16 flex flex-col items-center text-center relative">
 
@@ -61,7 +61,8 @@ export default function NotFound() {
           We have nothing to show here...
         </div>
 
-        <RegularButton
+        <ZButton
+          type="regular"
           text="Home"
           color="purple"
           image="/icons/home.svg"

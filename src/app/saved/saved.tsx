@@ -8,7 +8,7 @@ import useScreenSize from "@/hooks/useScreenSize";
 import SavedMobile from "./saved-mobile";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
-import Popup from "@/components/ui/popup";
+import Popup from "@/components/ui/Popup";
 
 export default function Saved() {
   const size = useScreenSize();

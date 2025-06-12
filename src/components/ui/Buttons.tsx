@@ -3,14 +3,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
-type ButtonProps = {
-  text: string;
+type ButtonVariant = 'regular' | 'image' | 'long' | 'large';
+
+type ZButtonProps = {
+  type: ButtonVariant;
+  text?: string;
   color: 'red' | 'yellow' | 'green' | 'green_2' | 'blue' | 'purple' | 'gray';
   image?: string;
   onClick?: () => void;
   disabled?: boolean;
   clicked?: boolean;
-  forceColor?: string; // Optional prop to force a specific color
+  forceColor?: string;
+};
+
+type ToggleButtonProps = {
+  onToggle?: (selected: string) => void;
 };
 
 const colorMap = {
@@ -23,108 +30,44 @@ const colorMap = {
   gray: '#969696',
 };
 
-export function RegularButton({ text, color, image, onClick, forceColor, disabled = false, clicked = false }: ButtonProps) {
+const toggleOptions = ["Theory", "Lab"];
 
-  const buttonColor = forceColor || colorMap[color];
+
+export function ZButton({ type, text, color, image, onClick, forceColor, disabled = false, clicked = false, }: ZButtonProps) {
+  const variantClasses = {
+    regular: 'h-12 rounded-xl px-4 text-base gap-2.5',
+    image: 'h-12 rounded-xl px-4 text-base gap-2.5',
+    long: 'h-12 rounded-xl px-8 text-base gap-2.5',
+    large: 'h-[60px] rounded-2xl px-8 text-2xl gap-6',
+  };
+
+  const imageSize = type === 'large' ? 28 : 24;
+
+  const backgroundColor = forceColor
+    ? (disabled ? colorMap['gray'] : clicked ? colorMap['green_2'] : forceColor)
+    : (disabled ? colorMap['gray'] : clicked ? colorMap['green_2'] : colorMap[color]);
 
   return (
     <button
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
-      style={{
-        backgroundColor: disabled ? colorMap['gray'] : clicked ? colorMap['green_2'] : buttonColor,
-        fontFamily: 'Poppins, sans-serif',
-        height: '48px',
-        borderRadius: '16px',
-        userSelect: 'none',
-      }}
-      className={`  
-      text-black  
-        px-4 py-2  
-        border-3 border-black  
-        font-semibold  
-        text-base  
-        ${disabled ? 'cursor-normal' : 'cursor-pointer'}  
-        flex items-center justify-center text-center gap-2.5  
-        transition duration-100  
-        shadow-[4px_4px_0_0_black]  
-        ${disabled ? '' : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'}  
+      style={{ backgroundColor }}
+      className={`
+        font-poppins
+        border-3 border-black
+        font-semibold
+        flex items-center justify-center text-center
+        transition duration-100
+        shadow-[4px_4px_0_0_black]
+        ${disabled ? 'cursor-normal' : 'cursor-pointer'}
+        ${disabled ? '' : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'}
+        ${variantClasses[type]}
       `}
     >
       {text}
       {image && (
         <span style={{ pointerEvents: 'none', display: 'flex' }}>
-          <Image src={image} alt="" width={24} height={4} />
-        </span>
-      )}
-    </button>
-  );
-}
-
-export function LongButton({ text, color, image, onClick, disabled = false, clicked = false }: ButtonProps) {
-  return (
-    <button
-      onClick={disabled ? undefined : onClick}
-      disabled={disabled}
-      style={{
-        backgroundColor: disabled ? colorMap['gray'] : clicked ? colorMap['green_2'] : colorMap[color],
-        fontFamily: 'Poppins, sans-serif',
-        height: '48px',
-        borderRadius: '16px',
-        userSelect: 'none',
-      }}
-      className={`  
-      text-black  
-        px-8 py-2  
-        border-3 border-black  
-        font-semibold  
-        text-base  
-        ${disabled ? 'cursor-normal' : 'cursor-pointer'}  
-        flex items-center justify-center text-center gap-2.5  
-        transition duration-100  
-        shadow-[4px_4px_0_0_black]  
-        ${disabled ? '' : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'}  
-      `}
-    >
-      {text}
-      {image && (
-        <span style={{ pointerEvents: 'none', display: 'flex' }}>
-          <Image src={image} alt="" width={24} height={4} />
-        </span>
-      )}
-    </button>
-  );
-}
-
-export function LargeButton({ text, color, image, onClick, disabled = false, clicked = false }: ButtonProps) {
-  return (
-    <button
-      onClick={disabled ? undefined : onClick}
-      disabled={disabled}
-      style={{
-        backgroundColor: disabled ? colorMap['gray'] : clicked ? colorMap['green_2'] : colorMap[color],
-        fontFamily: 'Poppins, sans-serif',
-        height: '60px',
-        borderRadius: '20px',
-        userSelect: 'none',
-      }}
-      className={`  
-      text-black  
-      px-8 py-4  
-      border-3 border-black  
-      font-semibold  
-      text-2xl
-      ${disabled ? 'cursor-normal' : 'cursor-pointer'}  
-      flex items-center justify-center text-center gap-6 
-      transition duration-100  
-      shadow-[4px_4px_0_0_black]  
-      ${disabled ? '' : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'}  
-      `}
-    >
-      {text}
-      {image && (
-        <span style={{ pointerEvents: 'none', display: 'flex' }}>
-          <Image src={image} alt="" width={28} height={28} />
+          <Image src={image} alt="" width={imageSize} height={imageSize} />
         </span>
       )}
     </button>
@@ -163,15 +106,8 @@ export function FFCSButton() {
   );
 }
 
-
-type ToggleButtonProps = {
-  onToggle?: (selected: string) => void;
-};
-
-const toggleOptions = ["Theory", "Lab"];
-
-
 export function ToggleButton({ onToggle }: ToggleButtonProps) {
+
   const [selected, setSelected] = useState<string>(toggleOptions[0]);
   const [sizes, setSizes] = useState<{ [key: string]: { width: number; left: number } }>({});
 

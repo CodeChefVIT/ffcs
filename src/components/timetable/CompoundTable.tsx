@@ -1,6 +1,5 @@
 "use client";
 
-import { tableFacingSlot } from "@/lib/type";
 import TimeTable from "./TimeTable";
 import React from "react";
 
@@ -18,30 +17,12 @@ type CompoundTableProps = {
   data: dataProps[];
 }
 
-const tfs: tableFacingSlot[] = [
-  { slotName: "A1", showName: true },
-  { slotName: "B2", showName: true },
-  { slotName: "D1+TD1", showName: true },
-  { slotName: "F2", showName: true },
-  { slotName: "L1+L2", showName: true },
-  { slotName: "L11+L12", showName: true },
-];
-
-
-const data: dataProps[] = [
-  { code: "BBRT101L", slot: "TG1", name: "Mansi Sharma" },
-  { code: "BBRT101P", slot: "L21+L22", name: "Mansi Sharma" },
-  { code: "BBIT101L", slot: "A1", name: "Monami Som Saha" },
-  { code: "BBIT101P", slot: "L31+L32", name: "Monami Som Saha" },
-  { code: "BERT101L", slot: "B1", name: "Yashita Puri" },
-  { code: "BBRT101L", slot: "C1", name: "Kuriak Tom Jacob" },
-  { code: "BBRT101P", slot: "L43+L44", name: "Kuriak Tom Jacob" },
-  { code: "BBRT101L", slot: "D1", name: "Abhinav Pant" },
-  { code: "BBRT101L", slot: "F2", name: "Ishan Jindal" },
-];
+const sortData = (data: dataProps[]): dataProps[] => {
+  return [...data].sort((a, b) => a.code.localeCompare(b.code));
+}
 
 const getGroupedData = (data: dataProps[]): groupedDataProps => {
-  return data.reduce((acc, { code, slot, name }) => {
+  return sortData(data).reduce((acc, { code, slot, name }) => {
     // Use code prefix (all except last char) + name as the grouping key
     const codePrefix = code.slice(0, -1);
     const groupKey = `${name}__${codePrefix}`;
@@ -52,25 +33,33 @@ const getGroupedData = (data: dataProps[]): groupedDataProps => {
 
 export default function CompoundTable({ data }: CompoundTableProps) {
   const groupedData = getGroupedData(data);
-  console.log("groupedData", groupedData);
 
-  return <div className="flex flex-row">
+  const tfs = data.map((d) => {
+    return { slotName: d.slot, showName: true };
+  })
 
-    <div className="w-[1000px] h-[480px]">
+  return <div className="flex flex-row gap-8 mx-8 text-black text-sm font-inter select-none">
+
+    <div className="w-[830px] h-[400px]">
       <TimeTable slotNames={tfs} />
     </div>
 
-    <div className="p-6 bg-blue-50 rounded-xl border max-w-md mx-auto space-y-4">
+    <div className="h-[400px] w-[480px] bg-[#ffffff]/60 border-3 border-black p-4 rounded-2xl space-y-2 overflow-y-auto overflow-x-auto">
       {Object.entries(groupedData).map(([groupKey, entries], idx) => {
-        const displayName = groupKey.split("__")[0]; // Extract original name
+        const displayName = groupKey.split("__")[0];
         return (
-          <div key={idx} className="border-b last:border-b-0 pb-2">
+          <div key={idx} className="border-b-1 border-black last:border-b-0 pb-2">
             <div className="space-y-1">
               {entries.map((entry, i) => (
-                <div key={i} className="grid grid-cols-3 text-sm">
-                  <div>{entry.code}</div>
-                  <div>{entry.slot}</div>
-                  {i === 0 && <div>{displayName}</div>}
+                <div key={i} className="flex px-2 min-w-0">
+                  <div className="w-[80px] shrink-0 break-words whitespace-normal text-left">{entry.code}</div>
+                  <div className="w-[96px] shrink-0 ml-4 mr-4 break-words whitespace-normal text-left">
+                    {entry.slot.replace(/\+/g, '+\u200B')}
+                  </div>
+                  {i === 0
+                    ? <div className="shrink-0 break-words whitespace-normal text-left pr-4">{displayName}</div>
+                    : <div className="shrink-0"></div>
+                  }
                 </div>
               ))}
             </div>

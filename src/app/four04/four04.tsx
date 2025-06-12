@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image";
-import { LargeButton } from "@/components/ui/Buttons";
+import { ZButton } from "@/components/ui/Buttons";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 
@@ -56,7 +56,8 @@ export default function NotFound() {
           We have nothing to show here...
         </div>
 
-        <LargeButton
+        <ZButton
+          type="large"
           text="Home"
           color="purple"
           image="/icons/home.svg"
