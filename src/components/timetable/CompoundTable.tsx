@@ -33,7 +33,6 @@ const getGroupedData = (data: dataProps[]): groupedDataProps => {
 
 export default function CompoundTable({ data }: CompoundTableProps) {
   const groupedData = getGroupedData(data);
-  console.log("groupedData", groupedData);
 
   const tfs = data.map((d) => {
     return { slotName: d.slot, showName: true };

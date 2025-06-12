@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { RegularButton } from "@/components/ui/Buttons";
+import { ZButton } from "@/components/ui/Buttons";
 import Popup from "@/components/ui/Popup";
 
 type PopupType = | "google" | "email" | "remove" | "save" | "share" | "delete" | "view" | "shared" | null;
@@ -48,13 +48,13 @@ export default function Home() {
   return (
     <div>
       <div className="flex gap-2 mb-4 p-8">
-        <RegularButton text="Google" color="yellow" onClick={() => setPopupType("google")} />
-        <RegularButton text="Email" color="purple" onClick={() => setPopupType("email")} />
-        <RegularButton text="Remove" color="red" onClick={() => setPopupType("remove")} />
-        <RegularButton text="Save" color="green" onClick={() => setPopupType("save")} />
-        <RegularButton text="Share" color="blue" onClick={() => setPopupType("share")} />
-        <RegularButton text="Delete" color="red" onClick={() => setPopupType("delete")} />
-        <RegularButton text="View" color="blue" onClick={() => setPopupType("view")} />
+        <ZButton type="regular" text="Google" color="yellow" onClick={() => setPopupType("google")} />
+        <ZButton type="regular" text="Email" color="purple" onClick={() => setPopupType("email")} />
+        <ZButton type="regular" text="Remove" color="red" onClick={() => setPopupType("remove")} />
+        <ZButton type="regular" text="Save" color="green" onClick={() => setPopupType("save")} />
+        <ZButton type="regular" text="Share" color="blue" onClick={() => setPopupType("share")} />
+        <ZButton type="regular" text="Delete" color="red" onClick={() => setPopupType("delete")} />
+        <ZButton type="regular" text="View" color="blue" onClick={() => setPopupType("view")} />
       </div>
       {getPopupComponent(popupType)}
     </div>

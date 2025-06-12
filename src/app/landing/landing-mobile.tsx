@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { FooterMobile } from '@/components/ui/Footer';
-import { RegularButton } from '@/components/ui/Buttons';
+import { ZButton } from '@/components/ui/Buttons';
 
 export default function View() {
   return (
@@ -43,7 +43,8 @@ export default function View() {
           Use PC or Tablet For All Features
         </div>
 
-        <RegularButton
+        <ZButton
+          type="regular"
           text="Saved Timetables"
           color="green"
           onClick={() => { window.location.href = '/saved'; }}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { RegularButton } from "@/components/ui/Buttons";
+import { ZButton } from "@/components/ui/Buttons";
 import { FooterMobile } from "@/components/ui/Footer";
 
 const dummyTimetables = [
@@ -19,7 +19,8 @@ export default function SavedMobile() {
     <div className="min-h-screen bg-[#CEE4E5] flex flex-col items-center font-poppins">
       <div className="w-full px-4 py-2 flex justify-between items-center text-black select-none">
         <div className="text-2xl font-[pangolin]">FFCS-Inator</div>
-        <RegularButton
+        <ZButton
+          type="regular"
           text="Logout"
           color="red"
           onClick={() => (window.location.href = "/logout")}
@@ -48,13 +49,7 @@ export default function SavedMobile() {
         <div className="flex-grow border-t border-gray-400"></div>
       </div>
 
-      
-        
-          
-
-          <FooterMobile/>
-      
-      
+      <FooterMobile />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import TimeTable from "@/components/timetable/TimeTable";
-import { RegularButton, ToggleButton } from "@/components/ui/Buttons";
+import { ZButton, ToggleButton } from "@/components/ui/Buttons";
 import { Footer } from "@/components/ui/Footer";
 import { Navbar } from "@/components/ui/Navbar";
 import { clashMap, getAllSlots } from "@/lib/slots";
@@ -71,7 +71,8 @@ export default function View() {
                     (activeText) => disableMap[activeText.split("+")[0]]?.includes(text.split("+")[0])
                   );
                   return (
-                    <RegularButton
+                    <ZButton
+                      type="regular"
                       key={`evening-r1-${text}`}
                       text={text}
                       color="blue"
@@ -93,7 +94,8 @@ export default function View() {
                     (activeText) => disableMap[activeText.split("+")[0]]?.includes(text.split("+")[0])
                   );
                   return (
-                    <RegularButton
+                    <ZButton
+                      type="regular"
                       key={`evening-r1-${text}`}
                       text={text}
                       color="blue"
@@ -115,7 +117,8 @@ export default function View() {
                     (activeText) => disableMap[activeText.split("+")[0]]?.includes(text.split("+")[0])
                   );
                   return (
-                    <RegularButton
+                    <ZButton
+                      type="regular"
                       key={`evening-r1-${text}`}
                       text={text}
                       color="blue"
@@ -140,7 +143,8 @@ export default function View() {
                     (activeText) => disableMap[activeText.split("+")[0]]?.includes(text.split("+")[0])
                   );
                   return (
-                    <RegularButton
+                    <ZButton
+                      type="regular"
                       key={`evening-r1-${text}`}
                       text={text}
                       color="blue"
@@ -162,7 +166,8 @@ export default function View() {
                     (activeText) => disableMap[activeText.split("+")[0]]?.includes(text.split("+")[0])
                   );
                   return (
-                    <RegularButton
+                    <ZButton
+                      type="regular"
                       key={`evening-r1-${text}`}
                       text={text}
                       color="blue"
@@ -184,7 +189,8 @@ export default function View() {
                     (activeText) => disableMap[activeText.split("+")[0]]?.includes(text.split("+")[0])
                   );
                   return (
-                    <RegularButton
+                    <ZButton
+                      type="regular"
                       key={`evening-r1-${text}`}
                       text={text}
                       color="blue"
@@ -210,7 +216,8 @@ export default function View() {
                 (activeText) => disableMap[activeText.split("+")[0]]?.includes(pair.split("+")[0])
               );
               return (
-                <RegularButton
+                <ZButton
+                  type="regular"
                   key={pair}
                   text={pair}
                   color="blue"
@@ -230,7 +237,8 @@ export default function View() {
                 (activeText) => disableMap[activeText.split("+")[0]]?.includes(pair.split("+")[0])
               );
               return (
-                <RegularButton
+                <ZButton
+                  type="regular"
                   key={pair}
                   text={pair}
                   color="blue"

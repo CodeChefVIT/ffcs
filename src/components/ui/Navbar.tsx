@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { CCButton, FFCSButton, LongButton } from './Buttons';
+import { CCButton, FFCSButton, ZButton } from './Buttons';
 
 type NavbarProps = {
   page: "landing" | "404" | "slots" | "saved" | "phone";
@@ -23,7 +23,8 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
 
         {/* B2: Slots or Text */}
         {(page === 'landing' || page === '404') && (
-          <LongButton
+          <ZButton
+            type="long"
             text="Slot View"
             color="yellow"
             onClick={() => window.location.href = '/slots'}
@@ -43,14 +44,16 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
 
         {/* B3: Slots or Saved */}
         {(page === 'landing' || page === '404' || page == 'slots') && (
-          <LongButton
+          <ZButton
+            type="long"
             text="Saved Timetables"
             color='blue'
             onClick={() => window.location.href = '/saved'}
           />
         )}
         {(page === 'saved') && (
-          <LongButton
+          <ZButton
+            type="long"
             text="Slot View"
             color="yellow"
             onClick={() => window.location.href = '/slots'}
@@ -59,14 +62,16 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
 
         {/* B4: Login Logout */}
         {(page === 'landing' || page === '404' || page == 'slots') && (!loggedin) && (
-          <LongButton
+          <ZButton
+            type="long"
             text="Log In"
             color='green'
             onClick={() => window.location.href = '/login'}
           />
         )}
         {((page === 'saved') || ((page === 'landing' || page === '404' || page == 'slots') && (loggedin))) && (
-          <LongButton
+          <ZButton
+            type="long"
             text="Log Out"
             color="red"
             onClick={() => window.location.href = '/logout'}
