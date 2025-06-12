@@ -23,18 +23,21 @@ const inter = Inter({
 });
 
 
-export const metadata = {
-  title: 'FFCS-inator',
-  description: '',
-  icons: {
-    icon: '/icon_ffcs.svg',
-  },
-};
+// export const metadata = {
+//   title: 'FFCS-inator',
+//   // description: '',
+//   // icons: {
+//   //   icon: '/logo_FFCS.svg',
+//   // },
+// };
 
 
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
   return (
-    <html lang="en"    >
+    <html lang="en">
+      <head>
+        <title>FFCS-inator</title>
+      </head>
       <body className={`${pangolin.variable} ${poppins.variable} ${inter.variable} antialiased`}>
         {children}
       </body>
