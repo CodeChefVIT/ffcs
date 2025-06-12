@@ -13,7 +13,7 @@ const initialCourses: Course[] = [
     id: "course1",
     codes: ["BBRT101L", "BBRT101P"],
     names: ["Engineering Rizzology", "Engineering Rizzology Lab"],
-    slots: ["B2+TB2" ,"L47+L48" ],
+    slots: ["B2+TB2", "L47+L48"],
   },
   {
     id: "course2",
@@ -173,23 +173,7 @@ export const CourseCard: React.FC = () => {
 
   return (
     <>
-      <style>
-        {`
-        .scrollbar-custom::-webkit-scrollbar { width: 16px; background: transparent; }
-        .scrollbar-custom::-webkit-scrollbar-track {
-          background: transparent; border-radius: 12px;
-        }
-        .scrollbar-custom::-webkit-scrollbar-thumb {
-          background-color: rgba(107, 114, 128, 0.3); 
-          border-radius: 12px; border: 3px solid transparent;
-          background-clip: content-box; cursor: pointer;
-        }
-        .scrollbar-custom::-webkit-scrollbar-thumb:hover {
-          background-color: rgba(75, 85, 99, 0.7); 
-        }
-        .scrollbar-custom { scrollbar-width: thin; scrollbar-color: rgba(107, 114, 128, 0.3) transparent; }
-      `}
-      </style>
+      
 
       <div className="bg-[#A7D5D7] m-4 font-poppins rounded-2xl border-[3px] border-black p-6 text-black font-medium px-12 mb-16">
         <div className="flex justify-between items-start mt-4">
@@ -200,10 +184,11 @@ export const CourseCard: React.FC = () => {
           </p>
         </div>
 
-        <div
-          id="course-list"
-          className="mt-6 space-y-4 max-h-[350px] overflow-y-auto pr-2 font-poppins scrollbar-custom w-full"
-        >
+       <div
+  id="course-list"
+  className="mt-6 space-y-4 max-h-[350px] overflow-y-auto pr-2 font-poppins scrollbar-custom w-full"
+>
+
           {courses.map((course, index) => (
             <div
               key={`${course.id}-${index}`}
