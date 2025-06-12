@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { RegularButton } from "@/components/ui/Buttons";
+import { FooterMobile } from "@/components/ui/Footer";
 
 const dummyTimetables = [
   "Evening Theory",
@@ -42,49 +43,19 @@ export default function SavedMobile() {
         ))}
       </ul>
 
-      <div className="flex items-center w-full mt-10 text-sm font-poppins text-gray-600 px-6">
+      <div className="flex items-center w-full mt-12 text-sm font-poppins text-gray-600 px-6">
         <div className="flex-grow border-t border-gray-400"></div>
         <span className="mx-4">End of List</span>
         <div className="flex-grow border-t border-gray-400"></div>
       </div>
 
-      <div className="w-full mt-auto">
-        <svg
-          viewBox="0 0 375 100"
-          className="w-full h-16 block"
-          preserveAspectRatio="none"
-          style={{ display: "block" }}
-        >
-          <path
-            d="M0,60 Q93.75,20 187.5,40 Q281.25,60 375,40 L375,100 L0,100 Z"
-            fill="#96C0C2"
-          />
-        </svg>
-        <div
-          className="bg-[#96C0C2] w-full px-6 pb-8"
-          style={{ marginTop: "-1px" }}
-        >
-          <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 rounded-lg flex items-center justify-center">
-              <Image
-                src="/cclogo.svg"
-                alt="cclogo"
-                width={79}
-                height={87}
-                className="self-center"
-              />
-            </div>
-          </div>
+      
+        
+          
 
-          <div className="text-center font-medium">
-            <p className="text-black">
-              Made with
-              <span className="text-black mx-1">♥</span>
-              by CodeChef-VIT
-            </p>
-          </div>
-        </div>
-      </div>
+          <FooterMobile/>
+      
+      
     </div>
   );
 }
