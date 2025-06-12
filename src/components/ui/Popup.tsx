@@ -3,13 +3,23 @@
 import Image from "next/image";
 import React from "react";
 import { GoogleLoginButton, RegularButton } from "./Buttons";
-import { tableFacingSlot } from "@/lib/type";
+import CompoundTable from "../timetable/CompoundTable";
+
+type dataProps = {
+  code: string;
+  slot: string;
+  name: string;
+}
+
+type CompoundTableProps = {
+  data: dataProps[];
+}
 
 type PopupProps = {
   type: 'login' | 'rem_course' | 'email_tt' | 'share_tt' | 'save_tt' | 'delete_tt' | 'view_tt';
   dataTitle?: string;
   dataBody?: string;
-  dataTT?: tableFacingSlot[];
+  dataTT?: dataProps[];
   closeLink: () => void;
   action?: () => void;
 };
@@ -58,7 +68,7 @@ function copy(text: string) {
   }
 }
 
-export default function Popup({ type, dataTitle, dataBody, closeLink, action }: PopupProps) {
+export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, action }: PopupProps) {
 
   const theme = colorMap[typeColorMap[type] as keyof typeof colorMap] || ['#E4E9FC', '#94ACFF'];
   const title = typeTitleMap[type] || dataTitle || '';
@@ -143,8 +153,60 @@ export default function Popup({ type, dataTitle, dataBody, closeLink, action }: 
         <div className="flex flex-col items-center justify-center text-lg font-poppins font-regular p-8">
 
           {(type == 'login') && (
-            <div className="flex flex-col items-center justify-center">
-              <div className="break-words max-w-xs w-full text-center mt-4 mb-8">
+            <div className="flex flex-col items-center justify-center relative">
+              {/* Top-left */}
+              <div className="absolute -top-0 -left-12 -rotate-[5deg] z-[1]">
+                <Image
+                  src="/art/art_rice.svg"
+                  alt="artwork1"
+                  width={32}
+                  height={32}
+                  className="select-none"
+                  unselectable="on"
+                  draggable={false}
+                  priority
+                />
+              </div>
+              {/* Top-right */}
+              <div className="absolute top-1 -right-10 rotate-[-0deg] z-[1]">
+                <Image
+                  src="/art/art_boom.svg"
+                  alt="artwork2"
+                  width={36}
+                  height={36}
+                  className="select-none"
+                  unselectable="on"
+                  draggable={false}
+                  priority
+                />
+              </div>
+              {/* Bottom-left */}
+              <div className="absolute -bottom-1 -left-10 -rotate-[5deg] z-[1]">
+                <Image
+                  src="/art/art_arrow.svg"
+                  alt="artwork3"
+                  width={72}
+                  height={72}
+                  className="select-none"
+                  unselectable="on"
+                  draggable={false}
+                  priority
+                />
+              </div>
+              {/* Bottom-right */}
+              <div className="absolute -bottom-4 -right-7 rotate-[5deg] z-[1]">
+                <Image
+                  src="/art/art_loop.svg"
+                  alt="artwork4"
+                  width={60}
+                  height={60}
+                  className="select-none"
+                  unselectable="on"
+                  draggable={false}
+                  priority
+                />
+              </div>
+              <div className="break-words max-w-xs w-full text-center mt-4 mb-8 z-10">
                 {text}
               </div>
               <GoogleLoginButton onClick={action} />
@@ -225,9 +287,8 @@ export default function Popup({ type, dataTitle, dataBody, closeLink, action }: 
 
           {(type == 'view_tt') && (
             <div>
-              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
-                {/* {dataBody && <span className="font-semibold">&quot;{dataBody}&quot;</span>} */}
-                {/* compound table here */}
+              <div className="break-words max-w-[80vw] w-full text-center mt-2 mb-6">
+                <CompoundTable data={dataTT || []} />
               </div>
               <div className="flex flex-row items-center justify-center gap-4 mb-4">
                 <RegularButton text="Copy Link" color="green" image="/icons/send.svg" forceColor="#C1FF83" onClick={() => copy(dataBody || "")} />

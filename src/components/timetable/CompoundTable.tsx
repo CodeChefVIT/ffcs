@@ -39,13 +39,13 @@ export default function CompoundTable({ data }: CompoundTableProps) {
     return { slotName: d.slot, showName: true };
   })
 
-  return <div className="flex flex-row gap-8 m-8 text-black text-sm font-inter select-none">
+  return <div className="flex flex-row gap-8 mx-8 text-black text-sm font-inter select-none">
 
     <div className="w-[830px] h-[400px]">
       <TimeTable slotNames={tfs} />
     </div>
 
-    <div className="h-[400px] max-w-[480px] bg-[#ffffff]/60 border-3 border-black p-4 rounded-2xl space-y-2 overflow-y-auto overflow-x-auto">
+    <div className="h-[400px] w-[480px] bg-[#ffffff]/60 border-3 border-black p-4 rounded-2xl space-y-2 overflow-y-auto overflow-x-auto">
       {Object.entries(groupedData).map(([groupKey, entries], idx) => {
         const displayName = groupKey.split("__")[0];
         return (
@@ -53,12 +53,12 @@ export default function CompoundTable({ data }: CompoundTableProps) {
             <div className="space-y-1">
               {entries.map((entry, i) => (
                 <div key={i} className="flex px-2 min-w-0">
-                  <div className="w-[80px] shrink-0 break-words whitespace-normal">{entry.code}</div>
-                  <div className="w-[96px] shrink-0 ml-4 mr-4 break-words whitespace-normal">
+                  <div className="w-[80px] shrink-0 break-words whitespace-normal text-left">{entry.code}</div>
+                  <div className="w-[96px] shrink-0 ml-4 mr-4 break-words whitespace-normal text-left">
                     {entry.slot.replace(/\+/g, '+\u200B')}
                   </div>
                   {i === 0
-                    ? <div className="shrink-0 break-words whitespace-normal pr-4">{displayName}</div>
+                    ? <div className="shrink-0 break-words whitespace-normal text-left pr-4">{displayName}</div>
                     : <div className="shrink-0"></div>
                   }
                 </div>

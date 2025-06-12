@@ -6,6 +6,20 @@ import Popup from "@/components/ui/Popup";
 
 type PopupType = | "google" | "email" | "remove" | "save" | "share" | "delete" | "view" | "shared" | null;
 
+const data = [
+  { code: "BBRT101L", slot: "TG1", name: "Mansi Sharma" },
+  { code: "BBRT101P", slot: "L21+L22", name: "Mansi Sharma" },
+  { code: "BBIT101L", slot: "A1+TA1", name: "Samya Mehta" },
+  { code: "BBIT101P", slot: "L31+L32", name: "Samya Mehta" },
+  { code: "BERT101L", slot: "B1", name: "Yashita Puri" },
+  { code: "BERT101P", slot: "L59+L60", name: "Yashita Puri" },
+  { code: "BBRT101L", slot: "C1", name: "Kuriak Tom Jacob" },
+  { code: "BBRT101P", slot: "L43+L44", name: "Kuriak Tom Jacob" },
+  { code: "BBRT101L", slot: "D1", name: "Abhinav Pant" },
+  { code: "BBRT101L", slot: "F1+TF1", name: "Ishan Jindal" },
+  { code: "BBRT101P", slot: "L47+L48", name: "Ishan Jindal" },
+];
+
 export default function Home() {
   const [popupType, setPopupType] = useState<PopupType>(null);
   const closePopup = () => setPopupType(null);
@@ -23,9 +37,9 @@ export default function Home() {
       case "save":
         return <Popup type="save_tt" closeLink={closePopup} action={closePopup} />;
       case "delete":
-        return <Popup type="delete_tt" closeLink={closePopup} action={closePopup} dataBody="Morning Theory" />;
+        return <Popup type="delete_tt" closeLink={closePopup} action={closePopup} dataBody="<TT Name>" />;
       case "view":
-        return <Popup type="view_tt" closeLink={closePopup} action={closePopup} dataBody="ffcs.codechefvit.com/share?id=ABC123" dataTitle="Morning Theory" dataTT={[]} />;
+        return <Popup type="view_tt" closeLink={closePopup} action={closePopup} dataBody="ffcs.codechefvit.com/share?id=ABC123" dataTitle="<TT Name>" dataTT={data} />;
       default:
         return null;
     }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { RegularButton } from "@/components/ui/Buttons";
 import { FooterMobile } from "@/components/ui/Footer";
 
