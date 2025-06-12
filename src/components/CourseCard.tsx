@@ -175,11 +175,6 @@ export const CourseCard: React.FC = () => {
     <>
       <style>
         {`
-          @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Pangolin&display=swap');
-        .font-pangolin { font-family: "Pangolin", cursive; }
-        .font-poppins { font-family: "Poppins", sans-serif; }
-
         .scrollbar-custom::-webkit-scrollbar { width: 16px; background: transparent; }
         .scrollbar-custom::-webkit-scrollbar-track {
           background: transparent; border-radius: 12px;
