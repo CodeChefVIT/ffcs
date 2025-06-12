@@ -48,13 +48,19 @@ const typeTitleMap = {
 const typeTextMap = {
   login: 'Please log-in to save and share your time-tables.',
   rem_course: 'Are you sure you want to remove this course?',
-  email_tt: 'A Report has been sent to your email ID.',
+  email_tt: 'A report has been sent to your email ID.',
   share_tt: 'Use this link to share your timetable with anyone.',
-  save_tt: 'This will be saved to your collection. Please enter a unique name.',
+  save_tt: 'Save this timetable in your collection.',
   delete_tt: 'Are you sure you want to delete this timetable?',
   view_tt: 'View Timetable',
   shared_tt: 'Shared Timetable',
 };
+
+function copy(text: string) {
+  if (typeof navigator !== "undefined" && navigator.clipboard) {
+    navigator.clipboard.writeText(String(text));
+  }
+}
 
 export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, action1, action2 }: PopupProps) {
 
@@ -107,7 +113,7 @@ export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, ac
           </div>
 
           {/* close button */}
-          {(!(type == 'delete_tt' || type == 'rem_course')) && (
+          {(!(type == 'delete_tt' || type == 'rem_course' || type == 'email_tt')) && (
             <div className="flex-1 text-right flex items-center justify-end">
               <div
                 className={`
@@ -131,26 +137,57 @@ export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, ac
 
         <div className="flex flex-col items-center justify-center text-lg font-poppins font-regular p-8">
 
-          <div className="break-words max-w-lg w-full text-center mt-4 mb-8">
-            {text}<br />
-            {dataBody && <span className="font-semibold">"{dataBody}"</span>}
-          </div>
-
-
           {(type == 'login') && (
-            <div>
-              <GoogleLoginButton />
+            <div className="flex flex-col items-center justify-center">
+              <div className="break-words max-w-xs w-full text-center mt-4 mb-8">
+                {text}
+              </div>
+              <GoogleLoginButton onClick={action1} />
               <div className="mt-8" />
             </div>
           )}
 
-          {(type == 'rem_course') && (
-            <div className="flex flex-row items-center justify-center gap-4 mb-4">
-              <RegularButton text="Cancel" color="yellow" forceColor="#FFEA79" onClick={() => closeLink()} />
-              <RegularButton text="Remove" color="red" forceColor={theme[1]} />
+          {(type == 'share_tt') && (
+            <div className="flex flex-col items-center justify-center">
+              <div className="break-words w-full text-center mt-2 mb-4">
+                {text}
+              </div>
+              <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
+                <div className="outline-3 outline-black pt-2 pb-2 px-4 rounded-xl shadow-[6px_6px_0_0_black] bg-white text-[#606060] font-semibold">
+                  {dataBody}
+                </div>
+                <RegularButton text="Copy" color="yellow" forceColor="#FFEA79" onClick={() => copy(dataBody || "")} />
+              </div>
             </div>
           )}
 
+          {(type != 'login' && type != 'share_tt') && (
+            <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
+              {text}<br />
+              {dataBody && <span className="font-semibold">"{dataBody}"</span>}
+            </div>
+          )}
+
+
+          {(type == 'rem_course') && (
+            <div className="flex flex-row items-center justify-center gap-4 mb-4">
+              <RegularButton text="Cancel" color="yellow" forceColor="#FFEA79" onClick={closeLink} />
+              <RegularButton text="Remove" color="red" forceColor={theme[1]} onClick={action1} />
+            </div>
+          )}
+
+          {(type == 'delete_tt') && (
+            <div className="flex flex-row items-center justify-center gap-4 mb-4">
+              <RegularButton text="Cancel" color="yellow" forceColor="#FFEA79" onClick={closeLink} />
+              <RegularButton text="Delete" color="red" forceColor={theme[1]} onClick={action1} />
+            </div>
+          )}
+
+          {(type == 'email_tt') && (
+            <div className="flex flex-row items-center justify-center gap-4 mb-2">
+              <RegularButton text="OK" color="blue" forceColor={theme[1]} onClick={closeLink} />
+            </div>
+          )}
 
 
         </div>
