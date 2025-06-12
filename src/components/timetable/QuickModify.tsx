@@ -85,7 +85,7 @@ const ReplaceSlot = () => {
         >
           Quick Modify
           <Image
-            src="/Tool.svg"
+            src="/icons/tool.svg"
             alt="quick modify icon"
             width={24}
             height={24}

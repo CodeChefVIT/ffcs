@@ -9,7 +9,7 @@ export default function NotFound() {
     <div className="flex flex-col min-h-screen relative select-none">
       <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
         <Image
-          src="/bg_dots.svg"
+          src="/art/bg_dots.svg"
           alt="Background"
           fill
           priority
@@ -64,7 +64,7 @@ export default function NotFound() {
         <RegularButton
           text="Home"
           color="purple"
-          image="/icon_home.svg"
+          image="/icons/home.svg"
           onClick={() => { window.location.href = '/'; }}
         />
       </div>

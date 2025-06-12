@@ -126,7 +126,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
         className="col-[1] row-start-[1] row-end-[3] bg-white border border-black box-border flex items-center justify-center"
       >
         <Image
-          src="/ffcs.svg"
+          src="/logo_ffcs.svg"
           alt="logo of FFCS Platform by CodeChef-VIT"
           width={120}
           height={80}

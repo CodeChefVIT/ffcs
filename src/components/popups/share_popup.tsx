@@ -24,7 +24,7 @@ const SharePopup: React.FC<SharePopupProps> = ({ onClose }) => {
             className="w-13 h-14 flex items-center justify-center bg-red-300 rounded-tr-3xl outline-4 outline-offset-[-2px] outline-black text-xl font-bold relative left-4"
           >
             <Image
-              src="./x.svg"
+              src="/icons/cross.svg"
               alt="x"
               width={120}
               height={80}

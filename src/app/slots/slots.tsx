@@ -39,7 +39,7 @@ export default function View() {
     <div className="flex flex-col min-h-screen relative select-none items-center">
       <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
         <Image
-          src="/bg_dots.svg"
+          src="/art/bg_dots.svg"
           alt="Background"
           fill
           priority

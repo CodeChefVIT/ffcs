@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import Timetable from "@/components/timetable/TimeTable";
-import FacultyTable from "@/components/ui/FacultyTable";
+import FacultyTable from "@/components/FacultyTable";
 import { facultyData, tableFacingSlot } from "@/lib/type";
 import useScreenSize from "@/hooks/useScreenSize"; // Adjust import path if different
 
@@ -38,12 +38,12 @@ const extractSlotNames = (facultyData: facultyData[]): tableFacingSlot[] => {
   });
   return Array.from(slotSet).map((slotName) => ({ slotName, showName: true }));
 };
-const buttons = [
 
- 
-  { label: 'Share', bg: '#C1FF83', icon: '/Send.svg' },
-  { label: 'Download', bg: '#FFEA79', icon: '/download.svg' },
+const buttons = [
+  { label: 'Share', bg: '#C1FF83', icon: '/icons/send.svg' },
+  { label: 'Download', bg: '#FFEA79', icon: '/icons/download.svg' },
 ];
+
 const SharePopup: React.FC<ViewTimetableProps> = ({ onClose }) => {
   const screenSize = useScreenSize();
   const slotNames = extractSlotNames(savedTimetable.facultyData);
@@ -65,7 +65,7 @@ const SharePopup: React.FC<ViewTimetableProps> = ({ onClose }) => {
             className="w-13 h-14 flex items-center justify-center bg-red-300 rounded-tr-3xl outline-4 outline-offset-[-2px] outline-black text-xl font-bold relative left-4"
           >
             <Image
-              src="/x.svg"
+              src="/icons/cross.svg"
               alt="x"
               width={120}
               height={80}
@@ -75,9 +75,8 @@ const SharePopup: React.FC<ViewTimetableProps> = ({ onClose }) => {
         </div>
 
         <div
-          className={`p-6 sm:p-8 flex gap-6 flex-1 ${
-            screenSize === "mobile" ? "flex-col" : "flex-row"
-          }`}
+          className={`p-6 sm:p-8 flex gap-6 flex-1 ${screenSize === "mobile" ? "flex-col" : "flex-row"
+            }`}
         >
           <div className="overflow-auto basis-2/3 h-full flex-1">
             <Timetable slotNames={slotNames} />
@@ -87,18 +86,18 @@ const SharePopup: React.FC<ViewTimetableProps> = ({ onClose }) => {
           </div>
         </div>
         <div className="flex gap-9 w-full justify-center items-center">
-              {buttons.map((btn, index) => (
-                <button
-                  key={index}
-                  style={{ backgroundColor: btn.bg }}
-                  className="flex items-center gap-2 px-6 py-2 border-2 border-black rounded-lg shadow-[3px_3px_0_0_black] hover:brightness-105 active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
-                >
-                  <span className="text-lg font-medium">{btn.label}</span>
-                  <Image src={btn.icon} alt={btn.label} className="w-4 h-4" width={120} height={80} />
-                </button>
-              ))}
-            </div>
-         
+          {buttons.map((btn, index) => (
+            <button
+              key={index}
+              style={{ backgroundColor: btn.bg }}
+              className="flex items-center gap-2 px-6 py-2 border-2 border-black rounded-lg shadow-[3px_3px_0_0_black] hover:brightness-105 active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
+            >
+              <span className="text-lg font-medium">{btn.label}</span>
+              <Image src={btn.icon} alt={btn.label} className="w-4 h-4" width={120} height={80} />
+            </button>
+          ))}
+        </div>
+
 
         <div className="h-6" />
       </div>

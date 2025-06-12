@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import GoogleLoginPopup from "@/components/ui/popups/login_popup";
-import EmailPopup from "@/components/ui/popups/email_popup";
-import RemovePopup from "@/components/ui/popups/remove_popup";
-import SavePopup from "@/components/ui/popups/save_popup";
-import RenamePopup from "@/components/ui/popups/rename_popup";
-import SharePopup from "@/components/ui/popups/share_popup";
-import DeletePopup from "@/components/ui/popups/delete_popup";
-import ViewTimetablePopup from "@/components/ui/popups/view_timetable_popup"; 
+import GoogleLoginPopup from "@/components/popups/login_popup";
+import EmailPopup from "@/components/popups/email_popup";
+import RemovePopup from "@/components/popups/remove_popup";
+import SavePopup from "@/components/popups/save_popup";
+import RenamePopup from "@/components/popups/rename_popup";
+import SharePopup from "@/components/popups/share_popup";
+import DeletePopup from "@/components/popups/delete_popup";
+import ViewTimetablePopup from "@/components/popups/view_timetable_popup"; 
 
 
 export default function Home() {

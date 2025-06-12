@@ -27,7 +27,7 @@ export const metadata = {
   title: 'FFCS-inator',
   description: '',
   icons: {
-    icon: '/favicon.svg',
+    icon: '/icon_ffcs.svg',
   },
 };
 

@@ -10,7 +10,7 @@ export default function View() {
     <div className="flex flex-col min-h-screen relative select-none">
       <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
         <Image
-          src="/bg_dots.svg"
+          src="/art/bg_dots.svg"
           alt="Background"
           fill
           priority
@@ -31,12 +31,16 @@ export default function View() {
         </div>
 
         <div className="mb-8">
-          <Image src="/ffcs.svg" alt="FFCS Logo" width={120} height={120} />
+          <Image src="/logo_ffcs.svg" alt="FFCS Logo" width={120} height={120} />
         </div>
 
         <div className="text-4xl mb-8 font-pangolin text-black">
           Create Your<br />
           Ideal Timetable!
+        </div>
+
+        <div className="text-xl mb-8 font-poppins text-black">
+          Use PC or Tablet For All Features
         </div>
 
         <RegularButton
@@ -46,7 +50,7 @@ export default function View() {
         />
       </div>
 
-      <div className="h-8" />
+      <div className="h-6" />
 
       <FooterMobile />
     </div>

@@ -6,7 +6,7 @@ export default function Header() {
     <div className="relative w-full flex flex-col items-center justify-center px-4 text-center bg-[#CEE4E5] overflow-hidden h-screen mb-16">
 
       <Image
-        src="/background.svg"
+        src="/art/bg_dots.svg"
         alt="bg dots"
         width={1920} // Full width of the background
         height={1080} // Full height of the background
@@ -14,7 +14,7 @@ export default function Header() {
       />
 
       <Image
-        src="/paper.svg"
+        src="/art/art_paper.svg"
         alt="paper"
         width={96} // = w-24
         height={96} // ~ h-24
@@ -23,7 +23,7 @@ export default function Header() {
 
 
       <Image
-        src="/plane.svg"
+        src="/art/art_plane.svg"
         alt="plane"
         width={112} // w-28
         height={112}
@@ -31,7 +31,7 @@ export default function Header() {
       />
 
       <Image
-        src="/c.svg"
+        src="/art/letter_c.svg"
         alt="C"
         width={32} // w-8
         height={32}
@@ -39,7 +39,7 @@ export default function Header() {
       />
 
       <Image
-        src="/h.svg"
+        src="/art/letter_h.svg"
         alt="H"
         width={32} // w-8
         height={32}
@@ -47,7 +47,7 @@ export default function Header() {
       />
 
       <Image
-        src="/e.svg"
+        src="/art/letter_e.svg"
         alt="E"
         width={32} // w-8
         height={32}
@@ -55,7 +55,7 @@ export default function Header() {
       />
 
       <Image
-        src="/f.svg"
+        src="/art/letter_f.svg"
         alt="F"
         width={32} // w-8
         height={32}
@@ -63,15 +63,15 @@ export default function Header() {
       />
 
       <Image
-        src="/scribble-left.svg"
+        src="/art/art_rice.svg"
         alt="scribble"
         width={56} // w-14
         height={56}
-        className="absolute left-[25%] top-[75%] sm:left-[13%] sm:top-[73%] md:left-[20%] z-10 lg:w-16 lg:top-[78%]"
+        className="absolute left-[25%] top-[75%] sm:left-[13%] sm:top-[73%] md:left-[20%] z-10 lg:w-16 lg:top-[78%] rotate-[-70deg]"
       />
 
       <Image
-        src="/scribble-right.svg"
+        src="/art/art_boom.svg"
         alt="squiggle"
         width={56} // w-14
         height={56}
@@ -81,7 +81,7 @@ export default function Header() {
       <div className="z-20 pt-40 pb-20">
         <div className="flex flex-col items-center justify-start gap-5">
           <Image
-            src="/ffcs.svg"
+            src="/logo_ffcs.svg"
             alt="icon"
             width={94} // w-24 = 96px
             height={94} // h-24 = 96px
@@ -103,7 +103,7 @@ export default function Header() {
             Start
 
             <Image
-              src="/arrow-down.svg"
+              src="/icons/arrow_down.svg"
               alt="down"
               width={28} // w-7 = 28px
               height={28} // h-7 = 28px
