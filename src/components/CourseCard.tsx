@@ -185,15 +185,15 @@ export const CourseCard: React.FC = () => {
           </p>
         </div>
 
-        <div
-          id="course-list"
-          className="mt-6 space-y-4 max-h-[350px] overflow-y-auto pr-2 font-poppins scrollbar-custom w-full"
-        >
+       <div
+  id="course-list"
+  className="mt-6 space-y-4 max-h-[350px] overflow-y-auto pr-2 font-poppins w-full"
+>
 
           {courses.map((course, index) => (
             <div
               key={`${course.id}-${index}`}
-              className="course-row bg-[#FBFDFC66] rounded-3xl px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 sm:space-x-4 w-full"
+              className="course-row bg-[#FBFDFC66] rounded-3xl px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 sm:space-x-4 w-full "
               draggable
               onDragStart={(e) => handleDragStart(e, index)}
               onDragEnter={() => handleDragEnter(index)}
