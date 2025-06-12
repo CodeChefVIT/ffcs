@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import React from "react";
-import { GoogleLoginButton, RegularButton } from "../ui/Buttons";
+import { GoogleLoginButton, RegularButton } from "./Buttons";
 import { tableFacingSlot } from "@/lib/type";
 
 type PopupProps = {
@@ -11,8 +11,7 @@ type PopupProps = {
   dataBody?: string;
   dataTT?: tableFacingSlot[];
   closeLink: () => void;
-  action1?: () => void;
-  action2?: () => void;
+  action?: () => void;
 };
 
 const colorMap = {
@@ -62,7 +61,7 @@ function copy(text: string) {
   }
 }
 
-export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, action1, action2 }: PopupProps) {
+export default function Popup({ type, dataTitle, dataBody, closeLink, action }: PopupProps) {
 
   const theme = colorMap[typeColorMap[type] as keyof typeof colorMap] || ['#E4E9FC', '#94ACFF'];
   const title = typeTitleMap[type] || dataTitle || 'Popup Title';
@@ -142,7 +141,7 @@ export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, ac
               <div className="break-words max-w-xs w-full text-center mt-4 mb-8">
                 {text}
               </div>
-              <GoogleLoginButton onClick={action1} />
+              <GoogleLoginButton onClick={action} />
               <div className="mt-8" />
             </div>
           )}
@@ -161,34 +160,43 @@ export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, ac
             </div>
           )}
 
-          {(type != 'login' && type != 'share_tt') && (
-            <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
-              {text}<br />
-              {dataBody && <span className="font-semibold">"{dataBody}"</span>}
-            </div>
-          )}
-
-
           {(type == 'rem_course') && (
-            <div className="flex flex-row items-center justify-center gap-4 mb-4">
-              <RegularButton text="Cancel" color="yellow" forceColor="#FFEA79" onClick={closeLink} />
-              <RegularButton text="Remove" color="red" forceColor={theme[1]} onClick={action1} />
+            <div>
+              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
+                {text}<br />
+                {dataBody && <span className="font-semibold">&quot;{dataBody}&quot;</span>}
+              </div>
+              <div className="flex flex-row items-center justify-center gap-4 mb-4">
+                <RegularButton text="Cancel" color="yellow" forceColor="#FFEA79" onClick={closeLink} />
+                <RegularButton text="Remove" color="red" forceColor={theme[1]} onClick={action} />
+              </div>
             </div>
           )}
 
           {(type == 'delete_tt') && (
-            <div className="flex flex-row items-center justify-center gap-4 mb-4">
-              <RegularButton text="Cancel" color="yellow" forceColor="#FFEA79" onClick={closeLink} />
-              <RegularButton text="Delete" color="red" forceColor={theme[1]} onClick={action1} />
+            <div>
+              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
+                {text}<br />
+                {dataBody && <span className="font-semibold">&quot;{dataBody}&quot;</span>}
+              </div>
+              <div className="flex flex-row items-center justify-center gap-4 mb-4">
+                <RegularButton text="Cancel" color="yellow" forceColor="#FFEA79" onClick={closeLink} />
+                <RegularButton text="Delete" color="red" forceColor={theme[1]} onClick={action} />
+              </div>
             </div>
           )}
 
           {(type == 'email_tt') && (
-            <div className="flex flex-row items-center justify-center gap-4 mb-2">
-              <RegularButton text="OK" color="blue" forceColor={theme[1]} onClick={closeLink} />
+            <div>
+              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
+                {text}<br />
+                {dataBody && <span className="font-semibold">&quot;{dataBody}&quot;</span>}
+              </div>
+              <div className="flex flex-row items-center justify-center gap-4 mb-2">
+                <RegularButton text="OK" color="blue" forceColor={theme[1]} onClick={closeLink} />
+              </div>
             </div>
           )}
-
 
         </div>
 

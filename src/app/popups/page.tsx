@@ -1,8 +1,8 @@
 "use client";
 
-import Popup from "@/components/popups/popup";
-import { RegularButton } from "@/components/ui/Buttons";
 import { useState } from "react";
+import { RegularButton } from "@/components/ui/Buttons";
+import Popup from "@/components/ui/popup";
 
 type PopupType = | "google" | "email" | "remove" | "save" | "share" | "delete" | "view" | "shared" | null;
 
@@ -13,21 +13,21 @@ export default function Home() {
   const getPopupComponent = (type: PopupType) => {
     switch (type) {
       case "google":
-        return <Popup type="login" closeLink={closePopup} action1={closePopup} />;
+        return <Popup type="login" closeLink={closePopup} action={closePopup} />;
       case "remove":
-        return <Popup type="rem_course" dataBody="Engineering Rizzology" closeLink={closePopup} action1={closePopup} />;
+        return <Popup type="rem_course" closeLink={closePopup} action={closePopup} dataBody="Engineering Rizzology" />;
       case "email":
         return <Popup type="email_tt" closeLink={closePopup} />;
       case "share":
-        return <Popup type="share_tt" dataBody="ffcs.codechefvit.com/share?id=ABC123" closeLink={closePopup} />;
+        return <Popup type="share_tt" closeLink={closePopup} dataBody="ffcs.codechefvit.com/share?id=ABC123" />;
       case "save":
-        return <Popup type="save_tt" closeLink={closePopup} action1={closePopup} />;
+        return <Popup type="save_tt" closeLink={closePopup} action={closePopup} />;
       case "delete":
-        return <Popup type="delete_tt" dataBody="Morning Theory" closeLink={closePopup} action1={closePopup} />;
+        return <Popup type="delete_tt" closeLink={closePopup} action={closePopup} dataBody="Morning Theory" />;
       case "view":
-        return <Popup type="view_tt" closeLink={closePopup} />;
+        return <Popup type="view_tt" closeLink={closePopup} action={closePopup} dataBody="ffcs.codechefvit.com/share?id=ABC123" dataTitle="Morning Theory" dataTT={[]} />;
       case "shared":
-        return <Popup type="shared_tt" closeLink={closePopup} />;
+        return <Popup type="shared_tt" closeLink={closePopup} dataTitle="Morning Theory" dataTT={[]} />;
       default:
         return null;
     }
