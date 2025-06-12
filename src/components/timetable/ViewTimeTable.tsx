@@ -99,22 +99,21 @@ export default function ViewTimeTable() {
       <div className="flex flex-col h-full w-full max-w-[1600px] mx-auto px-4 sm:px-6 py-4 overflow-hidden bg-[#A7D5D7]">
         
         
-        <div className="flex flex-col sm:flex-row items-start sm:items-center mb-4 ml-2">
-          <h1
-            className="text-[6vw] sm:text-[4vw] md:text-[3vw] font-pangolin leading-tight text-left"
-            style={{ fontFamily: "Pangolin, cursive" }}
-          >
-            Your Timetables
-          </h1>
-          <span className="text-[3vw] sm:text-[2vw] md:text-[1.5vw] ml-4 sm:ml-7 font-normal">
-            ({timetableCount} timetables were generated)
-          </span>
-        </div>
+<div className="flex flex-col sm:flex-row items-start sm:items-center mb-4 ml-2">
+  <h1
+    className="text-[6vw] sm:text-[4vw] md:text-[3vw] font-pangolin leading-tight text-left"
+  >
+    Your Timetables
+  </h1>
+  <span className="text-[3vw] sm:text-[2vw] md:text-[1.5vw] ml-4 sm:ml-7 font-normal font-poppins">
+    ({timetableCount} timetables were generated)
+  </span>
+</div>
 
         
         <div className="flex flex-col lg:flex-row flex-1 gap-6 overflow-hidden">
           
-          <div className="flex-[2] overflow-auto p-2 max-h-[70vh]">
+          <div className="flex-[2.5] overflow-auto p-2 max-h-[70vh]">
             <TimeTable slotNames={slotNames} />
           </div>
 
@@ -125,24 +124,20 @@ export default function ViewTimeTable() {
         </div>
 
         
-       <div
-  className="mt-1 flex flex-col sm:flex-row items-center justify-between px-4 sm:px-8 gap-4"
-  style={{ minHeight: 64 }}
->
-  <div className="sm:mr-auto w-full sm:w-auto">
-    <TimetableSwitcher
-      visibleStart={visibleStart}
-      maxVisible={maxVisible}
-      total={total}
-      selectedIndex={selectedIndex}
-      onSelect={setSelectedIndex}
-      onLeft={handleLeft}
-      onRight={handleRight}
-    />
-  </div>
-
-  <ActionButtons />
-</div>
+      <div className="mt-1 flex flex-col sm:flex-row items-center justify-between px-4 sm:px-8 gap-4 min-h-[64px]">
+        <div className="sm:mr-auto w-full sm:w-auto">
+          <TimetableSwitcher
+            visibleStart={visibleStart}
+            maxVisible={maxVisible}
+            total={total}
+            selectedIndex={selectedIndex}
+            onSelect={setSelectedIndex}
+            onLeft={handleLeft}
+            onRight={handleRight}
+          />
+        </div>
+        <ActionButtons />
+      </div>
 
         
         <footer className="mt-4 border-t-2 border-black pt-2 pb-2">
