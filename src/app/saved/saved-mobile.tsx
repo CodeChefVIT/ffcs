@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
+import { RegularButton } from "@/components/ui/Buttons";
 
 const dummyTimetables = [
   "Evening Theory",
@@ -14,35 +16,75 @@ export default function SavedMobile() {
   const [timetable] = useState(dummyTimetables);
 
   return (
-    <>
-      <header></header>
-      <section className="min-h-screen w-full bg-[#d0eef1] px-6 py-8 flex flex-col items-center justify-center">
-        <div className="px-6 py-8 flex flex-col items-center w-full max-w-md"></div>
-        {/* Heading */}
-        <h1 className="text-4xl mb-6 text-black font-Pangolin"
-          style={{ fontFamily: 'Pangolin, cursive' }}>
-          Saved Timetables
-        </h1>
+    <div className="min-h-screen bg-[#CEE4E5] flex flex-col items-center font-poppins">
+      <div className="w-full px-4 py-2 flex justify-between items-center text-black select-none">
+        <div className="text-2xl font-[pangolin]">FFCS-Inator</div>
+        <RegularButton
+          text="Logout"
+          color="red"
+          onClick={() => (window.location.href = "/logout")}
+        />
+      </div>
 
-        {/* Timetable List */}
-        <ul className="w-full space-y-4">
-          {timetable.map((name, index) => (
-            <li
-              key={index}
-              className="grid grid-cols-[auto_1fr] items-center px-4 py-3 bg-[#bce6eb] text-black rounded-xl border-2 border-black shadow-md"
-            >
-              <span className="font-medium text-base mr-4">{index + 1}.</span>
-              <span className="font-medium text-base truncate">{name}</span>
-            </li>
-          ))}
-        </ul>
+      <h1 className="text-2xl mb-10 mt-12 text-black font-Pangolin">
+        Saved Timetables
+      </h1>
 
-        {/* End of List */}
-        <div className="text-sm text-gray-600 mt-10 border-t border-gray-400 w-full text-center pt-2">
-          End of List
+      <ul className="w-full space-y-4 px-6">
+        {timetable.map((name, index) => (
+          <li
+            key={index}
+            className="grid grid-cols-[auto_1fr] items-center px-3 py-3 bg-[#bce6eb] text-black rounded-xl border-2 border-black shadow-md"
+          >
+            <span className="font-medium text-base mr-4">{index + 1}.</span>
+            <span className="font-medium text-base truncate">{name}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div className="flex items-center w-full mt-10 text-sm font-poppins text-gray-600 px-6">
+        <div className="flex-grow border-t border-gray-400"></div>
+        <span className="mx-4">End of List</span>
+        <div className="flex-grow border-t border-gray-400"></div>
+      </div>
+
+      <div className="w-full mt-auto">
+        <svg
+          viewBox="0 0 375 100"
+          className="w-full h-16 block"
+          preserveAspectRatio="none"
+          style={{ display: "block" }}
+        >
+          <path
+            d="M0,60 Q93.75,20 187.5,40 Q281.25,60 375,40 L375,100 L0,100 Z"
+            fill="#96C0C2"
+          />
+        </svg>
+        <div
+          className="bg-[#96C0C2] w-full px-6 pb-8"
+          style={{ marginTop: "-1px" }}
+        >
+          <div className="flex justify-center mb-6">
+            <div className="w-16 h-16 rounded-lg flex items-center justify-center">
+              <Image
+                src="/cclogo.svg"
+                alt="cclogo"
+                width={79}
+                height={87}
+                className="self-center"
+              />
+            </div>
+          </div>
+
+          <div className="text-center font-medium">
+            <p className="text-black">
+              Made with
+              <span className="text-black mx-1">♥</span>
+              by CodeChef-VIT
+            </p>
+          </div>
         </div>
-      </section>
-      <footer> </footer>
-    </>
+      </div>
+    </div>
   );
 }
