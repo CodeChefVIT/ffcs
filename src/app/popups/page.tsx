@@ -26,8 +26,6 @@ export default function Home() {
         return <Popup type="delete_tt" closeLink={closePopup} action={closePopup} dataBody="Morning Theory" />;
       case "view":
         return <Popup type="view_tt" closeLink={closePopup} action={closePopup} dataBody="ffcs.codechefvit.com/share?id=ABC123" dataTitle="Morning Theory" dataTT={[]} />;
-      case "shared":
-        return <Popup type="shared_tt" closeLink={closePopup} dataTitle="Morning Theory" dataTT={[]} />;
       default:
         return null;
     }
@@ -37,13 +35,12 @@ export default function Home() {
     <div>
       <div className="flex gap-2 mb-4 p-8">
         <RegularButton text="Google" color="yellow" onClick={() => setPopupType("google")} />
-        <RegularButton text="Email" color="blue" onClick={() => setPopupType("email")} />
+        <RegularButton text="Email" color="purple" onClick={() => setPopupType("email")} />
         <RegularButton text="Remove" color="red" onClick={() => setPopupType("remove")} />
         <RegularButton text="Save" color="green" onClick={() => setPopupType("save")} />
-        <RegularButton text="Share" color="yellow" onClick={() => setPopupType("share")} />
+        <RegularButton text="Share" color="blue" onClick={() => setPopupType("share")} />
         <RegularButton text="Delete" color="red" onClick={() => setPopupType("delete")} />
         <RegularButton text="View" color="blue" onClick={() => setPopupType("view")} />
-        <RegularButton text="Shared" color="purple" onClick={() => setPopupType("shared")} />
       </div>
       {getPopupComponent(popupType)}
     </div>

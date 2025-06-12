@@ -6,7 +6,7 @@ import { GoogleLoginButton, RegularButton } from "./Buttons";
 import { tableFacingSlot } from "@/lib/type";
 
 type PopupProps = {
-  type: 'login' | 'rem_course' | 'email_tt' | 'share_tt' | 'save_tt' | 'delete_tt' | 'view_tt' | 'shared_tt';
+  type: 'login' | 'rem_course' | 'email_tt' | 'share_tt' | 'save_tt' | 'delete_tt' | 'view_tt';
   dataTitle?: string;
   dataBody?: string;
   dataTT?: tableFacingSlot[];
@@ -16,7 +16,7 @@ type PopupProps = {
 
 const colorMap = {
   red: ['#FFD3D3', '#FF8C8C'],
-  yellow: ['#F9F7E2', '#FFBB39'],
+  yellow: ['#FFF8D1', '#FFEA79'],
   green: ['#E5FFDE', '#ABDE9F'],
   blue: ['#E2F2F9', '#8BD5FF'],
   purple: ['#E4E9FC', '#94ACFF'],
@@ -25,12 +25,11 @@ const colorMap = {
 const typeColorMap = {
   login: 'yellow',
   rem_course: 'red',
-  email_tt: 'blue',
-  share_tt: 'yellow',
+  email_tt: 'purple',
+  share_tt: 'blue',
   save_tt: 'green',
   delete_tt: 'red',
   view_tt: 'blue',
-  shared_tt: 'purple',
 };
 
 const typeTitleMap = {
@@ -41,7 +40,6 @@ const typeTitleMap = {
   save_tt: 'Save Timetable',
   delete_tt: 'Delete Timetable',
   view_tt: '',
-  shared_tt: '',
 };
 
 const typeTextMap = {
@@ -51,8 +49,7 @@ const typeTextMap = {
   share_tt: 'Use this link to share your timetable with anyone.',
   save_tt: 'Save this timetable in your collection.',
   delete_tt: 'Are you sure you want to delete this timetable?',
-  view_tt: 'View Timetable',
-  shared_tt: 'Shared Timetable',
+  view_tt: '',
 };
 
 function copy(text: string) {
@@ -127,7 +124,15 @@ export default function Popup({ type, dataTitle, dataBody, closeLink, action }: 
                 `}
                 onClick={() => closeLink()}
               >
-                <Image src="/icons/cross.svg" alt="close" width={32} height={32} />
+                <Image
+                  src="/icons/cross.svg"
+                  alt="close"
+                  width={32}
+                  height={32}
+                  draggable={false}
+                  unselectable="on"
+                  style={{ userSelect: "none", pointerEvents: "auto" }}
+                />
               </div>
             </div>
           )}
@@ -152,10 +157,10 @@ export default function Popup({ type, dataTitle, dataBody, closeLink, action }: 
                 {text}
               </div>
               <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
-                <div className="outline-3 outline-black pt-2 pb-2 px-4 rounded-xl shadow-[6px_6px_0_0_black] bg-white text-[#606060] font-semibold">
+                <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-[#606060] font-semibold">
                   {dataBody}
                 </div>
-                <RegularButton text="Copy" color="yellow" forceColor="#FFEA79" onClick={() => copy(dataBody || "")} />
+                <RegularButton text="Copy" color="yellow" forceColor={theme[1]} onClick={() => copy(dataBody || "")} />
               </div>
             </div>
           )}
@@ -198,11 +203,40 @@ export default function Popup({ type, dataTitle, dataBody, closeLink, action }: 
             </div>
           )}
 
+          {(type == 'save_tt') && (
+            <div>
+              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
+                {text}<br />
+              </div>
+              <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
+                <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-black font-semibold">
+                  <input
+                    type="text"
+                    className="bg-transparent outline-none w-full text-center font-semibold"
+                    placeholder="Enter timetable name"
+                    value={dataBody}
+                  />
+                </div>
+                <RegularButton text="Save" color="green" forceColor={theme[1]} onClick={action} />
+              </div>
+            </div>
+          )}
+
+          {(type == 'view_tt') && (
+            <div>
+              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
+                {dataBody && <span className="font-semibold">&quot;{dataBody}&quot;</span>}
+              </div>
+
+              <div className="flex flex-row items-center justify-center gap-4 mb-4">
+                <RegularButton text="Copy Link" color="green" image="/icons/send.svg" forceColor="#C1FF83" onClick={() => copy(dataBody || "")} />
+                <RegularButton text="Download" color="yellow" image="/icons/download.svg" forceColor="#FFEA79" onClick={action} />
+              </div>
+            </div>
+          )}
+
         </div>
-
       </div>
-
     </div>
-
   );
 };
