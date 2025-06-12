@@ -30,8 +30,11 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
           />
         )}
         {(page === 'slots' || page === 'saved') && (
-          <div className={"text-4xl font-[pangolin]"}>
-            FFCS-Inator
+          <div
+            className="text-4xl font-[pangolin] cursor-pointer"
+            onClick={() => window.location.href = '/'}
+          >
+            FFCS-inator
           </div>
         )}
 
