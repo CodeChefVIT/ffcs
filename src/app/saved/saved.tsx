@@ -29,6 +29,7 @@ export default function Saved() {
 
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState<boolean>(false);
   const [indexToDelete, setIndexToDelete] = useState<number | null>(null);
+  const [TimetableToDelete, setTimetableToDelete] = useState<string | null>(null);
 
   const handleDelete = (indexToDelete: number): void => {
     setTimetables((prev) => prev.filter((_, index) => index !== indexToDelete));
@@ -59,12 +60,14 @@ export default function Saved() {
       handleDelete(indexToDelete);
       setIsDeletePopupOpen(false);
       setIndexToDelete(null);
+      setTimetableToDelete(null);
     }
   };
 
   const cancelDelete = () => {
     setIsDeletePopupOpen(false);
     setIndexToDelete(null);
+    setTimetableToDelete(null);
   };
 
   if (size === "mobile") {
@@ -92,7 +95,7 @@ export default function Saved() {
             Your Saved Timetables
           </p>
 
-          <ul className="space-y-3 max-h-[60vh] overflow-y-auto pr-2 font-poppins custom-scrollbar ">
+          <ul className="space-y-3 max-h-[60vh] overflow-y-auto pr-2 font-poppins custom-scrollbar">
             {timetables.length === 0 ? (
               <li className="text-center text-lg text-gray-700">
                 No timetables saved.
@@ -101,7 +104,7 @@ export default function Saved() {
               timetables.map((name: string, index: number) => (
                 <li
                   key={index}
-                  className="flex items-center justify-between bg-[#d2f4f6] px-6 py-3 rounded-3xl "
+                  className="flex items-center justify-between bg-[#d2f4f6] px-6 py-3 rounded-3xl"
                 >
                   {editingIndex === index ? (
                     <input
@@ -112,12 +115,8 @@ export default function Saved() {
                     />
                   ) : (
                     <p>
-                    <span className="text-xl m-2">
-                      {index + 1}.
-                    </span>
-                    <span className="text-xl m-4">
-                    {name}
-                    </span>
+                      <span className="text-xl m-2">{index + 1}.</span>
+                      <span className="text-xl m-4">{name}</span>
                     </p>
                   )}
 
@@ -158,6 +157,7 @@ export default function Saved() {
                           onClick={() => {
                             setIsDeletePopupOpen(true);
                             setIndexToDelete(index);
+                            setTimetableToDelete(timetables[index]);
                           }}
                         >
                           <Trash2 size={18} />
@@ -172,12 +172,22 @@ export default function Saved() {
         </div>
       </section>
       <Footer />
-      {isPopupOpen &&
-        <Popup type="share_tt" closeLink={() => setIsPopupOpen(false)} dataBody="ffcs.codechefvit.com/share?id=ABC123" />
-      }
-      {isPopupOpen && <SharePopup onClose={() => setIsPopupOpen(false)} />}
+
+      {isPopupOpen && (
+        <Popup
+          type="share_tt"
+          closeLink={() => setIsPopupOpen(false)}
+          dataBody="ffcs.codechefvit.com/share?id=ABC123"
+        />
+      )}
+
       {isDeletePopupOpen && (
-        <DeletePopup onConfirm={confirmDelete} onClose={cancelDelete} />
+        <Popup
+          type="delete_tt"
+          closeLink={cancelDelete}
+          action={confirmDelete}
+          dataBody={TimetableToDelete || ""}
+        />
       )}
     </>
   );
