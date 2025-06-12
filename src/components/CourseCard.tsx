@@ -5,7 +5,7 @@ interface Course {
   id: string;
   codes: string[];
   names: string[];
-  slots: string;
+  slots: string | string[];
 }
 
 const initialCourses: Course[] = [
@@ -13,7 +13,7 @@ const initialCourses: Course[] = [
     id: "course1",
     codes: ["BBRT101L", "BBRT101P"],
     names: ["Engineering Rizzology", "Engineering Rizzology Lab"],
-    slots: "B2, D2, G2",
+    slots: ["B2+TB2" ,"L47+L48" ],
   },
   {
     id: "course2",
@@ -60,8 +60,11 @@ const saveCourses = (courses: Course[]): Promise<void> => {
           !Array.isArray(course.names) ||
           course.names.length === 0 ||
           course.names.some((name) => !name || name.trim() === "") ||
-          !course.slots ||
-          course.slots.trim() === ""
+          !Array.isArray(course.slots) ||
+          course.slots.length === 0 ||
+          course.slots.some(
+            (slot) => typeof slot !== "string" || slot.trim() === ""
+          )
         ) {
           reject(
             new Error(
@@ -156,7 +159,7 @@ export const CourseCard: React.FC = () => {
       await saveCourses(courses);
       alert(
         "Courses saved successfully!\n\nCourse order:\n" +
-        courses.map((c, i) => `${i + 1}. ${c.codes.join(", ")}`).join("\n")
+          courses.map((c, i) => `${i + 1}. ${c.codes.join(", ")}`).join("\n")
       );
     } catch (error) {
       if (error instanceof Error) {
@@ -223,8 +226,9 @@ export const CourseCard: React.FC = () => {
                     {index + 1}.
                   </div>
                   <div
-                    className={`flex flex-col px-4 ${course.codes.length > 1 ? "space-y-1" : ""
-                      }`}
+                    className={`flex flex-col px-4 ${
+                      course.codes.length > 1 ? "space-y-1" : ""
+                    }`}
                   >
                     {course.codes.map((code) => (
                       <p key={code}>{code}</p>
@@ -234,10 +238,11 @@ export const CourseCard: React.FC = () => {
               </div>
 
               {/* Names */}
-              <div className="flex items-center sm:min-w-[200px] text-sm text-black font-normal">
+              <div className="flex items-start sm:min-w-[200px] text-sm text-black font-normal">
                 <div
-                  className={`flex flex-col justify-center ${course.names.length > 1 ? "space-y-1" : ""
-                    }`}
+                  className={`flex flex-col ${
+                    course.names.length > 1 ? "space-y-1" : ""
+                  }`}
                 >
                   {course.names.map((name, i) => (
                     <p key={i}>{name}</p>
@@ -247,10 +252,14 @@ export const CourseCard: React.FC = () => {
 
               {/* Slots */}
               <div className="flex items-center sm:min-w-[120px] text-sm text-right text-black font-normal">
-                <div className="flex flex-col justify-center">
-                  {course.slots.split("\n").map((slot, idx) => (
-                    <div key={idx}>{slot}</div>
-                  ))}
+                <div className="flex flex-col space-y-1">
+                  {Array.isArray(course.slots)
+                    ? course.slots.map((slot, idx) => (
+                        <div key={idx}>{slot}</div>
+                      ))
+                    : course.slots
+                        .split("\n")
+                        .map((slot, idx) => <div key={idx}>{slot}</div>)}
                 </div>
               </div>
 
@@ -336,8 +345,9 @@ export const CourseCard: React.FC = () => {
         <div className="text-center mt-8">
           <button
             id="generate-btn"
-            className={`border-2 border-black bg-[#7ce5e5] hover:bg-[#67d2d2] text-black font-semibold text-lg px-6 py-2 rounded-full shadow-[4px_4px_0_0_black] transition flex items-center justify-center gap-2 mx-auto ${saving ? "opacity-60 cursor-not-allowed" : ""
-              }`}
+            className={`border-2 border-black bg-[#7ce5e5] hover:bg-[#67d2d2] text-black font-semibold text-lg px-6 py-2 rounded-full shadow-[4px_4px_0_0_black] transition flex items-center justify-center gap-2 mx-auto ${
+              saving ? "opacity-60 cursor-not-allowed" : ""
+            }`}
             onClick={handleGenerate}
             type="button"
             disabled={saving}
