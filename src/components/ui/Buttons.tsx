@@ -10,6 +10,7 @@ type ButtonProps = {
   onClick?: () => void;
   disabled?: boolean;
   clicked?: boolean;
+  forceColor?: string; // Optional prop to force a specific color
 };
 
 const colorMap = {
@@ -22,13 +23,16 @@ const colorMap = {
   gray: '#969696',
 };
 
-export function RegularButton({ text, color, image, onClick, disabled = false, clicked = false }: ButtonProps) {
+export function RegularButton({ text, color, image, onClick, forceColor, disabled = false, clicked = false }: ButtonProps) {
+
+  const buttonColor = forceColor || colorMap[color];
+
   return (
     <button
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       style={{
-        backgroundColor: disabled ? colorMap['gray'] : clicked ? colorMap['green_2'] : colorMap[color],
+        backgroundColor: disabled ? colorMap['gray'] : clicked ? colorMap['green_2'] : buttonColor,
         fontFamily: 'Poppins, sans-serif',
         height: '48px',
         borderRadius: '16px',
@@ -251,5 +255,43 @@ export function ToggleButton({ onToggle }: ToggleButtonProps) {
         </button>
       ))}
     </div>
+  );
+}
+
+export function GoogleLoginButton({ onClick }: { onClick?: () => void }) {
+
+  const buttonColor = "#ffffff";
+
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        backgroundColor: buttonColor,
+        fontFamily: 'Poppins, sans-serif',
+        height: '48px',
+        borderRadius: '16px',
+        userSelect: 'none',
+      }}
+      className={`  
+      text-black  
+        px-4 py-2  
+        border-3 border-black  
+        font-semibold  
+        text-base  
+        cursor-pointer  
+        flex items-center justify-center text-center gap-2.5  
+        transition duration-100  
+        shadow-[4px_4px_0_0_black]  
+        active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]  
+      `}
+    >
+
+      <span style={{ pointerEvents: 'none', display: 'flex' }}>
+        <Image src="/social/google.svg" alt="" width={24} height={4} />
+      </span>
+
+      {"Login with Google"}
+
+    </button>
   );
 }

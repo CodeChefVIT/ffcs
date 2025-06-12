@@ -7,9 +7,8 @@ import { Eye, Edit, Trash2, Check, X } from "lucide-react";
 import useScreenSize from "@/hooks/useScreenSize";
 import SavedMobile from "./saved-mobile";
 import { Navbar } from "@/components/ui/Navbar";
-import SharePopup from "@/components/popups/view_timetable_popup";
-import DeletePopup from "@/components/popups/delete_popup";
 import { Footer } from "@/components/ui/Footer";
+import Popup from "@/components/ui/popup";
 
 export default function Saved() {
   const size = useScreenSize();
@@ -173,6 +172,9 @@ export default function Saved() {
         </div>
       </section>
       <Footer />
+      {isPopupOpen &&
+        <Popup type="share_tt" closeLink={() => setIsPopupOpen(false)} dataBody="ffcs.codechefvit.com/share?id=ABC123" />
+      }
       {isPopupOpen && <SharePopup onClose={() => setIsPopupOpen(false)} />}
       {isDeletePopupOpen && (
         <DeletePopup onConfirm={confirmDelete} onClose={cancelDelete} />
