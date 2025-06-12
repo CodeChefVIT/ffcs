@@ -111,21 +111,21 @@ export default function View() {
 
       <div className="relative w-full flex justify-center">
         <Image
-          src="/e.svg"
+          src="/art/letter_i.svg"
           alt="E"
           width={32}
           height={32}
           className="absolute left-[4%] top-16 sm:top-16 z-10 lg:w-11 select-none"
         />
         <Image
-          src="/f.svg"
+          src="/art/letter_k.svg"
           alt="F"
           width={32}
           height={32}
           className="absolute right-[8%] top-60 sm:top-60 z-10 lg:w-11 select-none"
         />
         <Image
-          src="/c.svg"
+          src="/art/letter_m.svg"
           alt="C"
           width={32}
           height={32}
@@ -191,7 +191,7 @@ export default function View() {
       </div>
       <div className="w-[80%] my-16">
         <Image
-          src="/footer.svg"
+          src="/art/graphic.svg"
           alt="footer wave"
           width={0}
           height={0}

@@ -4,11 +4,11 @@ import Image from 'next/image';
 import React from 'react';
 
 const buttons = [
-  { label: 'Email', bg: '#FFEA79', icon: '/mail.svg' },
-  { label: 'Save', bg: '#C1FF83', icon: '/save.svg' },
-  { label: 'Report', bg: '#90BDFF', icon: '/report.svg' },
-  { label: 'Share', bg: '#C1FF83', icon: '/Send.svg' },
-  { label: 'Download', bg: '#FFEA79', icon: '/download.svg' },
+  { label: 'Email', bg: '#FFEA79', icon: '/icons/mail.svg' },
+  { label: 'Save', bg: '#C1FF83', icon: '/icons/save.svg' },
+  { label: 'Report', bg: '#90BDFF', icon: '/icons/report.svg' },
+  { label: 'Share', bg: '#C1FF83', icon: '/icons/send.svg' },
+  { label: 'Download', bg: '#FFEA79', icon: '/icons/download.svg' },
 ];
 
 const ActionButtons = () => {

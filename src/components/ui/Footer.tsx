@@ -12,27 +12,27 @@ export function Footer() {
             {[
               {
                 href: "https://www.facebook.com/codechefvit/",
-                src: "/meta.svg",
+                src: "/social/meta.svg",
                 alt: "Facebook",
               },
               {
                 href: "https://x.com/codechefvit",
-                src: "/twitter.svg",
+                src: "/social/twitter.svg",
                 alt: "Twitter",
               },
               {
                 href: "https://github.com/CodeChefVIT",
-                src: "/github.svg",
+                src: "/social/github.svg",
                 alt: "Github",
               },
               {
                 href: "https://www.linkedin.com/company/codechefvit/mycompany/",
-                src: "/linkedin.svg",
+                src: "/social/linkedin.svg",
                 alt: "LinkedIn",
               },
               {
                 href: "https://www.instagram.com/codechefvit/",
-                src: "/instagram.svg",
+                src: "/social/instagram.svg",
                 alt: "Instagram",
               }
             ].map(({ href, src, alt }) => (
@@ -77,7 +77,7 @@ export function Footer() {
               />
             </div>
             <button className="bg-[#90BDFF] border-[3px] border-black rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-13 h-13 flex items-center justify-center shrink-0">
-              <Image src="/bell.svg" alt="Bell" width={23} height={23} />
+              <Image src="/icons/bell.svg" alt="Bell" width={23} height={23} />
             </button>
 
           </div>
@@ -108,7 +108,7 @@ export function FooterMobile() {
       {/* Full-width Wave Background */}
       <div className="absolute bottom-0 left-0 right-0 z-0">
         <Image
-          src="/footer_mobile.svg"
+          src="/art/footer_mobile.svg"
           alt="Wave Design"
           width={1920}
           height={1080}

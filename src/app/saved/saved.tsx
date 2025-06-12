@@ -29,7 +29,7 @@ export default function Saved() {
 
       <section className="w-full h-screen relative overflow-hidden">
         <Image
-          src="/bgffcs.jpg"
+          src="/art/bg_dots.svg"
           alt="Background of ffcs page"
           fill
           className="object-cover z-0"

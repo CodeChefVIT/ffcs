@@ -24,7 +24,7 @@ const GoogleLoginPopup: React.FC<GoogleLoginPopupProps> = ({ onClose }) => {
             className="w-13 h-14 flex items-center justify-center bg-red-300 rounded-tr-3xl outline-4 outline-offset-[-2px] outline-black text-xl font-bold relative left-4"
           >
             <Image
-              src="./x.svg"
+              src="/icons/cross.svg"
               alt="x"
               width={120}
               height={80}
@@ -43,7 +43,7 @@ const GoogleLoginPopup: React.FC<GoogleLoginPopupProps> = ({ onClose }) => {
         <div className="flex justify-center mt-2 px-18">
           <button className="flex items-center justify-center gap-4 w-full max-w-80 h-14 bg-white rounded-3xl shadow-[5px_5px_0px_rgba(0,0,0,1.00)] outline-4 outline-black px-4">
             <Image
-              src="./google.svg"
+              src="/social/google.svg"
               alt="Google"
               className="w-10 h-10"
               width={120}
@@ -58,7 +58,7 @@ const GoogleLoginPopup: React.FC<GoogleLoginPopupProps> = ({ onClose }) => {
         {/*doodles */}
         <div className="absolute top-18 left-10 w-10 h-10">
           <Image
-              src="./sparkle.svg"
+              src="/art/art_rice.svg"
               alt=""
               width={120}
               height={80}
@@ -67,7 +67,7 @@ const GoogleLoginPopup: React.FC<GoogleLoginPopupProps> = ({ onClose }) => {
 
         <div className="absolute top-20 right-11 w-10 h-10">
           <Image
-              src="./scribble.svg"
+              src="/art/art_boom.svg"
               alt=""
               width={120}
               height={80}
@@ -76,7 +76,7 @@ const GoogleLoginPopup: React.FC<GoogleLoginPopupProps> = ({ onClose }) => {
 
         <div className="absolute -bottom-2 left-8 w-18 h-16">
           <Image
-              src="./curved.svg"
+              src="/art/art_arrow.svg"
               alt=""
               width={120}
               height={80}
@@ -85,7 +85,7 @@ const GoogleLoginPopup: React.FC<GoogleLoginPopupProps> = ({ onClose }) => {
 
         <div className="absolute -bottom-4 rotate-6 right-8 w-18 h-18">
           <Image
-              src="./loop.svg"
+              src="/art/art_loop.svg"
               alt=""
               width={120}
               height={80}

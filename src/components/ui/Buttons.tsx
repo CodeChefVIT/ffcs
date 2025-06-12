@@ -149,7 +149,7 @@ export function CCButton() {
 export function FFCSButton() {
   return (
     <Image
-      src="/FFCS.svg"
+      src="/logo_FFCS.svg"
       alt="CC Button"
       width={80}
       height={80}
