@@ -1,18 +1,20 @@
 "use client";
 
 import React, { useState } from "react";
-import TimeTable from "@/components/timetable/TimeTable";
-import FacultyTable from "@/components/ui/FacultyTable";
-import TimetableSwitcher from "@/components/timetable/components/TimeTableSwitcher";
 import { facultyData, tableFacingSlot } from "@/lib/type";
-import ActionButtons from "@/components/timetable/components/ActionButtons";
-import ReplaceSlot from "@/components/timetable/components/QuickModify";
-import Header from "@/components/ui/Header";
-import FacultySelector from "@/components/ui/FacultySelector";
-import CourseCard from "@/components/ui/CourseCard";
 import Image from "next/image";
-import { Navbar } from "@/components/ui/Navbar";
+import { Navbar } from "@/components/ui//Navbar";
 import { Footer } from "@/components/ui/Footer";
+
+import TimeTable from "@/components/timetable/TimeTable";
+import FacultyTable from "@/components/FacultyTable";
+import TimetableSwitcher from "@/components/timetable/TimeTableSwitcher";
+import ActionButtons from "@/components/timetable/ActionButtons";
+import ReplaceSlot from "@/components/timetable/QuickModify";
+import Header from "@/components/Header";
+import FacultySelector from "@/components/FacultySelector";
+import CourseCard from "@/components/CourseCard";
+
 
 type APIFaculty = {
   faculty: string;

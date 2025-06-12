@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import Timetable from "@/components/timetable/TimeTable";
-import FacultyTable from "@/components/ui/FacultyTable";
+import FacultyTable from "@/components/FacultyTable";
 import { facultyData, tableFacingSlot } from "@/lib/type";
 import useScreenSize from "@/hooks/useScreenSize"; // Adjust import path if different
 
