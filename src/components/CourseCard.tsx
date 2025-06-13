@@ -19,7 +19,7 @@ const initialCourses: Course[] = [
     id: "course2",
     codes: ["BBRT102L"],
     names: ["Sigma Theory"],
-    slots: "A1+TA1, F1+TF1",
+    slots: "F1+TF1",
   },
   {
     id: "course3",
@@ -52,6 +52,10 @@ const saveCourses = (courses: Course[]): Promise<void> => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       for (const course of courses) {
+        const normalizedSlots = Array.isArray(course.slots)
+          ? course.slots
+          : course.slots.split(",").map((s) => s.trim());
+
         if (
           !course.id ||
           !Array.isArray(course.codes) ||
@@ -60,11 +64,8 @@ const saveCourses = (courses: Course[]): Promise<void> => {
           !Array.isArray(course.names) ||
           course.names.length === 0 ||
           course.names.some((name) => !name || name.trim() === "") ||
-          !Array.isArray(course.slots) ||
-          course.slots.length === 0 ||
-          course.slots.some(
-            (slot) => typeof slot !== "string" || slot.trim() === ""
-          )
+          normalizedSlots.length === 0 ||
+          normalizedSlots.some((slot) => !slot || slot.trim() === "")
         ) {
           reject(
             new Error(
@@ -74,6 +75,7 @@ const saveCourses = (courses: Course[]): Promise<void> => {
           return;
         }
       }
+
       resolve();
     }, 1000);
   });
@@ -229,7 +231,7 @@ export const CourseCard: React.FC = () => {
               </div>
 
               {/* Slots */}
-              <div className="flex items-center sm:min-w-[120px] text-sm text-right text-black font-normal">
+              <div className="flex items-center sm:min-w-[120px] text-sm text-left text-black font-normal">
                 <div className="flex flex-col space-y-1">
                   {Array.isArray(course.slots)
                     ? course.slots.map((slot, idx) => (
