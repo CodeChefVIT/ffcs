@@ -105,6 +105,24 @@ const Landing = () => {
             src="/art/letter_f.svg" alt="graphic element" width={60} height={60}
             className="select-none" unselectable="on" draggable={false} priority />
         </div>
+
+        <div className="absolute top-220 left-8 rotate-[0deg] z-[1]">
+          <Image
+            src="/art/letter_i.svg" alt="graphic element" width={60} height={60}
+            className="select-none" unselectable="on" draggable={false} priority />
+        </div>
+
+        <div className="absolute top-300 left-23 rotate-[0deg] z-[1]">
+          <Image
+            src="/art/letter_m.svg" alt="graphic element" width={60} height={60}
+            className="select-none" unselectable="on" draggable={false} priority />
+        </div>
+
+        <div className="absolute top-263 right-12 rotate-[0deg] z-[1]">
+          <Image
+            src="/art/letter_k.svg" alt="graphic element" width={60} height={60}
+            className="select-none" unselectable="on" draggable={false} priority />
+        </div>
       </div>
 
       <div className="max-w-6xl mx-4 pt-12" id="start">
@@ -118,7 +136,11 @@ const Landing = () => {
           ]}
           subjects={[]}
           slots={[]}
-          faculties={["a", "b", "c"]}
+          faculties={[
+            "Faculty Name 1",
+            "Professor Name 2",
+            "Dr. G Vishwanathan"
+          ]}
           onConfirm={() => { }}
           onReset={() => { }}
         />
