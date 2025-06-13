@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { CCButton, FFCSButton, ZButton } from './Buttons';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 type NavbarProps = {
   page: "landing" | "404" | "slots" | "saved" | "phone";
