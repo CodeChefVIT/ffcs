@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Navbar } from "@/components/ui//Navbar";
 import { Footer } from "@/components/ui/Footer";
 
-import Header from "@/components/Header";
 import FacultySelector from "@/components/FacultySelector";
 import CourseCard from "@/components/CourseCard";
 import ViewTimeTable from "@/components/timetable/ViewTimeTable";
@@ -37,7 +36,8 @@ const Landing = () => {
             alt="I"
             width={96}
             height={96}
-            className="mx-auto mb-6"
+            className="mx-auto mb-6 select-none"
+            unselectable="on" draggable={false} priority
           />
           <div className="text-6xl mb-6">FFCS-inator</div>
           <div className="text-md font-poppins font-semibold text-black mb-6">
