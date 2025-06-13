@@ -7,8 +7,8 @@ interface Course {
   id: string;
   codes: string[];
   names: string[];
-  slots: string | string[];
-  facultyName: string | string[];
+  slots: string | string[]| string[][];
+  facultyName: string | string[]| string[][];
 }
 
 const initialCourses: Course[] = [
@@ -16,15 +16,15 @@ const initialCourses: Course[] = [
     id: "course1",
     codes: ["CSE102L", "BCSE102P"],
     names: ["Structured and Object-Oriented Programming", "Structured and Object-Oriented Programming Lab"],
-    slots: ["G1", "L43+L44+L53+L54"],
-    facultyName: "DHIVYAA C R"
+    slots: [["G1","L43+L44+L53+L54"], ["G1+TG1"]],
+    facultyName: [["DHIVYAA C R "],["testwa"]]
   },
   {
     id: "course2",
     codes: ["BENG101L", "BENG101P"],
     names: ["Technical English Communication", "Technical English Communication Lab"],
-    slots: ["B1", "L45+L46"],
-    facultyName: "SOUMEN MUKHERJEE"
+    slots: [["B1", "L45+L46"],["B1", "L45+L46"]],
+    facultyName: [["SOUMEN MUKHERJEE"], ["vishu"]]
   },
   {
     id: "course3",
@@ -61,13 +61,7 @@ const initialCourses: Course[] = [
     slots: "F1+TF1",
     facultyName: "SIXPHRASE (APT)"
   },
-  {
-    id: "course8",
-    codes: ["BSTS101l"],
-    names: ["test"],
-    slots: "F1+TF1",
-    facultyName: "testwa"
-  }
+ 
 ];
 
 export const CourseCard: React.FC = () => {
@@ -151,21 +145,51 @@ export const CourseCard: React.FC = () => {
 
     try {
       const generateData = courses.map((course) => {
-        const slotsArray = Array.isArray(course.slots)
-          ? course.slots
-          : [course.slots];
+        // Check if array of array
+        if (
+          Array.isArray(course.facultyName) &&
+          Array.isArray(course.slots) &&
+          Array.isArray(course.facultyName[0]) &&
+          Array.isArray(course.slots[0])
+        ) {
+          // Pairing + add if seperate members exist
+          const facultyArr = course.facultyName as string[][];
+          const slotsArr = course.slots as string[][];
+          return facultyArr.map((faculty, idx) => ({
+            faculty: faculty.length > 1 ? faculty.join(" + ") : faculty[0] ?? "NIL",
+            facultySlot:
+              slotsArr[idx]?.length > 0
+                ? [slotsArr[idx].join("+")]
+                : ["NIL"],
+          }));
+        } else {
+          const slotsArray = Array.isArray(course.slots)
+            ? course.slots
+            : [course.slots];
 
-        const facultySlots = slotsArray
-          .map((slotStr) => slotStr.split("+").map((slot) => slot.trim()))
-          .flat()
-          .filter((slot) => slot !== "" && slot.toUpperCase() !== "NIL");
+          const facultySlots = slotsArray
+            .map((slotStr) => {
+              if (typeof slotStr === "string") {
+                return slotStr.split("+").map((slot) => slot.trim());
+              } else if (Array.isArray(slotStr)) {
+                return slotStr.flatMap((s) =>
+                  typeof s === "string"
+                    ? s.split("+").map((slot) => slot.trim())
+                    : []
+                );
+              }
+              return [];
+            })
+            .flat()
+            .filter((slot) => slot !== "" && slot.toUpperCase() !== "NIL");
 
-        return [
-          {
-            faculty: course.facultyName,
-            facultySlot: facultySlots.length > 0 ? facultySlots : ["NIL"],
-          },
-        ];
+          return [
+            {
+              faculty: course.facultyName,
+              facultySlot: facultySlots.length > 0 ? facultySlots : ["NIL"],
+            },
+          ];
+        }
       });
 
       const facultyData = courses.map((course) => course.codes.join("/"));
@@ -175,8 +199,6 @@ export const CourseCard: React.FC = () => {
         generateData,
         facultyData,
       };
-
-      // Send the payload to the API
       const response = await axios.post("/api/generate", payload);
       setTimetableData(response.data);
     } catch (err: any) {
