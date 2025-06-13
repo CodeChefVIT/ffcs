@@ -61,6 +61,13 @@ const initialCourses: Course[] = [
     slots: "F1+TF1",
     facultyName: "SIXPHRASE (APT)"
   },
+  {
+    id: "course",
+    codes: ["BSTFU-101"],
+    names: ["Vissus Rizzology"],
+    slots: "F1+TF1",
+    facultyName: "VISSU",
+  },
  
 ];
 

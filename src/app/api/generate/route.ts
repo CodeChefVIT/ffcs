@@ -289,7 +289,7 @@ export async function POST(req: Request) {
   const cur: FacultyData[] = [];
   const toRemove: number[] = [];
 
-  // remove empty groups
+  
   for (let i = 0; i < inputData.length; i++) {
     if (inputData[i].length === 0) toRemove.push(i);
   }
@@ -322,7 +322,7 @@ export async function POST(req: Request) {
       return;
     }
 
-    // optional early save
+    
     if (cur_arr.length === check) {
       result.push([...cur_arr]);
     }
@@ -331,12 +331,12 @@ export async function POST(req: Request) {
       const candidate = data[ind][i];
       let slotsOfCurFaculty = [...candidate.facultySlot];
 
-      // avoid duplicate faculty names
+      
       const names = new Set(cur_arr.map(f => f.faculty));
       names.add(candidate.faculty);
       if (names.size > check + labs) continue;
 
-      // mask secondary slots if needed
+      
       let toBeMaskedSlots: string[] = [];
       if (selectedTime === "Both") {
         const slotMap = selectedCampus === "Vellore Campus" ? velloreSlots : chennaiSlots;
@@ -345,7 +345,7 @@ export async function POST(req: Request) {
         }
       }
 
-      // no clash → normal
+      
       if (clashCheck(cur_slots_arr, slotsOfCurFaculty)) {
         const combined = [...slotsOfCurFaculty, ...toBeMaskedSlots];
         cur_arr.push(candidate);
@@ -356,33 +356,33 @@ export async function POST(req: Request) {
         cur_arr.pop();
         cur_slots_arr.splice(-combined.length, combined.length);
       }
-      // clash → two branches, but *keep existing first*
+      
       else {
-        // find the slot that clashes
+        
         const clashSlot = slotsOfCurFaculty.find(s => cur_slots_arr.includes(s))!;
-        // find the existing faculty index
+      
         const culpritIdx = cur_arr.findIndex(f => f.facultySlot.includes(clashSlot));
         const removed = cur_arr.splice(culpritIdx, 1)[0];
 
-        // remove that faculty's slots
+        
         for (const s of removed.facultySlot) {
           const idx = cur_slots_arr.indexOf(s);
           if (idx >= 0) cur_slots_arr.splice(idx, 1);
         }
 
-        // — Branch B (first!): keep the old faculty, skip the new —
+        
         cur_arr.splice(culpritIdx, 0, removed);
         cur_slots_arr.push(...removed.facultySlot);
         generate(cur_slots_arr, cur_arr, data, ind + 1, n, check);
-        // backtrack branch B
+      
         cur_arr.splice(culpritIdx, 1);
         cur_slots_arr.splice(-removed.facultySlot.length, removed.facultySlot.length);
 
-        // — Branch A: drop the old, take the new —
+        
         cur_arr.push(candidate);
         cur_slots_arr.push(...slotsOfCurFaculty);
         generate(cur_slots_arr, cur_arr, data, ind + 1, n, check);
-        // backtrack branch A
+        // backtrack branch a
         cur_arr.pop();
         cur_slots_arr.splice(-slotsOfCurFaculty.length, slotsOfCurFaculty.length);
       }
