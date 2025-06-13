@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import router from "next/router";
 
 import { ZButton } from "@/components/ui/Buttons";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 import Popup from "@/components/ui/Popup";
+import { useRouter } from "next/navigation";
 
 export default function Saved() {
+  const router = useRouter();
+
 
   const [timetables, setTimetables] = useState<string[]>([
     "Evening Theory",

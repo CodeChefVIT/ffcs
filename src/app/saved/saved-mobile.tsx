@@ -3,17 +3,21 @@
 import { useState } from "react";
 import { ZButton } from "@/components/ui/Buttons";
 import { FooterMobile } from "@/components/ui/Footer";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 
 const dummyTimetables = [
   "Evening Theory",
   "5:30 before lab",
   "Too good to be true",
   "FFCS hatao desh bachao",
-  "Abki baar vishu ki sarkar",
+  "Abki baar Vishwanathan Sarkar",
+  "Dummy Timetable",
+  "Another Timetable",
+  "Yet Another Timetable",
 ];
 
 export default function SavedMobile() {
+  const router = useRouter();
   const [timetable] = useState(dummyTimetables);
 
   return (
@@ -24,7 +28,7 @@ export default function SavedMobile() {
           type="regular"
           text="Logout"
           color="red"
-          onClick={() => { () => router.push('/logout') }}
+          onClick={() => router.push('/logout')}
         />
       </div>
 

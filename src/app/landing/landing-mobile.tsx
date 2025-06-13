@@ -4,9 +4,13 @@ import React from 'react';
 import Image from 'next/image';
 import { FooterMobile } from '@/components/ui/Footer';
 import { ZButton } from '@/components/ui/Buttons';
-import router from 'next/router';
+import { useRouter } from "next/navigation";
+
 
 export default function View() {
+  const router = useRouter();
+
+
   return (
     <div className="flex flex-col min-h-screen relative select-none">
       <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
@@ -48,7 +52,7 @@ export default function View() {
           type="regular"
           text="Saved Timetables"
           color="green"
-          onClick={() => { () => router.push('/saved') }}
+          onClick={() => router.push('/saved')}
         />
       </div>
 
