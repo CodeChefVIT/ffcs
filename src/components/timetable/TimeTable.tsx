@@ -123,7 +123,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
       {cells}
       <div
         key="image-cell"
-        className="col-[1] row-start-[1] row-end-[3] bg-white border border-black box-border flex items-center justify-center"
+        className="col-[1] row-start-[1] row-end-[3] bg-white border-black border-[0.5px] box-border flex items-center justify-center"
       >
         <Image
           src="/logo_ffcs.svg"

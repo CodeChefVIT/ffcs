@@ -1,6 +1,6 @@
 "use client";
 
-import CompoundTable from "@/components/timetable/CompoundTable";
+import CompoundTable from "@/components/ui/CompoundTable";
 
 const data = [
   { code: "BBRT101L", slot: "TG1", name: "Mansi Sharma" },

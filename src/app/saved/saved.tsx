@@ -2,25 +2,26 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Eye, Edit, Trash2, Check, X } from "lucide-react";
 
-import useScreenSize from "@/hooks/useScreenSize";
-import SavedMobile from "./saved-mobile";
+import { ZButton } from "@/components/ui/Buttons";
 import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 import Popup from "@/components/ui/Popup";
+import { useRouter } from "next/navigation";
 
 export default function Saved() {
-  const size = useScreenSize();
+  const router = useRouter();
+
 
   const [timetables, setTimetables] = useState<string[]>([
     "Evening Theory",
     "5:30 before lab",
     "Too good to be true",
     "FFCS hatao desh bachao",
-    "Abki baar vishu ki sarkar",
-    "somethng",
-    "vit is the best",
+    "Abki baar Vishwanathan Sarkar",
+    "Dummy Timetable",
+    "Another Timetable",
+    "Yet Another Timetable",
   ]);
 
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
@@ -70,107 +71,142 @@ export default function Saved() {
     setTimetableToDelete(null);
   };
 
-  if (size === "mobile") {
-    return <SavedMobile />;
-  }
-
   return (
-    <>
-      <header></header>
-      <Navbar page="saved" loggedin={true} />
-      <section className="w-full min-h-screen relative overflow-hidden flex flex-col items-center justify-center">
+    <div className="flex flex-col min-h-screen relative select-none items-center">
+      <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
         <Image
           src="/art/bg_dots.svg"
-          alt="Background of ffcs page"
+          alt="Background"
           fill
-          className="object-cover z-0"
+          priority
+          sizes="100vw"
+          className="object-top object-contain w-full h-full"
         />
+      </div>
 
-        <h1 className="text-5xl font-light z-10 mb-6 mt-24 p-6 font-pangolin text-black">
-          Saved Timetables
-        </h1>
+      <Navbar page="saved" loggedin={true} />
 
-        <div className="z-10 w-11/12 max-w-7xl rounded-[2rem] border-black border-3 bg-[#a6dde0]/90 p-6 backdrop-blur-md mb-20 shadow-[4px_4px_0_0_black]">
-          <p className="mb-8 mt-2 ml-2 text-3xl font-light font-pangolin">
-            Your Saved Timetables
-          </p>
+      <div className="text-6xl mt-48 mb-16 font-pangolin text-black">Saved Timetables</div>
 
-          <ul className="space-y-3 max-h-[60vh] overflow-y-auto pr-2 font-poppins custom-scrollbar">
-            {timetables.length === 0 ? (
-              <li className="text-center text-lg text-gray-700">
-                No timetables saved.
-              </li>
-            ) : (
-              timetables.map((name: string, index: number) => (
-                <li
-                  key={index}
-                  className="flex items-center justify-between bg-[#d2f4f6] px-6 py-3 rounded-3xl"
-                >
-                  {editingIndex === index ? (
-                    <input
-                      type="text"
-                      className="flex-1 mr-4 px-3 py-1 rounded-md border border-gray-400"
-                      value={editedName}
-                      onChange={(e) => setEditedName(e.target.value)}
-                    />
-                  ) : (
-                    <p>
-                      <span className="text-xl m-2">{index + 1}.</span>
-                      <span className="text-xl m-4">{name}</span>
-                    </p>
-                  )}
+      <div className="z-10 w-5/6 max-w-7xl rounded-[60px] border-black border-4 bg-[#A7D5D7] px-24 py-12 mb-24 shadow-[4px_4px_0_0_black]">
 
-                  <div className="flex space-x-2">
-                    {editingIndex === index ? (
-                      <>
-                        <button
-                          className="bg-green-300 p-2 m-2 rounded-md hover:scale-110 cursor-pointer"
-                          onClick={handleSaveRename}
-                        >
-                          <Check size={18} />
-                        </button>
-                        <button
-                          className="bg-red-300 p-2 m-2 rounded-md hover:scale-110 cursor-pointer"
-                          onClick={handleCancelRename}
-                        >
-                          <X size={18} />
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button
-                          className="bg-white p-2 m-2 rounded-md hover:bg-yellow-200 cursor-pointer transition-colors"
-                          onClick={() => setIsPopupOpen(true)}
-                        >
-                          <Eye size={18} />
-                        </button>
+        <div className="text-4xl mt-2 mb-8 font-pangolin font-light text-black">Your Saved Timetables</div>
 
-                        <button
-                          className="bg-white p-2 m-2 rounded-md hover:bg-blue-300 cursor-pointer transition-colors"
-                          onClick={() => handleRename(index)}
-                        >
-                          <Edit size={18} />
-                        </button>
-
-                        <button
-                          className="bg-white p-2 m-2 rounded-md hover:bg-red-300 cursor-pointer transition-colors"
-                          onClick={() => {
-                            setIsDeletePopupOpen(true);
-                            setIndexToDelete(index);
-                            setTimetableToDelete(timetables[index]);
-                          }}
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      </>
-                    )}
+        <ul className="space-y-4 max-h-[60vh] overflow-y-auto pr-4 font-poppins">
+          {timetables.length === 0 ? (
+            <li className="flex flex-col items-center justify-center mt-12 mb-6">
+              <div className="text-center text-2xl font-semibold text-[#606060] mb-6">
+                (No Saved Timetables)
+              </div>
+              <ZButton
+                type="large"
+                text="Home"
+                color="purple"
+                image="/icons/home.svg"
+                onClick={() => router.push('/')}
+              />
+            </li>
+          ) : (
+            timetables.map((name: string, index: number) => (
+              <li
+                key={index}
+                className="flex items-center justify-between bg-[#C9E5E6] p-4 rounded-3xl"
+              >
+                {editingIndex === index ? (
+                  <input
+                    type="text"
+                    className="flex-1 ml-2 mr-2 px-4 py-2 rounded-lg border border-black bg-white font-semibold text-[#505050]"
+                    value={editedName}
+                    onChange={(e) => setEditedName(e.target.value)}
+                  />
+                ) : (
+                  <div className="flex flex-row">
+                    <div className="text-xl mx-4 my-4">{index + 1}.</div>
+                    <div className="text-xl ml-8 mr-4 my-4 overflow-hidden">{name}</div>
                   </div>
-                </li>
-              ))
-            )}
-          </ul>
-        </div>
-      </section>
+                )}
+
+                <div className="flex space-x-2">
+                  {editingIndex === index ? (
+                    <>
+                      <button
+                        className="w-10 h-10 bg-[#53ec8e] border-1 border-black p-2 m-2 rounded-lg cursor-pointer"
+                        onClick={handleSaveRename}
+                      >
+                        <Image
+                          src="/icons/check.svg"
+                          alt="Save"
+                          width={24}
+                          height={24}
+                          className="m-auto"
+                        />
+                      </button>
+                      <button
+                        className="w-10 h-10 bg-[#FFA3A3] border-1 border-black p-2 m-2 rounded-lg cursor-pointer"
+                        onClick={handleCancelRename}
+                      >
+                        <Image
+                          src="/icons/cross.svg"
+                          alt="Cancel"
+                          width={24}
+                          height={24}
+                          className="m-auto"
+                        />
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        className="w-10 h-10 bg-[#E5F3F3] hover:bg-[#FFEA79] border-1 border-black p-2 m-2 rounded-lg cursor-pointer transition-colors"
+                        onClick={() => setIsPopupOpen(true)}
+                      >
+                        <Image
+                          src="/icons/eye.svg"
+                          alt="View"
+                          width={24}
+                          height={24}
+                          className="m-auto"
+                        />
+                      </button>
+
+                      <button
+                        className="w-10 h-10 bg-[#E5F3F3] hover:bg-[#9ABCFF] border-1 border-black p-2 m-2 rounded-lg cursor-pointer transition-colors"
+                        onClick={() => handleRename(index)}
+                      >
+                        <Image
+                          src="/icons/edit.svg"
+                          alt="Rename"
+                          width={24}
+                          height={24}
+                          className="m-auto"
+                        />
+                      </button>
+
+                      <button
+                        className="w-10 h-10 bg-[#E5F3F3] hover:bg-[#FFA3A3] border-1 border-black p-2 m-2 rounded-lg cursor-pointer transition-colors"
+                        onClick={() => {
+                          setIsDeletePopupOpen(true);
+                          setIndexToDelete(index);
+                          setTimetableToDelete(timetables[index]);
+                        }}
+                      >
+                        <Image
+                          src="/icons/trash.svg"
+                          alt="Delete"
+                          width={24}
+                          height={24}
+                          className="m-auto"
+                        />
+                      </button>
+                    </>
+                  )}
+                </div>
+              </li>
+            ))
+          )}
+        </ul>
+      </div>
+
       <Footer />
 
       {isPopupOpen && (
@@ -189,6 +225,7 @@ export default function Saved() {
           dataBody={TimetableToDelete || ""}
         />
       )}
-    </>
+
+    </div>
   );
 }

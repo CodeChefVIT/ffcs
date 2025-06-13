@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { CCButton, FFCSButton, ZButton } from './Buttons';
+import { useRouter } from 'next/navigation';
 
 type NavbarProps = {
   page: "landing" | "404" | "slots" | "saved" | "phone";
@@ -9,6 +10,7 @@ type NavbarProps = {
 };
 
 export function Navbar({ page, loggedin = false }: NavbarProps) {
+  const router = useRouter();
   return (<div className="absolute top-0 left-0 w-full z-10 select-none">
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem' }}>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
@@ -27,13 +29,13 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
             type="long"
             text="Slot View"
             color="yellow"
-            onClick={() => window.location.href = '/slots'}
+            onClick={() => router.push('/slots')}
           />
         )}
         {(page === 'slots' || page === 'saved') && (
           <div
             className="text-4xl font-[pangolin] cursor-pointer"
-            onClick={() => window.location.href = '/'}
+            onClick={() => router.push('/')}
           >
             FFCS-inator
           </div>
@@ -48,7 +50,7 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
             type="long"
             text="Saved Timetables"
             color='blue'
-            onClick={() => window.location.href = '/saved'}
+            onClick={() => router.push('/saved')}
           />
         )}
         {(page === 'saved') && (
@@ -56,7 +58,7 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
             type="long"
             text="Slot View"
             color="yellow"
-            onClick={() => window.location.href = '/slots'}
+            onClick={() => router.push('/slots')}
           />
         )}
 
@@ -66,7 +68,7 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
             type="long"
             text="Log In"
             color='green'
-            onClick={() => window.location.href = '/login'}
+            onClick={() => router.push('/login')}
           />
         )}
         {((page === 'saved') || ((page === 'landing' || page === '404' || page == 'slots') && (loggedin))) && (
@@ -74,7 +76,7 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
             type="long"
             text="Log Out"
             color="red"
-            onClick={() => window.location.href = '/logout'}
+            onClick={() => router.push('/logout')}
           />
         )}
 

@@ -3,8 +3,11 @@
 import { ZButton } from "@/components/ui/Buttons";
 import { FooterMobile } from "@/components/ui/Footer";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function NotFound() {
+  const router = useRouter();
+
   return (
     <div className="flex flex-col min-h-screen relative select-none">
       <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
@@ -66,7 +69,7 @@ export default function NotFound() {
           text="Home"
           color="purple"
           image="/icons/home.svg"
-          onClick={() => { window.location.href = '/'; }}
+          onClick={() => router.push('/')}
         />
       </div>
 

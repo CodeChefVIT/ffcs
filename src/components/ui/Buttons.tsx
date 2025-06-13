@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from "next/navigation";
 
 type ButtonVariant = 'regular' | 'image' | 'long' | 'large';
 
@@ -34,9 +35,10 @@ const toggleOptions = ["Theory", "Lab"];
 
 
 export function ZButton({ type, text, color, image, onClick, forceColor, disabled = false, clicked = false, }: ZButtonProps) {
+
   const variantClasses = {
     regular: 'h-12 rounded-xl px-4 text-base gap-2.5',
-    image: 'h-12 rounded-xl px-4 text-base gap-2.5',
+    image: 'h-13 w-13 rounded-xl text-base gap-2.5',
     long: 'h-12 rounded-xl px-8 text-base gap-2.5',
     large: 'h-[60px] rounded-2xl px-8 text-2xl gap-6',
   };
@@ -94,6 +96,7 @@ export function CCButton() {
 }
 
 export function FFCSButton() {
+  const router = useRouter();
   return (
     <Image
       src="/logo_FFCS.svg"
@@ -101,7 +104,7 @@ export function FFCSButton() {
       width={80}
       height={80}
       className="cursor-pointer select-none"
-      onClick={() => window.location.href = '/'}
+      onClick={() => router.push('/')}
     />
   );
 }

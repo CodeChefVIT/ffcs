@@ -3,7 +3,8 @@
 import Image from "next/image";
 import React from "react";
 import { GoogleLoginButton, ZButton } from "./Buttons";
-import CompoundTable from "../timetable/CompoundTable";
+import CompoundTable from "./CompoundTable";
+
 
 type dataProps = {
   code: string;
@@ -257,7 +258,7 @@ export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, ac
                 {dataBody && <span className="font-semibold">&quot;{dataBody}&quot;</span>}
               </div>
               <div className="flex flex-row items-center justify-center gap-4 mb-2">
-                <ZButton type="regular" text="OK" color="blue" forceColor={theme[1]} onClick={closeLink} />
+                <ZButton type="long" text="OK" color="blue" forceColor={theme[1]} onClick={closeLink} />
               </div>
             </div>
           )}
@@ -283,7 +284,7 @@ export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, ac
 
           {(type == 'view_tt') && (
             <div>
-              <div className="break-words max-w-[80vw] w-full text-center mt-2 mb-6">
+              <div className="break-words max-w-[80vw] w-full text-center p-2 -mt-4">
                 <CompoundTable data={dataTT || []} />
               </div>
               <div className="flex flex-row items-center justify-center gap-4 mb-4">
