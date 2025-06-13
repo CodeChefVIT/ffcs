@@ -7,14 +7,14 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 const dummyTimetables: string[] = [
-  // "Evening Theory",
-  // "5:30 before lab",
-  // "Too good to be true",
-  // "FFCS hatao desh bachao",
-  // "Abki baar Vishwanathan Sarkar",
-  // "Dummy Timetable",
-  // "Another Timetable",
-  // "Yet Another Timetable",
+  "Evening Theory",
+  "5:30 before lab",
+  "Too good to be true",
+  "FFCS hatao desh bachao",
+  "Abki baar Vishwanathan Sarkar",
+  "Dummy Timetable",
+  "Another Timetable",
+  "Yet Another Timetable",
 ];
 
 export default function SavedMobile() {
