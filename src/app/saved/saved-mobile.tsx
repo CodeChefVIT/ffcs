@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ZButton } from "@/components/ui/Buttons";
 import { FooterMobile } from "@/components/ui/Footer";
+import router from "next/router";
 
 const dummyTimetables = [
   "Evening Theory",
@@ -23,7 +24,7 @@ export default function SavedMobile() {
           type="regular"
           text="Logout"
           color="red"
-          onClick={() => (window.location.href = "/logout")}
+          onClick={() => { () => router.push('/logout') }}
         />
       </div>
 

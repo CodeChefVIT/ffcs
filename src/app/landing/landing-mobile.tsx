@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { FooterMobile } from '@/components/ui/Footer';
 import { ZButton } from '@/components/ui/Buttons';
+import router from 'next/router';
 
 export default function View() {
   return (
@@ -47,7 +48,7 @@ export default function View() {
           type="regular"
           text="Saved Timetables"
           color="green"
-          onClick={() => { window.location.href = '/saved'; }}
+          onClick={() => { () => router.push('/saved') }}
         />
       </div>
 

@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { CCButton } from "./Buttons";
+import { CCButton, ZButton } from "./Buttons";
 
 export function Footer() {
   return (
@@ -76,9 +76,8 @@ export function Footer() {
                 className="text-sm bg-transparent outline-none placeholder:text-black/50 w-full"
               />
             </div>
-            <button className="bg-[#90BDFF] border-[3px] border-black rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-13 h-13 flex items-center justify-center shrink-0">
-              <Image src="/icons/bell.svg" alt="Bell" width={23} height={23} />
-            </button>
+
+            <ZButton type="image" color="purple" image="/icons/bell.svg" onClick={() => alert("Subscribed!")} />
 
           </div>
         </div>

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { CCButton, FFCSButton, ZButton } from './Buttons';
+import router from 'next/router';
 
 type NavbarProps = {
   page: "landing" | "404" | "slots" | "saved" | "phone";
@@ -27,13 +28,13 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
             type="long"
             text="Slot View"
             color="yellow"
-            onClick={() => window.location.href = '/slots'}
+            onClick={() => { () => router.push('/slots') }}
           />
         )}
         {(page === 'slots' || page === 'saved') && (
           <div
             className="text-4xl font-[pangolin] cursor-pointer"
-            onClick={() => window.location.href = '/'}
+            onClick={() => { () => router.push('/') }}
           >
             FFCS-inator
           </div>
@@ -48,7 +49,7 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
             type="long"
             text="Saved Timetables"
             color='blue'
-            onClick={() => window.location.href = '/saved'}
+            onClick={() => { () => router.push('/saved') }}
           />
         )}
         {(page === 'saved') && (
@@ -56,7 +57,7 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
             type="long"
             text="Slot View"
             color="yellow"
-            onClick={() => window.location.href = '/slots'}
+            onClick={() => { () => router.push('/slots') }}
           />
         )}
 
@@ -66,7 +67,7 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
             type="long"
             text="Log In"
             color='green'
-            onClick={() => window.location.href = '/login'}
+            onClick={() => { () => router.push('/login') }}
           />
         )}
         {((page === 'saved') || ((page === 'landing' || page === '404' || page == 'slots') && (loggedin))) && (
@@ -74,7 +75,7 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
             type="long"
             text="Log Out"
             color="red"
-            onClick={() => window.location.href = '/logout'}
+            onClick={() => { () => router.push('/logout') }}
           />
         )}
 

@@ -3,6 +3,7 @@
 import { ZButton } from "@/components/ui/Buttons";
 import { FooterMobile } from "@/components/ui/Footer";
 import Image from "next/image";
+import router from "next/router";
 
 export default function NotFound() {
   return (
@@ -66,7 +67,7 @@ export default function NotFound() {
           text="Home"
           color="purple"
           image="/icons/home.svg"
-          onClick={() => { window.location.href = '/'; }}
+          onClick={() => { () => router.push('/') }}
         />
       </div>
 

@@ -38,7 +38,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
       <head>
         <title>FFCS-inator</title>
       </head>
-      <body className={`${pangolin.variable} ${poppins.variable} ${inter.variable} antialiased bg-[#CEE4E5]`}>
+      <body className={`${pangolin.variable} ${poppins.variable} ${inter.variable} antialiased bg-[#CEE4E5] select-none`}>
         {children}
       </body>
     </html>
