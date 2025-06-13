@@ -5,7 +5,7 @@ import { CCButton, FFCSButton, ZButton } from './Buttons';
 import { useRouter } from 'next/navigation';
 
 type NavbarProps = {
-  page: "landing" | "404" | "slots" | "saved" | "phone";
+  page: "landing" | "404" | "slots" | "saved" | "shared" | "mobile";
   loggedin: boolean;
 };
 
@@ -16,15 +16,15 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
 
         {/* B1: CC or FFCS button */}
-        {(page === 'landing' || page === '404') && (
+        {(page == 'landing' || page == '404' || page == 'shared') && (
           <CCButton />
         )}
-        {(page === 'slots' || page === 'saved') && (
+        {(page == 'slots' || page == 'saved') && (
           <FFCSButton />
         )}
 
         {/* B2: Slots or Text */}
-        {(page === 'landing' || page === '404') && (
+        {(page == 'landing' || page == '404' || page == 'shared') && (
           <ZButton
             type="long"
             text="Slot View"
@@ -41,11 +41,21 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
           </div>
         )}
 
+        {/* B3: Mobile */}
+        {(page == 'mobile') && (
+          <div
+            className="text-3xl font-[pangolin] cursor-pointer"
+            onClick={() => router.push('/')}
+          >
+            FFCS-inator
+          </div>
+        )}
+
       </div>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
 
-        {/* B3: Slots or Saved */}
-        {(page === 'landing' || page === '404' || page == 'slots') && (
+        {/* B4: Slots or Saved */}
+        {(page === 'landing' || page === '404' || page == 'slots' || page == 'shared') && (
           <ZButton
             type="long"
             text="Saved Timetables"
@@ -62,7 +72,7 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
           />
         )}
 
-        {/* B4: Login Logout */}
+        {/* B5: Login Logout */}
         {(page === 'landing' || page === '404' || page == 'slots') && (!loggedin) && (
           <ZButton
             type="long"
@@ -74,6 +84,16 @@ export function Navbar({ page, loggedin = false }: NavbarProps) {
         {((page === 'saved') || ((page === 'landing' || page === '404' || page == 'slots') && (loggedin))) && (
           <ZButton
             type="long"
+            text="Log Out"
+            color="red"
+            onClick={() => router.push('/logout')}
+          />
+        )}
+
+        {/* B6: Mobile */}
+        {(page == 'mobile') && (
+          <ZButton
+            type="regular"
             text="Log Out"
             color="red"
             onClick={() => router.push('/logout')}
