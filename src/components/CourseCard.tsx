@@ -238,7 +238,7 @@ export const CourseCard: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="px-12">
       <div id="course-card" className="bg-[#A7D5D7] mt-4 font-poppins rounded-4xl border-[3px] border-black p-6 shadow-[4px_4px_0_0_black] text-black font-medium px-12 mb-16">
         <div className="flex justify-between items-start mt-4">
           <h2 className="text-3xl font-pangolin">Your Courses</h2>
@@ -298,26 +298,25 @@ export const CourseCard: React.FC = () => {
               </div>
 
               {/* Buttons */}
-              <div className="flex items-center justify-end gap-2">
+              <div className="flex items-center justify-end gap-2 flex-shrink-0">
                 <button
                   onClick={() => {
                     setCourseToDelete(course);
                     setDeletePopupOpen(true);
                   }}
                   aria-label="Delete Course"
-                  className="bg-[#FFFFFF]/50 hover:bg-[#F08585] text-black p-2 rounded-lg transition cursor-pointer"
+                  className="bg-[#FFFFFF]/50 hover:bg-[#F08585] text-black rounded-lg transition cursor-pointer w-10 h-10 flex items-center justify-center flex-shrink-0"
                   type="button"
                   title="Delete Course"
                 >
-                  <Image src={"/icons/trash.svg"} width={120} height={80} alt="up" className="w-5 h-5" />
-
+                  <Image src={"/icons/trash.svg"} width={1} height={1} alt="delete" className="w-6 h-6" />
                 </button>
 
-                <div className="flex flex-col bg-[#FFFFFF]/50 rounded-lg overflow-hidden leading-none gap-0 p-1">
+                <div className="flex flex-col bg-[#FFFFFF]/50 rounded-xl overflow-hidden leading-none gap-0 p-1 flex-shrink-0 w-8 h-12 -mr-2">
                   <button
                     onClick={() => moveCourseUp(index)}
                     aria-label="Move Course Up"
-                    className="px-1 py-0.5 m-0 leading-none transition rounded-t-lg cursor-pointer"
+                    className="px-1 py-0.5 m-0 leading-none transition rounded-t-lg cursor-pointer w-6 h-6 flex items-center justify-center"
                     type="button"
                     title="Move Up"
                     disabled={index === 0}
@@ -334,20 +333,19 @@ export const CourseCard: React.FC = () => {
                   <button
                     onClick={() => moveCourseDown(index)}
                     aria-label="Move Course Down"
-                    className="px-1 py-0.5 m-0 leading-none transition rounded-b-lg cursor-pointer"
+                    className="px-1 py-0.5 m-0 leading-none transition rounded-b-lg cursor-pointer w-6 h-6 flex items-center justify-center"
                     type="button"
                     title="Move Down"
                     disabled={index === courses.length - 1}
                   >
                     <Image
                       src={index === courses.length - 1 ? "/icons/chevron_down_gray.svg" : "/icons/chevron_down.svg"}
-                      width={120}
-                      height={80}
+                      width={1}
+                      height={1}
                       alt="down"
                       className="w-3 h-3"
                     />
                   </button>
-
                 </div>
               </div>
             </div>
@@ -380,7 +378,7 @@ export const CourseCard: React.FC = () => {
           }}
         />
       )}
-    </>
+    </div>
   );
 };
 
