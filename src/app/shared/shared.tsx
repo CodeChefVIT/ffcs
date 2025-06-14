@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 import CompoundTable from '@/components/ui/CompoundTable';
 import Navbar from '@/components/ui/Navbar';
-import { Footer } from '@/components/ui/Footer';
+import Footer from '@/components/ui/Footer';
 
 type dataProps = {
   code: string;

@@ -5,7 +5,7 @@ import Image from "next/image";
 
 import Hero from "@/components/ui/Hero";
 import Navbar from "@/components/ui/Navbar";
-import { Footer } from "@/components/ui/Footer";
+import Footer from "@/components/ui/Footer";
 
 import FacultySelector from "@/components/FacultySelector";
 import CourseCard from "@/components/CourseCard";
@@ -64,7 +64,7 @@ export default function View() {
       <div className="w-full max-w-5xl px-4 sm:px-6 lg:px-12 m-32">
         <Image
           src="/art/graphic.svg"
-          alt="footer wave"
+          alt="graphic"
           width={0}
           height={0}
           className="w-full h-auto"

@@ -1,7 +1,7 @@
 "use client";
 
 import { ZButton } from "@/components/ui/Buttons";
-import { FooterMobile } from "@/components/ui/Footer";
+import Footer from "@/components/ui/Footer";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -75,7 +75,7 @@ export default function NotFound() {
 
       <div className="h-8" />
 
-      <FooterMobile />
+      <Footer type="mobile" />
     </div>
   );
 }

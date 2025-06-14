@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { FooterMobile } from '@/components/ui/Footer';
+import Footer from '@/components/ui/Footer';
 import { ZButton } from '@/components/ui/Buttons';
 import { useRouter } from "next/navigation";
 
@@ -58,7 +58,7 @@ export default function View() {
 
       <div className="h-6" />
 
-      <FooterMobile />
+      <Footer type="mobile" />
     </div>
   );
 }

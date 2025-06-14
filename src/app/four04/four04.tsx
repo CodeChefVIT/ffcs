@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import Navbar from "@/components/ui/Navbar";
 import { ZButton } from "@/components/ui/Buttons";
-import { Footer } from "@/components/ui/Footer";
+import Footer from "@/components/ui/Footer";
 import { useRouter } from "next/navigation";
 
 export default function NotFound() {
