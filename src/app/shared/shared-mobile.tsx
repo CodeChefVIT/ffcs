@@ -1,4 +1,5 @@
 "use client";
+
 import CompoundTable from "@/components/ui/CompoundTable";
 import { FooterMobile } from "@/components/ui/Footer";
 import Image from "next/image";
