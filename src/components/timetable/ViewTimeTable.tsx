@@ -6,6 +6,7 @@ import { facultyData } from "@/lib/type";
 import CompoundTable from "@/components//ui/CompoundTable";
 import { ZButton } from "@/components/ui/Buttons";
 import { useTimetable } from "@/components/timetable/TimeTableContext";
+import Image from "next/image";
 
 const actionButtons = [
   { label: 'Email', color: 'yellow', icon: '/icons/mail.svg', onClick: () => console.log("Email clicked") },
@@ -38,10 +39,11 @@ function getVisibleIndexes(selected: number, total: number) {
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const timetableNumber = selectedIndex + 1;
   const allTimatables = timetableData ? transformAPIResponseToFacultyData(timetableData) : [[]];
   const timetableCount = allTimatables.length;
   const selectedData = allTimatables[selectedIndex] || [];
-  const visibleIndexes = getVisibleIndexes(selectedIndex, timetableCount);
+  const visibleIndexes = getVisibleIndexes(timetableNumber, timetableCount);
 
   // console.log("Timetable Data:", timetableData);
   // console.log("Selected Data:", selectedData);
@@ -77,82 +79,85 @@ export default function ViewTimeTable() {
 
           <div className="w-auto">
 
+
+
+
             <div className=" w-full flex justify-center">
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  height: 48,
-                  background: '#75E5EA',
-                  borderRadius: 12,
-                  border: '2px solid black',
-                  boxShadow: '3px 3px 0px black',
-                  overflow: 'hidden',
-                }}
+
+              <button
+                onClick={timetableNumber === 1 ? undefined : () => setSelectedIndex(0)}
+                disabled={timetableNumber === 1}
+                className={`
+                  ${timetableNumber === 1 ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'}
+                  font-poppins
+                  border-2 border-black
+                  font-semibold
+                  flex items-center justify-center text-center
+                  transition duration-100
+                  h-12 w-12
+                  rounded-l-xl
+                  shadow-[4px_4px_0_0_black]
+                  ${timetableNumber === 1 ? 'cursor-normal' : 'cursor-pointer'}
+                  ${timetableNumber === 1 ? 'cursor-normal' : 'cursor-pointer'}
+                  ${timetableNumber === 1 ? '' : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'}
+                `}
               >
-                <button
-                  onClick={() => setSelectedIndex(0)}
-                  disabled={selectedIndex === 0}
-                  style={{
-                    width: 48,
-                    height: 48,
-                    background: '#75E5EA',
+                <span style={{ pointerEvents: 'none', display: 'flex' }}>
+                  <Image src="/icons/start.svg" alt="" width={32} height={32} />
+                </span>
+              </button>
 
-                    fontSize: 20,
-                    fontWeight: 700,
-                    cursor: selectedIndex === 0 ? 'not-allowed' : 'pointer',
-                    opacity: selectedIndex === 0 ? 0.4 : 1,
-                    border: 'none',
-                    borderRight: '2px solid black',
-                  }}
-                >
-                  ‹
-                </button>
-
-                {visibleIndexes.map((i, idx) => (
-                  <div
-                    key={i}
-                    onClick={() => setSelectedIndex(i)}
-                    style={{
-                      width: 40,
-                      height: 48,
-                      background:
-                        selectedIndex === i ? 'rgba(255,255,255,0.4)' : '#75E5EA',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: 18,
-                      fontWeight: 700,
-                      fontFamily: 'Poppins',
-                      cursor: 'pointer',
-                      borderRight: '2px solid black',
-                      borderLeft: idx === 0 ? '2px solid black' : 'none',
-                    }}
+              <div className="flex flex-row">
+                {visibleIndexes.map((index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedIndex(index - 1)}
+                    className={`
+                      ${timetableNumber === index ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'}
+                      font-poppins
+                      border-2 border-black
+                      font-bold
+                      text-lg
+                      flex items-center justify-center text-center
+                      transition duration-100
+                      h-12 w-12
+                      shadow-[4px_4px_0_0_black]
+                      ${timetableNumber === index ? 'cursor-normal' : 'cursor-pointer'}
+                      ${timetableNumber === index ? '' : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'}
+                    `}
                   >
-                    {i + 1}
-                  </div>
+                    {index}
+                  </button>
                 ))}
-
-                <button
-                  onClick={() => setSelectedIndex(timetableCount - 1)}
-                  disabled={selectedIndex + 5 >= timetableCount}
-                  style={{
-                    width: 48,
-                    height: 48,
-                    background: '#75E5EA',
-                    fontSize: 20,
-                    fontWeight: 700,
-                    cursor:
-                      selectedIndex + 5 >= timetableCount ? 'not-allowed' : 'pointer',
-                    opacity: selectedIndex + 5 >= timetableCount ? 0.4 : 1,
-                    border: 'none',
-                    borderLeft: '2px solid black',
-                  }}
-                >
-                  ›
-                </button>
               </div>
+
+              <button
+                onClick={timetableNumber === timetableCount ? undefined : () => setSelectedIndex(timetableCount - 1)}
+                disabled={timetableNumber === timetableCount}
+                className={`
+                  ${timetableNumber === timetableCount ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'}
+                  font-poppins
+                  border-2 border-black
+                  font-semibold
+                  flex items-center justify-center text-center
+                  transition duration-100
+                  h-12 w-12
+                  rounded-r-xl
+                  shadow-[4px_4px_0_0_black]
+                  ${timetableNumber === timetableCount ? 'cursor-normal' : 'cursor-pointer'}
+                  ${timetableNumber === timetableCount ? 'cursor-normal' : 'cursor-pointer'}
+                  ${timetableNumber === timetableCount ? '' : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'}
+                `}
+              >
+                <span style={{ pointerEvents: 'none', display: 'flex' }}>
+                  <Image src="/icons/end.svg" alt="" width={32} height={32} />
+                </span>
+              </button>
+
             </div>
+
+
+
 
           </div>
 

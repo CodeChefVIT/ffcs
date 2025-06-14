@@ -7,8 +7,8 @@ import Hero from "@/components/ui/Hero";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 
-import FacultySelector from "@/components/FacultySelector";
-import CourseCard from "@/components/CourseCard";
+import FacultySelector from "@/components/cards/FacultySelector";
+import CourseCard from "@/components/cards/CourseCard";
 import ViewTimeTable from "@/components/timetable/ViewTimeTable";
 import { TimetableProvider } from "@/components/timetable/TimeTableContext";
 

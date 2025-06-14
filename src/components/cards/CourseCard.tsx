@@ -3,10 +3,10 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
 
-import { useTimetable } from "../components/timetable/TimeTableContext";
+import { useTimetable } from "../timetable/TimeTableContext";
 
-import Popup from "./ui/Popup";
-import { ZButton } from "./ui/Buttons";
+import Popup from "../ui/Popup";
+import { ZButton } from "../ui/Buttons";
 import Image from "next/image";
 
 interface Course {
