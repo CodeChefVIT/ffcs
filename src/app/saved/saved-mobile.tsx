@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 import Navbar from "@/components/ui/Navbar";
-import { FooterMobile } from "@/components/ui/Footer";
+import Footer from "@/components/ui/Footer";
 
 const dummyTimetables: string[] = [
   "Evening Theory",
@@ -64,7 +64,7 @@ export default function SavedMobile() {
         </div>
       )}
 
-      <FooterMobile />
+      <Footer type="mobile" />
     </div>
   );
 }

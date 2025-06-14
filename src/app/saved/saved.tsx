@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import Navbar from "@/components/ui/Navbar";
 import Popup from "@/components/ui/Popup";
 import { ZButton } from "@/components/ui/Buttons";
-import { Footer } from "@/components/ui/Footer";
+import Footer from "@/components/ui/Footer";
 
 export default function Saved() {
   const router = useRouter();

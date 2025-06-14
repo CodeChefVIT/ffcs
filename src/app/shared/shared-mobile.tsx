@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 
 import CompoundTable from "@/components/ui/CompoundTable";
-import { FooterMobile } from "@/components/ui/Footer";
+import Footer from "@/components/ui/Footer";
 
 type dataProps = {
   code: string;
@@ -94,8 +94,7 @@ export default function View() {
       </div>
     )}
 
-    <FooterMobile />
-
+    <Footer type="mobile" />
 
   </div>
 }

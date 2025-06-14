@@ -15,6 +15,7 @@ type groupedDataProps = {
 
 type CompoundTableProps = {
   data: dataProps[];
+  large?: boolean;
 }
 
 const sortData = (data: dataProps[]): dataProps[] => {
@@ -31,7 +32,7 @@ const getGroupedData = (data: dataProps[]): groupedDataProps => {
   }, {} as groupedDataProps);
 }
 
-export default function CompoundTable({ data }: CompoundTableProps) {
+export default function CompoundTable({ data, large }: CompoundTableProps) {
   const groupedData = getGroupedData(data);
 
   const tfs = data.map((d) => {
@@ -41,13 +42,29 @@ export default function CompoundTable({ data }: CompoundTableProps) {
   return <div className="flex flex-col lg:flex-row gap-4 m-2 text-black text-sm font-inter select-none lg:overflow-x-auto">
 
     <div className="overflow-x-auto lg:overflow-x-visible">
-      <div className="min-w-[830px] lg:w-[830px] h-[400px]">
+      <div className={`
+        ${large ?
+          "w-[1000px] h-[480px]" :
+          "w-[830px] h-[400px]"
+        }
+      `}>
         <TimeTable slotNames={tfs} />
       </div>
     </div>
 
     <div className="overflow-x-auto lg:overflow-x-visible">
-      <div className="min-w-[400px] w-full lg:w-[400px] h-[320px] lg:h-[400px] bg-[#ffffff]/60 border-3 border-black p-4 rounded-2xl space-y-2 overflow-y-auto">
+      <div className={`
+        w-full min-w-[400px]
+        ${large ?
+          "h-[360px] lg:h-[480px]" :
+          "h-[320px] lg:h-[400px]"
+        }
+
+        bg-[#ffffff]/60 p-4
+        border-3 border-black
+        rounded-2xl space-y-2
+        overflow-y-auto
+      `}>
         {Object.entries(groupedData).map(([groupKey, entries], idx) => {
           const displayName = groupKey.split("__")[0];
           return (
@@ -71,5 +88,5 @@ export default function CompoundTable({ data }: CompoundTableProps) {
         })}
       </div>
     </div>
-  </div>
+  </div >
 }

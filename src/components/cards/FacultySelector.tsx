@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { ZButton } from './ui/Buttons';
+import { ZButton } from '../ui/Buttons';
 
 const schools = ['SCOPE', 'SELECT', 'SCORE', 'SMEC', 'SBST', 'SCHEME', 'SENSE', 'SCE'];
 
@@ -201,7 +201,7 @@ export default function FacultySelector({ domains = [], subjects = [], slots = [
                 {priorityList.map((faculty, index) => (
                   <div
                     key={index}
-                    className="group cursor-move"
+                    className="group cursor-grab active:cursor-grabbing"
                     draggable
                     onDragStart={(e) => e.dataTransfer.setData('text/plain', index.toString())}
                     onDragOver={(e) => e.preventDefault()}
