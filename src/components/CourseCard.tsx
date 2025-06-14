@@ -1,94 +1,87 @@
 import React, { useState, useRef } from "react";
+import { useTimetable } from "../components/timetable/TimeTableContext";
+import axios from "axios";
 import Popup from "./ui/Popup";
 
 interface Course {
   id: string;
   codes: string[];
   names: string[];
-  slots: string | string[];
+  slots: string | string[]| string[][];
+  facultyName: string | string[]| string[][];
 }
 
 const initialCourses: Course[] = [
   {
     id: "course1",
-    codes: ["BBRT101L", "BBRT101P"],
-    names: ["Engineering Rizzology", "Engineering Rizzology Lab"],
-    slots: ["B2+TB2", "L47+L48"],
+    codes: ["CSE102L", "BCSE102P"],
+    names: ["Structured and Object-Oriented Programming", "Structured and Object-Oriented Programming Lab"],
+    slots: [["G1","L43+L44+L53+L54"], ["G1+TG1"]],
+    facultyName: [["DHIVYAA C R "],["testwa"]]
   },
   {
     id: "course2",
-    codes: ["BBRT102L"],
-    names: ["Sigma Theory"],
-    slots: "F1+TF1",
+    codes: ["BENG101L", "BENG101P"],
+    names: ["Technical English Communication", "Technical English Communication Lab"],
+    slots: [["B1", "L45+L46"],["B1", "L45+L46"]],
+    facultyName: [["SOUMEN MUKHERJEE"], ["vishu"]]
   },
   {
     id: "course3",
-    codes: ["BBRT103P"],
-    names: ["Skibidi Programming Lab"],
-    slots: "L22+L23",
+    codes: ["BHUM101N"],
+    names: ["Ethics and Values"],
+    slots: "NIL",
+    facultyName: "BHUVANESWARI M"
   },
   {
     id: "course4",
-    codes: ["BBRT104E"],
-    names: ["Delulu NPC Studies"],
-    slots: "TG2",
+    codes: ["BHUM220L"],
+    names: ["Financial Markets and Institutions"],
+    slots: "C1+TC1",
+    facultyName: "SAVITHA N"
   },
   {
     id: "course5",
-    codes: ["BBRT101S"],
-    names: ["Testing extra "],
-    slots: "TG2, TG3",
+    codes: ["BMAT101L", "BMAT101P"],
+    names: ["Calculus", "Calculus Lab"],
+    slots: ["D1+TD1", "L35+L36"],
+    facultyName: "ARUN KUMAR BADAJENA"
   },
   {
     id: "course6",
-    codes: ["BCSE101L"],
-    names: ["OOPS with Rizz"],
-    slots: "G1,G2",
+    codes: ["BPHY101L", "BPHY101P"],
+    names: ["Engineering Physics", "Engineering Physics Lab"],
+    slots: ["E1+TE1", "L47+L48"],
+    facultyName: "KANHAIYA LAL PANDEY"
   },
+  {
+    id: "course7",
+    codes: ["BSTS101P"],
+    names: ["Quantitative Skills Practice I"],
+    slots: "F1+TF1",
+    facultyName: "SIXPHRASE (APT)"
+  },
+  {
+    id: "course",
+    codes: ["BSTFU-101"],
+    names: ["Vissus Rizzology"],
+    slots: "F1+TF1",
+    facultyName: "VISSU",
+  },
+ 
 ];
 
-// Simulated backend save with validation
-const saveCourses = (courses: Course[]): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      for (const course of courses) {
-        const normalizedSlots = Array.isArray(course.slots)
-          ? course.slots
-          : course.slots.split(",").map((s) => s.trim());
-
-        if (
-          !course.id ||
-          !Array.isArray(course.codes) ||
-          course.codes.length === 0 ||
-          course.codes.some((code) => !code || code.trim() === "") ||
-          !Array.isArray(course.names) ||
-          course.names.length === 0 ||
-          course.names.some((name) => !name || name.trim() === "") ||
-          normalizedSlots.length === 0 ||
-          normalizedSlots.some((slot) => !slot || slot.trim() === "")
-        ) {
-          reject(
-            new Error(
-              `Invalid course data detected for course with id "${course.id}". Please check all fields.`
-            )
-          );
-          return;
-        }
-      }
-
-      resolve();
-    }, 1000);
-  });
-};
-
 export const CourseCard: React.FC = () => {
+  const { setTimetableData } = useTimetable();
+
   const [courses, setCourses] = useState<Course[]>(initialCourses);
   const draggedItemIndex = useRef<number | null>(null);
   const dragOverItemIndex = useRef<number | null>(null);
-  const [saving, setSaving] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const [deletePopupOpen, setDeletePopupOpen] = useState(false);
-
   const [courseToDelete, setCourseToDelete] = useState<Course | null>(null);
 
   const resetDragRefs = () => {
@@ -133,8 +126,6 @@ export const CourseCard: React.FC = () => {
     resetDragRefs();
   };
 
-  // Instead of deleting immediately, open popup
-
   const moveCourseUp = (index: number) => {
     if (index === 0) return;
     const updatedCourses = [...courses];
@@ -156,28 +147,88 @@ export const CourseCard: React.FC = () => {
   };
 
   const handleGenerate = async () => {
-    setSaving(true);
+    setLoading(true);
+    setError(null);
+
     try {
-      await saveCourses(courses);
-      alert(
-        "Courses saved successfully!\n\nCourse order:\n" +
-        courses.map((c, i) => `${i + 1}. ${c.codes.join(", ")}`).join("\n")
-      );
-    } catch (error) {
-      if (error instanceof Error) {
-        alert("Failed to save courses:\n" + error.message);
-      } else {
-        alert("Failed to save courses due to an unknown error.");
+      const generateData = courses.map((course) => {
+        // Check if array of array
+        if (
+          Array.isArray(course.facultyName) &&
+          Array.isArray(course.slots) &&
+          Array.isArray(course.facultyName[0]) &&
+          Array.isArray(course.slots[0])
+        ) {
+          // Pairing + add if seperate members exist
+          const facultyArr = course.facultyName as string[][];
+          const slotsArr = course.slots as string[][];
+          return facultyArr.map((faculty, idx) => ({
+            faculty: faculty.length > 1 ? faculty.join(" + ") : faculty[0] ?? "NIL",
+            facultySlot:
+              slotsArr[idx]?.length > 0
+                ? [slotsArr[idx].join("+")]
+                : ["NIL"],
+          }));
+        } else {
+          const slotsArray = Array.isArray(course.slots)
+            ? course.slots
+            : [course.slots];
+
+          const facultySlots = slotsArray
+            .map((slotStr) => {
+              if (typeof slotStr === "string") {
+                return slotStr.split("+").map((slot) => slot.trim());
+              } else if (Array.isArray(slotStr)) {
+                return slotStr.flatMap((s) =>
+                  typeof s === "string"
+                    ? s.split("+").map((slot) => slot.trim())
+                    : []
+                );
+              }
+              return [];
+            })
+            .flat()
+            .filter((slot) => slot !== "" && slot.toUpperCase() !== "NIL");
+
+          return [
+            {
+              faculty: course.facultyName,
+              facultySlot: facultySlots.length > 0 ? facultySlots : ["NIL"],
+            },
+          ];
+        }
+      });
+
+      const facultyData = courses.map((course) => course.codes.join("/"));
+
+      const payload = {
+        slotTime: "Both",
+        generateData,
+        facultyData,
+      };
+      const response = await axios.post("/api/generate", payload);
+
+      if (response?.data) {
+        setTimetableData(response.data);
+
+        setTimeout(() => {
+          const el = document.getElementById("timetable-view");
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 100);
       }
+    } catch (err: any) {
+      setError("Failed to generate timetable. Please try again.");
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
-    setSaving(false);
   };
 
   return (
     <>
-
-
-      <div className="bg-[#A7D5D7] m-4 font-poppins rounded-2xl border-[3px] border-black p-6 text-black font-medium px-12 mb-16">
+      <div id="course-card" className="bg-[#A7D5D7] mt-4 font-poppins rounded-2xl border-[3px] border-black p-6 text-black font-medium px-12 mb-16">
         <div className="flex justify-between items-start mt-4">
           <h2 className="text-3xl font-pangolin">Your Courses</h2>
           <p className="text-sm text-red-700 max-w-xs text-right">
@@ -186,11 +237,10 @@ export const CourseCard: React.FC = () => {
           </p>
         </div>
 
-       <div
-  id="course-list"
-  className="mt-6 space-y-4 max-h-[350px] overflow-y-auto pr-2 font-poppins w-full"
->
-
+        <div
+          id="course-list"
+          className="mt-6 space-y-4 max-h-[350px] overflow-y-auto pr-2 font-poppins w-full"
+        >
           {courses.map((course, index) => (
             <div
               key={`${course.id}-${index}`}
@@ -204,12 +254,9 @@ export const CourseCard: React.FC = () => {
               {/* Codes */}
               <div className="flex items-center sm:min-w-[400px] text-sm text-black font-normal">
                 <div className="flex items-start">
-                  <div className="w-6 text-right mr-2 text-sm">
-                    {index + 1}.
-                  </div>
+                  <div className="w-6 text-right mr-2 text-sm">{index + 1}.</div>
                   <div
-                    className={`flex flex-col px-4 ${course.codes.length > 1 ? "space-y-1" : ""
-                      }`}
+                    className={`flex flex-col px-4 ${course.codes.length > 1 ? "space-y-1" : ""}`}
                   >
                     {course.codes.map((code) => (
                       <p key={code}>{code}</p>
@@ -220,10 +267,7 @@ export const CourseCard: React.FC = () => {
 
               {/* Names */}
               <div className="flex items-start sm:min-w-[200px] text-sm text-black font-normal">
-                <div
-                  className={`flex flex-col ${course.names.length > 1 ? "space-y-1" : ""
-                    }`}
-                >
+                <div className={`flex flex-col ${course.names.length > 1 ? "space-y-1" : ""}`}>
                   {course.names.map((name, i) => (
                     <p key={i}>{name}</p>
                   ))}
@@ -234,12 +278,10 @@ export const CourseCard: React.FC = () => {
               <div className="flex items-center sm:min-w-[120px] text-sm text-left text-black font-normal">
                 <div className="flex flex-col space-y-1">
                   {Array.isArray(course.slots)
-                    ? course.slots.map((slot, idx) => (
-                      <div key={idx}>{slot}</div>
-                    ))
+                    ? course.slots.map((slot, idx) => <div key={idx}>{slot}</div>)
                     : course.slots
-                      .split("\n")
-                      .map((slot, idx) => <div key={idx}>{slot}</div>)}
+                        .split("\n")
+                        .map((slot, idx) => <div key={idx}>{slot}</div>)}
                 </div>
               </div>
 
@@ -325,13 +367,14 @@ export const CourseCard: React.FC = () => {
         <div className="text-center mt-8">
           <button
             id="generate-btn"
-            className={`border-2 border-black bg-[#7ce5e5] hover:bg-[#67d2d2] text-black font-semibold text-lg px-6 py-2 rounded-full shadow-[4px_4px_0_0_black] transition flex items-center justify-center gap-2 mx-auto ${saving ? "opacity-60 cursor-not-allowed" : ""
-              }`}
+            className={`border-2 border-black bg-[#7ce5e5] hover:bg-[#67d2d2] text-black font-semibold text-lg px-6 py-2 rounded-full shadow-[4px_4px_0_0_black] transition flex items-center justify-center gap-2 mx-auto ${
+              loading ? "opacity-60 cursor-not-allowed" : ""
+            }`}
             onClick={handleGenerate}
             type="button"
-            disabled={saving}
+            disabled={loading}
           >
-            <span>{saving ? "Saving..." : "Generate"}</span>
+            <span>{loading ? "Generating..." : "Generate"}</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="w-5 h-5"
@@ -347,6 +390,12 @@ export const CourseCard: React.FC = () => {
               />
             </svg>
           </button>
+
+          {error && (
+            <p className="mt-3 text-red-600 font-medium" role="alert">
+              {error}
+            </p>
+          )}
         </div>
       </div>
 
@@ -355,7 +404,10 @@ export const CourseCard: React.FC = () => {
           type="rem_course"
           dataBody={courseToDelete.names.join(", ")}
           action={confirmDeleteCourse}
-          closeLink={() => { setDeletePopupOpen(false); setCourseToDelete(null); }}
+          closeLink={() => {
+            setDeletePopupOpen(false);
+            setCourseToDelete(null);
+          }}
         />
       )}
     </>

@@ -75,6 +75,12 @@ export default function FacultySelector({ domains = [], subjects = [], slots = [
       slot: selectedSlot,
       priorityList,
     });
+    setTimeout(() => {
+      const el = document.getElementById("course-card");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
   };
 
   // Toggle faculty selection and sync with priority list

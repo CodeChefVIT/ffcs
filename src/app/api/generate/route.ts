@@ -271,153 +271,136 @@ const morning = [
   "L54",
   "L60",
 ];
-
 export async function POST(req: Request) {
   const body = await req.json();
-
   const selectedTime: Timing = body.slotTime;
   const inputData: GenerateData = body.generateData;
-
-  const courseNames = body.facultyData;
+  const courseNames = body.facultyData as string[];
 
   if (inputData.length * inputData[0].length > 42) {
     return NextResponse.json(
-      {
-        message: "to many subject are being passed",
-        result: [],
-        courseNames: [],
-      },
+      { message: "too many subjects are being passed", result: [], courseNames: [] },
       { status: 404 }
     );
   }
 
   const result: ResultType = [];
-  const finalSlots = []; 
-
-  const cur_slots: string[] = [];
+  let cur_slots: string[] = [];
   const cur: FacultyData[] = [];
-  const toRemove = [];
+  const toRemove: number[] = [];
 
+  
   for (let i = 0; i < inputData.length; i++) {
-    if (inputData[i].length == 0) {
-      toRemove.push(i);
+    if (inputData[i].length === 0) toRemove.push(i);
+  }
+  toRemove.reverse().forEach(i => {
+    inputData.splice(i, 1);
+    courseNames.splice(i, 1);
+  });
+
+  function clashCheck(existing: string[], toAdd: string[]) {
+    for (const s of toAdd) {
+      if (selectedTime === "MT" && !morning.includes(s)) return false;
+      if (selectedTime === "ET" && morning.includes(s)) return false;
+      if (existing.includes(s)) return false;
     }
+    return true;
   }
 
-  toRemove.reverse();
-
-  for (let i = 0; i < toRemove.length; i++) {
-    inputData.splice(toRemove[i], 1);
-    courseNames.splice(toRemove[i], 1);
-  }
-
-  function clashCheck(cur_slots: string[], toAdd: string[]) {
-    for (let i = 0; i < toAdd.length; i++) {
-      if (selectedTime == "MT" && !morning.includes(toAdd[i])) {
-        return 0;
-      } else if (selectedTime == "ET" && morning.includes(toAdd[i])) {
-        return 0;
-      }
-      for (let j = 0; j < cur_slots.length; j++) {
-        if (toAdd[i] == cur_slots[j]) {
-          return 0;
-        }
-      }
-    }
-    return 1;
-  }
-
-  const selectedCampus = "Vellore Campus"; 
+  const selectedCampus = "Vellore Campus";
 
   function generate(
-    cur_slots: Slots,
-    cur: FacultyData[],
-    inputData: GenerateData,
+    cur_slots_arr: Slots,
+    cur_arr: FacultyData[],
+    data: GenerateData,
     ind: number,
     n: number,
-    check: number,
-    result: ResultType
+    check: number
   ) {
     if (ind >= n) {
-      result.push(Object.assign([], cur));
-      finalSlots.push(Object.assign([], cur_slots));
+      result.push([...cur_arr]);
       return;
     }
 
-    if (cur.length == check + labs) {
-      result.push(Object.assign([], cur));
-      finalSlots.push(Object.assign([], cur_slots));
+    
+    if (cur_arr.length === check) {
+      result.push([...cur_arr]);
     }
 
-    for (let i = 0; i < inputData[ind].length; i++) {
-      let slotsOfCurFaculty = inputData[ind][i].facultySlot;
-      const temp = new Set();
-      temp.add(inputData[ind][i].faculty);
+    for (let i = 0; i < data[ind].length; i++) {
+      const candidate = data[ind][i];
+      let slotsOfCurFaculty = [...candidate.facultySlot];
 
-      cur.forEach((ele) => {
-        //if (ele.faculty == curFaculty) {
-        //  bool_var = false;
-        //}
-        temp.add(ele.faculty);
-      });
+      
+      const names = new Set(cur_arr.map(f => f.faculty));
+      names.add(candidate.faculty);
+      if (names.size > check + labs) continue;
 
-      if (temp.size <= check) {
-        const tmpSlotLength = slotsOfCurFaculty.length;
-        let toBeMaskedSlots: Slots = []; // Mask the lab slot that theory part covers
-        if (selectedTime == "Both") {
-          for (let j = 0; j < tmpSlotLength; j++) {
-            if (selectedCampus == "Vellore Campus") {
-              //@ts-error
-              toBeMaskedSlots = toBeMaskedSlots.concat(
-                velloreSlots[slotsOfCurFaculty[j]]
-              );
-            } else {
-              //@ts-error
-              toBeMaskedSlots = toBeMaskedSlots.concat(
-                chennaiSlots[slotsOfCurFaculty[j]]
-              );
-            }
-          }
+      
+      let toBeMaskedSlots: string[] = [];
+      if (selectedTime === "Both") {
+        const slotMap = selectedCampus === "Vellore Campus" ? velloreSlots : chennaiSlots;
+        for (const s of slotsOfCurFaculty) {
+          toBeMaskedSlots.push(...(slotMap[s] || []));
+        }
+      }
+
+      
+      if (clashCheck(cur_slots_arr, slotsOfCurFaculty)) {
+        const combined = [...slotsOfCurFaculty, ...toBeMaskedSlots];
+        cur_arr.push(candidate);
+        cur_slots_arr.push(...combined);
+
+        generate(cur_slots_arr, cur_arr, data, ind + 1, n, check);
+
+        cur_arr.pop();
+        cur_slots_arr.splice(-combined.length, combined.length);
+      }
+      
+      else {
+        
+        const clashSlot = slotsOfCurFaculty.find(s => cur_slots_arr.includes(s))!;
+      
+        const culpritIdx = cur_arr.findIndex(f => f.facultySlot.includes(clashSlot));
+        const removed = cur_arr.splice(culpritIdx, 1)[0];
+
+        
+        for (const s of removed.facultySlot) {
+          const idx = cur_slots_arr.indexOf(s);
+          if (idx >= 0) cur_slots_arr.splice(idx, 1);
         }
 
-        if (clashCheck(cur_slots, slotsOfCurFaculty) == 1) {
-          slotsOfCurFaculty = slotsOfCurFaculty.concat(toBeMaskedSlots);
-          cur.push(inputData[ind][i]);
-          cur_slots = cur_slots.concat(slotsOfCurFaculty);
-          generate(cur_slots, cur, inputData, ind + 1, n, check, result);
-          cur.pop();
-          for (let r = 0; r < slotsOfCurFaculty.length; r++) {
-            cur_slots.pop();
-          }
-        }
+        
+        cur_arr.splice(culpritIdx, 0, removed);
+        cur_slots_arr.push(...removed.facultySlot);
+        generate(cur_slots_arr, cur_arr, data, ind + 1, n, check);
+      
+        cur_arr.splice(culpritIdx, 1);
+        cur_slots_arr.splice(-removed.facultySlot.length, removed.facultySlot.length);
+
+        
+        cur_arr.push(candidate);
+        cur_slots_arr.push(...slotsOfCurFaculty);
+        generate(cur_slots_arr, cur_arr, data, ind + 1, n, check);
+        // backtrack branch a
+        cur_arr.pop();
+        cur_slots_arr.splice(-slotsOfCurFaculty.length, slotsOfCurFaculty.length);
       }
     }
   }
 
   let labs = 0;
-  courseNames.forEach((ele: string) => {
-    const subCode = ele.split("-")[0].trim();
-    if (
-      ele.toLowerCase().includes("lab") &&
-      subCode[subCode.length - 1] == "P"
-    ) {
-      labs += 1;
-    }
+  courseNames.forEach(ele => {
+    const code = ele.split("-")[0].trim();
+    if (ele.toLowerCase().includes("lab") && code.endsWith("P")) labs++;
   });
   const check = courseNames.length - labs;
-  generate(cur_slots, cur, inputData, 0, inputData.length, check, result);
 
-  if (result.length == 0) {
-    return NextResponse.json({
-      message: "No possible timetable",
-      result: [],
-      courseNames: [],
-    });
+  generate(cur_slots, cur, inputData, 0, inputData.length, check);
+
+  if (result.length === 0) {
+    return NextResponse.json({ message: "No possible timetable", result: [], courseNames: [] });
   }
 
-  return NextResponse.json({
-    message: "success",
-    result: result,
-    courseNames: courseNames,
-  });
+  return NextResponse.json({ message: "success", result, courseNames });
 }
