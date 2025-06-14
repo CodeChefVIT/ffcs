@@ -5,6 +5,7 @@ import { ZButton } from "@/components/ui/Buttons";
 import { FooterMobile } from "@/components/ui/Footer";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Navbar } from "@/components/ui/Navbar";
 
 const dummyTimetables: string[] = [
   "Evening Theory",
@@ -35,17 +36,9 @@ export default function SavedMobile() {
         />
       </div>
 
-      <div className="w-full px-4 py-2 flex justify-between items-center text-black select-none">
-        <div className="text-2xl font-[pangolin]" onClick={() => router.push('/')}>FFCS-inator</div>
-        <ZButton
-          type="regular"
-          text="Logout"
-          color="red"
-          onClick={() => router.push('/logout')}
-        />
-      </div>
+      <Navbar page="mobile" loggedin={true} />
 
-      <div className="text-4xl mb-8 mt-8 text-black font-pangolin">Saved Timetables</div>
+      <div className="text-4xl mb-8 mt-28 text-black font-pangolin">Saved Timetables</div>
 
       <ul className="w-full space-y-4 px-6">
         {timetable.map((name, index) => (
