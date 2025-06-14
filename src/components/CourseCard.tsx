@@ -14,7 +14,7 @@ interface Course {
 const initialCourses: Course[] = [
   {
     id: "course1",
-    codes: ["CSE102L", "BCSE102P"],
+    codes: ["BCSE102L", "BCSE102P"],
     names: ["Structured and Object-Oriented Programming", "Structured and Object-Oriented Programming Lab"],
     slots: [["G1","L43+L44+L53+L54"], ["G1+TG1"]],
     facultyName: [["DHIVYAA C R "],["testwa"]]
@@ -218,10 +218,15 @@ export const CourseCard: React.FC = () => {
           }
         }, 100);
       }
-    } catch (err: any) {
-      setError("Failed to generate timetable. Please try again.");
-      console.error(err);
-    } finally {
+    } catch (err: unknown) {
+  setError("Failed to generate timetable. Please try again.");
+  if (err instanceof Error) {
+    console.error(err.message); // Optional: log error message
+  } else {
+    console.error("Unknown error", err);
+  }
+}
+ finally {
       setLoading(false);
     }
   };
@@ -266,13 +271,16 @@ export const CourseCard: React.FC = () => {
               </div>
 
               {/* Names */}
-              <div className="flex items-start sm:min-w-[200px] text-sm text-black font-normal">
-                <div className={`flex flex-col ${course.names.length > 1 ? "space-y-1" : ""}`}>
-                  {course.names.map((name, i) => (
-                    <p key={i}>{name}</p>
-                  ))}
-                </div>
-              </div>
+              <div className="flex sm:min-w-[250px] w-full text-sm text-black font-normal">
+  <div className="flex flex-col space-y-1 break-words max-w-full">
+    {course.names.map((name, i) => (
+      <p key={i} className="break-words leading-snug">
+        {name}
+      </p>
+    ))}
+  </div>
+</div>
+
 
               {/* Slots */}
               <div className="flex items-center sm:min-w-[120px] text-sm text-left text-black font-normal">
