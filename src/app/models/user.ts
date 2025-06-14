@@ -2,7 +2,7 @@ import mongoose, { Document, Schema } from "mongoose";
 
 interface IUser extends Document {
   userName: string;
-  userEmail: string;
+  email: string;
   savedCourseData: {
     faculty: string;
     facultySlot: string[];
@@ -19,7 +19,7 @@ interface IUser extends Document {
 const userSchema = new Schema<IUser>(
   {
     userName: { type: String, required: true, trim: true },
-    userEmail: {
+    email: {
       type: String,
       required: true,
       unique: true,
@@ -43,6 +43,6 @@ const userSchema = new Schema<IUser>(
   { versionKey: false, timestamps: true }
 );
 
-const User = mongoose.models.User || mongoose.model<IUser>("User", userSchema);
+const User = mongoose.models.User || mongoose.model<IUser>("User", userSchema,"user");
 
 export default User;
