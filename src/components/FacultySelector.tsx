@@ -201,7 +201,7 @@ export default function FacultySelector({ domains = [], subjects = [], slots = [
                 {priorityList.map((faculty, index) => (
                   <div
                     key={index}
-                    className="group cursor-move"
+                    className="group cursor-grab active:cursor-grabbing"
                     draggable
                     onDragStart={(e) => e.dataTransfer.setData('text/plain', index.toString())}
                     onDragOver={(e) => e.preventDefault()}

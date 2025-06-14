@@ -7,6 +7,7 @@ import { useTimetable } from "../components/timetable/TimeTableContext";
 
 import Popup from "./ui/Popup";
 import { ZButton } from "./ui/Buttons";
+import Image from "next/image";
 
 interface Course {
   id: string;
@@ -254,17 +255,17 @@ export const CourseCard: React.FC = () => {
           {courses.map((course, index) => (
             <div
               key={`${course.id}-${index}`}
-              className="course-row bg-[#ffffff]/40 rounded-3xl px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 sm:space-x-4 w-full "
+              className="course-row bg-[#ffffff]/40 rounded-3xl px-6 py-4 flex flex-row items-center justify-between gap-2 sm:space-x-4 w-full cursor-grab active:cursor-grabbing"
               draggable
               onDragStart={(e) => handleDragStart(e, index)}
               onDragEnter={() => handleDragEnter(index)}
               onDragEnd={handleDragEnd}
               onDragOver={(e) => e.preventDefault()}
             >
-              {/* Codes */}
-              <div className="flex items-center sm:min-w-[400px] text-sm text-black font-normal">
+              {/* Course Codes */}
+              <div className="flex items-center w-[120px] text-sm text-black font-normal">
                 <div className="flex items-start">
-                  <div className="w-6 text-right mr-4 text-sm">{index + 1}.</div>
+                  <div className="w-6 text-right mr-4 text-sm font-inter">{index + 1}.</div>
                   <div
                     className={`flex flex-col px-4 ${course.codes.length > 1 ? "space-y-1" : ""}`}
                   >
@@ -275,8 +276,8 @@ export const CourseCard: React.FC = () => {
                 </div>
               </div>
 
-              {/* Names */}
-              <div className="flex sm:min-w-[250px] w-full text-sm text-black font-normal">
+              {/* Course namee */}
+              <div className="flex w-[480px] text-sm text-black font-normal">
                 <div className="flex flex-col space-y-1 break-words max-w-full">
                   {course.names.map((name, i) => (
                     <p key={i} className="break-words leading-snug">
@@ -288,13 +289,11 @@ export const CourseCard: React.FC = () => {
 
 
               {/* Slots */}
-              <div className="flex items-center sm:min-w-[120px] text-sm text-left text-black font-normal">
+              <div className="flex items-center w-[120px] text-sm text-left text-black font-normal">
                 <div className="flex flex-col space-y-1">
                   {Array.isArray(course.slots)
                     ? course.slots.map((slot, idx) => <div key={idx}>{slot}</div>)
-                    : course.slots
-                      .split("\n")
-                      .map((slot, idx) => <div key={idx}>{slot}</div>)}
+                    : course.slots.split("\n").map((slot, idx) => <div key={idx}>{slot}</div>)}
                 </div>
               </div>
 
@@ -306,71 +305,49 @@ export const CourseCard: React.FC = () => {
                     setDeletePopupOpen(true);
                   }}
                   aria-label="Delete Course"
-                  className="bg-[#FFFFFF80] hover:bg-[#F08585] text-black p-2 rounded-lg shadow transition"
+                  className="bg-[#FFFFFF]/50 hover:bg-[#F08585] text-black p-2 rounded-lg transition cursor-pointer"
                   type="button"
                   title="Delete Course"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2m2 0v14a2 2 0 01-2 2H8a2 2 0 01-2-2V6h12zM10 11v6m4-6v6"
-                    />
-                  </svg>
+                  <Image src={"/icons/trash.svg"} width={120} height={80} alt="up" className="w-5 h-5" />
+
                 </button>
 
-                <div className="flex flex-col bg-[#FFFFFF80] rounded-lg shadow-sm overflow-hidden leading-none gap-0 p-1">
+                <div className="flex flex-col bg-[#FFFFFF]/50 rounded-lg overflow-hidden leading-none gap-0 p-1">
                   <button
                     onClick={() => moveCourseUp(index)}
                     aria-label="Move Course Up"
-                    className="hover:bg-gray-200 p-0 m-0 leading-none transition rounded-t-lg"
+                    className="px-1 py-0.5 m-0 leading-none transition rounded-t-lg cursor-pointer"
                     type="button"
                     title="Move Up"
+                    disabled={index === 0}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-3.5 h-3"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 15l7-7 7 7"
-                      />
-                    </svg>
+                    <Image
+                      src={index === 0 ? "/icons/chevron_up_gray.svg" : "/icons/chevron_up.svg"}
+                      width={1}
+                      height={1}
+                      alt="up"
+                      className="w-3 h-3"
+                    />
                   </button>
+
                   <button
                     onClick={() => moveCourseDown(index)}
                     aria-label="Move Course Down"
-                    className="hover:bg-gray-200 p-0 m-0 leading-none transition rounded-b-lg"
+                    className="px-1 py-0.5 m-0 leading-none transition rounded-b-lg cursor-pointer"
                     type="button"
                     title="Move Down"
+                    disabled={index === courses.length - 1}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-3.5 h-3"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
+                    <Image
+                      src={index === courses.length - 1 ? "/icons/chevron_down_gray.svg" : "/icons/chevron_down.svg"}
+                      width={120}
+                      height={80}
+                      alt="down"
+                      className="w-3 h-3"
+                    />
                   </button>
+
                 </div>
               </div>
             </div>
