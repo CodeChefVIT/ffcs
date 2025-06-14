@@ -9,7 +9,7 @@ type ButtonVariant = 'regular' | 'image' | 'long' | 'large';
 type ZButtonProps = {
   type: ButtonVariant;
   text?: string;
-  color: 'red' | 'yellow' | 'green' | 'green_2' | 'blue' | 'purple' | 'gray';
+  color: 'red' | 'yellow' | 'green' | 'green_2' | 'blue' | 'purple' | 'gray' | string;
   image?: string;
   onClick?: () => void;
   disabled?: boolean;
@@ -21,7 +21,7 @@ type ToggleButtonProps = {
   onToggle?: (selected: string) => void;
 };
 
-const colorMap = {
+const colorMap: Record<string, string> = {
   red: '#FFAD93',
   yellow: '#FFEA79',
   green: '#C1FF83',

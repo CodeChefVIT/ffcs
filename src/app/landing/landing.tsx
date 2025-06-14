@@ -52,13 +52,15 @@ export default function View() {
       </div>
 
       <TimetableProvider>
-        {" "}
+
         <div className="w-full px-4 sm:px-6 lg:px-12">
           <CourseCard />
         </div>
+
         <div className="w-screen p-0 m-0">
           <ViewTimeTable />
         </div>
+
       </TimetableProvider>
 
       <div className="w-full max-w-5xl px-4 sm:px-6 lg:px-12 m-32">

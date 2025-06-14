@@ -1,105 +1,175 @@
 "use client";
 
 import React, { useState } from "react";
+import { facultyData } from "@/lib/type";
+
+import CompoundTable from "@/components//ui/CompoundTable";
+import { ZButton } from "@/components/ui/Buttons";
 import { useTimetable } from "@/components/timetable/TimeTableContext";
 
-import { facultyData, tableFacingSlot } from "@/lib/type";
-import TimeTable from "@/components/timetable/TimeTable";
-import FacultyTable from "@/components/FacultyTable";
-import TimetableSwitcher from "@/components/timetable/TimeTableSwitcher";
-import ActionButtons from "@/components/timetable/ActionButtons";
+const actionButtons = [
+  { label: 'Email', color: 'yellow', icon: '/icons/mail.svg', onClick: () => console.log("Email clicked") },
+  { label: 'Save', color: 'green', icon: '/icons/save.svg', onClick: () => console.log("Save clicked") },
+  { label: 'Report', color: 'purple', icon: '/icons/report.svg', onClick: () => console.log("Report clicked") },
+  { label: 'Share', color: 'green', icon: '/icons/send.svg', onClick: () => console.log("Share clicked") },
+  { label: 'Download', color: 'yellow', icon: '/icons/download.svg', onClick: () => console.log("Download clicked") },
+];
 
-const transformAPIResponseToFacultyData = (
-  response: any
-): facultyData[][] => {
+const transformAPIResponseToFacultyData = (response: any): facultyData[][] => {
   if (!response?.result) return [[]]; // Return empty array structure if no data
-
   return response.result.map((timetable: any, ttIndex: number) =>
     timetable.map((facultyObj: any, index: number) => ({
       _id: `${ttIndex}-${index}`,
       faculty: facultyObj.faculty,
-      facultySlot: [
-        facultyObj.facultySlot.length > 0
-          ? facultyObj.facultySlot.join("+")
-          : "NIL",
-      ],
+      facultySlot: [facultyObj.facultySlot.length > 0 ? facultyObj.facultySlot.join("+") : "NIL",],
       subject: response.courseNames?.[ttIndex] || "Unknown",
     }))
   );
 };
 
-const extractSlotNames = (facultyData: facultyData[]): tableFacingSlot[] => {
-  const slotSet = new Set<string>();
-  facultyData.forEach((faculty) => {
-    faculty.facultySlot.forEach((group) => {
-      group.split("+").forEach((slotName) => {
-        slotSet.add(slotName);
-      });
-    });
-  });
-  return Array.from(slotSet).map((slotName) => ({ slotName, showName: true }));
-};
+function getVisibleIndexes(selected: number, total: number) {
+  const maxVisible = 5;
+  const shift = 2;
+  const start = Math.max(1, Math.min(selected - shift, total - maxVisible + 1));
+  const end = Math.min(total, start + maxVisible - 1);
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+}
 
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const allTimatables = timetableData ? transformAPIResponseToFacultyData(timetableData) : [[]];
+  const timetableCount = allTimatables.length;
+  const selectedData = allTimatables[selectedIndex] || [];
+  const visibleIndexes = getVisibleIndexes(selectedIndex, timetableCount);
 
-  // Always transform timetableData; fallback to empty timetable if none exists
-  const initialFacultyData = timetableData
-    ? transformAPIResponseToFacultyData(timetableData)
-    : [[]];
+  // console.log("Timetable Data:", timetableData);
+  // console.log("Selected Data:", selectedData);
 
-  const total = initialFacultyData.length;
-  const selectedData = initialFacultyData[selectedIndex] || [];
-  const slotNames: tableFacingSlot[] = extractSlotNames(selectedData);
-  const timetableCount = total;
+  const convertedData = selectedData.map((item) => ({
+    code: item.subject || "00000000",
+    slot: item.facultySlot.join("+"),
+    name: item.faculty || "Unknown",
+  }));
 
-  const handleLeft = () => {
-    if (selectedIndex > 0) setSelectedIndex(selectedIndex - 1);
-  };
-
-  const handleRight = () => {
-    if (selectedIndex < total - 1) setSelectedIndex(selectedIndex + 1);
-  };
 
   return (
     <div
       id="timetable-view"
-      className="w-screen lg:h-screen bg-[#CEE4E5] font-poppins flex items-center justify-center flex-col px-2 sm:px-6 py-4"
+      className="w-screen mt-12 bg-[#A7D5D7] font-poppins flex items-center justify-center flex-col border-black border-3"
     >
-      <div className="flex flex-col h-full w-full max-w-[1600px] mx-auto px-4 sm:px-6 py-4 overflow-hidden bg-[#A7D5D7]">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center mb-4 ml-2">
-          <h1 className="text-[6vw] sm:text-[4vw] md:text-[3vw] font-pangolin leading-tight text-left">
+      <div className="flex flex-col h-full p-12 overflow-hidden">
+
+        <div className="flex flex-row items-end mb-4 ml-2">
+          <div className="text-5xl font-pangolin">
             Your Timetables
-          </h1>
-          <span className="text-[3vw] sm:text-[2vw] md:text-[1.5vw] ml-4 sm:ml-7 font-normal font-poppins">
-            ({timetableCount} timetables were generated)
-          </span>
-        </div>
-
-        <div className="flex flex-col lg:flex-row flex-1 gap-6 overflow-hidden">
-          <div className="flex-[2.5] overflow-auto p-2 max-h-[70vh]">
-            <TimeTable slotNames={slotNames} />
           </div>
-
-          <div className="flex-1 overflow-auto rounded p-2 max-h-[70vh]">
-            <FacultyTable list={selectedData} />
+          <div className="text-xl ml-8 font-poppins pb-1">
+            ({timetableCount} timetable{timetableCount != 1 ? "s were" : " was"} generated)
           </div>
         </div>
 
-        <div className="mt-1 flex flex-col sm:flex-row items-center justify-between px-4 sm:px-8 gap-4 min-h-[64px]">
-          <div className="sm:mr-auto w-full sm:w-auto">
-            <TimetableSwitcher
-              visibleStart={0}
-              maxVisible={4}
-              total={total}
-              selectedIndex={selectedIndex}
-              onSelect={setSelectedIndex}
-              onLeft={handleLeft}
-              onRight={handleRight}
-            />
+        <div className="w-full max-w-[95vw] my-4">
+          <CompoundTable data={convertedData} large={true} />
+        </div>
+
+        <div className="flex flex-row items-center justify-between px-8 pt-8 gap-8">
+
+          <div className="w-auto">
+
+            <div className=" w-full flex justify-center">
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  height: 48,
+                  background: '#75E5EA',
+                  borderRadius: 12,
+                  border: '2px solid black',
+                  boxShadow: '3px 3px 0px black',
+                  overflow: 'hidden',
+                }}
+              >
+                <button
+                  onClick={() => setSelectedIndex(0)}
+                  disabled={selectedIndex === 0}
+                  style={{
+                    width: 48,
+                    height: 48,
+                    background: '#75E5EA',
+
+                    fontSize: 20,
+                    fontWeight: 700,
+                    cursor: selectedIndex === 0 ? 'not-allowed' : 'pointer',
+                    opacity: selectedIndex === 0 ? 0.4 : 1,
+                    border: 'none',
+                    borderRight: '2px solid black',
+                  }}
+                >
+                  ‹
+                </button>
+
+                {visibleIndexes.map((i, idx) => (
+                  <div
+                    key={i}
+                    onClick={() => setSelectedIndex(i)}
+                    style={{
+                      width: 40,
+                      height: 48,
+                      background:
+                        selectedIndex === i ? 'rgba(255,255,255,0.4)' : '#75E5EA',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: 18,
+                      fontWeight: 700,
+                      fontFamily: 'Poppins',
+                      cursor: 'pointer',
+                      borderRight: '2px solid black',
+                      borderLeft: idx === 0 ? '2px solid black' : 'none',
+                    }}
+                  >
+                    {i + 1}
+                  </div>
+                ))}
+
+                <button
+                  onClick={() => setSelectedIndex(timetableCount - 1)}
+                  disabled={selectedIndex + 5 >= timetableCount}
+                  style={{
+                    width: 48,
+                    height: 48,
+                    background: '#75E5EA',
+                    fontSize: 20,
+                    fontWeight: 700,
+                    cursor:
+                      selectedIndex + 5 >= timetableCount ? 'not-allowed' : 'pointer',
+                    opacity: selectedIndex + 5 >= timetableCount ? 0.4 : 1,
+                    border: 'none',
+                    borderLeft: '2px solid black',
+                  }}
+                >
+                  ›
+                </button>
+              </div>
+            </div>
+
           </div>
-          <ActionButtons />
+
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            {actionButtons.map((btn, idx) => (
+              <div key={idx}>
+                <ZButton
+                  type="regular"
+                  text={btn.label}
+                  image={btn.icon}
+                  color={btn.color || "blue"}
+                  onClick={btn.onClick}
+                />
+              </div>
+            ))}
+          </div>
+
         </div>
       </div>
     </div>
