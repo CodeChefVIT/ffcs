@@ -1,9 +1,12 @@
 "use client";
 
-import React, { useState, useRef, use } from "react";
-import { useTimetable } from "../components/timetable/TimeTableContext";
+import React, { useState, useRef } from "react";
 import axios from "axios";
+
+import { useTimetable } from "../components/timetable/TimeTableContext";
+
 import Popup from "./ui/Popup";
+import { ZButton } from "./ui/Buttons";
 
 interface Course {
   id: string;
@@ -221,27 +224,27 @@ export const CourseCard: React.FC = () => {
         }, 100);
       }
     } catch (err: unknown) {
-  setError("Failed to generate timetable. Please try again.");
-  if (err instanceof Error) {
-    console.error(err.message); // Optional: log error message
-  } else {
-    console.error("Unknown error", err);
-  }
-}
- finally {
+      setError("Failed to generate timetable. Please try again.");
+      if (err instanceof Error) {
+        console.error(err.message); // Optional: log error message
+      } else {
+        console.error("Unknown error", err);
+      }
+    }
+    finally {
       setLoading(false);
     }
   };
 
   return (
     <>
-      <div id="course-card" className="bg-[#A7D5D7] mt-4 font-poppins rounded-2xl border-[3px] border-black p-6 text-black font-medium px-12 mb-16">
+      <div id="course-card" className="bg-[#A7D5D7] mt-4 font-poppins rounded-4xl border-[3px] border-black p-6 shadow-[4px_4px_0_0_black] text-black font-medium px-12 mb-16">
         <div className="flex justify-between items-start mt-4">
           <h2 className="text-3xl font-pangolin">Your Courses</h2>
-          <p className="text-sm text-red-700 max-w-xs text-right">
-            *Use arrows or drag-drop to set course priority, multiple timetables
-            will be generated.
-          </p>
+          <div className="text-sm text-[#B93C21] text-right mr-6">
+            *Use arrows or drag-drop to set course priority,<br />
+            multiple timetables will be generated.
+          </div>
         </div>
 
         <div
@@ -251,7 +254,7 @@ export const CourseCard: React.FC = () => {
           {courses.map((course, index) => (
             <div
               key={`${course.id}-${index}`}
-              className="course-row bg-[#FBFDFC66] rounded-3xl px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 sm:space-x-4 w-full "
+              className="course-row bg-[#ffffff]/40 rounded-3xl px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 sm:space-x-4 w-full "
               draggable
               onDragStart={(e) => handleDragStart(e, index)}
               onDragEnter={() => handleDragEnter(index)}
@@ -261,7 +264,7 @@ export const CourseCard: React.FC = () => {
               {/* Codes */}
               <div className="flex items-center sm:min-w-[400px] text-sm text-black font-normal">
                 <div className="flex items-start">
-                  <div className="w-6 text-right mr-2 text-sm">{index + 1}.</div>
+                  <div className="w-6 text-right mr-4 text-sm">{index + 1}.</div>
                   <div
                     className={`flex flex-col px-4 ${course.codes.length > 1 ? "space-y-1" : ""}`}
                   >
@@ -274,14 +277,14 @@ export const CourseCard: React.FC = () => {
 
               {/* Names */}
               <div className="flex sm:min-w-[250px] w-full text-sm text-black font-normal">
-  <div className="flex flex-col space-y-1 break-words max-w-full">
-    {course.names.map((name, i) => (
-      <p key={i} className="break-words leading-snug">
-        {name}
-      </p>
-    ))}
-  </div>
-</div>
+                <div className="flex flex-col space-y-1 break-words max-w-full">
+                  {course.names.map((name, i) => (
+                    <p key={i} className="break-words leading-snug">
+                      {name}
+                    </p>
+                  ))}
+                </div>
+              </div>
 
 
               {/* Slots */}
@@ -374,38 +377,19 @@ export const CourseCard: React.FC = () => {
           ))}
         </div>
 
-        <div className="text-center mt-8">
-          <button
-            id="generate-btn"
-            className={`border-2 border-black bg-[#7ce5e5] hover:bg-[#67d2d2] text-black font-semibold text-lg px-6 py-2 rounded-full shadow-[4px_4px_0_0_black] transition flex items-center justify-center gap-2 mx-auto ${loading ? "opacity-60 cursor-not-allowed" : ""
-              }`}
-            onClick={handleGenerate}
-            type="button"
+        <div className="flex text-center justify-center mt-8 mb-4">
+          <ZButton
+            type="large"
+            text={loading ? "Generating..." : "Generate"}
+            image="/icons/thunder.svg"
+            color="blue"
             disabled={loading}
-          >
-            <span>{loading ? "Generating..." : "Generate"}</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-5 h-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 2L3 14h9l-1 8L21 10h-9l1-8z"
-              />
-            </svg>
-          </button>
-
-          {error && (
-            <p className="mt-3 text-red-600 font-medium" role="alert">
-              {error}
-            </p>
-          )}
+            onClick={handleGenerate}
+          />
         </div>
+
+        {error && (<div className="mt-6 text-center text-[#CC3312] font-semibold" role="alert">{error}</div>)}
+
       </div>
 
       {deletePopupOpen && courseToDelete && (

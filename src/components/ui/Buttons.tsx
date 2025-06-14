@@ -40,7 +40,7 @@ export function ZButton({ type, text, color, image, onClick, forceColor, disable
     regular: 'h-12 rounded-xl px-4 text-base gap-2.5',
     image: 'h-13 w-13 rounded-xl text-base gap-2.5',
     long: 'h-12 rounded-xl px-8 text-base gap-2.5',
-    large: 'h-[60px] rounded-2xl px-8 text-2xl gap-6',
+    large: 'h-[60px] rounded-[20px] px-8 text-2xl gap-6',
   };
 
   const imageSize = type === 'large' ? 28 : 24;
