@@ -228,7 +228,7 @@ export const CourseCard: React.FC = () => {
 
   return (
     <>
-      <div className="bg-[#A7D5D7] m-4 font-poppins rounded-2xl border-[3px] border-black p-6 text-black font-medium px-12 mb-16">
+      <div id="course-card" className="bg-[#A7D5D7] mt-4 font-poppins rounded-2xl border-[3px] border-black p-6 text-black font-medium px-12 mb-16">
         <div className="flex justify-between items-start mt-4">
           <h2 className="text-3xl font-pangolin">Your Courses</h2>
           <p className="text-sm text-red-700 max-w-xs text-right">
