@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
   
 
     const email = req.headers.get("email");
+    console.log("Received email:", email);
     if (!email) {
         return NextResponse.json(
           { message: "Favourites retrieval failed: User not authenticated" },
@@ -23,7 +24,7 @@ export async function GET(req: NextRequest) {
       }
 
   try {
-    const user = await User.findOne({ userEmail: email }, { favourites: 1 });
+    const user = await User.findOne({ email: email }, { favourites: 1 });
 
     if (!user) {
       return NextResponse.json(
@@ -75,11 +76,11 @@ export async function POST(req: NextRequest) {
 
   try {
     await User.updateOne(
-      { userEmail: email },
+      { email: email },
       { $push: { favourites: body.timetable } }
     );
 
-    const updatedUser = await User.findOne({ userEmail: email });
+    const updatedUser = await User.findOne({ email: email });
 
     if (updatedUser) {
       const newFavoriteId =
@@ -131,7 +132,7 @@ if (!email) {
     return NextResponse.json({ message: "No id to delete data", status: 401 });
   }
   const user = await User.findOneAndUpdate(
-    { userEmail: email },
+    { email: email },
     { $pull: { favourites: { _id: body.id } } },
     { new: true }
   );

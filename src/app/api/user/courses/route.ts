@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
   await dbConnect();
 
   const body = await req.json();
-  const userEmail = req.headers.get("email");
+  const email = req.headers.get("email");
 
   if (body.courseNo < 0) {
     return NextResponse.json(
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
   try {
     // Find user by email
-    const user = await User.findOne({ userEmail });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
 
     // Update the user data in the database
     const updatedUser = await User.findOneAndUpdate(
-      { userEmail },
+      { email },
       { savedCourseData: user.savedCourseData },
       { new: true }
     );

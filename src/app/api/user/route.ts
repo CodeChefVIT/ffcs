@@ -9,7 +9,7 @@ export async function GET(req: Request) {
 
   try {
     const user = await User.findOne(
-      { userEmail: email },
+      { email: email },
       { savedCourseData: 1 }
     );
     if (user) {
