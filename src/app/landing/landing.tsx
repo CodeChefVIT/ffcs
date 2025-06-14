@@ -53,7 +53,7 @@ export default function View() {
 
       <TimetableProvider>
 
-        <div className="w-full px-4 sm:px-6 lg:px-12">
+        <div className="w-full px-8">
           <CourseCard />
         </div>
 

@@ -77,7 +77,7 @@ const initialCourses: Course[] = [
 
 ];
 
-export const CourseCard: React.FC = () => {
+export default function CourseCard() {
   const { setTimetableData } = useTimetable();
 
   const [courses, setCourses] = useState<Course[]>(initialCourses);
@@ -381,5 +381,3 @@ export const CourseCard: React.FC = () => {
     </div>
   );
 };
-
-export default CourseCard;
