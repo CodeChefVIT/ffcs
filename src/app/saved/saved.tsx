@@ -1,70 +1,81 @@
 "use client";
 
 import Image from "next/image";
-import { useState , useEffect} from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { fetchUserFavourites } from "@/services/api";
+
+
 import Navbar from "@/components/ui/Navbar";
 import Popup from "@/components/ui/Popup";
 import { ZButton } from "@/components/ui/Buttons";
 import Footer from "@/components/ui/Footer";
 
+interface TimetableEntry {
+  name: string;
+  id: string;
+}
+
 export default function Saved() {
   const router = useRouter();
+  //const { data: session } = useSession();
+  const userEmail = "sohammaha15@gmail.com";
 
-
-  const [timetables, setTimetables] = useState<string[]>([]);
-
-  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
+  const [timetables, setTimetables] = useState<TimetableEntry[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editedName, setEditedName] = useState<string>("");
 
+  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState<boolean>(false);
   const [indexToDelete, setIndexToDelete] = useState<number | null>(null);
-  const [TimetableToDelete, setTimetableToDelete] = useState<string | null>(null);
+  const [timetableToDelete, setTimetableToDelete] = useState<string | null>(null);
+  const [timetableToDeleteId, setTimetableToDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
-    const email = "sohammaha15@gmail.com"; // Or use your auth method to get email
-    if (email) {
-      fetchUserFavourites(email)
-        .then((data) => {
-          const names = data.favourites.map((fav: any) => fav.name);
-          setTimetables(names);
-        })
-        .catch((err) => console.error("Error fetching timetables", err));
+    const fetchFavourites = async () => {
+      try {
+        const res = await fetch("/api/user/favorites", {
+          headers: {
+            email: userEmail,
+          },
+        });
+        const data = await res.json();
+        const favourites = data.favourites.map((fav: any) => ({
+          name: fav.name,
+          id: fav._id,
+        }));
+        setTimetables(favourites);
+      } catch (err) {
+        console.error("Failed to fetch favourites", err);
+      }
+    };
+
+    if (userEmail) fetchFavourites();
+  }, [userEmail]);
+
+  const handleDelete = async (idToDelete: string) => {
+    try {
+      await fetch("/api/user/favorites", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          email: userEmail,
+        },
+        body: JSON.stringify({ id: idToDelete }),
+      });
+
+      setTimetables((prev) => prev.filter((tt) => tt.id !== idToDelete));
+    } catch (err) {
+      console.error("Failed to delete timetable:", err);
     }
-  }, []);
-
-  const handleDelete = (indexToDelete: number): void => {
-    setTimetables((prev) => prev.filter((_, index) => index !== indexToDelete));
-  };
-
-  const handleRename = (index: number): void => {
-    setEditingIndex(index);
-    setEditedName(timetables[index]);
-  };
-
-  const handleSaveRename = () => {
-    if (editingIndex !== null && editedName.trim() !== "") {
-      setTimetables((prev) =>
-        prev.map((name, i) => (i === editingIndex ? editedName.trim() : name))
-      );
-      setEditingIndex(null);
-      setEditedName("");
-    }
-  };
-
-  const handleCancelRename = () => {
-    setEditingIndex(null);
-    setEditedName("");
   };
 
   const confirmDelete = () => {
-    if (indexToDelete !== null) {
-      handleDelete(indexToDelete);
+    if (timetableToDeleteId) {
+      handleDelete(timetableToDeleteId);
       setIsDeletePopupOpen(false);
       setIndexToDelete(null);
       setTimetableToDelete(null);
+      setTimetableToDeleteId(null);
     }
   };
 
@@ -72,6 +83,48 @@ export default function Saved() {
     setIsDeletePopupOpen(false);
     setIndexToDelete(null);
     setTimetableToDelete(null);
+    setTimetableToDeleteId(null);
+  };
+
+  const handleRename = (index: number) => {
+    setEditingIndex(index);
+    setEditedName(timetables[index].name);
+  };
+
+  const handleSaveRename = async () => {
+  if (editingIndex !== null && editedName.trim() !== "") {
+    const id = timetables[editingIndex].id;
+    try {
+      const res = await fetch("/api/user/favorites", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          email: userEmail,
+        },
+        body: JSON.stringify({ id, newName: editedName.trim() }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setTimetables((prev) =>
+          prev.map((tt, i) => (i === editingIndex ? { ...tt, name: editedName.trim() } : tt))
+        );
+        setEditingIndex(null);
+        setEditedName("");
+      } else {
+        console.error("Rename failed:", data.error);
+      }
+    } catch (error) {
+      console.error("Rename request failed", error);
+    }
+  }
+};
+
+
+  const handleCancelRename = () => {
+    setEditingIndex(null);
+    setEditedName("");
   };
 
   return (
@@ -90,12 +143,14 @@ export default function Saved() {
       <Navbar page="saved" loggedin={true} />
 
       <div className="flex-1 flex flex-col items-center">
-
-        <div className="text-6xl mt-48 mb-16 font-pangolin text-black">Saved Timetables</div>
+        <div className="text-6xl mt-48 mb-16 font-pangolin text-black">
+          Saved Timetables
+        </div>
 
         <div className="z-10 w-5/6 max-w-7xl rounded-[60px] border-black border-4 bg-[#A7D5D7] px-24 py-12 mb-24 shadow-[4px_4px_0_0_black]">
-
-          <div className="text-4xl mt-2 mb-8 font-pangolin font-light text-black">Your Saved Timetables</div>
+          <div className="text-4xl mt-2 mb-8 font-pangolin font-light text-black">
+            Your Saved Timetables
+          </div>
 
           <ul className="space-y-4 max-h-[60vh] overflow-y-auto pr-4 font-poppins">
             {timetables.length === 0 ? (
@@ -108,13 +163,13 @@ export default function Saved() {
                   text="Home"
                   color="purple"
                   image="/icons/home.svg"
-                  onClick={() => router.push('/')}
+                  onClick={() => router.push("/")}
                 />
               </li>
             ) : (
-              timetables.map((name: string, index: number) => (
+              timetables.map((tt, index) => (
                 <li
-                  key={index}
+                  key={tt.id}
                   className="flex items-center justify-between bg-[#C9E5E6] p-4 rounded-3xl"
                 >
                   {editingIndex === index ? (
@@ -127,7 +182,9 @@ export default function Saved() {
                   ) : (
                     <div className="flex flex-row">
                       <div className="text-xl mx-4 my-4">{index + 1}.</div>
-                      <div className="text-xl ml-8 mr-4 my-4 overflow-hidden">{name}</div>
+                      <div className="text-xl ml-8 mr-4 my-4 overflow-hidden">
+                        {tt.name}
+                      </div>
                     </div>
                   )}
 
@@ -135,7 +192,7 @@ export default function Saved() {
                     {editingIndex === index ? (
                       <>
                         <button
-                          className="w-10 h-10 bg-[#53ec8e] border-1 border-black p-2 m-2 rounded-lg cursor-pointer"
+                          className="w-10 h-10 bg-[#53ec8e] border border-black p-2 m-2 rounded-lg cursor-pointer"
                           onClick={handleSaveRename}
                         >
                           <Image
@@ -147,7 +204,7 @@ export default function Saved() {
                           />
                         </button>
                         <button
-                          className="w-10 h-10 bg-[#FFA3A3] border-1 border-black p-2 m-2 rounded-lg cursor-pointer"
+                          className="w-10 h-10 bg-[#FFA3A3] border border-black p-2 m-2 rounded-lg cursor-pointer"
                           onClick={handleCancelRename}
                         >
                           <Image
@@ -162,7 +219,7 @@ export default function Saved() {
                     ) : (
                       <>
                         <button
-                          className="w-10 h-10 bg-[#E5F3F3] hover:bg-[#FFEA79] border-1 border-black p-2 m-2 rounded-lg cursor-pointer transition-colors"
+                          className="w-10 h-10 bg-[#E5F3F3] hover:bg-[#FFEA79] border border-black p-2 m-2 rounded-lg cursor-pointer transition-colors"
                           onClick={() => setIsPopupOpen(true)}
                         >
                           <Image
@@ -175,7 +232,7 @@ export default function Saved() {
                         </button>
 
                         <button
-                          className="w-10 h-10 bg-[#E5F3F3] hover:bg-[#9ABCFF] border-1 border-black p-2 m-2 rounded-lg cursor-pointer transition-colors"
+                          className="w-10 h-10 bg-[#E5F3F3] hover:bg-[#9ABCFF] border border-black p-2 m-2 rounded-lg cursor-pointer transition-colors"
                           onClick={() => handleRename(index)}
                         >
                           <Image
@@ -188,11 +245,12 @@ export default function Saved() {
                         </button>
 
                         <button
-                          className="w-10 h-10 bg-[#E5F3F3] hover:bg-[#FFA3A3] border-1 border-black p-2 m-2 rounded-lg cursor-pointer transition-colors"
+                          className="w-10 h-10 bg-[#E5F3F3] hover:bg-[#FFA3A3] border border-black p-2 m-2 rounded-lg cursor-pointer transition-colors"
                           onClick={() => {
                             setIsDeletePopupOpen(true);
                             setIndexToDelete(index);
-                            setTimetableToDelete(timetables[index]);
+                            setTimetableToDelete(tt.name);
+                            setTimetableToDeleteId(tt.id);
                           }}
                         >
                           <Image
@@ -211,7 +269,6 @@ export default function Saved() {
             )}
           </ul>
         </div>
-
       </div>
 
       <Footer />
@@ -229,10 +286,9 @@ export default function Saved() {
           type="delete_tt"
           closeLink={cancelDelete}
           action={confirmDelete}
-          dataBody={TimetableToDelete || ""}
+          dataBody={timetableToDelete || ""}
         />
       )}
-
     </div>
   );
 }
