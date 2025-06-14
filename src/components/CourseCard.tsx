@@ -207,7 +207,17 @@ export const CourseCard: React.FC = () => {
         facultyData,
       };
       const response = await axios.post("/api/generate", payload);
-      setTimetableData(response.data);
+
+      if (response?.data) {
+        setTimetableData(response.data);
+
+        setTimeout(() => {
+          const el = document.getElementById("timetable-view");
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 100);
+      }
     } catch (err: any) {
       setError("Failed to generate timetable. Please try again.");
       console.error(err);

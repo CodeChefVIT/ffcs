@@ -63,7 +63,10 @@ export default function ViewTimeTable() {
   };
 
   return (
-    <div className="w-screen lg:h-screen bg-[#CEE4E5] font-poppins flex items-center justify-center flex-col px-2 sm:px-6 py-4">
+    <div
+      id="timetable-view"
+      className="w-screen lg:h-screen bg-[#CEE4E5] font-poppins flex items-center justify-center flex-col px-2 sm:px-6 py-4"
+    >
       <div className="flex flex-col h-full w-full max-w-[1600px] mx-auto px-4 sm:px-6 py-4 overflow-hidden bg-[#A7D5D7]">
         <div className="flex flex-col sm:flex-row items-start sm:items-center mb-4 ml-2">
           <h1 className="text-[6vw] sm:text-[4vw] md:text-[3vw] font-pangolin leading-tight text-left">
