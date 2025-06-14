@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import { useRouter } from "next/navigation";
-
+import { fetchUserFavourites } from "@/services/api";
 import Navbar from "@/components/ui/Navbar";
 import Popup from "@/components/ui/Popup";
 import { ZButton } from "@/components/ui/Buttons";
@@ -13,16 +13,7 @@ export default function Saved() {
   const router = useRouter();
 
 
-  const [timetables, setTimetables] = useState<string[]>([
-    "Evening Theory",
-    "5:30 before lab",
-    "Too good to be true",
-    "FFCS hatao desh bachao",
-    "Abki baar Vishwanathan Sarkar",
-    "Dummy Timetable",
-    "Another Timetable",
-    "Yet Another Timetable",
-  ]);
+  const [timetables, setTimetables] = useState<string[]>([]);
 
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -31,6 +22,18 @@ export default function Saved() {
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState<boolean>(false);
   const [indexToDelete, setIndexToDelete] = useState<number | null>(null);
   const [TimetableToDelete, setTimetableToDelete] = useState<string | null>(null);
+
+  useEffect(() => {
+    const email = "sohammaha15@gmail.com"; // Or use your auth method to get email
+    if (email) {
+      fetchUserFavourites(email)
+        .then((data) => {
+          const names = data.favourites.map((fav: any) => fav.name);
+          setTimetables(names);
+        })
+        .catch((err) => console.error("Error fetching timetables", err));
+    }
+  }, []);
 
   const handleDelete = (indexToDelete: number): void => {
     setTimetables((prev) => prev.filter((_, index) => index !== indexToDelete));
