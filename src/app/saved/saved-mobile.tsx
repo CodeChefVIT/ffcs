@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { FooterMobile } from "@/components/ui/Footer";
 import Image from "next/image";
-import { Navbar } from "@/components/ui/Navbar";
+import { useState } from "react";
+
+import Navbar from "@/components/ui/Navbar";
+import { FooterMobile } from "@/components/ui/Footer";
 
 const dummyTimetables: string[] = [
   "Evening Theory",

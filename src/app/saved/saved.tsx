@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
-
-import { ZButton } from "@/components/ui/Buttons";
-import { Navbar } from "@/components/ui/Navbar";
-import { Footer } from "@/components/ui/Footer";
-import Popup from "@/components/ui/Popup";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+
+import Navbar from "@/components/ui/Navbar";
+import Popup from "@/components/ui/Popup";
+import { ZButton } from "@/components/ui/Buttons";
+import { Footer } from "@/components/ui/Footer";
 
 export default function Saved() {
   const router = useRouter();

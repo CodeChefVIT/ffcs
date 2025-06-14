@@ -1,12 +1,15 @@
 "use client";
 
-import TimeTable from "@/components/timetable/TimeTable";
-import { ZButton, ToggleButton } from "@/components/ui/Buttons";
-import { Footer } from "@/components/ui/Footer";
-import { Navbar } from "@/components/ui/Navbar";
-import { clashMap, getAllSlots } from "@/lib/slots";
 import Image from "next/image";
 import { useState } from "react";
+
+import { clashMap, getAllSlots } from "@/lib/slots";
+
+import Navbar from "@/components/ui/Navbar";
+import { Footer } from "@/components/ui/Footer";
+import { ZButton, ToggleButton } from "@/components/ui/Buttons";
+import TimeTable from "@/components/timetable/TimeTable";
+
 
 export default function View() {
 

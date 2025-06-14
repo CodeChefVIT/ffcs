@@ -5,8 +5,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 
 import CompoundTable from '@/components/ui/CompoundTable';
+import Navbar from '@/components/ui/Navbar';
 import { Footer } from '@/components/ui/Footer';
-import { Navbar } from '@/components/ui/Navbar';
 
 type dataProps = {
   code: string;

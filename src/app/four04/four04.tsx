@@ -1,8 +1,9 @@
 "use client"
 
 import Image from "next/image";
+
+import Navbar from "@/components/ui/Navbar";
 import { ZButton } from "@/components/ui/Buttons";
-import { Navbar } from "@/components/ui/Navbar";
 import { Footer } from "@/components/ui/Footer";
 import { useRouter } from "next/navigation";
 
