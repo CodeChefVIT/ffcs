@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { ZButton } from "@/components/ui/Buttons";
-import Popup from "@/components/ui/Popup";
 
-type PopupType = | "google" | "email" | "remove" | "save" | "share" | "delete" | "view" | "shared" | null;
+import Popup from "@/components/ui/Popup";
+import { PopupLogin, PopupViewTT } from "@/components/ui/PopupMobile";
+import { ZButton } from "@/components/ui/Buttons";
+
+
+type PopupType = | "google" | "email" | "remove" | "save" | "share" | "delete" | "view" | "phone1" | "phone2" | null;
 
 const data = [
   { code: "BBRT101L", slot: "TG1", name: "Mansi Sharma" },
@@ -40,6 +43,11 @@ export default function Home() {
         return <Popup type="delete_tt" closeLink={closePopup} action={closePopup} dataBody="<TT Name>" />;
       case "view":
         return <Popup type="view_tt" closeLink={closePopup} action={closePopup} dataBody="ffcs.codechefvit.com/share?id=ABC123" dataTitle="<TT Name>" dataTT={data} />;
+      case "phone1":
+        return <PopupViewTT TTName={"Morning Theory"} TTData={data} shareLink={"ffcs.codechefvit.com/share?id=ABC123"} closeLink={closePopup} onDownloadClick={closePopup} />;
+      case "phone2":
+        return <PopupLogin closeLink={closePopup} onLoginClick={closePopup} />;
+
       default:
         return null;
     }
@@ -47,7 +55,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className="flex gap-2 mb-4 p-8">
+      <div className="flex flex-col justify-center gap-2 mb-4 p-8 w-full">
         <ZButton type="regular" text="Google" color="yellow" onClick={() => setPopupType("google")} />
         <ZButton type="regular" text="Email" color="purple" onClick={() => setPopupType("email")} />
         <ZButton type="regular" text="Remove" color="red" onClick={() => setPopupType("remove")} />
@@ -55,6 +63,8 @@ export default function Home() {
         <ZButton type="regular" text="Share" color="blue" onClick={() => setPopupType("share")} />
         <ZButton type="regular" text="Delete" color="red" onClick={() => setPopupType("delete")} />
         <ZButton type="regular" text="View" color="blue" onClick={() => setPopupType("view")} />
+        <ZButton type="regular" text="View Mobile" color="purple" onClick={() => setPopupType("phone1")} />
+        <ZButton type="regular" text="Login Mobile" color="purple" onClick={() => setPopupType("phone2")} />
       </div>
       {getPopupComponent(popupType)}
     </div>
