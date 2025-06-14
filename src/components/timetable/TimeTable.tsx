@@ -6,14 +6,13 @@ import { getSlot, getAllSlots } from '@/lib/slots';
 import Image from 'next/image';
 
 export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] }) {
-
   const slots: slot[] = slotNames.map(slotNames => getSlot(slotNames.slotName, slotNames.showName)).flat();
 
-  const ROWS = 17
+  const ROWS = 17;
   const COLUMNS = 69;
   const ROW_WEIGHTS = [5, 5, 2, 5, 5, 2, 5, 5, 2, 5, 5, 2, 5, 5, 2, 5, 5];
   const COLUMN_WEIGHTS = Array(69).fill(1).map((v, i) => (i === 0 ? 5 : 1));
-  const LAB_ROWS = [5, 8, 11, 14, 17]; // Rows where labs are located
+  const LAB_ROWS = [5, 8, 11, 14, 17];
 
   const totalRowWeight = ROW_WEIGHTS.reduce((a, b) => a + b, 0);
   const gridTemplateRows = ROW_WEIGHTS.map(w => `${(w / totalRowWeight) * 100}%`).join(' ');
@@ -67,7 +66,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
     { colStart: 67, colEnd: 70, rowStart: 10, rowEnd: 11, slotName: '' },
     { colStart: 67, colEnd: 70, rowStart: 13, rowEnd: 14, slotName: '' },
     { colStart: 67, colEnd: 70, rowStart: 16, rowEnd: 17, slotName: '' },
-  ]
+  ];
 
   const MERGE_CELLS_SLOTS: slot[] = [];
   const allSlotsWithoutName: slot[] = getAllSlots().map(slotName => getSlot(slotName, true)).flat();
@@ -88,16 +87,8 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
       cells.push(
         <div
           key={`cell-${row}-${col}`}
-          style={{
-            border: '0.5px solid #000000',
-            //boxShadow: '0 0 0 0.5px #000000',
-            width: '100%',
-            height: '100%',
-            boxSizing: 'border-box',
-            gridColumn: col,
-            gridRow: row,
-            backgroundColor: '#ffffff',
-          }}
+          className="border-black border-[0.5px] w-full h-full box-border bg-white"
+          style={{ gridColumn: col, gridRow: row, }}
         />
       );
     }
@@ -105,20 +96,8 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
 
   return (
     <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns,
-        gridTemplateRows,
-        gap: '0px',
-        backgroundColor: '#000000',
-        position: 'relative',
-        width: '100%',
-        height: '100%',
-        padding: '1px',
-        //border: '1px solid #000000',
-        userSelect: 'none',
-        fontFamily: 'var(--font-inter), Inter, sans-serif',
-      }}
+      className="grid bg-black relative w-full h-full p-[1px] select-none font-inter"
+      style={{ gridTemplateColumns, gridTemplateRows, }}
     >
       {cells}
       <div
@@ -138,36 +117,15 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
       {MERGE_CELLS_BOLD_TEXT.map((cell, i) => (
         <div
           key={`merge-cell-${i}`}
+          className="bg-white border-black border-[0.5px] box-border flex items-center justify-center w-full h-full overflow-hidden"
           style={{
             gridColumnStart: cell.colStart,
             gridColumnEnd: cell.colEnd,
             gridRowStart: cell.rowStart,
             gridRowEnd: cell.rowEnd,
-            backgroundColor: '#ffffff',
-            border: '0.5px solid #000000',
-            boxSizing: 'border-box',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%',
-            height: '100%',
-            overflow: 'hidden',
           }}
         >
-          <span
-            style={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 'clamp(8px, 0.8vw, 18px)', // Responsive font size
-              fontWeight: "bold",
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-            }}
-          >
+          <span className="w-full h-full flex items-center justify-center font-bold whitespace-nowrap overflow-hidden text-ellipsis text-[clamp(8px,0.8vw,18px)]">
             {cell.slotName}
           </span>
         </div>
@@ -176,73 +134,32 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
       {MERGE_CELLS_SLOTS.map((cell, i) => (
         <div
           key={`slot-${i}`}
+          className="bg-white border-black border-[0.5px] box-border flex items-center justify-center w-full h-full overflow-hidden"
           style={{
             gridColumnStart: cell.colStart,
             gridColumnEnd: cell.colEnd,
             gridRowStart: cell.rowStart,
             gridRowEnd: cell.rowEnd,
-            backgroundColor: '#ffffff',
-            border: '0.5px solid #000000',
-            boxSizing: 'border-box',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%',
-            height: '100%',
-            overflow: 'hidden',
           }}
         >
-          <span
-            style={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 'clamp(8px, 0.8vw, 18px)', // Responsive font size
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-            }}
-          >
+          <span className="w-full h-full flex items-center justify-center whitespace-nowrap overflow-hidden text-ellipsis text-[clamp(8px,0.8vw,18px)]">
             {cell.slotName}
           </span>
         </div>
       ))}
 
-
       {slots.map((slot, i) => (
         <div
           key={`slot-${i}`}
+          className={`border-black border-[0.5px] box-border flex items-center justify-center w-full h-full overflow-hidden ${LAB_ROWS.includes(slot.rowStart) ? 'bg-[#96FFCA]' : 'bg-[#86d7FF]'}`}
           style={{
             gridColumnStart: slot.colStart,
             gridColumnEnd: slot.colEnd,
             gridRowStart: slot.rowStart,
             gridRowEnd: slot.rowEnd,
-            backgroundColor: LAB_ROWS.includes(slot.rowStart) ? '#96FFCA' : '#86d7FF',
-            border: '0.5px solid #000000',
-            boxSizing: 'border-box',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '100%',
-            height: '100%',
-            overflow: 'hidden',
           }}
         >
-          <span
-            style={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 'clamp(8px, 0.8vw, 18px)',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-            }}
-          >
+          <span className="w-full h-full flex items-center justify-center whitespace-nowrap overflow-hidden text-ellipsis text-[clamp(8px,0.8vw,18px)]">
             {slot.slotName}
           </span>
         </div>
@@ -251,4 +168,3 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
     </div>
   );
 }
-

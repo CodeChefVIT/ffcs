@@ -1,4 +1,6 @@
-import React, { useState, useRef } from "react";
+"use client";
+
+import React, { useState, useRef, use } from "react";
 import { useTimetable } from "../components/timetable/TimeTableContext";
 import axios from "axios";
 import Popup from "./ui/Popup";
@@ -7,8 +9,8 @@ interface Course {
   id: string;
   codes: string[];
   names: string[];
-  slots: string | string[]| string[][];
-  facultyName: string | string[]| string[][];
+  slots: string | string[] | string[][];
+  facultyName: string | string[] | string[][];
 }
 
 const initialCourses: Course[] = [
@@ -16,14 +18,14 @@ const initialCourses: Course[] = [
     id: "course1",
     codes: ["BCSE102L", "BCSE102P"],
     names: ["Structured and Object-Oriented Programming", "Structured and Object-Oriented Programming Lab"],
-    slots: [["G1","L43+L44+L53+L54"], ["G1+TG1"]],
-    facultyName: [["DHIVYAA C R "],["testwa"]]
+    slots: [["G1", "L43+L44+L53+L54"], ["G1+TG1"]],
+    facultyName: [["DHIVYAA C R "], ["testwa"]]
   },
   {
     id: "course2",
     codes: ["BENG101L", "BENG101P"],
     names: ["Technical English Communication", "Technical English Communication Lab"],
-    slots: [["B1", "L45+L46"],["B1", "L45+L46"]],
+    slots: [["B1", "L45+L46"], ["B1", "L45+L46"]],
     facultyName: [["SOUMEN MUKHERJEE"], ["vishu"]]
   },
   {
@@ -68,7 +70,7 @@ const initialCourses: Course[] = [
     slots: "F1+TF1",
     facultyName: "VISSU",
   },
- 
+
 ];
 
 export const CourseCard: React.FC = () => {
@@ -288,8 +290,8 @@ export const CourseCard: React.FC = () => {
                   {Array.isArray(course.slots)
                     ? course.slots.map((slot, idx) => <div key={idx}>{slot}</div>)
                     : course.slots
-                        .split("\n")
-                        .map((slot, idx) => <div key={idx}>{slot}</div>)}
+                      .split("\n")
+                      .map((slot, idx) => <div key={idx}>{slot}</div>)}
                 </div>
               </div>
 
@@ -375,9 +377,8 @@ export const CourseCard: React.FC = () => {
         <div className="text-center mt-8">
           <button
             id="generate-btn"
-            className={`border-2 border-black bg-[#7ce5e5] hover:bg-[#67d2d2] text-black font-semibold text-lg px-6 py-2 rounded-full shadow-[4px_4px_0_0_black] transition flex items-center justify-center gap-2 mx-auto ${
-              loading ? "opacity-60 cursor-not-allowed" : ""
-            }`}
+            className={`border-2 border-black bg-[#7ce5e5] hover:bg-[#67d2d2] text-black font-semibold text-lg px-6 py-2 rounded-full shadow-[4px_4px_0_0_black] transition flex items-center justify-center gap-2 mx-auto ${loading ? "opacity-60 cursor-not-allowed" : ""
+              }`}
             onClick={handleGenerate}
             type="button"
             disabled={loading}

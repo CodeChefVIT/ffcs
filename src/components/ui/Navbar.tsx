@@ -9,7 +9,7 @@ type NavbarProps = {
   loggedin: boolean;
 };
 
-export function Navbar({ page, loggedin = false }: NavbarProps) {
+export default function Navbar({ page, loggedin = false }: NavbarProps) {
   const router = useRouter();
   return (<div className="absolute top-0 left-0 w-full z-10 select-none">
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem' }}>

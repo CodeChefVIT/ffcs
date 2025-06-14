@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { ZButton } from "@/components/ui/Buttons";
-import { FooterMobile } from "@/components/ui/Footer";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Navbar } from "@/components/ui/Navbar";
+import { useState } from "react";
+
+import Navbar from "@/components/ui/Navbar";
+import { FooterMobile } from "@/components/ui/Footer";
 
 const dummyTimetables: string[] = [
   "Evening Theory",
@@ -19,7 +18,6 @@ const dummyTimetables: string[] = [
 ];
 
 export default function SavedMobile() {
-  const router = useRouter();
   const [timetable] = useState(dummyTimetables);
 
   return (
