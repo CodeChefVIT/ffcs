@@ -1,7 +1,9 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import React from "react";
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+
 import CompoundTable from '@/components/ui/CompoundTable';
 import { Footer } from '@/components/ui/Footer';
 import { Navbar } from '@/components/ui/Navbar';
@@ -56,8 +58,13 @@ const idMap: Record<string, dataProps[]> = {
 }
 
 export default function View() {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const id = searchParams.get('id')?.toUpperCase();;
+  const id = searchParams.get('id')?.toUpperCase();
+
+  if (!id || !idMap[id]) {
+    router.push('/404');
+  }
 
   return <div className="flex flex-col min-h-screen relative select-none">
     <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
@@ -75,7 +82,7 @@ export default function View() {
 
     <div className="flex-1 flex flex-col items-center mb-16">
       <div className="text-5xl mt-48 mb-8 font-pangolin text-black">Shared Timetable</div>
-      {id && (
+      {id && idMap[id] && (
         <div className="w-full max-w-7xl overflow-x-auto">
           <CompoundTable data={idMap[id] ?? []} />
         </div>
