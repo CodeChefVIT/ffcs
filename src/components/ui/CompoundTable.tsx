@@ -34,6 +34,7 @@ const getGroupedData = (data: dataProps[]): groupedDataProps => {
 
 export default function CompoundTable({ data, large }: CompoundTableProps) {
   const groupedData = getGroupedData(data);
+  console.log("Grouped Data:", groupedData);
 
   const tfs = data.map((d) => {
     return { slotName: d.slot, showName: true };
@@ -71,15 +72,14 @@ export default function CompoundTable({ data, large }: CompoundTableProps) {
             <div key={idx} className="border-b-1 border-black last:border-b-0 pb-2">
               <div className="space-y-1">
                 {entries.map((entry, i) => (
-                  <div key={i} className="flex px-2 min-w-0">
+                  <div key={i} className="flex px-2 min-w-0 justify-between">
                     <div className="w-[80px] shrink-0 break-words whitespace-normal text-left">{entry.code}</div>
                     <div className="w-[96px] shrink-0 ml-4 mr-4 break-words whitespace-normal text-left">
                       {entry.slot.replace(/\+/g, '+\u200B')}
                     </div>
-                    {i === 0
-                      ? <div className="shrink-0 break-words whitespace-normal text-left pr-4">{displayName}</div>
-                      : <div className="shrink-0"></div>
-                    }
+                    <div className="w-[160px] shrink-0 break-words whitespace-normal text-right pr-4">
+                      {i === 0 ? displayName : ""}
+                    </div>
                   </div>
                 ))}
               </div>
