@@ -9,7 +9,7 @@ import Navbar from "@/components/ui/Navbar";
 import Popup from "@/components/ui/Popup";
 import { ZButton } from "@/components/ui/Buttons";
 import Footer from "@/components/ui/Footer";
-import { getFavourites } from "@/services/api";
+import { getFavourites, deleteFavourite, renameFavourite } from "@/services/api";
 
 
 interface TimetableEntry {
@@ -37,7 +37,7 @@ export default function Saved() {
       if (!userEmail) return;
 
       const favourites = await getFavourites(userEmail);
-      setTimetables(favourites); // You should type this state as FavouriteTimetable[]
+      setTimetables(favourites);
     };
 
     fetchFavourites();
@@ -45,15 +45,7 @@ export default function Saved() {
 
   const handleDelete = async (idToDelete: string) => {
     try {
-      await fetch("/api/user/favorites", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          email: userEmail,
-        },
-        body: JSON.stringify({ id: idToDelete }),
-      });
-
+      await deleteFavourite(userEmail, idToDelete);
       setTimetables((prev) => prev.filter((tt) => tt.id !== idToDelete));
     } catch (err) {
       console.error("Failed to delete timetable:", err);
@@ -83,27 +75,17 @@ export default function Saved() {
   const handleSaveRename = async () => {
   if (editingIndex !== null && editedName.trim() !== "") {
     const id = timetables[editingIndex].id;
+
     try {
-      const res = await fetch("/api/user/favorites", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          email: userEmail,
-        },
-        body: JSON.stringify({ id, newName: editedName.trim() }),
-      });
+      await renameFavourite(userEmail, id, editedName.trim());
 
-      const data = await res.json();
-
-      if (res.ok) {
-        setTimetables((prev) =>
-          prev.map((tt, i) => (i === editingIndex ? { ...tt, name: editedName.trim() } : tt))
-        );
-        setEditingIndex(null);
-        setEditedName("");
-      } else {
-        console.error("Rename failed:", data.error);
-      }
+      setTimetables((prev) =>
+        prev.map((tt, i) =>
+          i === editingIndex ? { ...tt, name: editedName.trim() } : tt
+        )
+      );
+      setEditingIndex(null);
+      setEditedName("");
     } catch (error) {
       console.error("Rename request failed", error);
     }
