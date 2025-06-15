@@ -9,8 +9,8 @@ import Footer from "@/components/ui/Footer";
 
 import FacultySelector from "@/components/cards/FacultySelector";
 import CourseCard from "@/components/cards/CourseCard";
-import ViewTimeTable from "@/components/timetable/ViewTimeTable";
-import { TimetableProvider } from "@/components/timetable/TimeTableContext";
+import ViewTimeTable from "@/components/cards/ViewTimeTable";
+import { TimetableProvider } from "@/lib/TimeTableContext";
 
 export default function View() {
   return (

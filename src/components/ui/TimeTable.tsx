@@ -1,9 +1,14 @@
 'use client';
 
 import React from 'react';
-import { slot, tableFacingSlot } from '@/lib/type';
+import { slot } from '@/lib/type';
 import { getSlot, getAllSlots } from '@/lib/slots';
 import Image from 'next/image';
+
+export type tableFacingSlot = {
+  slotName: string;
+  showName: boolean;
+};
 
 export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] }) {
   const slots: slot[] = slotNames.map(slotNames => getSlot(slotNames.slotName, slotNames.showName)).flat();

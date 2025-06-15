@@ -3,7 +3,6 @@
 import Image from "next/image";
 import React from "react";
 import CompoundTable from "./CompoundTable";
-import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { GoogleLoginButton, ZButton } from "./Buttons";
 
@@ -174,5 +173,3 @@ export function PopupViewTT({ TTName, TTData, shareLink, closeLink, onDownloadCl
     </div>
   );
 }
-
-export default { PopupLogin, PopupViewTT };

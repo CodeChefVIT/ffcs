@@ -1,27 +1,15 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-
-type APIFaculty = {
-  faculty: string;
-  facultySlot: string[];
-};
-
-type APIResponse = {
-  message: string;
-  result: APIFaculty[][];
-  courseNames: string[];
-};
+import { timetableDisplayData } from "@/lib/type";
 
 type TimetableContextType = {
-  timetableData: APIResponse | null;
-  setTimetableData: React.Dispatch<React.SetStateAction<APIResponse | null>>;
+  timetableData: timetableDisplayData[][] | null;
+  setTimetableData: React.Dispatch<React.SetStateAction<timetableDisplayData[][] | null>>;
 };
 
-const TimetableContext = createContext<TimetableContextType | undefined>(
-  undefined
-);
+const TimetableContext = createContext<TimetableContextType | undefined>(undefined);
 
 export const TimetableProvider = ({ children }: { children: ReactNode }) => {
-  const [timetableData, setTimetableData] = useState<APIResponse | null>(null);
+  const [timetableData, setTimetableData] = useState<timetableDisplayData[][] | null>(null);
 
   return (
     <TimetableContext.Provider value={{ timetableData, setTimetableData }}>

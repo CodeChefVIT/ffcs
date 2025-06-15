@@ -6,14 +6,26 @@ export type slot = {
   slotName: string;
 };
 
-export type tableFacingSlot = {
+export type timetableDisplayData = {
+  courseCode: string;
+  courseName: string;
   slotName: string;
-  showName: boolean;
-};
-
-export type facultyData = {
-  faculty: string;
-  facultySlot: string[];
-  subject?: string;
+  facultyName: string;
   _id?: string;
 };
+
+export type fullCourseData = {
+  id: string;
+  courseType: "th" | "lab" | "both";
+  courseCode: string;     // if th or lab
+  courseName: string;     // if th or lab
+  courseCodeLab?: string;      // if both
+  courseNameLab?: string;      // if both
+  courseSlots: {
+    slotName: string;
+    slotFaculties: {
+      facultyName: string;
+      facultyLabSlot?: string; // if both
+    }[];
+  }[];
+}
