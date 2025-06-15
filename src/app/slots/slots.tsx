@@ -8,7 +8,7 @@ import { clashMap, getAllSlots } from "@/lib/slots";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import { ZButton, ToggleButton } from "@/components/ui/Buttons";
-import TimeTable from "@/components/timetable/TimeTable";
+import TimeTable from "@/components/ui/TimeTable";
 
 
 export default function View() {

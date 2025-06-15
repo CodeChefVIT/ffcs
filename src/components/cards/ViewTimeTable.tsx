@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 import CompoundTable from "@/components//ui/CompoundTable";
 import { ZButton } from "@/components/ui/Buttons";
-import { useTimetable } from "@/components/timetable/TimeTableContext";
+import { useTimetable } from "@/lib/TimeTableContext";
 import Image from "next/image";
 
 const actionButtons = [
@@ -66,9 +66,6 @@ export default function ViewTimeTable() {
         <div className="flex flex-row items-center justify-between px-8 pt-8 gap-8">
 
           <div className="w-auto">
-
-
-
 
             <div className=" w-full flex justify-center">
 
@@ -143,9 +140,6 @@ export default function ViewTimeTable() {
               </button>
 
             </div>
-
-
-
 
           </div>
 

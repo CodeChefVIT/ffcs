@@ -1,6 +1,6 @@
 "use client";
 
-import TimeTable from "../timetable/TimeTable";
+import TimeTable from "./TimeTable";
 import React from "react";
 
 type dataProps = {

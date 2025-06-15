@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 
-import { useTimetable } from "../timetable/TimeTableContext";
+import { useTimetable } from "../../lib/TimeTableContext";
 
 import Popup from "../ui/Popup";
 import { ZButton } from "../ui/Buttons";
