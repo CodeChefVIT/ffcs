@@ -33,6 +33,7 @@ const userSchema = new Schema<IUser>(
     favourites: {
       type: [
         {
+          name: String,
           TTdata: [{ faculty: String, facultySlot: [String] }],
           courseNames: [String],
         },
