@@ -1,19 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
+import axios from "axios";
 
 import CompoundTable from "@/components//ui/CompoundTable";
 import { ZButton } from "@/components/ui/Buttons";
 import { useTimetable } from "@/lib/TimeTableContext";
 import Image from "next/image";
 
-const actionButtons = [
-  { label: 'Email', color: 'yellow', icon: '/icons/mail.svg', onClick: () => console.log("Email clicked") },
-  { label: 'Save', color: 'green', icon: '/icons/save.svg', onClick: () => console.log("Save clicked") },
-  { label: 'Report', color: 'purple', icon: '/icons/report.svg', onClick: () => console.log("Report clicked") },
-  { label: 'Share', color: 'green', icon: '/icons/send.svg', onClick: () => console.log("Share clicked") },
-  { label: 'Download', color: 'yellow', icon: '/icons/download.svg', onClick: () => console.log("Download clicked") },
-];
+const DUMMY_USER_ID = "665f1e8e2f8b9b0012345678";
 
 function getVisibleIndexes(selected: number, total: number) {
   const maxVisible = 5;
@@ -42,6 +37,41 @@ export default function ViewTimeTable() {
     name: item.facultyName || "Unknown",
   }));
 
+  async function handleSave() {
+    if (!selectedData || selectedData.length === 0) return;
+
+    const slots = selectedData.map((item: any) => ({
+      slot: item.slotName || "NIL",
+      courseCode: item.courseCode || "00000000",
+      courseName: item.courseName || "Unknown",
+      facultyName: item.facultyName || "Unknown",
+    }));
+
+    try {
+      const res = await axios.post("/api/save-timetable", {
+        title: `Saved Timetable ${selectedIndex + 1}`,
+        slots,
+        owner: DUMMY_USER_ID,
+      });
+      console.log("selectedData:", selectedData);
+console.log("slots to save:", slots);
+      if (res.data.success) {
+        alert("Timetable saved!");
+      } else {
+        alert("Failed to save timetable.");
+      }
+    } catch (e) {
+      alert("Error saving timetable.");
+    }
+  }
+
+  const actionButtons = [
+    { label: 'Email', color: 'yellow', icon: '/icons/mail.svg', onClick: () => console.log("Email clicked") },
+    { label: 'Save', color: 'green', icon: '/icons/save.svg', onClick: handleSave },
+    { label: 'Report', color: 'purple', icon: '/icons/report.svg', onClick: () => console.log("Report clicked") },
+    { label: 'Share', color: 'green', icon: '/icons/send.svg', onClick: () => console.log("Share clicked") },
+    { label: 'Download', color: 'yellow', icon: '/icons/download.svg', onClick: () => console.log("Download clicked") },
+  ];
 
   return (
     <div
