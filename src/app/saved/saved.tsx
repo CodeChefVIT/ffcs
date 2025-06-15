@@ -9,6 +9,8 @@ import Navbar from "@/components/ui/Navbar";
 import Popup from "@/components/ui/Popup";
 import { ZButton } from "@/components/ui/Buttons";
 import Footer from "@/components/ui/Footer";
+import { getFavourites } from "@/services/api";
+
 
 interface TimetableEntry {
   name: string;
@@ -18,38 +20,27 @@ interface TimetableEntry {
 export default function Saved() {
   const router = useRouter();
   //const { data: session } = useSession();
-  const userEmail = "sohammaha15@gmail.com";
+  const userEmail = "sohammaha15@gmail.com"; //get email from authentication
 
   const [timetables, setTimetables] = useState<TimetableEntry[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editedName, setEditedName] = useState<string>("");
-
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState<boolean>(false);
-  const [indexToDelete, setIndexToDelete] = useState<number | null>(null);
   const [timetableToDelete, setTimetableToDelete] = useState<string | null>(null);
   const [timetableToDeleteId, setTimetableToDeleteId] = useState<string | null>(null);
 
+ 
+
   useEffect(() => {
     const fetchFavourites = async () => {
-      try {
-        const res = await fetch("/api/user/favorites", {
-          headers: {
-            email: userEmail,
-          },
-        });
-        const data = await res.json();
-        const favourites = data.favourites.map((fav: any) => ({
-          name: fav.name,
-          id: fav._id,
-        }));
-        setTimetables(favourites);
-      } catch (err) {
-        console.error("Failed to fetch favourites", err);
-      }
+      if (!userEmail) return;
+
+      const favourites = await getFavourites(userEmail);
+      setTimetables(favourites); // You should type this state as FavouriteTimetable[]
     };
 
-    if (userEmail) fetchFavourites();
+    fetchFavourites();
   }, [userEmail]);
 
   const handleDelete = async (idToDelete: string) => {
@@ -73,7 +64,6 @@ export default function Saved() {
     if (timetableToDeleteId) {
       handleDelete(timetableToDeleteId);
       setIsDeletePopupOpen(false);
-      setIndexToDelete(null);
       setTimetableToDelete(null);
       setTimetableToDeleteId(null);
     }
@@ -81,7 +71,6 @@ export default function Saved() {
 
   const cancelDelete = () => {
     setIsDeletePopupOpen(false);
-    setIndexToDelete(null);
     setTimetableToDelete(null);
     setTimetableToDeleteId(null);
   };
@@ -248,7 +237,6 @@ export default function Saved() {
                           className="w-10 h-10 bg-[#E5F3F3] hover:bg-[#FFA3A3] border border-black p-2 m-2 rounded-lg cursor-pointer transition-colors"
                           onClick={() => {
                             setIsDeletePopupOpen(true);
-                            setIndexToDelete(index);
                             setTimetableToDelete(tt.name);
                             setTimetableToDeleteId(tt.id);
                           }}
