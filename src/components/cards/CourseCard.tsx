@@ -1,86 +1,103 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import axios from "axios";
 
 import { useTimetable } from "../timetable/TimeTableContext";
 
 import Popup from "../ui/Popup";
 import { ZButton } from "../ui/Buttons";
 import Image from "next/image";
+import { generateTT } from "@/lib/utils";
+import { fullCourseData } from "@/lib/type";
 
-interface Course {
-  id: string;
-  codes: string[];
-  names: string[];
-  slots: string | string[] | string[][];
-  facultyName: string | string[] | string[][];
-}
 
-const initialCourses: Course[] = [
+const courseData: fullCourseData[] = [
   {
-    id: "course1",
-    codes: ["BCSE102L", "BCSE102P"],
-    names: ["Structured and Object-Oriented Programming", "Structured and Object-Oriented Programming Lab"],
-    slots: [["G1", "L43+L44+L53+L54"], ["G1+TG1"]],
-    facultyName: [["DHIVYAA C R "], ["testwa"]]
+    id: "course_1",
+    courseType: "both",
+    courseCode: "BCSE102L",
+    courseName: "Structured and Object-Oriented Programming",
+    courseCodeLab: "BCSE102P",
+    courseNameLab: "Structured and Object-Oriented Programming Lab",
+    courseSlots: [
+      {
+        slotName: "G1",
+        slotFaculties: [
+          { facultyName: "Fac 1", facultyLabSlot: "L31+L32" },
+          { facultyName: "Fac 2", facultyLabSlot: "L43+L44" },
+          { facultyName: "Fac 3", facultyLabSlot: "L53+L54" },
+          { facultyName: "Fac 4", facultyLabSlot: "L55+L56" },
+        ]
+      },
+      {
+        slotName: "F1",
+        slotFaculties: [
+          { facultyName: "Fac 5", facultyLabSlot: "L37+L38" },
+          { facultyName: "Fac 6", facultyLabSlot: "L39+L40" },
+          { facultyName: "Fac 7", facultyLabSlot: "L45+L46" },
+          { facultyName: "Fac 8", facultyLabSlot: "L59+L60" },
+        ]
+      },
+    ],
   },
   {
-    id: "course2",
-    codes: ["BENG101L", "BENG101P"],
-    names: ["Technical English Communication", "Technical English Communication Lab"],
-    slots: [["B1", "L45+L46"], ["B1", "L45+L46"]],
-    facultyName: [["SOUMEN MUKHERJEE"], ["vishu"]]
-  },
-  {
-    id: "course3",
-    codes: ["BHUM101N"],
-    names: ["Ethics and Values"],
-    slots: "NIL",
-    facultyName: "BHUVANESWARI M"
-  },
-  {
-    id: "course4",
-    codes: ["BHUM220L"],
-    names: ["Financial Markets and Institutions"],
-    slots: "C1+TC1",
-    facultyName: "SAVITHA N"
-  },
-  {
-    id: "course5",
-    codes: ["BMAT101L", "BMAT101P"],
-    names: ["Calculus", "Calculus Lab"],
-    slots: ["D1+TD1", "L35+L36"],
-    facultyName: "ARUN KUMAR BADAJENA"
-  },
-  {
-    id: "course6",
-    codes: ["BPHY101L", "BPHY101P"],
-    names: ["Engineering Physics", "Engineering Physics Lab"],
-    slots: ["E1+TE1", "L47+L48"],
-    facultyName: "KANHAIYA LAL PANDEY"
-  },
-  {
-    id: "course7",
-    codes: ["BSTS101P"],
-    names: ["Quantitative Skills Practice I"],
-    slots: "F1+TF1",
-    facultyName: "SIXPHRASE (APT)"
-  },
-  {
-    id: "course",
-    codes: ["BSTFU-101"],
-    names: ["Vissus Rizzology"],
-    slots: "F1+TF1",
-    facultyName: "VISSU",
-  },
+    id: "course_2",
+    courseType: "th",
+    courseCode: "BCSE205L",
+    courseName: "Theory of Computation",
+    courseSlots: [
+      {
+        slotName: "A1+TA1",
+        slotFaculties: [
+          { facultyName: "Fac 9" },
+          { facultyName: "Fac 10" },
+          { facultyName: "Fac 11" },
+        ]
+      },
+      {
+        slotName: "F1+TF1",
+        slotFaculties: [
+          { facultyName: "Fac 12" },
+          { facultyName: "Fac 13" },
 
+        ]
+      },
+    ],
+  },
+  {
+    id: "course_3",
+    courseType: "lab",
+    courseCode: "BCSE301P",
+    courseName: "Database Management Systems Lab",
+    courseSlots: [
+      {
+        slotName: "L5+L6",
+        slotFaculties: [
+          { facultyName: "Fac 14" },
+          { facultyName: "Fac 15" },
+        ]
+      },
+      {
+        slotName: "L13+L14",
+        slotFaculties: [
+          { facultyName: "Fac 16" },
+        ]
+      },
+      {
+        slotName: "L21+L22",
+        slotFaculties: [
+          { facultyName: "Fac 17" },
+          { facultyName: "Fac 18" },
+        ]
+      },
+    ],
+  },
 ];
 
 export default function CourseCard() {
   const { setTimetableData } = useTimetable();
 
-  const [courses, setCourses] = useState<Course[]>(initialCourses);
+  const [courses, setCourses] = useState<fullCourseData[]>(courseData);
   const draggedItemIndex = useRef<number | null>(null);
   const dragOverItemIndex = useRef<number | null>(null);
 
@@ -88,7 +105,7 @@ export default function CourseCard() {
   const [error, setError] = useState<string | null>(null);
 
   const [deletePopupOpen, setDeletePopupOpen] = useState(false);
-  const [courseToDelete, setCourseToDelete] = useState<Course | null>(null);
+  const [courseToDelete, setCourseToDelete] = useState<fullCourseData | null>(null);
 
   const resetDragRefs = () => {
     draggedItemIndex.current = null;
@@ -96,9 +113,7 @@ export default function CourseCard() {
   };
 
   const confirmDeleteCourse = () => {
-    if (courseToDelete) {
-      setCourses((prev) => prev.filter((c) => c.id !== courseToDelete.id));
-    }
+    if (courseToDelete) setCourses((prev) => prev.filter((c) => c.id !== courseToDelete.id));
     setDeletePopupOpen(false);
     setCourseToDelete(null);
   };
@@ -108,19 +123,13 @@ export default function CourseCard() {
     e.dataTransfer.effectAllowed = "move";
   };
 
-  const handleDragEnter = (index: number) => {
-    dragOverItemIndex.current = index;
-  };
+  const handleDragEnter = (index: number) => dragOverItemIndex.current = index;
 
   const handleDragEnd = () => {
     const draggedIdx = draggedItemIndex.current;
     const dragOverIdx = dragOverItemIndex.current;
 
-    if (
-      draggedIdx === null ||
-      dragOverIdx === null ||
-      draggedIdx === dragOverIdx
-    ) {
+    if (draggedIdx === null || dragOverIdx === null || draggedIdx === dragOverIdx) {
       resetDragRefs();
       return;
     }
@@ -145,10 +154,7 @@ export default function CourseCard() {
   const moveCourseDown = (index: number) => {
     if (index === courses.length - 1) return;
     const updatedCourses = [...courses];
-    [updatedCourses[index + 1], updatedCourses[index]] = [
-      updatedCourses[index],
-      updatedCourses[index + 1],
-    ];
+    [updatedCourses[index + 1], updatedCourses[index]] = [updatedCourses[index], updatedCourses[index + 1]];
     setCourses(updatedCourses);
   };
 
@@ -157,80 +163,16 @@ export default function CourseCard() {
     setError(null);
 
     try {
-      const generateData = courses.map((course) => {
-        // Check if array of array
-        if (
-          Array.isArray(course.facultyName) &&
-          Array.isArray(course.slots) &&
-          Array.isArray(course.facultyName[0]) &&
-          Array.isArray(course.slots[0])
-        ) {
-          // Pairing + add if seperate members exist
-          const facultyArr = course.facultyName as string[][];
-          const slotsArr = course.slots as string[][];
-          return facultyArr.map((faculty, idx) => ({
-            faculty: faculty.length > 1 ? faculty.join(" + ") : faculty[0] ?? "NIL",
-            facultySlot:
-              slotsArr[idx]?.length > 0
-                ? [slotsArr[idx].join("+")]
-                : ["NIL"],
-          }));
-        } else {
-          const slotsArray = Array.isArray(course.slots)
-            ? course.slots
-            : [course.slots];
+      const generatedTT = generateTT(courses);
+      setTimetableData(generatedTT);
 
-          const facultySlots = slotsArray
-            .map((slotStr) => {
-              if (typeof slotStr === "string") {
-                return slotStr.split("+").map((slot) => slot.trim());
-              } else if (Array.isArray(slotStr)) {
-                return slotStr.flatMap((s) =>
-                  typeof s === "string"
-                    ? s.split("+").map((slot) => slot.trim())
-                    : []
-                );
-              }
-              return [];
-            })
-            .flat()
-            .filter((slot) => slot !== "" && slot.toUpperCase() !== "NIL");
+      setTimeout(() => {
+        const el = document.getElementById("timetable-view");
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 100);
 
-          return [
-            {
-              faculty: course.facultyName,
-              facultySlot: facultySlots.length > 0 ? facultySlots : ["NIL"],
-            },
-          ];
-        }
-      });
-
-      const facultyData = courses.map((course) => course.codes.join("/"));
-
-      const payload = {
-        slotTime: "Both",
-        generateData,
-        facultyData,
-      };
-      const response = await axios.post("/api/generate", payload);
-
-      if (response?.data) {
-        setTimetableData(response.data);
-
-        setTimeout(() => {
-          const el = document.getElementById("timetable-view");
-          if (el) {
-            el.scrollIntoView({ behavior: "smooth" });
-          }
-        }, 100);
-      }
-    } catch (err: unknown) {
+    } catch {
       setError("Failed to generate timetable. Please try again.");
-      if (err instanceof Error) {
-        console.error(err.message); // Optional: log error message
-      } else {
-        console.error("Unknown error", err);
-      }
     }
     finally {
       setLoading(false);
@@ -266,34 +208,30 @@ export default function CourseCard() {
               <div className="flex items-center w-[120px] text-sm text-black font-normal">
                 <div className="flex items-start">
                   <div className="w-6 text-right mr-4 text-sm font-inter">{index + 1}.</div>
-                  <div
-                    className={`flex flex-col px-4 ${course.codes.length > 1 ? "space-y-1" : ""}`}
-                  >
-                    {course.codes.map((code) => (
-                      <p key={code}>{code}</p>
-                    ))}
+                  <div className={"flex flex-col px-4 gap-1"}                  >
+                    <p key={course.courseCode}>{course.courseCode}</p>
+                    {course.courseType === "both" && <p key={course.courseCodeLab}>{course.courseCodeLab}</p>}
                   </div>
                 </div>
               </div>
 
               {/* Course namee */}
               <div className="flex w-[480px] text-sm text-black font-normal">
-                <div className="flex flex-col space-y-1 break-words max-w-full">
-                  {course.names.map((name, i) => (
-                    <p key={i} className="break-words leading-snug">
-                      {name}
-                    </p>
-                  ))}
+                <div className="flex flex-col gap-1 break-words max-w-full">
+                  <p key={course.courseName} className="break-words leading-snug">{course.courseName}</p>
+                  {course.courseType === "both" && <p key={course.courseNameLab} className="break-words leading-snug">{course.courseNameLab}</p>}
                 </div>
               </div>
 
 
               {/* Slots */}
               <div className="flex items-center w-[120px] text-sm text-left text-black font-normal">
-                <div className="flex flex-col space-y-1">
-                  {Array.isArray(course.slots)
-                    ? course.slots.map((slot, idx) => <div key={idx}>{slot}</div>)
-                    : course.slots.split("\n").map((slot, idx) => <div key={idx}>{slot}</div>)}
+                <div className="flex flex-col gap-1">
+                  {course.courseType == "lab" && <p key={course.courseName + "slot"} className="break-words leading-snug">(Lab)</p>}
+                  {course.courseType != "lab" &&
+                    <p key={course.courseName + "slot"} className="break-words leading-snug">{course.courseSlots.map((slot) => slot.slotName).join(", ")}                  </p>
+                  }
+
                 </div>
               </div>
 
@@ -370,7 +308,7 @@ export default function CourseCard() {
       {deletePopupOpen && courseToDelete && (
         <Popup
           type="rem_course"
-          dataBody={courseToDelete.names.join(", ")}
+          dataBody={courseToDelete.courseName + (courseToDelete.courseType === "both" ? ` & ${courseToDelete.courseNameLab}` : "")}
           action={confirmDeleteCourse}
           closeLink={() => {
             setDeletePopupOpen(false);

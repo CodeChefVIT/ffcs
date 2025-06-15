@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { facultyData } from "@/lib/type";
 
 import CompoundTable from "@/components//ui/CompoundTable";
 import { ZButton } from "@/components/ui/Buttons";
@@ -16,18 +15,6 @@ const actionButtons = [
   { label: 'Download', color: 'yellow', icon: '/icons/download.svg', onClick: () => console.log("Download clicked") },
 ];
 
-const transformAPIResponseToFacultyData = (response: any): facultyData[][] => {
-  if (!response?.result) return [[]]; // Return empty array structure if no data
-  return response.result.map((timetable: any, ttIndex: number) =>
-    timetable.map((facultyObj: any, index: number) => ({
-      _id: `${ttIndex}-${index}`,
-      faculty: facultyObj.faculty,
-      facultySlot: [facultyObj.facultySlot.length > 0 ? facultyObj.facultySlot.join("+") : "NIL",],
-      subject: response.courseNames?.[ttIndex] || "Unknown",
-    }))
-  );
-};
-
 function getVisibleIndexes(selected: number, total: number) {
   const maxVisible = 5;
   const shift = 2;
@@ -39,8 +26,9 @@ function getVisibleIndexes(selected: number, total: number) {
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
   const [selectedIndex, setSelectedIndex] = useState(0);
+
   const timetableNumber = selectedIndex + 1;
-  const allTimatables = timetableData ? transformAPIResponseToFacultyData(timetableData) : [[]];
+  const allTimatables = timetableData ? timetableData : [[]];
   const timetableCount = allTimatables.length;
   const selectedData = allTimatables[selectedIndex] || [];
   const visibleIndexes = getVisibleIndexes(timetableNumber, timetableCount);
@@ -49,9 +37,9 @@ export default function ViewTimeTable() {
   // console.log("Selected Data:", selectedData);
 
   const convertedData = selectedData.map((item) => ({
-    code: item.subject || "00000000",
-    slot: item.facultySlot.join("+"),
-    name: item.faculty || "Unknown",
+    code: item.courseCode || "00000000",
+    slot: item.slotName || "NIL",
+    name: item.facultyName || "Unknown",
   }));
 
 

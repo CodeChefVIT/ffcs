@@ -173,5 +173,3 @@ export function PopupViewTT({ TTName, TTData, shareLink, closeLink, onDownloadCl
     </div>
   );
 }
-
-export default { PopupLogin, PopupViewTT };
