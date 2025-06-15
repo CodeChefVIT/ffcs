@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/app/lib/db";
 import User from "@/app/models/user";
 
+import mongoose from "mongoose";
+
 
 // GET request to retrieve user's favourites using email
 export async function GET(req: NextRequest) {
@@ -143,5 +145,36 @@ if (!email) {
       message: "Favourites Delete failed",
       status: 404,
     });
+  }
+}
+
+
+
+
+export async function PUT(req: NextRequest) {
+  await dbConnect();
+
+  const { id, newName } = await req.json();
+  const email = req.headers.get("email");
+
+  if (!email || !id || !newName) {
+    return NextResponse.json({ error: "Missing required data" }, { status: 400 });
+  }
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { email, "favourites._id": new mongoose.Types.ObjectId(id) },
+      { $set: { "favourites.$.name": newName } },
+      { new: true }
+    );
+
+    if (!user) {
+      return NextResponse.json({ error: "Favourite not found or user not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error("Rename error:", err);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
