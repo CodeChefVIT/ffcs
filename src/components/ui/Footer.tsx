@@ -15,7 +15,7 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
           <CCButton />
         </div>
         <p className="text-sm text-black font-poppins font-semibold">
-          Made with ❤ by CodeChef-VIT
+          Made with <span className="font-[inter]">❤</span> by CodeChef-VIT
         </p>
       </div>
 
@@ -90,8 +90,8 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
         <div>
           <h3 className="font-poppins font-semibold mb-2 text-2xl md:text-xl lg:text-2xl">Our Projects</h3>
           <ul className="space-y-1">
-            <li><a href="#">Brainrot Arcade</a></li>
-            <li><a href="#">FFCS-inator</a></li>
+            <li><a href="https://contactify.codechefvit.com/" target="_blank">Contactify</a></li>
+            <li><a href="https://ffcs.codechefvit.com/" target="_blank">FFCS-inator</a></li>
             <li><a href="https://papers.codechefvit.com/" target="_blank">Papers</a></li>
           </ul>
         </div>
