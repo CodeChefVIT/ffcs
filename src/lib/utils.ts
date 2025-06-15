@@ -1,26 +1,7 @@
 import { clashMap } from "./slots";
 import { fullCourseData, timetableDisplayData } from "./type";
 
-export function generateTT(courseData: fullCourseData[]) {
-
-  function slotClashes(slotStr: string, usedSlots: Set<string>): boolean {
-    const parts = slotStr.split(/[\+__]/);
-    for (const part of parts) {
-      for (const used of usedSlots) {
-        const usedParts = used.split(/[\+__]/);
-        for (const u of usedParts) {
-          if (
-            u === part ||
-            clashMap[u]?.includes(part) ||
-            clashMap[part]?.includes(u)
-          ) {
-            return true;
-          }
-        }
-      }
-    }
-    return false;
-  }
+export function generateTT(courseData: fullCourseData[], discardClashCombinations: boolean = false): timetableDisplayData[][] {
 
   function simplify(data: fullCourseData[]): timetableDisplayData[][] {
     const coursesSimple: timetableDisplayData[][] = [];
@@ -85,21 +66,40 @@ export function generateTT(courseData: fullCourseData[]) {
   const subjectList = simplify(courseData);
   let combinations: timetableDisplayData[][] = [[]];
   for (const subject of subjectList) {
-    const nextCombinations: timetableDisplayData[][] = [];
-    for (const combo of combinations) {
-      const usedSlots = new Set(combo.map(item => item.slotName));
-      let added = false;
+    const temp: timetableDisplayData[][] = [];
+    for (const partial of combinations) {
       for (const item of subject) {
-        if (!slotClashes(item.slotName, usedSlots)) {
-          nextCombinations.push([...combo, item]);
-          added = true;
+
+        if (!discardClashCombinations) {
+
+          const included: string[] = [];
+          partial.forEach(p => {
+            const slots = p.slotName.split(/\+|__/);
+            slots.forEach(slot => {
+              included.push(slot);
+              if (clashMap[slot]) included.push(...clashMap[slot]);
+            });
+          });
+          const nonePresent = item.slotName.split(/\+|__/).every(slot => !included.includes(slot));
+          if (nonePresent) temp.push([...partial, item]);
+          else temp.push([...partial])
+
+        } else {
+
+          const clashes = partial.some(p => {
+            const pSlots = p.slotName.split(/\+|__/);
+            const iSlots = item.slotName.split(/\+|__/);
+            return pSlots.some(slot => iSlots.includes(slot)) || iSlots.some(slot => pSlots.includes(slot));
+          });
+          if (!clashes) {
+            temp.push([...partial, item]);
+          }
+
         }
-      }
-      if (!added) {
-        nextCombinations.push(combo);
+
       }
     }
-    combinations = nextCombinations;
+    combinations = temp;
   }
   return breakClubbed(combinations);
 }

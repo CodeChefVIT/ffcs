@@ -163,7 +163,7 @@ export default function CourseCard() {
     setError(null);
 
     try {
-      const generatedTT = generateTT(courses);
+      const generatedTT = generateTT(courses, false);
       setTimetableData(generatedTT);
 
       setTimeout(() => {
