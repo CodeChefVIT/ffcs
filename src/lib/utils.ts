@@ -1,7 +1,7 @@
 import { clashMap } from "./slots";
 import { fullCourseData, timetableDisplayData } from "./type";
 
-export function generateTT(courseData: fullCourseData[], discardClashCombinations: boolean = false): timetableDisplayData[][] {
+export function generateTT(courseData: fullCourseData[], discardClashCombinations: boolean = true): timetableDisplayData[][] {
 
   function simplify(data: fullCourseData[]): timetableDisplayData[][] {
     const coursesSimple: timetableDisplayData[][] = [];
