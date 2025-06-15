@@ -163,7 +163,7 @@ export default function Saved() {
                     {editingIndex === index ? (
                       <>
                         <button
-                          className="w-10 h-10 bg-[#53ec8e] border border-black p-2 m-2 rounded-lg cursor-pointer"
+                          className="w-10 h-10 bg-[#53ec8e] border-1 border-black p-2 m-2 rounded-lg cursor-pointer"
                           onClick={handleSaveRename}
                         >
                           <Image
@@ -175,7 +175,7 @@ export default function Saved() {
                           />
                         </button>
                         <button
-                          className="w-10 h-10 bg-[#FFA3A3] border border-black p-2 m-2 rounded-lg cursor-pointer"
+                          className="w-10 h-10 bg-[#FFA3A3] border-1 border-black p-2 m-2 rounded-lg cursor-pointer"
                           onClick={handleCancelRename}
                         >
                           <Image
@@ -190,7 +190,7 @@ export default function Saved() {
                     ) : (
                       <>
                         <button
-                          className="w-10 h-10 bg-[#E5F3F3] hover:bg-[#FFEA79] border border-black p-2 m-2 rounded-lg cursor-pointer transition-colors"
+                          className="w-10 h-10 bg-[#E5F3F3] hover:bg-[#FFEA79] border-1 border-black p-2 m-2 rounded-lg cursor-pointer transition-colors"
                           onClick={() => setIsPopupOpen(true)}
                         >
                           <Image
@@ -203,7 +203,7 @@ export default function Saved() {
                         </button>
 
                         <button
-                          className="w-10 h-10 bg-[#E5F3F3] hover:bg-[#9ABCFF] border border-black p-2 m-2 rounded-lg cursor-pointer transition-colors"
+                          className="w-10 h-10 bg-[#E5F3F3] hover:bg-[#9ABCFF] border-1 border-black p-2 m-2 rounded-lg cursor-pointer transition-colors"
                           onClick={() => handleRename(index)}
                         >
                           <Image
@@ -216,7 +216,7 @@ export default function Saved() {
                         </button>
 
                         <button
-                          className="w-10 h-10 bg-[#E5F3F3] hover:bg-[#FFA3A3] border border-black p-2 m-2 rounded-lg cursor-pointer transition-colors"
+                          className="w-10 h-10 bg-[#E5F3F3] hover:bg-[#FFA3A3] border-1 border-black p-2 m-2 rounded-lg cursor-pointer transition-colors"
                           onClick={() => {
                             setIsDeletePopupOpen(true);
                             setTimetableToDelete(tt.name);
