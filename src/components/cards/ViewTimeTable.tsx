@@ -1,32 +1,29 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 
 import CompoundTable from "@/components//ui/CompoundTable";
 import { ZButton } from "@/components/ui/Buttons";
 import { useTimetable } from "@/lib/TimeTableContext";
 import Image from "next/image";
 
-const DUMMY_USER_ID = "665f1e8e2f8b9b0012345678";
-
-function getVisibleIndexes(selected: number, total: number) {
-  const maxVisible = 5;
-  const shift = 2;
-  const start = Math.max(1, Math.min(selected - shift, total - maxVisible + 1));
-  const end = Math.min(total, start + maxVisible - 1);
-  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-}
-
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  // Use next-auth to get the session
+  const { data: session } = useSession();
+  const owner = session?.user?.email || null;
+  console.log("Session Data:", owner);
 
   const timetableNumber = selectedIndex + 1;
   const allTimatables = timetableData ? timetableData : [[]];
   const timetableCount = allTimatables.length;
   const selectedData = allTimatables[selectedIndex] || [];
   const visibleIndexes = getVisibleIndexes(timetableNumber, timetableCount);
+  console.log
 
   // console.log("Timetable Data:", timetableData);
   // console.log("Selected Data:", selectedData);
@@ -51,10 +48,12 @@ export default function ViewTimeTable() {
       const res = await axios.post("/api/save-timetable", {
         title: `Saved Timetable ${selectedIndex + 1}`,
         slots,
-        owner: DUMMY_USER_ID,
+        owner: owner, 
       });
+      console.log("Save response:", res.data);
+      
       console.log("selectedData:", selectedData);
-console.log("slots to save:", slots);
+      //console.log("slots to save:", slots);
       if (res.data.success) {
         alert("Timetable saved!");
       } else {
@@ -191,4 +190,12 @@ console.log("slots to save:", slots);
       </div>
     </div>
   );
+}
+
+function getVisibleIndexes(selected: number, total: number) {
+  const maxVisible = 5;
+  const shift = 2;
+  const start = Math.max(1, Math.min(selected - shift, total - maxVisible + 1));
+  const end = Math.min(total, start + maxVisible - 1);
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
 }

@@ -2,7 +2,7 @@ import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface ITimetable extends Document {
   title: string;
-  owner: Types.ObjectId;
+  owner: string;
   isPublic: boolean;
   shareId: string;
   slots: {
@@ -16,7 +16,7 @@ export interface ITimetable extends Document {
 const timetableSchema = new Schema<ITimetable>(
   {
     title: { type: String, required: true },
-    owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    owner: { type: String, required: true },
     isPublic: { type: Boolean, default: false },
     shareId: { type: String, unique: true, sparse: true },
     slots: [
@@ -33,4 +33,3 @@ const timetableSchema = new Schema<ITimetable>(
 
 export default mongoose.models.Timetable ||
   mongoose.model<ITimetable>("Timetable", timetableSchema);
-  
