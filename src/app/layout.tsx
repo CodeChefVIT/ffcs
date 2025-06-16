@@ -1,5 +1,6 @@
 import { Pangolin, Poppins, Inter } from "next/font/google";
 import "./globals.css";
+import SessionProviderWrapper from "./SessionProvider";
 
 const pangolin = Pangolin({
   weight: "400",
@@ -41,7 +42,7 @@ export default function RootLayout({
       <body
         className={`${pangolin.variable} ${poppins.variable} ${inter.variable} antialiased bg-[#CEE4E5] select-none`}
       >
-        {children}
+        <SessionProviderWrapper>{children}</SessionProviderWrapper>
       </body>
     </html>
   );
