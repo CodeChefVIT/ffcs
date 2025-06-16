@@ -407,7 +407,7 @@ export default function Popup({
                   color="green"
                   image="/icons/send.svg"
                   forceColor="#C1FF83"
-                  onClick={() => copy(dataBody || "")}
+                  onClick={action}
                 />
                 <ZButton
                   type="regular"
@@ -415,7 +415,7 @@ export default function Popup({
                   color="yellow"
                   image="/icons/download.svg"
                   forceColor="#FFEA79"
-                  onClick={action}
+                  
                 />
               </div>
             </div>

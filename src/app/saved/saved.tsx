@@ -8,13 +8,13 @@ import { ZButton } from "@/components/ui/Buttons";
 import Footer from "@/components/ui/Footer";
 import Popup from "@/components/ui/Popup";
 import Image from "next/image";
+import { useRef } from "react";
 
 async function fetchTimetablesByOwner(owner: string) {
   const res = await fetch(`/api/timetables?owner=${encodeURIComponent(owner)}`);
   if (!res.ok) throw new Error("Failed to fetch timetables");
   return res.json();
 }
-
 
 interface TimetableEntry {
   _id: string;
@@ -39,11 +39,14 @@ export default function Saved() {
 
   // Popup state
   const [showPopup, setShowPopup] = useState(false);
-  const [popupType, setPopupType] = useState<"view_tt" | "delete_tt" | "rename_tt" | null>(null);
+  const [popupType, setPopupType] = useState<"view_tt" | "delete_tt" | "rename_tt"  | null>(null);
   const [popupSlots, setPopupSlots] = useState<any[]>([]);
   const [popupTitle, setPopupTitle] = useState<string>("");
   const [selectedTT, setSelectedTT] = useState<TimetableEntry | null>(null);
   const [renameValue, setRenameValue] = useState<string>("");
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
+  const [shareLoading, setShareLoading] = useState(false);
+  const [copyLoading, setCopyLoading] = useState(false);
 
   useEffect(() => {
     if (!userEmail) return;
@@ -91,6 +94,60 @@ export default function Saved() {
     setSelectedTT(null);
   }
 
+  // Share timetable
+  async function handleShare(tt: TimetableEntry) {
+    setShareLoading(true);
+    try {
+      // PATCH to set isPublic true
+      const patchRes = await fetch(`/api/timetables/${tt._id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isPublic: true }),
+      });
+      if (!patchRes.ok) throw new Error("Failed to update timetable");
+
+      // GET the updated timetable to get shareId
+      const getRes = await fetch(`/api/timetables/${tt._id}`);
+      if (!getRes.ok) throw new Error("Failed to fetch timetable");
+      const updated = await getRes.json();
+
+      if (!updated.shareId) throw new Error("No shareId found");
+
+      setShareUrl(`${window.location.origin}/share/${updated.shareId}`);
+      
+      setShowPopup(true);
+    } catch (e) {
+      alert("Failed to generate share link.");
+    } finally {
+      setShareLoading(false);
+    }
+  }
+
+  // Copy share link from view popup
+  async function handleCopyLink(tt: TimetableEntry) {
+    setCopyLoading(true);
+    try {
+        // Set isPublic to true
+      await fetch(`/api/timetables/${tt._id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isPublic: true }),
+      });
+
+      // Fetch updated timetable to get shareId
+      const res = await fetch(`/api/timetables/${tt._id}`);
+      const updated = await res.json();
+      if (!updated.shareId) throw new Error("No shareId found");
+
+      const url = `${window.location.origin}/share/${updated.shareId}`;
+      await navigator.clipboard.writeText(url);
+      // Optionally show a toast/snackbar here
+    } catch (e) {
+      alert("Failed to copy share link.");
+    } finally {
+      setCopyLoading(false);
+    }
+  }
 
   return (
     <div className="flex flex-col min-h-screen relative select-none">
@@ -157,8 +214,17 @@ export default function Saved() {
                         setPopupSlots(convertSlots(tt.slots));
                         setPopupTitle(tt.title);
                         setPopupType("view_tt");
+                        setSelectedTT(tt);
                         setShowPopup(true);
                       }}
+                    />
+                    <ZButton
+                      type="regular"
+                      text="Share"
+                      color="green"
+                      image="/icons/send.svg"
+                      onClick={() => handleShare(tt)}
+                      disabled={shareLoading}
                     />
                     <ZButton
                       type="regular"
@@ -194,14 +260,16 @@ export default function Saved() {
       <Footer />
 
       {/* Popups */}
-      {showPopup && popupType === "view_tt" && (
+      {showPopup && popupType === "view_tt" && selectedTT && (
         <Popup
           type="view_tt"
           dataTitle={popupTitle}
           dataTT={popupSlots}
           closeLink={() => setShowPopup(false)}
+          action={() => handleCopyLink(selectedTT)}
         />
       )}
+    
       {showPopup && popupType === "delete_tt" && selectedTT && (
         <Popup
           type="delete_tt"
