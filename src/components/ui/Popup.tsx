@@ -49,7 +49,7 @@ const typeColorMap = {
   delete_tt: "red",
   view_tt: "blue",
   logout: "red",
-  rename_tt: "green",
+  rename_tt: "purple", 
 };
 
 const typeTitleMap = {
