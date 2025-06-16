@@ -127,7 +127,7 @@ export default function Navbar({ page }: NavbarProps) {
               <ZButton
                 type="long"
                 text={session?.user?.name || "Log Out"}
-                color="red"
+                color="green"
                 onClick={() => setShowLogoutPopup(true)}
               />
             )}
@@ -137,7 +137,7 @@ export default function Navbar({ page }: NavbarProps) {
               <ZButton
                 type="regular"
                 text={session?.user?.name || "Log Out"}
-                color="red"
+                color="green"
                 onClick={() => signOut({ callbackUrl: "/" })}
               />
             )}
