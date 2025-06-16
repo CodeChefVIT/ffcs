@@ -4,10 +4,10 @@ import Timetable from "@/models/timetable";
 
 export async function DELETE(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
-  const { id } = (await context).params;
+  const { id } = await params;
 
   try {
     await Timetable.findByIdAndDelete(id);
@@ -19,14 +19,16 @@ export async function DELETE(
 
 export async function PATCH(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
-  const { id } = (await context).params;
+  const { id } = await params;
   const body = await req.json();
+
   const update: any = {};
   if (body.title !== undefined) update.title = body.title;
   if (body.isPublic !== undefined) update.isPublic = body.isPublic;
+
   try {
     await Timetable.findByIdAndUpdate(id, update);
     return NextResponse.json({ success: true });
@@ -37,10 +39,11 @@ export async function PATCH(
 
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await dbConnect();
-  const { id } = (await context).params;
+  const { id } = await params;
+
   try {
     const timetable = await Timetable.findById(id).lean();
     if (!timetable) {
