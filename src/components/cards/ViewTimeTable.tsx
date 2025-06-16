@@ -9,6 +9,7 @@ import { ZButton } from "@/components/ui/Buttons";
 import { useTimetable } from "@/lib/TimeTableContext";
 import Image from "next/image";
 import Popup from "@/components/ui/Popup"; 
+import AlertModal from "@/components/ui/AlertModal";
 
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
@@ -18,6 +19,8 @@ export default function ViewTimeTable() {
   const [shareLink, setShareLink] = useState<string>("");
   const [showSavePopup, setShowSavePopup] = useState(false);
   const [saveTTName, setSaveTTName] = useState<string>("");
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMsg, setAlertMsg] = useState("");
 
   const { data: session } = useSession();
   const owner = session?.user?.email || null;
@@ -60,12 +63,12 @@ export default function ViewTimeTable() {
       console.log("selectedData:", selectedData);
       //console.log("slots to save:", slots);
       if (res.data.success) {
-        alert("Timetable saved!");
+        showAlert("Timetable saved!");
       } else {
-        alert("Failed to save timetable.");
+        showAlert("Failed to save timetable.");
       }
     } catch (e) {
-      alert("Error saving timetable.");
+      showAlert("Error saving timetable.");
     }
   }
 
@@ -124,6 +127,11 @@ export default function ViewTimeTable() {
       onClick: withLoginCheck(() => console.log("Download clicked"), true),
     },
   ];
+
+  function showAlert(msg: string) {
+    setAlertMsg(msg);
+    setAlertOpen(true);
+  }
 
   return (
     <div
@@ -264,6 +272,12 @@ export default function ViewTimeTable() {
           onInputChange={setSaveTTName}
         />
       )}
+
+      <AlertModal
+        open={alertOpen}
+        message={alertMsg}
+        onClose={() => setAlertOpen(false)}
+      />
     </div>
   );
 }
