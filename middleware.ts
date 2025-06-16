@@ -1,19 +1,17 @@
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-
-    if (!session) {
-        return NextResponse.redirect(new URL('/',request.url))
-    }
-
-    return NextResponse.next()
+  const token = await getToken({
+    req: request,
+    secret: process.env.AUTH_SECRET,
+  });
+  if (!token) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+  return NextResponse.next();
 }
 
 export const config = {
-    matcher: ["/user/favorites"],
-} 
+  matcher: ["/user/favorites"],
+};
