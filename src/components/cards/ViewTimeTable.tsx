@@ -105,7 +105,7 @@ export default function ViewTimeTable() {
       label: "Download",
       color: "yellow",
       icon: "/icons/download.svg",
-      onClick: withLoginCheck(() => console.log("Download clicked"), true), // skip login check
+      onClick: withLoginCheck(() => console.log("Download clicked"), true), 
     },
   ];
 
