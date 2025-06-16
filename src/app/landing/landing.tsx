@@ -26,7 +26,7 @@ export default function View() {
         />
       </div>
 
-      <Navbar page="landing" loggedin={false} />
+      <Navbar page="landing" />
 
       <Hero />
 
@@ -46,13 +46,12 @@ export default function View() {
             "Professor Name 2",
             "Dr. G Vishwanathan",
           ]}
-          onConfirm={() => { }}
-          onReset={() => { }}
+          onConfirm={() => {}}
+          onReset={() => {}}
         />
       </div>
 
       <TimetableProvider>
-
         <div className="w-full px-8">
           <CourseCard />
         </div>
@@ -60,7 +59,6 @@ export default function View() {
         <div className="w-screen p-0 m-0">
           <ViewTimeTable />
         </div>
-
       </TimetableProvider>
 
       <div className="w-full max-w-5xl px-4 sm:px-6 lg:px-12 m-32">
@@ -77,4 +75,4 @@ export default function View() {
       <Footer />
     </div>
   );
-};
+}

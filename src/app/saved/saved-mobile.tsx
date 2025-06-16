@@ -7,7 +7,6 @@ import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import { getFavourites } from "@/services/api"; // Service function
 
-
 interface FavouriteTimetable {
   name: string;
   id: string;
@@ -46,9 +45,11 @@ export default function SavedMobile() {
         />
       </div>
 
-      <Navbar page="mobile" loggedin={true} />
+      <Navbar page="mobile" />
 
-      <div className="text-4xl mb-8 mt-28 text-black font-pangolin">Saved Timetables</div>
+      <div className="text-4xl mb-8 mt-28 text-black font-pangolin">
+        Saved Timetables
+      </div>
 
       <ul className="w-full space-y-4 px-6">
         {timetables.map((item, index) => (
@@ -74,7 +75,8 @@ export default function SavedMobile() {
 
       {timetables.length === 0 && (
         <div className="mx-auto my-auto text-center text-sm font-poppins font-semibold text-black/70">
-          You do not have any saved timetables.<br />
+          You do not have any saved timetables.
+          <br />
           Create and save from the desktop website.
         </div>
       )}

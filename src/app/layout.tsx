@@ -1,5 +1,6 @@
 import { Pangolin, Poppins, Inter } from "next/font/google";
 import "./globals.css";
+import SessionProviderWrapper from "./SessionProvider";
 
 const pangolin = Pangolin({
   weight: "400",
@@ -22,24 +23,26 @@ const inter = Inter({
   display: "swap",
 });
 
-
 export const metadata = {
-  title: 'FFCS-inator',
-  description: '',
+  title: "FFCS-inator",
+  description: "",
   icons: {
-    icon: '/logo_ffcs.svg',
+    icon: "/logo_ffcs.svg",
   },
 };
 
-
-export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <head>
         <title>FFCS-inator</title>
       </head>
-      <body className={`${pangolin.variable} ${poppins.variable} ${inter.variable} antialiased bg-[#CEE4E5] select-none`}>
-        {children}
+      <body
+        className={`${pangolin.variable} ${poppins.variable} ${inter.variable} antialiased bg-[#CEE4E5] select-none`}
+      >
+        <SessionProviderWrapper>{children}</SessionProviderWrapper>
       </body>
     </html>
   );

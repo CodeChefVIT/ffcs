@@ -5,15 +5,22 @@ import React, { useState } from "react";
 import { BasicToggleButton, GoogleLoginButton, ZButton } from "./Buttons";
 import CompoundTable from "./CompoundTable";
 
-
 type dataProps = {
   code: string;
   slot: string;
   name: string;
-}
+};
 
 type PopupProps = {
-  type: 'login' | 'rem_course' | 'email_tt' | 'share_tt' | 'save_tt' | 'delete_tt' | 'view_tt';
+  type:
+    | "login"
+    | "rem_course"
+    | "email_tt"
+    | "share_tt"
+    | "save_tt"
+    | "delete_tt"
+    | "view_tt"
+    | "logout";
   dataTitle?: string;
   dataBody?: string;
   dataTT?: dataProps[];
@@ -24,41 +31,44 @@ type PopupProps = {
 };
 
 const colorMap = {
-  red: ['#FFD3D3', '#FF8C8C'],
-  yellow: ['#FFF8D1', '#FFEA79'],
-  green: ['#E5FFDE', '#ABDE9F'],
-  blue: ['#E2F2F9', '#8BD5FF'],
-  purple: ['#E4E9FC', '#94ACFF'],
+  red: ["#FFD3D3", "#FF8C8C"],
+  yellow: ["#FFF8D1", "#FFEA79"],
+  green: ["#E5FFDE", "#ABDE9F"],
+  blue: ["#E2F2F9", "#8BD5FF"],
+  purple: ["#E4E9FC", "#94ACFF"],
 };
 
 const typeColorMap = {
-  login: 'yellow',
-  rem_course: 'red',
-  email_tt: 'purple',
-  share_tt: 'blue',
-  save_tt: 'green',
-  delete_tt: 'red',
-  view_tt: 'blue',
+  login: "yellow",
+  rem_course: "red",
+  email_tt: "purple",
+  share_tt: "blue",
+  save_tt: "green",
+  delete_tt: "red",
+  view_tt: "blue",
+  logout: "red",
 };
 
 const typeTitleMap = {
-  login: 'Sign In',
-  rem_course: 'Remove Course',
-  email_tt: 'Email Report',
-  share_tt: 'Share Timetable',
-  save_tt: 'Save Timetable',
-  delete_tt: 'Delete Timetable',
-  view_tt: '',
+  login: "Sign In",
+  rem_course: "Remove Course",
+  email_tt: "Email Report",
+  share_tt: "Share Timetable",
+  save_tt: "Save Timetable",
+  delete_tt: "Delete Timetable",
+  view_tt: "",
+  logout: "Log Out",
 };
 
 const typeTextMap = {
-  login: 'Please log-in to save and share your time-tables.',
-  rem_course: 'Are you sure you want to remove this course?',
-  email_tt: 'A report has been sent to your email ID.',
-  share_tt: 'Share your timetable with anyone.',
-  save_tt: 'Save this timetable in your collection.',
-  delete_tt: 'Are you sure you want to delete this timetable?',
-  view_tt: '',
+  login: "Please log-in to save and share your time-tables.",
+  rem_course: "Are you sure you want to remove this course?",
+  email_tt: "A report has been sent to your email ID.",
+  share_tt: "Share your timetable with anyone.",
+  save_tt: "Save this timetable in your collection.",
+  delete_tt: "Are you sure you want to delete this timetable?",
+  view_tt: "",
+  logout: "Are you sure you want to log out?",
 };
 
 function copy(text: string) {
@@ -67,19 +77,31 @@ function copy(text: string) {
   }
 }
 
-export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, action, shareEnabledDefault, shareSwitchAction }: PopupProps) {
+export default function Popup({
+  type,
+  dataTitle,
+  dataBody,
+  dataTT,
+  closeLink,
+  action,
+  shareEnabledDefault,
+  shareSwitchAction,
+}: PopupProps) {
+  const theme = colorMap[typeColorMap[type] as keyof typeof colorMap] || [
+    "#E4E9FC",
+    "#94ACFF",
+  ];
+  const title = typeTitleMap[type] || dataTitle || "";
+  const text = typeTextMap[type] || "";
 
-  const theme = colorMap[typeColorMap[type] as keyof typeof colorMap] || ['#E4E9FC', '#94ACFF'];
-  const title = typeTitleMap[type] || dataTitle || '';
-  const text = typeTextMap[type] || '';
-
-  const shareEnabled = shareEnabledDefault !== undefined ? shareEnabledDefault : true;
-  const [shareState, setShareState] = useState<"on" | "off">(shareEnabled ? "on" : "off");
-
+  const shareEnabled =
+    shareEnabledDefault !== undefined ? shareEnabledDefault : true;
+  const [shareState, setShareState] = useState<"on" | "off">(
+    shareEnabled ? "on" : "off"
+  );
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#425D5F]/75 backdrop-blur-xs z-50 select-none">
-
       <div
         style={{ backgroundColor: theme[0] }}
         className={`
@@ -94,7 +116,6 @@ export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, ac
           min-w-120 min-h-48
         `}
       >
-
         <div
           style={{ backgroundColor: theme[1] }}
           className={`
@@ -109,11 +130,15 @@ export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, ac
             h-12
           `}
         >
-
           {/* 3 circles */}
           <div className="flex-1 text-left flex items-center justify-start pl-4">
             <div className="flex gap-2">
-              {[...Array(3)].map((_, i) => (<div key={i} className="w-4 h-4 rounded-full bg-black opacity-50" />))}
+              {[...Array(3)].map((_, i) => (
+                <div
+                  key={i}
+                  className="w-4 h-4 rounded-full bg-black opacity-50"
+                />
+              ))}
             </div>
           </div>
 
@@ -123,7 +148,11 @@ export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, ac
           </div>
 
           {/* close button */}
-          {(!(type == 'delete_tt' || type == 'rem_course' || type == 'email_tt')) && (
+          {!(
+            type == "delete_tt" ||
+            type == "rem_course" ||
+            type == "email_tt"
+          ) && (
             <div className="flex-1 text-right flex items-center justify-end">
               <div
                 className={`
@@ -150,12 +179,10 @@ export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, ac
               </div>
             </div>
           )}
-
         </div>
 
         <div className="flex flex-col items-center justify-center text-lg font-poppins font-regular p-8">
-
-          {(type == 'login') && (
+          {type == "login" && (
             <div className="flex flex-col items-center justify-center relative">
               {/* Top-left */}
               <div className="absolute -top-0 -left-12 -rotate-[5deg] z-[1]">
@@ -217,7 +244,7 @@ export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, ac
             </div>
           )}
 
-          {(type == 'share_tt') && (
+          {type == "share_tt" && (
             <div className="flex flex-col items-center justify-center">
               <div className="break-words w-full text-center mt-2 mb-4">
                 {text}
@@ -228,71 +255,118 @@ export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, ac
                   <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-[#606060] font-semibold">
                     {dataBody}
                   </div>
-                  <ZButton type="regular" text="Copy" color="blue" forceColor={theme[1]} onClick={() => copy(dataBody || "")} />
+                  <ZButton
+                    type="regular"
+                    text="Copy"
+                    color="blue"
+                    forceColor={theme[1]}
+                    onClick={() => copy(dataBody || "")}
+                  />
                 </div>
               )}
 
               <div className="flex flex-row items-center justify-center gap-4 mt-4 mb-4">
-                <div className={`${shareState === "on" ? "text-[#0E595D]" : "text-[#661800]"} text-xl font-semibold mt-2 mb-2`}>
+                <div
+                  className={`${
+                    shareState === "on" ? "text-[#0E595D]" : "text-[#661800]"
+                  } text-xl font-semibold mt-2 mb-2`}
+                >
                   Sharing Link is {shareState === "on" ? "Public" : "Private"}
                 </div>
                 <BasicToggleButton
                   isDefaultOn={shareEnabled}
-                  onToggle={
-                    (state: "on" | "off") => {
-                      setShareState(state);
-                      if (shareSwitchAction) shareSwitchAction(state);
-                      else alert("No action provided for share switch toggle.");
-                    }
-                  }
+                  onToggle={(state: "on" | "off") => {
+                    setShareState(state);
+                    if (shareSwitchAction) shareSwitchAction(state);
+                    else alert("No action provided for share switch toggle.");
+                  }}
                 />
               </div>
-
             </div>
           )}
 
-          {(type == 'rem_course') && (
+          {type == "rem_course" && (
             <div>
               <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
-                {text}<br />
-                {dataBody && <span className="font-semibold">&quot;{dataBody}&quot;</span>}
+                {text}
+                <br />
+                {dataBody && (
+                  <span className="font-semibold">&quot;{dataBody}&quot;</span>
+                )}
               </div>
               <div className="flex flex-row items-center justify-center gap-4 mb-4">
-                <ZButton type="regular" text="Cancel" color="yellow" forceColor="#FFEA79" onClick={closeLink} />
-                <ZButton type="regular" text="Remove" color="red" forceColor={theme[1]} onClick={action} />
+                <ZButton
+                  type="regular"
+                  text="Cancel"
+                  color="yellow"
+                  forceColor="#FFEA79"
+                  onClick={closeLink}
+                />
+                <ZButton
+                  type="regular"
+                  text="Remove"
+                  color="red"
+                  forceColor={theme[1]}
+                  onClick={action}
+                />
               </div>
             </div>
           )}
 
-          {(type == 'delete_tt') && (
+          {type == "delete_tt" && (
             <div>
               <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
-                {text}<br />
-                {dataBody && <span className="font-semibold">&quot;{dataBody}&quot;</span>}
+                {text}
+                <br />
+                {dataBody && (
+                  <span className="font-semibold">&quot;{dataBody}&quot;</span>
+                )}
               </div>
               <div className="flex flex-row items-center justify-center gap-4 mb-4">
-                <ZButton type="regular" text="Cancel" color="yellow" forceColor="#FFEA79" onClick={closeLink} />
-                <ZButton type="regular" text="Delete" color="red" forceColor={theme[1]} onClick={action} />
+                <ZButton
+                  type="regular"
+                  text="Cancel"
+                  color="yellow"
+                  forceColor="#FFEA79"
+                  onClick={closeLink}
+                />
+                <ZButton
+                  type="regular"
+                  text="Delete"
+                  color="red"
+                  forceColor={theme[1]}
+                  onClick={action}
+                />
               </div>
             </div>
           )}
 
-          {(type == 'email_tt') && (
+          {type == "email_tt" && (
             <div>
               <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
-                {text}<br />
-                {dataBody && <span className="font-semibold">&quot;{dataBody}&quot;</span>}
+                {text}
+                <br />
+                {dataBody && (
+                  <span className="font-semibold">&quot;{dataBody}&quot;</span>
+                )}
               </div>
               <div className="flex flex-row items-center justify-center gap-4 mb-2">
-                <ZButton type="long" text="OK" color="blue" forceColor={theme[1]} onClick={closeLink} />
+                <ZButton
+                  type="long"
+                  text="OK"
+                  color="blue"
+                  forceColor={theme[1]}
+                  onClick={closeLink}
+                />
               </div>
             </div>
           )}
 
-          {(type == 'save_tt') && (
+          {type == "save_tt" && (
             <div>
               <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
-                {text}<br />
+                {text}
+                <br />
               </div>
               <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
                 <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-black font-semibold">
@@ -303,25 +377,72 @@ export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, ac
                     value={dataBody}
                   />
                 </div>
-                <ZButton type="regular" text="Save" color="green" forceColor={theme[1]} onClick={action} />
+                <ZButton
+                  type="regular"
+                  text="Save"
+                  color="green"
+                  forceColor={theme[1]}
+                  onClick={action}
+                />
               </div>
             </div>
           )}
 
-          {(type == 'view_tt') && (
+          {type == "view_tt" && (
             <div>
               <div className="break-words max-w-[80vw] w-full text-center p-2 -mt-4">
                 <CompoundTable data={dataTT || []} />
               </div>
               <div className="flex flex-row items-center justify-center gap-4 mb-4">
-                <ZButton type="regular" text="Copy Link" color="green" image="/icons/send.svg" forceColor="#C1FF83" onClick={() => copy(dataBody || "")} />
-                <ZButton type="regular" text="Download" color="yellow" image="/icons/download.svg" forceColor="#FFEA79" onClick={action} />
+                <ZButton
+                  type="regular"
+                  text="Copy Link"
+                  color="green"
+                  image="/icons/send.svg"
+                  forceColor="#C1FF83"
+                  onClick={() => copy(dataBody || "")}
+                />
+                <ZButton
+                  type="regular"
+                  text="Download"
+                  color="yellow"
+                  image="/icons/download.svg"
+                  forceColor="#FFEA79"
+                  onClick={action}
+                />
               </div>
             </div>
           )}
 
+          {type == "logout" && (
+            <div>
+              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
+                {text}
+                <br />
+                {dataBody && (
+                  <span className="font-semibold">&quot;{dataBody}&quot;</span>
+                )}
+              </div>
+              <div className="flex flex-row items-center justify-center gap-4 mb-4">
+                <ZButton
+                  type="regular"
+                  text="Cancel"
+                  color="yellow"
+                  forceColor="#FFEA79"
+                  onClick={closeLink}
+                />
+                <ZButton
+                  type="regular"
+                  text="Log Out"
+                  color="red"
+                  forceColor={theme[1]}
+                  onClick={action}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
-};
+}
