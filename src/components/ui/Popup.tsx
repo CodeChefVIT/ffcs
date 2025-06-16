@@ -422,13 +422,6 @@ export default function Popup({
                   forceColor={theme[1]}
                   onClick={action}
                 />
-                <ZButton
-                  type="regular"
-                  text="Cancel"
-                  color="yellow"
-                  forceColor="#FFEA79"
-                  onClick={closeLink}
-                />
               </div>
             </div>
           )}
