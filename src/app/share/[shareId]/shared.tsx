@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
+import axios from "axios";
 
 import CompoundTable from "@/components/ui/CompoundTable";
 import Navbar from "@/components/ui/Navbar";
@@ -29,13 +30,10 @@ export default function SharedTimetablePage() {
 
   useEffect(() => {
     if (!shareId) return;
-    fetch(`/api/shared-timetable/${shareId}`)
-      .then(async (res) => {
-        if (!res.ok) {
-          setNotFound(true);
-          return;
-        }
-        const json = await res.json();
+    axios
+      .get(`/api/shared-timetable/${shareId}`)
+      .then((res) => {
+        const json = res.data;
         if (json && json.timetable && Array.isArray(json.timetable.slots)) {
           setTitle(json.timetable.title || "");
           setData(
