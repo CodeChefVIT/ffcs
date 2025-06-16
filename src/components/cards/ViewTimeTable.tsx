@@ -14,6 +14,8 @@ export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [showSharePopup, setShowSharePopup] = useState(false);
+  const [shareLink, setShareLink] = useState<string>("");
 
   const { data: session } = useSession();
   const owner = session?.user?.email || null;
@@ -65,7 +67,16 @@ export default function ViewTimeTable() {
     }
   }
 
-  // Wrapper to check login before action
+  async function handleShare() {
+   
+    const timetable = selectedData[0]; 
+  
+    // setShareLink(`https://yourdomain.com/share/${shareId}`);
+    setShareLink(window.location.href); 
+    setShowSharePopup(true);
+  }
+
+  
   function withLoginCheck(action: () => void, skipCheck = false) {
     return () => {
       if (!owner && !skipCheck) {
@@ -99,7 +110,7 @@ export default function ViewTimeTable() {
       label: "Share",
       color: "green",
       icon: "/icons/send.svg",
-      onClick: withLoginCheck(() => console.log("Share clicked")),
+      onClick: withLoginCheck(handleShare),
     },
     {
       label: "Download",
@@ -216,6 +227,14 @@ export default function ViewTimeTable() {
           </div>
         </div>
       </div>
+
+      {showSharePopup && (
+        <Popup
+          type="share_tt"
+          dataBody={shareLink}
+          closeLink={() => setShowSharePopup(false)}
+        />
+      )}
 
       {showLoginPopup && (
         <Popup
