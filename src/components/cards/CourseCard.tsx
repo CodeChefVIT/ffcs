@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import { useTimetable } from "../../lib/TimeTableContext";
 
@@ -10,94 +10,15 @@ import Image from "next/image";
 import { generateTT } from "@/lib/utils";
 import { fullCourseData } from "@/lib/type";
 
+type CourseCardProps = {
+  selectedCourses: fullCourseData[];
+};
 
-const courseData: fullCourseData[] = [
-  {
-    id: "course_1",
-    courseType: "both",
-    courseCode: "BCSE102L",
-    courseName: "Structured and Object-Oriented Programming",
-    courseCodeLab: "BCSE102P",
-    courseNameLab: "Structured and Object-Oriented Programming Lab",
-    courseSlots: [
-      {
-        slotName: "G1",
-        slotFaculties: [
-          { facultyName: "Fac 1", facultyLabSlot: "L31+L32" },
-          { facultyName: "Fac 2", facultyLabSlot: "L43+L44" },
-          { facultyName: "Fac 3", facultyLabSlot: "L53+L54" },
-          { facultyName: "Fac 4", facultyLabSlot: "L55+L56" },
-        ]
-      },
-      {
-        slotName: "F1",
-        slotFaculties: [
-          { facultyName: "Fac 5", facultyLabSlot: "L37+L38" },
-          { facultyName: "Fac 6", facultyLabSlot: "L39+L40" },
-          { facultyName: "Fac 7", facultyLabSlot: "L45+L46" },
-          { facultyName: "Fac 8", facultyLabSlot: "L59+L60" },
-        ]
-      },
-    ],
-  },
-  {
-    id: "course_2",
-    courseType: "th",
-    courseCode: "BCSE205L",
-    courseName: "Theory of Computation",
-    courseSlots: [
-      {
-        slotName: "A1+TA1",
-        slotFaculties: [
-          { facultyName: "Fac 9" },
-          { facultyName: "Fac 10" },
-          { facultyName: "Fac 11" },
-        ]
-      },
-      {
-        slotName: "F1+TF1",
-        slotFaculties: [
-          { facultyName: "Fac 12" },
-          { facultyName: "Fac 13" },
 
-        ]
-      },
-    ],
-  },
-  {
-    id: "course_3",
-    courseType: "lab",
-    courseCode: "BCSE301P",
-    courseName: "Database Management Systems Lab",
-    courseSlots: [
-      {
-        slotName: "L5+L6",
-        slotFaculties: [
-          { facultyName: "Fac 14" },
-          { facultyName: "Fac 15" },
-        ]
-      },
-      {
-        slotName: "L13+L14",
-        slotFaculties: [
-          { facultyName: "Fac 16" },
-        ]
-      },
-      {
-        slotName: "L21+L22",
-        slotFaculties: [
-          { facultyName: "Fac 17" },
-          { facultyName: "Fac 18" },
-        ]
-      },
-    ],
-  },
-];
-
-export default function CourseCard() {
+export default function CourseCard({ selectedCourses }: CourseCardProps) {
   const { setTimetableData } = useTimetable();
 
-  const [courses, setCourses] = useState<fullCourseData[]>(courseData);
+  const [courses, setCourses] = useState<fullCourseData[]>(selectedCourses);
   const draggedItemIndex = useRef<number | null>(null);
   const dragOverItemIndex = useRef<number | null>(null);
 
@@ -178,6 +99,11 @@ export default function CourseCard() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    setCourses(selectedCourses);
+    console.log(selectedCourses)
+  }, [selectedCourses]);
 
   return (
     <div className="px-12">
