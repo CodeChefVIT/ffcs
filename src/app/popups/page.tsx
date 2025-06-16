@@ -23,6 +23,11 @@ const data = [
   { code: "BBRT101P", slot: "L47+L48", name: "Ishan Jindal" },
 ];
 
+const handleShareSwitchAction = (state: "on" | "off") => {
+  if (state == 'on') alert("yippee");
+  else alert("oh no");
+}
+
 export default function Home() {
   const [popupType, setPopupType] = useState<PopupType>(null);
   const closePopup = () => setPopupType(null);
@@ -36,7 +41,7 @@ export default function Home() {
       case "email":
         return <Popup type="email_tt" closeLink={closePopup} />;
       case "share":
-        return <Popup type="share_tt" closeLink={closePopup} dataBody="ffcs.codechefvit.com/share?id=ABC123" />;
+        return <Popup type="share_tt" closeLink={closePopup} dataBody="ffcs.codechefvit.com/share?id=ABC123" shareEnabledDefault={false} shareSwitchAction={handleShareSwitchAction} />;
       case "save":
         return <Popup type="save_tt" closeLink={closePopup} action={closePopup} />;
       case "delete":
