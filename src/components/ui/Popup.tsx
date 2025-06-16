@@ -464,6 +464,30 @@ export default function Popup({
               </div>
             </div>
           )}
+
+          {type == "logout" && (
+            <div>
+              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
+                {text}
+              </div>
+              <div className="flex flex-row items-center justify-center gap-4 mb-4">
+                <ZButton
+                  type="regular"
+                  text="Cancel"
+                  color="yellow"
+                  forceColor="#FFEA79"
+                  onClick={closeLink}
+                />
+                <ZButton
+                  type="regular"
+                  text="Logout"
+                  color="red"
+                  forceColor={theme[1]}
+                  onClick={action}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
