@@ -13,14 +13,14 @@ type dataProps = {
 
 type PopupProps = {
   type:
-    | "login"
-    | "rem_course"
-    | "email_tt"
-    | "share_tt"
-    | "save_tt"
-    | "delete_tt"
-    | "view_tt"
-    | "logout";
+  | "login"
+  | "rem_course"
+  | "email_tt"
+  | "share_tt"
+  | "save_tt"
+  | "delete_tt"
+  | "view_tt"
+  | "logout";
   dataTitle?: string;
   dataBody?: string;
   dataTT?: dataProps[];
@@ -153,11 +153,12 @@ export default function Popup({
           {!(
             type == "delete_tt" ||
             type == "rem_course" ||
-            type == "email_tt"
+            type == "email_tt" ||
+            type == "logout"
           ) && (
-            <div className="flex-1 text-right flex items-center justify-end">
-              <div
-                className={`
+              <div className="flex-1 text-right flex items-center justify-end">
+                <div
+                  className={`
                 w-12 h-12
                 bg-[#FF9A9A]
                 rounded-tr-3xl
@@ -167,20 +168,20 @@ export default function Popup({
                 outline-4 outline-black
                 pt-1 pr-1
                 `}
-                onClick={() => closeLink()}
-              >
-                <Image
-                  src="/icons/cross.svg"
-                  alt="close"
-                  width={32}
-                  height={32}
-                  draggable={false}
-                  unselectable="on"
-                  style={{ userSelect: "none", pointerEvents: "auto" }}
-                />
+                  onClick={() => closeLink()}
+                >
+                  <Image
+                    src="/icons/cross.svg"
+                    alt="close"
+                    width={32}
+                    height={32}
+                    draggable={false}
+                    unselectable="on"
+                    style={{ userSelect: "none", pointerEvents: "auto" }}
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
 
         <div className="flex flex-col items-center justify-center text-lg font-poppins font-regular p-8">
@@ -269,9 +270,12 @@ export default function Popup({
 
               <div className="flex flex-row items-center justify-center gap-4 mt-4 mb-4">
                 <div
-                  className={`${
-                    shareState === "on" ? "text-[#0E595D]" : "text-[#661800]"
-                  } text-xl font-semibold mt-2 mb-2`}
+                  className={`
+                    ${shareState === "on" ? "text-[#0E595D]" : "text-[#661800]"}
+                    text-xl
+                    font-semibold
+                    mt-2 mb-2
+                  `}
                 >
                   Sharing Link is {shareState === "on" ? "Public" : "Private"}
                 </div>

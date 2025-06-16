@@ -1,8 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { ZButton } from '../ui/Buttons';
+
+import { data } from "@/data/faculty";
+import { fullCourseData } from '@/lib/type';
 
 const schools = ['SCOPE', 'SELECT', 'SCORE', 'SMEC', 'SBST', 'SCHEME', 'SENSE', 'SCE'];
 
@@ -14,19 +17,8 @@ type SelectFieldProps = {
 };
 
 type FacultySelectorProps = {
-  domains: string[];
-  subjects: string[];
-  slots: string[];
-  faculties: string[];
-  onConfirm: (selection: {
-    domain: string;
-    subject: string;
-    slot: string;
-    priorityList: string[];
-  }) => void;
-  onReset: () => void;
+  onConfirm: (course: fullCourseData) => void;
 };
-
 
 const SelectField = ({ label, value, options, onChange, }: SelectFieldProps) => {
   return <div className="relative">
@@ -49,8 +41,116 @@ const SelectField = ({ label, value, options, onChange, }: SelectFieldProps) => 
   </div>
 };
 
+function generateCourseSlotsSingle({
+  subjectData,
+  selectedFaculties,
+  selectedSlot,
+  courseType,
+}: {
+  subjectData: any[];
+  selectedFaculties: string[];
+  selectedSlot: string;
+  courseType: "th" | "lab";
+}) {
+  if (courseType === "th") {
+    // Theory course: no lab slots
+    return [
+      {
+        slotName: selectedSlot,
+        slotFaculties: selectedFaculties.map((facultyName) => ({
+          facultyName,
+        })),
+      },
+    ];
+  }
 
-export default function FacultySelector({ domains = [], subjects = [], slots = [], faculties = [], onConfirm, onReset, }: FacultySelectorProps) {
+  if (courseType === "lab") {
+    // Lab course: include only lab-style slots 
+    const labSlots = [
+      ...new Set(
+        subjectData
+          .filter(
+            (entry) =>
+              selectedFaculties.includes(entry.faculty)
+          )
+          .map((entry) => entry.slot)
+      ),
+    ];
+    console.log(labSlots)
+
+    return labSlots.map((slotName) => ({
+      slotName,
+      slotFaculties: subjectData
+        .filter(
+          (entry) =>
+            entry.slot === slotName &&
+            selectedFaculties.includes(entry.faculty)
+        )
+        .map((entry) => ({
+          facultyName: entry.faculty,
+        })),
+    }));
+  }
+
+  return [];
+}
+
+
+function generateCourseSlotsBoth({
+  data,
+  selectedSchool,
+  selectedDomain,
+  selectedSubject,
+  selectedSlot,
+  selectedFaculties,
+}: {
+  data: any;
+  selectedSchool: string;
+  selectedDomain: string;
+  selectedSubject: string;
+  selectedSlot: string;
+  selectedFaculties: string[];
+}) {
+  const [courseCode] = selectedSubject.split(" - ");
+
+  const baseCode = courseCode.slice(0, -1);
+  const labEntryKey = Object.keys(data[selectedSchool][selectedDomain]).find((key) => {
+    const code = key.split(" - ")[0];
+    return code.slice(0, -1) === baseCode && (code.endsWith("P") || code.endsWith("E"));
+  });
+
+  const labData =
+    labEntryKey
+      ? data[selectedSchool][selectedDomain][labEntryKey]
+      : [];
+
+  const slotFaculties = selectedFaculties.map((facultyName) => {
+    let facultyLabSlot: string | undefined = undefined;
+
+    const labSlots = labData
+      .filter((entry: any) => entry.faculty === facultyName && entry.slot.startsWith("L"))
+      .map((entry: any) => entry.slot);
+
+    if (labSlots.length > 0) {
+      facultyLabSlot = labSlots.join(", ");
+    }
+
+    return {
+      facultyName,
+      ...(facultyLabSlot && { facultyLabSlot }),
+    };
+  });
+
+  return [
+    {
+      slotName: selectedSlot,
+      slotFaculties,
+    },
+  ];
+}
+
+
+export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
 
   const [selectedSchool, setSelectedSchool] = useState('SCOPE');
   const [selectedFaculties, setSelectedFaculties] = useState<string[]>([]);
@@ -58,32 +158,104 @@ export default function FacultySelector({ domains = [], subjects = [], slots = [
   const [selectedDomain, setSelectedDomain] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedSlot, setSelectedSlot] = useState("");
+  const [domains, setDomains] = useState<string[]>([]);
+  const [subjects, setSubjects] = useState<string[]>([]);
+  const [slots, setSlots] = useState<string[]>([]);
+  const [faculties, setFaculties] = useState<string[]>([]);
 
   const handleReset = () => {
     setSelectedDomain('');
     setSelectedSubject('');
     setSelectedSlot('');
     setSelectedFaculties([]);
+    setFaculties([]);
     setPriorityList([]);
-    onReset();
   };
 
   const handleConfirm = () => {
-    onConfirm({
-      domain: selectedDomain,
-      subject: selectedSubject,
-      slot: selectedSlot,
-      priorityList,
+
+    const courseCode = selectedSubject.split(' - ')[0];
+    const courseCodeType = courseCode.at(-1);
+    const id = selectedSubject;
+
+    let labSubject = Object.keys(data[selectedSchool][selectedDomain]).filter(subject => {
+      const subjectCode = subject.split(' - ')[0];
+      return (
+        subjectCode.slice(0, -1) === courseCode.slice(0, -1) &&
+        (subjectCode.at(-1) === 'P' || subjectCode.at(-1) === 'E') &&
+        subjectCode !== courseCode
+      );
     });
+    let courseType: "both" | "th" | "lab";
+    courseType =
+      labSubject.length == 1 || courseCodeType === "E"
+        ? "both"
+        : courseCodeType === "P"
+          ? "lab"
+          : courseCodeType === "L"
+            ? "th" : "th";
+    const courseName = selectedSubject.split(' - ')[1];
+    let courseCodeLab;
+    let courseNameLab;
+    if (courseCodeType == "E") {
+      courseCodeLab = courseCode;
+      courseNameLab = courseName;
+    } else {
+      courseCodeLab = labSubject.length == 1 ? labSubject[0].split(' - ')[0] : '';
+      courseNameLab = labSubject.length == 1 ? labSubject[0].split(' - ')[1] : '';
+    }
+
+    let courseSlots;
+    if (courseType == "both") {
+      courseSlots = generateCourseSlotsBoth({
+        data,
+        selectedSchool,
+        selectedDomain,
+        selectedSubject,
+        selectedSlot,
+        selectedFaculties: priorityList,
+      });
+    } else if (courseType == "th") {
+      courseSlots = generateCourseSlotsSingle(
+        {
+          subjectData: data[selectedSchool][selectedDomain][selectedSubject],
+          selectedFaculties,
+          selectedSlot,
+          courseType: "th",
+        }
+      )
+    } else {
+
+      courseSlots = generateCourseSlotsSingle(
+        {
+          subjectData: data[selectedSchool][selectedDomain][selectedSubject],
+          selectedFaculties,
+          selectedSlot,
+          courseType: "lab",
+        }
+      )
+    }
     setTimeout(() => {
       const el = document.getElementById("course-card");
       if (el) {
         el.scrollIntoView({ behavior: "smooth" });
       }
     }, 100);
+    const courseData = {
+      id,
+      courseType,
+      courseCode,
+      courseName,
+      ...((labSubject.length == 1 || courseCodeType === "E") && {
+        courseCodeLab,
+        courseNameLab
+      }),
+      courseSlots: courseSlots
+    }
+    onConfirm(courseData);
+    handleReset();
   };
 
-  // Toggle faculty selection and sync with priority list
   const toggleFaculty = (name: string) => {
     setSelectedFaculties(prev => {
       const updated = prev.includes(name)
@@ -117,6 +289,105 @@ export default function FacultySelector({ domains = [], subjects = [], slots = [
     setPriorityList(newList);
   };
 
+  // Object.keys(data['SCORE']); // domain list for each school
+  // Object.keys(data['SCORE']['FoundationCore']); // courses for each domain, school
+  // data['SCORE']['FoundationCore']['BCHY101L - Engineering Chemistry'].map(entry => entry.slot)) // slots for each domain, school 
+  // entries.filter(entry => entry.slot === 'C1+TC1').map(entry => entry.faculty); // faculty based on slot
+
+  useEffect(() => {
+    const schoolData = data[selectedSchool];
+    if (!schoolData) return;
+
+    // 1. Domains
+    setDomains(Object.keys(schoolData));
+
+    // 2. Subjects (when domain is selected)
+    if (selectedDomain) {
+      const domainData = schoolData[selectedDomain];
+      const allSubjects = Object.keys(domainData);
+
+      const filteredSubjects = allSubjects.filter(subject => {
+        const code = subject.split(' - ')[0];
+        const base = code.slice(0, -1); // Strip last char (P or L)
+        if (code.endsWith('P')) {
+          // If the corresponding L exists, skip the lab (P)
+          return !allSubjects.some(s => s.startsWith(base + 'L'));
+        }
+        return true;
+      });
+
+      setSubjects(filteredSubjects);
+
+      // 3. Slots (when subject is selected)
+      if (selectedSubject) {
+        const subjectData = domainData[selectedSubject];
+
+        // Check course code ending
+        const courseCode = selectedSubject.split(' - ')[0];
+        const isEndWithE = courseCode.endsWith('E');
+
+        // Filter slots
+        const rawSlots = subjectData.map(entry => entry.slot);
+        const filteredSlots = isEndWithE
+          ? rawSlots.filter(slot => !slot.startsWith('L'))
+          : rawSlots;
+
+        const uniqueSlots = [...new Set(filteredSlots)];
+        setSlots(uniqueSlots);
+
+        // Faculties (when slot is selected)
+        if (selectedSlot) {
+          const facultiesForSlot = subjectData
+            .filter(entry => entry.slot === selectedSlot)
+            .map(entry => entry.faculty);
+
+          setSelectedFaculties([]); // Reset on slot change
+          setPriorityList([]);
+          setFaculties([...new Set(facultiesForSlot)]);
+        }
+      }
+
+    }
+  }, [selectedSchool, selectedDomain, selectedSubject, selectedSlot]);
+
+  const handleSchoolChange = (school: string) => {
+    setSelectedSchool(school);
+    setSelectedDomain('');
+    setSelectedSubject('');
+    setSelectedSlot('');
+    setSubjects([]);
+    setSlots([]);
+    setFaculties([]);
+    setSelectedFaculties([]);
+    setPriorityList([]);
+  };
+
+  const handleDomainChange = (domain: string) => {
+    setSelectedDomain(domain);
+    setSelectedSubject('');
+    setSelectedSlot('');
+    setSubjects([]);
+    setSlots([]);
+    setFaculties([]);
+    setSelectedFaculties([]);
+    setPriorityList([]);
+  };
+
+  const handleSubjectChange = (subject: string) => {
+    setSelectedSubject(subject);
+    setSelectedSlot('');
+    setSlots([]);
+    setFaculties([]);
+    setSelectedFaculties([]);
+    setPriorityList([]);
+  };
+  const handleSlotChange = (slot: string) => {
+    setSelectedSlot(slot);
+    setFaculties([]);
+    setSelectedFaculties([]);
+    setPriorityList([]);
+  };
+
   return <div>
 
     {/* Main container */}
@@ -130,7 +401,7 @@ export default function FacultySelector({ domains = [], subjects = [], slots = [
           {schools.map((school) => (
             <button
               key={school}
-              onClick={() => setSelectedSchool(school)}
+              onClick={() => handleSchoolChange(school)}
               className={`
                 px-3 py-1
                 rounded-full
@@ -153,9 +424,9 @@ export default function FacultySelector({ domains = [], subjects = [], slots = [
 
         {/* Filters: Domain, Subject, Slot */}
         <div className="grid grid-cols-3 gap-4 m-4 px-4">
-          <SelectField label={'Domain'} value={selectedDomain} options={domains} onChange={setSelectedDomain} />
-          <SelectField label="Subject" value={selectedSubject} options={subjects} onChange={setSelectedSubject} />
-          <SelectField label="Slot" value={selectedSlot} options={slots} onChange={setSelectedSlot} />
+          <SelectField label={'Domain'} value={selectedDomain} options={domains} onChange={handleDomainChange} />
+          <SelectField label="Subject" value={selectedSubject} options={subjects} onChange={handleSubjectChange} />
+          <SelectField label="Slot" value={selectedSlot} options={slots} onChange={handleSlotChange} />
         </div>
 
         {/* Divider */}
@@ -168,7 +439,7 @@ export default function FacultySelector({ domains = [], subjects = [], slots = [
           <div className="bg-[#FFFFFF]/40 rounded-xl overflow-hidden flex flex-col">
             <div className="bg-[#FFFFFF]/60 text-center text-[#000000]/80 p-4 font-semibold text-lg">Select Faculties</div>
             <div className="pt-4 pb-4 px-6 overflow-y-auto space-y-2 scrollbar-thin h-86">
-              {faculties.map((faculty, index) => (
+              {faculties.map((faculty: any, index: number) => (
                 <div key={index}>
                   <div className="flex items-center justify-between py-1 px-2">
                     <span className='text-[#000000]'>{faculty}</span>
@@ -243,11 +514,8 @@ export default function FacultySelector({ domains = [], subjects = [], slots = [
               <ZButton type="long" text="Reset" image="icons/reset.svg" onClick={handleReset} color="red" />
               <ZButton type="long" text="Confirm" image="icons/check.svg" onClick={handleConfirm} color="green" />
             </div>
-
           </div>
-
         </div>
-
       </div>
     </div>
   </div>

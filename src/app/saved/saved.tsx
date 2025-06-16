@@ -176,7 +176,7 @@ export default function Saved() {
                       type="regular"
                       text="Delete"
                       color="red"
-                      image="/icons/delete.svg"
+                      image="/icons/trash.svg"
                       onClick={() => {
                         setSelectedTT(tt);
                         setPopupType("delete_tt");

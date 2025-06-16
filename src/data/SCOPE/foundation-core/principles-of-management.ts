@@ -1,0 +1,15 @@
+export const principlesOfManagement = [
+  { slot: "F2+TF2", venue: "MB226", faculty: "ARJUN SINGH K" },
+  { slot: "F1+TF1", venue: "MB225", faculty: "RAJESH KANNA" },
+  { slot: "F1+TF1", venue: "MB309", faculty: "VINCENT HERALD WILSON" },
+  { slot: "F1+TF1", venue: "MB306A", faculty: "JOSE S" },
+  { slot: "F1+TF1", venue: "MB307A", faculty: "VENKATESHWARLU B" },
+  { slot: "F1+TF1", venue: "MB309A", faculty: "KANNAN C" },
+  { slot: "F1+TF1", venue: "MB306", faculty: "PONNUSAMY P" },
+  { slot: "F2+TF2", venue: "MB307", faculty: "RAJA SEKHAR Y" },
+  { slot: "F2+TF2", venue: "MB309A", faculty: "VEZHAVENDHAN R" },
+  { slot: "F1+TF1", venue: "MB307", faculty: "SRINIVASA GUPTA N" },
+  { slot: "F2+TF2", venue: "MB306", faculty: "VINCENT HERALD WILSON" },
+  { slot: "F2+TF2", venue: "MB307A", faculty: "SABOOR S" },
+  { slot: "F2+TF2", venue: "MB309", faculty: "BABU S" },
+];
