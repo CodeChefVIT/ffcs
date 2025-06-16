@@ -4,13 +4,15 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-
 import Navbar from "@/components/ui/Navbar";
 import Popup from "@/components/ui/Popup";
 import { ZButton } from "@/components/ui/Buttons";
 import Footer from "@/components/ui/Footer";
-import { getFavourites, deleteFavourite, renameFavourite } from "@/services/api";
-
+import {
+  getFavourites,
+  deleteFavourite,
+  renameFavourite,
+} from "@/services/api";
 
 interface TimetableEntry {
   name: string;
@@ -27,10 +29,12 @@ export default function Saved() {
   const [editedName, setEditedName] = useState<string>("");
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState<boolean>(false);
-  const [timetableToDelete, setTimetableToDelete] = useState<string | null>(null);
-  const [timetableToDeleteId, setTimetableToDeleteId] = useState<string | null>(null);
-
- 
+  const [timetableToDelete, setTimetableToDelete] = useState<string | null>(
+    null
+  );
+  const [timetableToDeleteId, setTimetableToDeleteId] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchFavourites = async () => {
@@ -73,25 +77,24 @@ export default function Saved() {
   };
 
   const handleSaveRename = async () => {
-  if (editingIndex !== null && editedName.trim() !== "") {
-    const id = timetables[editingIndex].id;
+    if (editingIndex !== null && editedName.trim() !== "") {
+      const id = timetables[editingIndex].id;
 
-    try {
-      await renameFavourite(userEmail, id, editedName.trim());
+      try {
+        await renameFavourite(userEmail, id, editedName.trim());
 
-      setTimetables((prev) =>
-        prev.map((tt, i) =>
-          i === editingIndex ? { ...tt, name: editedName.trim() } : tt
-        )
-      );
-      setEditingIndex(null);
-      setEditedName("");
-    } catch (error) {
-      console.error("Rename request failed", error);
+        setTimetables((prev) =>
+          prev.map((tt, i) =>
+            i === editingIndex ? { ...tt, name: editedName.trim() } : tt
+          )
+        );
+        setEditingIndex(null);
+        setEditedName("");
+      } catch (error) {
+        console.error("Rename request failed", error);
+      }
     }
-  }
-};
-
+  };
 
   const handleCancelRename = () => {
     setEditingIndex(null);
@@ -111,7 +114,7 @@ export default function Saved() {
         />
       </div>
 
-      <Navbar page="saved" loggedin={true} />
+      <Navbar page="saved" />
 
       <div className="flex-1 flex flex-col items-center">
         <div className="text-6xl mt-48 mb-16 font-pangolin text-black">

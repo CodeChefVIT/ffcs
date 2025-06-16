@@ -18,7 +18,7 @@ export const getFavourites = async (
     }
 
     const data = await res.json();
-    return data.favourites.map((fav: any) => ({
+    return data.favourites.map((fav: { name: string; _id: string }) => ({
       name: fav.name,
       id: fav._id,
     }));
@@ -27,7 +27,6 @@ export const getFavourites = async (
     return [];
   }
 };
-
 
 export const deleteFavourite = async (email: string, id: string) => {
   const res = await fetch("/api/user/favorites", {
@@ -43,7 +42,6 @@ export const deleteFavourite = async (email: string, id: string) => {
     throw new Error("Failed to delete timetable");
   }
 };
-
 
 export const renameFavourite = async (
   email: string,

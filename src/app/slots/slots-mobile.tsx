@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 
 export default function View() {
   const router = useRouter();
-  useEffect(() => { router.replace("/") }, [router]);
+  useEffect(() => {
+    router.replace("/");
+  }, [router]);
   return null;
 }

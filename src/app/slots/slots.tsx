@@ -10,9 +10,7 @@ import Footer from "@/components/ui/Footer";
 import { ZButton, SlotToggleButton } from "@/components/ui/Buttons";
 import TimeTable from "@/components/ui/TimeTable";
 
-
 export default function View() {
-
   const [active, setActive] = useState<number[]>([]);
   const buttonTexts = getAllSlots();
   const disableMap = clashMap;
@@ -20,14 +18,20 @@ export default function View() {
   const [selected, setSelected] = useState("Theory");
 
   const handleClick = (index: number) => {
-    if (active.includes(index)) setActive(active.filter((i) => i !== index)); // Deselect if already active
+    if (active.includes(index))
+      setActive(
+        active.filter((i) => i !== index)
+      ); // Deselect if already active
     else setActive([...active, index]); // Add this button as active
   };
 
   const rowFilters = [
-    (text: string, end: string) => !text.startsWith('T') && !text.startsWith('L') && text.endsWith(end),
-    (text: string, end: string) => text.startsWith('T') && text.endsWith(end) && text.length === 3,
-    (text: string, end: string) => text.startsWith('T') && text.endsWith(end) && text.length === 4,
+    (text: string, end: string) =>
+      !text.startsWith("T") && !text.startsWith("L") && text.endsWith(end),
+    (text: string, end: string) =>
+      text.startsWith("T") && text.endsWith(end) && text.length === 3,
+    (text: string, end: string) =>
+      text.startsWith("T") && text.endsWith(end) && text.length === 4,
   ];
 
   const lSlotPairs: string[] = [];
@@ -38,7 +42,6 @@ export default function View() {
   const lSlotPairsCol2 = lSlotPairs.slice(15);
 
   return (
-
     <div className="flex flex-col min-h-screen relative select-none items-center">
       <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
         <Image
@@ -51,9 +54,11 @@ export default function View() {
         />
       </div>
 
-      <Navbar page="slots" loggedin={false} />
+      <Navbar page="slots" />
 
-      <div className="text-6xl mt-36 mb-4 font-pangolin text-black">Slot View</div>
+      <div className="text-6xl mt-36 mb-4 font-pangolin text-black">
+        Slot View
+      </div>
 
       <div className="mt-8 mb-8">
         <SlotToggleButton onToggle={setSelected} />
@@ -66,12 +71,14 @@ export default function View() {
             {/* Row 1 */}
             <div className="grid grid-cols-7 gap-2">
               {buttonTexts
-                .filter((text) => rowFilters[0](text, '1'))
+                .filter((text) => rowFilters[0](text, "1"))
                 .map((text) => {
                   const idx = buttonTexts.indexOf(text);
                   const activeTexts = active.map((i) => buttonTexts[i]);
-                  const isDisabled = activeTexts.some(
-                    (activeText) => disableMap[activeText.split("+")[0]]?.includes(text.split("+")[0])
+                  const isDisabled = activeTexts.some((activeText) =>
+                    disableMap[activeText.split("+")[0]]?.includes(
+                      text.split("+")[0]
+                    )
                   );
                   return (
                     <ZButton
@@ -89,12 +96,14 @@ export default function View() {
             {/* Row 2 */}
             <div className="grid grid-cols-7 gap-2">
               {buttonTexts
-                .filter((text) => rowFilters[1](text, '1'))
+                .filter((text) => rowFilters[1](text, "1"))
                 .map((text) => {
                   const idx = buttonTexts.indexOf(text);
                   const activeTexts = active.map((i) => buttonTexts[i]);
-                  const isDisabled = activeTexts.some(
-                    (activeText) => disableMap[activeText.split("+")[0]]?.includes(text.split("+")[0])
+                  const isDisabled = activeTexts.some((activeText) =>
+                    disableMap[activeText.split("+")[0]]?.includes(
+                      text.split("+")[0]
+                    )
                   );
                   return (
                     <ZButton
@@ -112,12 +121,14 @@ export default function View() {
             {/* Row 3 */}
             <div className="grid grid-cols-4 gap-2">
               {buttonTexts
-                .filter((text) => rowFilters[2](text, '1'))
+                .filter((text) => rowFilters[2](text, "1"))
                 .map((text) => {
                   const idx = buttonTexts.indexOf(text);
                   const activeTexts = active.map((i) => buttonTexts[i]);
-                  const isDisabled = activeTexts.some(
-                    (activeText) => disableMap[activeText.split("+")[0]]?.includes(text.split("+")[0])
+                  const isDisabled = activeTexts.some((activeText) =>
+                    disableMap[activeText.split("+")[0]]?.includes(
+                      text.split("+")[0]
+                    )
                   );
                   return (
                     <ZButton
@@ -138,12 +149,14 @@ export default function View() {
             {/* Row 1 */}
             <div className="grid grid-cols-7 gap-2">
               {buttonTexts
-                .filter((text) => rowFilters[0](text, '2'))
+                .filter((text) => rowFilters[0](text, "2"))
                 .map((text) => {
                   const idx = buttonTexts.indexOf(text);
                   const activeTexts = active.map((i) => buttonTexts[i]);
-                  const isDisabled = activeTexts.some(
-                    (activeText) => disableMap[activeText.split("+")[0]]?.includes(text.split("+")[0])
+                  const isDisabled = activeTexts.some((activeText) =>
+                    disableMap[activeText.split("+")[0]]?.includes(
+                      text.split("+")[0]
+                    )
                   );
                   return (
                     <ZButton
@@ -161,12 +174,14 @@ export default function View() {
             {/* Row 2 */}
             <div className="grid grid-cols-7 gap-2">
               {buttonTexts
-                .filter((text) => rowFilters[1](text, '2'))
+                .filter((text) => rowFilters[1](text, "2"))
                 .map((text) => {
                   const idx = buttonTexts.indexOf(text);
                   const activeTexts = active.map((i) => buttonTexts[i]);
-                  const isDisabled = activeTexts.some(
-                    (activeText) => disableMap[activeText.split("+")[0]]?.includes(text.split("+")[0])
+                  const isDisabled = activeTexts.some((activeText) =>
+                    disableMap[activeText.split("+")[0]]?.includes(
+                      text.split("+")[0]
+                    )
                   );
                   return (
                     <ZButton
@@ -184,12 +199,14 @@ export default function View() {
             {/* Row 3 */}
             <div className="grid grid-cols-4 gap-2">
               {buttonTexts
-                .filter((text) => rowFilters[2](text, '2'))
+                .filter((text) => rowFilters[2](text, "2"))
                 .map((text) => {
                   const idx = buttonTexts.indexOf(text);
                   const activeTexts = active.map((i) => buttonTexts[i]);
-                  const isDisabled = activeTexts.some(
-                    (activeText) => disableMap[activeText.split("+")[0]]?.includes(text.split("+")[0])
+                  const isDisabled = activeTexts.some((activeText) =>
+                    disableMap[activeText.split("+")[0]]?.includes(
+                      text.split("+")[0]
+                    )
                   );
                   return (
                     <ZButton
@@ -215,8 +232,10 @@ export default function View() {
             {lSlotPairsCol1.map((pair) => {
               const btnIdx = buttonTexts.findIndex((text) => text === pair);
               const activeTexts = active.map((i) => buttonTexts[i]);
-              const isDisabled = activeTexts.some(
-                (activeText) => disableMap[activeText.split("+")[0]]?.includes(pair.split("+")[0])
+              const isDisabled = activeTexts.some((activeText) =>
+                disableMap[activeText.split("+")[0]]?.includes(
+                  pair.split("+")[0]
+                )
               );
               return (
                 <ZButton
@@ -236,8 +255,10 @@ export default function View() {
             {lSlotPairsCol2.map((pair) => {
               const btnIdx = buttonTexts.findIndex((text) => text === pair);
               const activeTexts = active.map((i) => buttonTexts[i]);
-              const isDisabled = activeTexts.some(
-                (activeText) => disableMap[activeText.split("+")[0]]?.includes(pair.split("+")[0])
+              const isDisabled = activeTexts.some((activeText) =>
+                disableMap[activeText.split("+")[0]]?.includes(
+                  pair.split("+")[0]
+                )
               );
               return (
                 <ZButton
@@ -258,14 +279,18 @@ export default function View() {
       <div className="mx-auto mt-12 mb-10 w-full max-w-[1000px]">
         <div className="overflow-x-auto">
           <div className="min-w-[1000px] h-[480px]">
-            <TimeTable slotNames={active.map(i => ({ slotName: buttonTexts[i], showName: true }))} />
+            <TimeTable
+              slotNames={active.map((i) => ({
+                slotName: buttonTexts[i],
+                showName: true,
+              }))}
+            />
           </div>
         </div>
       </div>
 
       <div className="h-12" />
       <Footer />
-
-    </div >
+    </div>
   );
 }
