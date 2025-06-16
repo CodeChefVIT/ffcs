@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 
@@ -22,17 +22,15 @@ export default function NotFound() {
         />
       </div>
 
-      <Navbar page="404" loggedin={false} />
-
+      <Navbar page="404" />
 
       <div className="flex-grow mt-24 flex flex-col items-center text-center relative">
-
         <div className="relative w-fit h-fit mb-4">
           {/* 45° Shadow layer */}
           <span
             className="absolute left-2 top-2 select-none pointer-events-none font-poppins font-extrabold text-[160px] z-0 text-black"
             style={{
-              WebkitTextStroke: '16px black',
+              WebkitTextStroke: "16px black",
             }}
           >
             404
@@ -41,21 +39,20 @@ export default function NotFound() {
           <span
             className="absolute left-0 top-0 select-none pointer-events-none font-poppins font-extrabold text-[160px] z-10 text-transparent"
             style={{
-              WebkitTextStroke: '16px black',
+              WebkitTextStroke: "16px black",
             }}
           >
             404
           </span>
           {/* Fill layer */}
-          <span
-            className="relative select-none pointer-events-none font-poppins font-extrabold text-[160px] z-20 text-[#90BDFF]"
-          >
+          <span className="relative select-none pointer-events-none font-poppins font-extrabold text-[160px] z-20 text-[#90BDFF]">
             404
           </span>
         </div>
 
         <div className="text-3xl mb-8 font-pangolin text-black">
-          OOPS! You have found this secret page!<br />
+          OOPS! You have found this secret page!
+          <br />
           We have nothing to show here...
         </div>
 
@@ -64,7 +61,7 @@ export default function NotFound() {
           text="Home"
           color="purple"
           image="/icons/home.svg"
-          onClick={() => router.push('/')}
+          onClick={() => router.push("/")}
         />
       </div>
 
