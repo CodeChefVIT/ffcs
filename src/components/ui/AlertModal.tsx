@@ -38,7 +38,7 @@ export default function AlertModal({ open, message, onClose }: AlertModalProps) 
             bg-[#FFEA79]
           "
         >
-          {/* 3 circles */}
+          
           <div className="flex-1 text-left flex items-center justify-start pl-4">
             <div className="flex gap-2">
               {[...Array(3)].map((_, i) => (

@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   await dbConnect();
   const body = await req.json();
 
-  const { title, slots, owner } = body;
+  const { title, slots, owner, isPublic } = body;
 
   if (!title || !slots || !owner) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
       title,
       slots,
       owner,
-      isPublic: false,
+      isPublic: isPublic ?? false,
       shareId,
     });
     return NextResponse.json({ success: true, timetable });

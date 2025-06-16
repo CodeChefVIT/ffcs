@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 
@@ -21,6 +21,8 @@ export default function ViewTimeTable() {
   const [saveTTName, setSaveTTName] = useState<string>("");
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMsg, setAlertMsg] = useState("");
+  const [sharePublic, setSharePublic] = useState(true); // for share toggle
+  const [shareId, setShareId] = useState<string>("");
 
   const { data: session } = useSession();
   const owner = session?.user?.email || null;
@@ -73,15 +75,40 @@ export default function ViewTimeTable() {
   }
 
   async function handleShare() {
-   
-    const timetable = selectedData[0]; 
-  
-    // setShareLink(`https://yourdomain.com/share/${shareId}`);
-    setShareLink(window.location.href); 
-    setShowSharePopup(true);
+    if (!selectedData || selectedData.length === 0) {
+      showAlert("No timetable to share.");
+      return;
+    }
+
+    // Save the timetable as public/private based on toggle
+    try {
+      const slots = selectedData.map((item: any) => ({
+        slot: item.slotName || "NIL",
+        courseCode: item.courseCode || "00000000",
+        courseName: item.courseName || "Unknown",
+        facultyName: item.facultyName || "Unknown",
+      }));
+
+      const res = await axios.post("/api/save-timetable", {
+        title: saveTTName || `Shared Timetable`,
+        slots,
+        owner: owner,
+        isPublic: sharePublic,
+      });
+
+      if (res.data && res.data.timetable && res.data.timetable.shareId) {
+        const newShareId = res.data.timetable.shareId;
+        setShareId(newShareId);
+        setShareLink(`${window.location.origin}/share/${newShareId}`);
+        setShowSharePopup(true);
+      } else {
+        showAlert("Failed to generate share link.");
+      }
+    } catch (e) {
+      showAlert("Error sharing timetable.");
+    }
   }
 
-  
   function withLoginCheck(action: () => void, skipCheck = false) {
     return () => {
       if (!owner && !skipCheck) {
@@ -90,6 +117,10 @@ export default function ViewTimeTable() {
       }
       action();
     };
+  }
+
+  function handleShareToggle(state: "on" | "off") {
+    setSharePublic(state === "on");
   }
 
   const actionButtons = [
@@ -246,6 +277,8 @@ export default function ViewTimeTable() {
           type="share_tt"
           dataBody={shareLink}
           closeLink={() => setShowSharePopup(false)}
+          shareEnabledDefault={sharePublic}
+          shareSwitchAction={handleShareToggle}
         />
       )}
 
