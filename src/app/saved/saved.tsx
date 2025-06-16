@@ -8,7 +8,6 @@ import { ZButton } from "@/components/ui/Buttons";
 import Footer from "@/components/ui/Footer";
 import Popup from "@/components/ui/Popup";
 import Image from "next/image";
-import { useRef } from "react";
 
 async function fetchTimetablesByOwner(owner: string) {
   const res = await fetch(`/api/timetables?owner=${encodeURIComponent(owner)}`);
@@ -36,27 +35,19 @@ export default function Saved() {
 
   const [timetables, setTimetables] = useState<TimetableEntry[]>([]);
   const [loading, setLoading] = useState(true);
-
-  // Popup state
   const [showPopup, setShowPopup] = useState(false);
-  const [popupType, setPopupType] = useState<"view_tt" | "delete_tt" | "rename_tt"  | null>(null);
+  const [popupType, setPopupType] = useState<"view_tt" | "delete_tt" | "rename_tt" | null>(null);
   const [popupSlots, setPopupSlots] = useState<any[]>([]);
   const [popupTitle, setPopupTitle] = useState<string>("");
   const [selectedTT, setSelectedTT] = useState<TimetableEntry | null>(null);
   const [renameValue, setRenameValue] = useState<string>("");
-  const [shareUrl, setShareUrl] = useState<string | null>(null);
-  const [shareLoading, setShareLoading] = useState(false);
-  const [copyLoading, setCopyLoading] = useState(false);
 
   useEffect(() => {
     if (!userEmail) return;
     setLoading(true);
     fetchTimetablesByOwner(userEmail)
       .then((data) => setTimetables(data))
-      .catch((err) => {
-        setTimetables([]);
-        console.error(err);
-      })
+      .catch(() => setTimetables([]))
       .finally(() => setLoading(false));
   }, [userEmail]);
 
@@ -68,7 +59,6 @@ export default function Saved() {
     }));
   }
 
-  // Delete timetable
   async function handleDelete() {
     if (!selectedTT) return;
     await fetch(`/api/timetables/${selectedTT._id}`, { method: "DELETE" });
@@ -77,7 +67,6 @@ export default function Saved() {
     setSelectedTT(null);
   }
 
-  // Rename timetable
   async function handleRename() {
     if (!selectedTT) return;
     await fetch(`/api/timetables/${selectedTT._id}`, {
@@ -94,58 +83,20 @@ export default function Saved() {
     setSelectedTT(null);
   }
 
-  // Share timetable
-  async function handleShare(tt: TimetableEntry) {
-    setShareLoading(true);
-    try {
-      // PATCH to set isPublic true
-      const patchRes = await fetch(`/api/timetables/${tt._id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ isPublic: true }),
-      });
-      if (!patchRes.ok) throw new Error("Failed to update timetable");
-
-      // GET the updated timetable to get shareId
-      const getRes = await fetch(`/api/timetables/${tt._id}`);
-      if (!getRes.ok) throw new Error("Failed to fetch timetable");
-      const updated = await getRes.json();
-
-      if (!updated.shareId) throw new Error("No shareId found");
-
-      setShareUrl(`${window.location.origin}/share/${updated.shareId}`);
-      
-      setShowPopup(true);
-    } catch (e) {
-      alert("Failed to generate share link.");
-    } finally {
-      setShareLoading(false);
-    }
-  }
-
-  // Copy share link from view popup
   async function handleCopyLink(tt: TimetableEntry) {
-    setCopyLoading(true);
     try {
-        // Set isPublic to true
       await fetch(`/api/timetables/${tt._id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isPublic: true }),
       });
-
-      // Fetch updated timetable to get shareId
       const res = await fetch(`/api/timetables/${tt._id}`);
       const updated = await res.json();
       if (!updated.shareId) throw new Error("No shareId found");
-
       const url = `${window.location.origin}/share/${updated.shareId}`;
       await navigator.clipboard.writeText(url);
-      // Optionally show a toast/snackbar here
-    } catch (e) {
+    } catch {
       alert("Failed to copy share link.");
-    } finally {
-      setCopyLoading(false);
     }
   }
 
@@ -161,19 +112,15 @@ export default function Saved() {
           className="object-top object-contain w-full h-full"
         />
       </div>
-
       <Navbar page="saved" />
-
       <div className="flex-1 flex flex-col items-center">
         <div className="text-6xl mt-48 mb-16 font-pangolin text-black">
           Your Timetables
         </div>
-
         <div className="z-10 w-5/6 max-w-7xl rounded-[60px] border-black border-4 bg-[#A7D5D7] px-24 py-12 mb-24 shadow-[4px_4px_0_0_black]">
           <div className="text-4xl mt-2 mb-8 font-pangolin font-light text-black">
             All Timetables
           </div>
-
           {loading ? (
             <div className="text-center text-2xl font-semibold text-[#606060] mb-6">
               Loading...
@@ -220,14 +167,6 @@ export default function Saved() {
                     />
                     <ZButton
                       type="regular"
-                      text="Share"
-                      color="green"
-                      image="/icons/send.svg"
-                      onClick={() => handleShare(tt)}
-                      disabled={shareLoading}
-                    />
-                    <ZButton
-                      type="regular"
                       text="Rename"
                       color="blue"
                       image="/icons/edit.svg"
@@ -256,10 +195,7 @@ export default function Saved() {
           )}
         </div>
       </div>
-
       <Footer />
-
-      {/* Popups */}
       {showPopup && popupType === "view_tt" && selectedTT && (
         <Popup
           type="view_tt"
@@ -269,7 +205,6 @@ export default function Saved() {
           action={() => handleCopyLink(selectedTT)}
         />
       )}
-    
       {showPopup && popupType === "delete_tt" && selectedTT && (
         <Popup
           type="delete_tt"
