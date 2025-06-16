@@ -62,9 +62,9 @@ export default function View() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id")?.toUpperCase();
 
-  if (!id || !idMap[id]) {
-    router.push("/404");
-  }
+  // if (!id || !idMap[id]) {
+  //   router.push("/404");
+  // }
 
   return (
     <div className="flex flex-col min-h-screen relative select-none">

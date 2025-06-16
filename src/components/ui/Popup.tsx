@@ -28,6 +28,7 @@ type PopupProps = {
   action?: () => void;
   shareEnabledDefault?: boolean;
   shareSwitchAction?: (state: "on" | "off") => void;
+  onInputChange?: (val: string) => void;
 };
 
 const colorMap = {
@@ -86,6 +87,7 @@ export default function Popup({
   action,
   shareEnabledDefault,
   shareSwitchAction,
+  onInputChange,
 }: PopupProps) {
   const theme = colorMap[typeColorMap[type] as keyof typeof colorMap] || [
     "#E4E9FC",
@@ -375,6 +377,7 @@ export default function Popup({
                     className="bg-transparent outline-none w-full text-center font-semibold"
                     placeholder="Enter timetable name"
                     value={dataBody}
+                    onChange={e => onInputChange && onInputChange(e.target.value)}
                   />
                 </div>
                 <ZButton
