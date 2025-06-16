@@ -13,6 +13,7 @@ import {
   deleteFavourite,
   renameFavourite,
 } from "@/services/api";
+import { useSession } from "next-auth/react";
 
 interface TimetableEntry {
   name: string;
@@ -22,8 +23,6 @@ interface TimetableEntry {
 export default function Saved() {
   const router = useRouter();
   //const { data: session } = useSession();
-  const userEmail = "sohammaha15@gmail.com"; //get email from authentication
-
   const [timetables, setTimetables] = useState<TimetableEntry[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editedName, setEditedName] = useState<string>("");
@@ -35,21 +34,23 @@ export default function Saved() {
   const [timetableToDeleteId, setTimetableToDeleteId] = useState<string | null>(
     null
   );
+  const { data: session } = useSession();
 
   useEffect(() => {
     const fetchFavourites = async () => {
-      if (!userEmail) return;
+      if (!session) return;
 
-      const favourites = await getFavourites(userEmail);
+      const favourites = await getFavourites(session.user!.email!);
       setTimetables(favourites);
     };
 
     fetchFavourites();
-  }, [userEmail]);
+  }, [session]);
 
   const handleDelete = async (idToDelete: string) => {
     try {
-      await deleteFavourite(userEmail, idToDelete);
+      if (!session) return;
+      await deleteFavourite(session.user!.email!, idToDelete);
       setTimetables((prev) => prev.filter((tt) => tt.id !== idToDelete));
     } catch (err) {
       console.error("Failed to delete timetable:", err);
@@ -81,7 +82,8 @@ export default function Saved() {
       const id = timetables[editingIndex].id;
 
       try {
-        await renameFavourite(userEmail, id, editedName.trim());
+        if (!session) return;
+        await renameFavourite(session.user!.email!, id, editedName.trim());
 
         setTimetables((prev) =>
           prev.map((tt, i) =>

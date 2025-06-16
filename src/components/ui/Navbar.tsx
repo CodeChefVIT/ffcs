@@ -23,7 +23,7 @@ export default function Navbar({ page }: NavbarProps) {
         <Popup
           type="login"
           closeLink={() => setShowLoginPopup(false)}
-          action={() => signIn("google")}
+          action={() => signIn("google", { callbackUrl: "/", redirect: true })}
         />
       )}
       {showLogoutPopup && (

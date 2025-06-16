@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import { getFavourites } from "@/services/api"; // Service function
+import { useSession } from "next-auth/react";
 
 interface FavouriteTimetable {
   name: string;
@@ -13,16 +14,15 @@ interface FavouriteTimetable {
 }
 
 export default function SavedMobile() {
-  //const { data: session } = useSession();
-  const userEmail = "sohammaha15@gmail.com"; //get email from authentication
+  const { data: session } = useSession();
 
   const [timetables, setTimetables] = useState<FavouriteTimetable[]>([]);
 
   useEffect(() => {
     const fetchFavourites = async () => {
-      if (!userEmail) return;
+      if (!session) return;
       try {
-        const favourites = await getFavourites(userEmail);
+        const favourites = await getFavourites(session.user!.email!);
         setTimetables(favourites);
       } catch (err) {
         console.error("Failed to fetch favourites", err);
@@ -30,7 +30,7 @@ export default function SavedMobile() {
     };
 
     fetchFavourites();
-  }, [userEmail]);
+  }, [session]);
 
   return (
     <div className="flex flex-col min-h-screen relative items-center font-poppins">

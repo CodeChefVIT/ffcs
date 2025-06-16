@@ -11,6 +11,7 @@ export const authOptions: AuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       authorization: {
         params: {
+          scope: "openid email profile",
           hd: "vitstudent.ac.in",
         },
       },
@@ -29,6 +30,13 @@ export const authOptions: AuthOptions = {
         return true;
       }
       return false;
+    },
+    async redirect({ url, baseUrl }) {
+      // Allow relative URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      // Allow only same-origin external URLs
+      if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
     },
   },
 };
