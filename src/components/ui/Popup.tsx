@@ -13,14 +13,15 @@ type dataProps = {
 
 type PopupProps = {
   type:
-  | "login"
-  | "rem_course"
-  | "email_tt"
-  | "share_tt"
-  | "save_tt"
-  | "delete_tt"
-  | "view_tt"
-  | "logout";
+    | "login"
+    | "rem_course"
+    | "email_tt"
+    | "share_tt"
+    | "save_tt"
+    | "delete_tt"
+    | "view_tt"
+    | "logout"
+    | "rename_tt"; 
   dataTitle?: string;
   dataBody?: string;
   dataTT?: dataProps[];
@@ -48,6 +49,7 @@ const typeColorMap = {
   delete_tt: "red",
   view_tt: "blue",
   logout: "red",
+  rename_tt: "green",
 };
 
 const typeTitleMap = {
@@ -59,6 +61,7 @@ const typeTitleMap = {
   delete_tt: "Delete Timetable",
   view_tt: "",
   logout: "Log Out",
+  rename_tt: "Rename Timetable",
 };
 
 const typeTextMap = {
@@ -70,6 +73,7 @@ const typeTextMap = {
   delete_tt: "Are you sure you want to delete this timetable?",
   view_tt: "",
   logout: "Are you sure you want to log out?",
+  rename_tt: "Enter a new name for your timetable.",
 };
 
 function copy(text: string) {
@@ -146,7 +150,7 @@ export default function Popup({
 
           {/* popup title */}
           <div className="absolute left-1/2 -translate-x-1/2 text-center flex items-center justify-center font-poppins font-bold text-2xl">
-            {title}
+            {type === "rename_tt" ? "Rename Timetable" : title}
           </div>
 
           {/* close button */}
@@ -156,32 +160,32 @@ export default function Popup({
             type == "email_tt" ||
             type == "logout"
           ) && (
-              <div className="flex-1 text-right flex items-center justify-end">
-                <div
-                  className={`
-                w-12 h-12
-                bg-[#FF9A9A]
-                rounded-tr-3xl
-                flex items-center
-                justify-center
-                cursor-pointer
-                outline-4 outline-black
-                pt-1 pr-1
+            <div className="flex-1 text-right flex items-center justify-end">
+              <div
+                className={`
+                  w-12 h-12
+                  bg-[#FF9A9A]
+                  rounded-tr-3xl
+                  flex items-center
+                  justify-center
+                  cursor-pointer
+                  outline-4 outline-black
+                  pt-1 pr-1
                 `}
-                  onClick={() => closeLink()}
-                >
-                  <Image
-                    src="/icons/cross.svg"
-                    alt="close"
-                    width={32}
-                    height={32}
-                    draggable={false}
-                    unselectable="on"
-                    style={{ userSelect: "none", pointerEvents: "auto" }}
-                  />
-                </div>
+                onClick={() => closeLink()}
+              >
+                <Image
+                  src="/icons/cross.svg"
+                  alt="close"
+                  width={32}
+                  height={32}
+                  draggable={false}
+                  unselectable="on"
+                  style={{ userSelect: "none", pointerEvents: "auto" }}
+                />
               </div>
-            )}
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col items-center justify-center text-lg font-poppins font-regular p-8">
@@ -395,24 +399,46 @@ export default function Popup({
             </div>
           )}
 
+          {type == "rename_tt" && (
+            <div>
+              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
+                Enter a new name for your timetable.
+              </div>
+              <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
+                <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-black font-semibold">
+                  <input
+                    type="text"
+                    className="bg-transparent outline-none w-full text-center font-semibold"
+                    placeholder="Enter timetable name"
+                    value={dataBody}
+                    onChange={e => onInputChange && onInputChange(e.target.value)}
+                    autoFocus
+                  />
+                </div>
+                <ZButton
+                  type="regular"
+                  text="Save"
+                  color="green"
+                  forceColor={theme[1]}
+                  onClick={action}
+                />
+                <ZButton
+                  type="regular"
+                  text="Cancel"
+                  color="yellow"
+                  forceColor="#FFEA79"
+                  onClick={closeLink}
+                />
+              </div>
+            </div>
+          )}
+
           {type == "view_tt" && (
             <div>
               <div className="break-words max-w-[80vw] w-full text-center p-2 -mt-4">
                 <CompoundTable data={dataTT || []} />
               </div>
               <div className="flex flex-row items-center justify-center gap-8 mb-4 w-full">
-                <div className="flex flex-row items-center gap-3 px-4 py-2 rounded-xl ">
-                  <span className="font-semibold text-lg whitespace-nowrap">
-                    Public Sharing
-                  </span>
-                  <BasicToggleButton
-                    isDefaultOn={shareEnabled}
-                    onToggle={shareSwitchAction ?? (() => {})}
-                  />
-                  <span className="text-base whitespace-nowrap">
-                    {shareEnabled ? "Anyone with the link can view" : "Only you can view"}
-                  </span>
-                </div>
                 <div className="flex flex-row items-center gap-3">
                   <ZButton
                     type="regular"
@@ -431,33 +457,17 @@ export default function Popup({
                   />
                 </div>
               </div>
-            </div>
-          )}
-
-          {type == "logout" && (
-            <div>
-              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
-                {text}
-                <br />
-                {dataBody && (
-                  <span className="font-semibold">&quot;{dataBody}&quot;</span>
-                )}
-              </div>
-              <div className="flex flex-row items-center justify-center gap-4 mb-4">
-                <ZButton
-                  type="regular"
-                  text="Cancel"
-                  color="yellow"
-                  forceColor="#FFEA79"
-                  onClick={closeLink}
+              <div className="flex flex-row items-center justify-center gap-3 px-4 py-2 rounded-xl mb-2">
+                <span className="font-semibold text-lg whitespace-nowrap">
+                  Public Sharing
+                </span>
+                <BasicToggleButton
+                  isDefaultOn={shareEnabled}
+                  onToggle={shareSwitchAction ?? (() => {})}
                 />
-                <ZButton
-                  type="regular"
-                  text="Log Out"
-                  color="red"
-                  forceColor={theme[1]}
-                  onClick={action}
-                />
+                <span className="text-base whitespace-nowrap">
+                  {shareEnabled ? "Anyone with the link can view" : "Only you can view"}
+                </span>
               </div>
             </div>
           )}

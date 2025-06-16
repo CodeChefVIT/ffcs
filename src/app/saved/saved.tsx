@@ -241,31 +241,13 @@ export default function Saved() {
         />
       )}
       {showPopup && popupType === "rename_tt" && selectedTT && (
-        <div className="fixed inset-0 flex items-center justify-center bg-[#425D5F]/75 backdrop-blur-xs z-50 select-none">
-          <div className="bg-white rounded-3xl shadow-lg p-8 flex flex-col items-center">
-            <div className="text-2xl font-bold mb-4">Rename Timetable</div>
-            <input
-              className="border border-black rounded-xl px-4 py-2 mb-4 text-xl"
-              value={renameValue}
-              onChange={(e) => setRenameValue(e.target.value)}
-              autoFocus
-            />
-            <div className="flex space-x-4">
-              <ZButton
-                type="regular"
-                text="Cancel"
-                color="yellow"
-                onClick={() => setShowPopup(false)}
-              />
-              <ZButton
-                type="regular"
-                text="Save"
-                color="green"
-                onClick={handleRename}
-              />
-            </div>
-          </div>
-        </div>
+        <Popup
+          type="rename_tt"
+          dataBody={renameValue}
+          closeLink={() => setShowPopup(false)}
+          action={handleRename}
+          onInputChange={setRenameValue}
+        />
       )}
       <AlertModal
         open={alertOpen}
