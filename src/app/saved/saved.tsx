@@ -15,6 +15,7 @@ async function fetchTimetablesByOwner(owner: string) {
   return res.json();
 }
 
+
 interface TimetableEntry {
   _id: string;
   title: string;
@@ -89,6 +90,7 @@ export default function Saved() {
     setShowPopup(false);
     setSelectedTT(null);
   }
+
 
   return (
     <div className="flex flex-col min-h-screen relative select-none">
