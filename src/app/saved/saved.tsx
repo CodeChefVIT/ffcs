@@ -8,6 +8,7 @@ import { ZButton } from "@/components/ui/Buttons";
 import Footer from "@/components/ui/Footer";
 import Popup from "@/components/ui/Popup";
 import Image from "next/image";
+import AlertModal from "@/components/ui/AlertModal";
 
 async function fetchTimetablesByOwner(owner: string) {
   const res = await fetch(`/api/timetables?owner=${encodeURIComponent(owner)}`);
@@ -41,6 +42,9 @@ export default function Saved() {
   const [popupTitle, setPopupTitle] = useState<string>("");
   const [selectedTT, setSelectedTT] = useState<TimetableEntry | null>(null);
   const [renameValue, setRenameValue] = useState<string>("");
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMsg, setAlertMsg] = useState("");
+  const [publicToggle, setPublicToggle] = useState(true);
 
   useEffect(() => {
     if (!userEmail) return;
@@ -65,6 +69,8 @@ export default function Saved() {
     setTimetables((prev) => prev.filter((tt) => tt._id !== selectedTT._id));
     setShowPopup(false);
     setSelectedTT(null);
+    setAlertMsg("Timetable deleted!");
+    setAlertOpen(true);
   }
 
   async function handleRename() {
@@ -81,6 +87,17 @@ export default function Saved() {
     );
     setShowPopup(false);
     setSelectedTT(null);
+    setAlertMsg("Timetable renamed!");
+    setAlertOpen(true);
+  }
+
+  function handleView(tt: TimetableEntry) {
+    setPopupSlots(convertSlots(tt.slots));
+    setPopupTitle(tt.title);
+    setPopupType("view_tt");
+    setSelectedTT(tt);
+    setPublicToggle(tt.isPublic);
+    setShowPopup(true);
   }
 
   async function handleCopyLink(tt: TimetableEntry) {
@@ -88,16 +105,34 @@ export default function Saved() {
       await fetch(`/api/timetables/${tt._id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ isPublic: true }),
+        body: JSON.stringify({ isPublic: publicToggle }),
       });
       const res = await fetch(`/api/timetables/${tt._id}`);
       const updated = await res.json();
       if (!updated.shareId) throw new Error("No shareId found");
       const url = `${window.location.origin}/share/${updated.shareId}`;
       await navigator.clipboard.writeText(url);
+      setAlertMsg("Link copied!");
+      setAlertOpen(true);
     } catch {
-      alert("Failed to copy share link.");
+      setAlertMsg("Failed to copy share link.");
+      setAlertOpen(true);
     }
+  }
+
+  async function handleTogglePublic(state: "on" | "off") {
+    if (!selectedTT) return;
+    setPublicToggle(state === "on");
+    await fetch(`/api/timetables/${selectedTT._id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isPublic: state === "on" }),
+    });
+    setTimetables((prev) =>
+      prev.map((tt) =>
+        tt._id === selectedTT._id ? { ...tt, isPublic: state === "on" } : tt
+      )
+    );
   }
 
   return (
@@ -157,13 +192,7 @@ export default function Saved() {
                       text="View"
                       color="yellow"
                       image="/icons/eye.svg"
-                      onClick={() => {
-                        setPopupSlots(convertSlots(tt.slots));
-                        setPopupTitle(tt.title);
-                        setPopupType("view_tt");
-                        setSelectedTT(tt);
-                        setShowPopup(true);
-                      }}
+                      onClick={() => handleView(tt)}
                     />
                     <ZButton
                       type="regular"
@@ -203,6 +232,8 @@ export default function Saved() {
           dataTT={popupSlots}
           closeLink={() => setShowPopup(false)}
           action={() => handleCopyLink(selectedTT)}
+          shareEnabledDefault={publicToggle}
+          shareSwitchAction={handleTogglePublic}
         />
       )}
       {showPopup && popupType === "delete_tt" && selectedTT && (
@@ -240,6 +271,11 @@ export default function Saved() {
           </div>
         </div>
       )}
+      <AlertModal
+        open={alertOpen}
+        message={alertMsg}
+        onClose={() => setAlertOpen(false)}
+      />
     </div>
   );
 }

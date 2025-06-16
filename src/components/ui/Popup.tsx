@@ -400,23 +400,36 @@ export default function Popup({
               <div className="break-words max-w-[80vw] w-full text-center p-2 -mt-4">
                 <CompoundTable data={dataTT || []} />
               </div>
-              <div className="flex flex-row items-center justify-center gap-4 mb-4">
-                <ZButton
-                  type="regular"
-                  text="Copy Link"
-                  color="green"
-                  image="/icons/send.svg"
-                  forceColor="#C1FF83"
-                  onClick={action}
-                />
-                <ZButton
-                  type="regular"
-                  text="Download"
-                  color="yellow"
-                  image="/icons/download.svg"
-                  forceColor="#FFEA79"
-                  
-                />
+              <div className="flex flex-row items-center justify-center gap-8 mb-4 w-full">
+                <div className="flex flex-row items-center gap-3 px-4 py-2 rounded-xl ">
+                  <span className="font-semibold text-lg whitespace-nowrap">
+                    Public Sharing
+                  </span>
+                  <BasicToggleButton
+                    isDefaultOn={shareEnabled}
+                    onToggle={shareSwitchAction ?? (() => {})}
+                  />
+                  <span className="text-base whitespace-nowrap">
+                    {shareEnabled ? "Anyone with the link can view" : "Only you can view"}
+                  </span>
+                </div>
+                <div className="flex flex-row items-center gap-3">
+                  <ZButton
+                    type="regular"
+                    text="Copy Link"
+                    color="green"
+                    image="/icons/send.svg"
+                    forceColor="#C1FF83"
+                    onClick={action}
+                  />
+                  <ZButton
+                    type="regular"
+                    text="Download"
+                    color="yellow"
+                    image="/icons/download.svg"
+                    forceColor="#FFEA79"
+                  />
+                </div>
               </div>
             </div>
           )}
