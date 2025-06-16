@@ -2,12 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/db";
 import Timetable from "@/models/timetable";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { shareId: string } }
-) {
+export async function GET(req: NextRequest) {
   await dbConnect();
-  const { shareId } = params;
+
+  // Get shareId from the URL
+  const shareId = req.nextUrl.pathname.split("/").pop();
 
   if (!shareId) {
     return NextResponse.json({ error: "Missing shareId" }, { status: 400 });
