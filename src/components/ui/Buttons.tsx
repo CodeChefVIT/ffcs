@@ -36,6 +36,9 @@ const colorMap: Record<string, string> = {
   gray: '#969696',
 };
 
+const slotToggleOptions = ["Theory", "Lab"];
+
+
 
 export function ZButton({ type, text, color, image, onClick, forceColor, disabled = false, clicked = false, }: ZButtonProps) {
 
@@ -113,8 +116,7 @@ export function FFCSButton() {
 }
 
 export function SlotToggleButton({ onToggle }: SlotToggleButtonProps) {
-  const toggleOptions = ["Theory", "Lab"];
-  const [selected, setSelected] = useState<string>(toggleOptions[0]);
+  const [selected, setSelected] = useState<string>(slotToggleOptions[0]);
   const [sizes, setSizes] = useState<{ [key: string]: { width: number; left: number } }>({});
 
   const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -123,7 +125,7 @@ export function SlotToggleButton({ onToggle }: SlotToggleButtonProps) {
     const newSizes: { [key: string]: { width: number; left: number } } = {};
     btnRefs.current.forEach((btn, idx) => {
       if (btn) {
-        newSizes[toggleOptions[idx]] = {
+        newSizes[slotToggleOptions[idx]] = {
           width: btn.offsetWidth,
           left: btn.offsetLeft,
         };
@@ -158,7 +160,7 @@ export function SlotToggleButton({ onToggle }: SlotToggleButtonProps) {
         w-fit
         active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]
       `}
-      onClick={() => handleSelect(selected === toggleOptions[0] ? toggleOptions[1] : toggleOptions[0])}
+      onClick={() => handleSelect(selected === slotToggleOptions[0] ? slotToggleOptions[1] : slotToggleOptions[0])}
       onMouseDown={() => setIsActive(true)}
       onMouseUp={() => setIsActive(false)}
       onMouseLeave={() => setIsActive(false)}
@@ -179,7 +181,7 @@ export function SlotToggleButton({ onToggle }: SlotToggleButtonProps) {
       )}
 
       {/* Toggle buttons */}
-      {toggleOptions.map((label, idx) => (
+      {slotToggleOptions.map((label, idx) => (
         <button
           key={label}
           ref={(el) => { btnRefs.current[idx] = el; }}
