@@ -4,7 +4,7 @@ export interface ITimetable extends Document {
   title: string;
   owner: Types.ObjectId;
   isPublic: boolean;
-  shareId?: string;
+  shareId: string;
   slots: {
     slot: string;
     courseCode: string;
