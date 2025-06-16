@@ -17,9 +17,6 @@ export default function Navbar({ page }: NavbarProps) {
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
 
-  // Get user image if available
-  const userImage = session?.user?.image || undefined;
-
   return (
     <>
       {showLoginPopup && (
@@ -132,7 +129,6 @@ export default function Navbar({ page }: NavbarProps) {
                 text={session?.user?.name || "Log Out"}
                 color="red"
                 onClick={() => setShowLogoutPopup(true)}
-                icon={userImage}
               />
             )}
 
@@ -143,7 +139,6 @@ export default function Navbar({ page }: NavbarProps) {
                 text={session?.user?.name || "Log Out"}
                 color="red"
                 onClick={() => signOut({ callbackUrl: "/" })}
-                icon={userImage}
               />
             )}
           </div>

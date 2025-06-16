@@ -19,7 +19,6 @@ type ZButtonProps = {
     | "gray"
     | string;
   image?: string;
-  icon?: string; // Optional icon prop (image URL)
   onClick?: () => void;
   disabled?: boolean;
   clicked?: boolean;
@@ -52,7 +51,6 @@ export function ZButton({
   text,
   color,
   image,
-  icon,
   onClick,
   forceColor,
   disabled = false,
@@ -100,26 +98,7 @@ export function ZButton({
         ${variantClasses[type]}
       `}
     >
-      {/* Render icon (user image) if provided */}
-      {icon && (
-        <span
-          style={{
-            pointerEvents: "none",
-            display: "flex",
-            marginRight: text ? 8 : 0,
-          }}
-        >
-          <Image
-            src={icon}
-            alt="icon"
-            width={imageSize}
-            height={imageSize}
-            style={{ borderRadius: "50%" }}
-          />
-        </span>
-      )}
       {text}
-      {/* Render image if provided (legacy prop) */}
       {image && (
         <span style={{ pointerEvents: "none", display: "flex" }}>
           <Image src={image} alt="" width={imageSize} height={imageSize} />
@@ -265,7 +244,7 @@ export function SlotToggleButton({ onToggle }: SlotToggleButtonProps) {
 // export function BasicToggleButton({ onColor, offColor, isDefaultOn, onToggle }: BasicToggleButtonProps) {
 //   const toggleOptions = ["on", "off"];
 //   const [selected, setSelected] = useState<string>(toggleOptions[0]);
-//   const [sizes, setSizes] = useState<{ [key: string]: { width: number; left: number } }>();
+//   const [sizes, setSizes] = useState<{ [key: string]: { width: number; left: number } }>({});
 
 //   const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
