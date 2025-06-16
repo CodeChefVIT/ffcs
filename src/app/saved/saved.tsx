@@ -1,14 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-
 import Navbar from "@/components/ui/Navbar";
 import { ZButton } from "@/components/ui/Buttons";
 import Footer from "@/components/ui/Footer";
-import Popup from "@/components/ui/Popup"; // <-- Import Popup
+import Popup from "@/components/ui/Popup";
+import Image from "next/image";
 
 async function fetchTimetablesByOwner(owner: string) {
   const res = await fetch(`/api/timetables?owner=${encodeURIComponent(owner)}`);
@@ -32,15 +31,18 @@ interface TimetableEntry {
 export default function Saved() {
   const router = useRouter();
   const { data: session } = useSession();
-  const userEmail = session?.user?.email; 
+  const userEmail = session?.user?.email;
 
   const [timetables, setTimetables] = useState<TimetableEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
-  
+  // Popup state
   const [showPopup, setShowPopup] = useState(false);
+  const [popupType, setPopupType] = useState<"view_tt" | "delete_tt" | "rename_tt" | null>(null);
   const [popupSlots, setPopupSlots] = useState<any[]>([]);
   const [popupTitle, setPopupTitle] = useState<string>("");
+  const [selectedTT, setSelectedTT] = useState<TimetableEntry | null>(null);
+  const [renameValue, setRenameValue] = useState<string>("");
 
   useEffect(() => {
     if (!userEmail) return;
@@ -54,13 +56,38 @@ export default function Saved() {
       .finally(() => setLoading(false));
   }, [userEmail]);
 
-  // Convert slots for CompoundTable in Popup
   function convertSlots(slots: TimetableEntry["slots"]) {
     return slots.map((item) => ({
       code: item.courseCode,
       slot: item.slot,
       name: item.facultyName,
     }));
+  }
+
+  // Delete timetable
+  async function handleDelete() {
+    if (!selectedTT) return;
+    await fetch(`/api/timetables/${selectedTT._id}`, { method: "DELETE" });
+    setTimetables((prev) => prev.filter((tt) => tt._id !== selectedTT._id));
+    setShowPopup(false);
+    setSelectedTT(null);
+  }
+
+  // Rename timetable
+  async function handleRename() {
+    if (!selectedTT) return;
+    await fetch(`/api/timetables/${selectedTT._id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title: renameValue }),
+    });
+    setTimetables((prev) =>
+      prev.map((tt) =>
+        tt._id === selectedTT._id ? { ...tt, title: renameValue } : tt
+      )
+    );
+    setShowPopup(false);
+    setSelectedTT(null);
   }
 
   return (
@@ -127,6 +154,30 @@ export default function Saved() {
                       onClick={() => {
                         setPopupSlots(convertSlots(tt.slots));
                         setPopupTitle(tt.title);
+                        setPopupType("view_tt");
+                        setShowPopup(true);
+                      }}
+                    />
+                    <ZButton
+                      type="regular"
+                      text="Rename"
+                      color="blue"
+                      image="/icons/edit.svg"
+                      onClick={() => {
+                        setSelectedTT(tt);
+                        setRenameValue(tt.title);
+                        setPopupType("rename_tt");
+                        setShowPopup(true);
+                      }}
+                    />
+                    <ZButton
+                      type="regular"
+                      text="Delete"
+                      color="red"
+                      image="/icons/delete.svg"
+                      onClick={() => {
+                        setSelectedTT(tt);
+                        setPopupType("delete_tt");
                         setShowPopup(true);
                       }}
                     />
@@ -140,13 +191,49 @@ export default function Saved() {
 
       <Footer />
 
-      {showPopup && (
+      {/* Popups */}
+      {showPopup && popupType === "view_tt" && (
         <Popup
           type="view_tt"
           dataTitle={popupTitle}
           dataTT={popupSlots}
           closeLink={() => setShowPopup(false)}
         />
+      )}
+      {showPopup && popupType === "delete_tt" && selectedTT && (
+        <Popup
+          type="delete_tt"
+          dataBody={selectedTT.title}
+          closeLink={() => setShowPopup(false)}
+          action={handleDelete}
+        />
+      )}
+      {showPopup && popupType === "rename_tt" && selectedTT && (
+        <div className="fixed inset-0 flex items-center justify-center bg-[#425D5F]/75 backdrop-blur-xs z-50 select-none">
+          <div className="bg-white rounded-3xl shadow-lg p-8 flex flex-col items-center">
+            <div className="text-2xl font-bold mb-4">Rename Timetable</div>
+            <input
+              className="border border-black rounded-xl px-4 py-2 mb-4 text-xl"
+              value={renameValue}
+              onChange={(e) => setRenameValue(e.target.value)}
+              autoFocus
+            />
+            <div className="flex space-x-4">
+              <ZButton
+                type="regular"
+                text="Cancel"
+                color="yellow"
+                onClick={() => setShowPopup(false)}
+              />
+              <ZButton
+                type="regular"
+                text="Save"
+                color="green"
+                onClick={handleRename}
+              />
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

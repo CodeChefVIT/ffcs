@@ -32,7 +32,6 @@ const timetableSchema = new Schema<ITimetable>(
 );
 
 timetableSchema.index({ owner: 1 });
-timetableSchema.index({ shareId: 1 }, { unique: true, sparse: true }); 
 
 export default mongoose.models.Timetable ||
   mongoose.model<ITimetable>("Timetable", timetableSchema);
