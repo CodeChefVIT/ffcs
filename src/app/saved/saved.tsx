@@ -8,8 +8,8 @@ import { useSession } from "next-auth/react";
 import Navbar from "@/components/ui/Navbar";
 import { ZButton } from "@/components/ui/Buttons";
 import Footer from "@/components/ui/Footer";
+import Popup from "@/components/ui/Popup"; // <-- Import Popup
 
-// --- New API call to fetch timetables by owner ---
 async function fetchTimetablesByOwner(owner: string) {
   const res = await fetch(`/api/timetables?owner=${encodeURIComponent(owner)}`);
   if (!res.ok) throw new Error("Failed to fetch timetables");
@@ -32,10 +32,15 @@ interface TimetableEntry {
 export default function Saved() {
   const router = useRouter();
   const { data: session } = useSession();
-  const userEmail = session?.user?.email || "sohammaha15@gmail.com"; // fallback for testing
+  const userEmail = session?.user?.email; 
 
   const [timetables, setTimetables] = useState<TimetableEntry[]>([]);
   const [loading, setLoading] = useState(true);
+
+  
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupSlots, setPopupSlots] = useState<any[]>([]);
+  const [popupTitle, setPopupTitle] = useState<string>("");
 
   useEffect(() => {
     if (!userEmail) return;
@@ -48,6 +53,15 @@ export default function Saved() {
       })
       .finally(() => setLoading(false));
   }, [userEmail]);
+
+  // Convert slots for CompoundTable in Popup
+  function convertSlots(slots: TimetableEntry["slots"]) {
+    return slots.map((item) => ({
+      code: item.courseCode,
+      slot: item.slot,
+      name: item.facultyName,
+    }));
+  }
 
   return (
     <div className="flex flex-col min-h-screen relative select-none">
@@ -110,7 +124,11 @@ export default function Saved() {
                       text="View"
                       color="yellow"
                       image="/icons/eye.svg"
-                      onClick={() => router.push(`/timetable/${tt._id}`)}
+                      onClick={() => {
+                        setPopupSlots(convertSlots(tt.slots));
+                        setPopupTitle(tt.title);
+                        setShowPopup(true);
+                      }}
                     />
                   </div>
                 </li>
@@ -121,6 +139,15 @@ export default function Saved() {
       </div>
 
       <Footer />
+
+      {showPopup && (
+        <Popup
+          type="view_tt"
+          dataTitle={popupTitle}
+          dataTT={popupSlots}
+          closeLink={() => setShowPopup(false)}
+        />
+      )}
     </div>
   );
 }
