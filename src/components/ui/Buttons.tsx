@@ -99,7 +99,7 @@ export function FFCSButton() {
   const router = useRouter();
   return (
     <Image
-      src="/logo_FFCS.svg"
+      src="/logo_ffcs.svg"
       alt="CC Button"
       width={80}
       height={80}
