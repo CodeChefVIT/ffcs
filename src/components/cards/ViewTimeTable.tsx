@@ -16,6 +16,8 @@ export default function ViewTimeTable() {
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [showSharePopup, setShowSharePopup] = useState(false);
   const [shareLink, setShareLink] = useState<string>("");
+  const [showSavePopup, setShowSavePopup] = useState(false);
+  const [saveTTName, setSaveTTName] = useState<string>("");
 
   const { data: session } = useSession();
   const owner = session?.user?.email || null;
@@ -37,7 +39,7 @@ export default function ViewTimeTable() {
     name: item.facultyName || "Unknown",
   }));
 
-  async function handleSave() {
+  async function handleSave(ttName?: string) {
     if (!selectedData || selectedData.length === 0) return;
 
     const slots = selectedData.map((item: any) => ({
@@ -49,7 +51,7 @@ export default function ViewTimeTable() {
 
     try {
       const res = await axios.post("/api/save-timetable", {
-        title: `Saved Timetable ${selectedIndex + 1}`,
+        title: ttName || `Saved Timetable`,
         slots,
         owner: owner,
       });
@@ -98,7 +100,10 @@ export default function ViewTimeTable() {
       label: "Save",
       color: "green",
       icon: "/icons/save.svg",
-      onClick: withLoginCheck(handleSave),
+      onClick: withLoginCheck(() => {
+        setSaveTTName("");
+        setShowSavePopup(true);
+      }),
     },
     {
       label: "Report",
@@ -116,7 +121,7 @@ export default function ViewTimeTable() {
       label: "Download",
       color: "yellow",
       icon: "/icons/download.svg",
-      onClick: withLoginCheck(() => console.log("Download clicked"), true), 
+      onClick: withLoginCheck(() => console.log("Download clicked"), true),
     },
   ];
 
@@ -240,6 +245,23 @@ export default function ViewTimeTable() {
         <Popup
           type="login"
           closeLink={() => setShowLoginPopup(false)}
+        />
+      )}
+
+      {showSavePopup && (
+        <Popup
+          type="save_tt"
+          dataBody={saveTTName}
+          closeLink={() => setShowSavePopup(false)}
+          action={() => {
+            if (!saveTTName.trim()) {
+              alert("Please enter a timetable name.");
+              return;
+            }
+            setShowSavePopup(false);
+            handleSave(saveTTName.trim());
+          }}
+          onInputChange={setSaveTTName}
         />
       )}
     </div>
