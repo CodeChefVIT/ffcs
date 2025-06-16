@@ -7,7 +7,7 @@ import { clashMap, getAllSlots } from "@/lib/slots";
 
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
-import { ZButton, ToggleButton } from "@/components/ui/Buttons";
+import { ZButton, SlotToggleButton } from "@/components/ui/Buttons";
 import TimeTable from "@/components/ui/TimeTable";
 
 
@@ -56,7 +56,7 @@ export default function View() {
       <div className="text-6xl mt-36 mb-4 font-pangolin text-black">Slot View</div>
 
       <div className="mt-8 mb-8">
-        <ToggleButton onToggle={setSelected} />
+        <SlotToggleButton onToggle={setSelected} />
       </div>
 
       {selected === "Theory" && (

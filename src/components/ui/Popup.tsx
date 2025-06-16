@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
-import { GoogleLoginButton, ZButton } from "./Buttons";
+import React, { useState } from "react";
+import { BasicToggleButton, GoogleLoginButton, ZButton } from "./Buttons";
 import CompoundTable from "./CompoundTable";
 
 
@@ -19,6 +19,8 @@ type PopupProps = {
   dataTT?: dataProps[];
   closeLink: () => void;
   action?: () => void;
+  shareEnabledDefault?: boolean;
+  shareSwitchAction?: (state: "on" | "off") => void;
 };
 
 const colorMap = {
@@ -53,7 +55,7 @@ const typeTextMap = {
   login: 'Please log-in to save and share your time-tables.',
   rem_course: 'Are you sure you want to remove this course?',
   email_tt: 'A report has been sent to your email ID.',
-  share_tt: 'Use this link to share your timetable with anyone.',
+  share_tt: 'Share your timetable with anyone.',
   save_tt: 'Save this timetable in your collection.',
   delete_tt: 'Are you sure you want to delete this timetable?',
   view_tt: '',
@@ -65,11 +67,15 @@ function copy(text: string) {
   }
 }
 
-export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, action }: PopupProps) {
+export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, action, shareEnabledDefault, shareSwitchAction }: PopupProps) {
 
   const theme = colorMap[typeColorMap[type] as keyof typeof colorMap] || ['#E4E9FC', '#94ACFF'];
   const title = typeTitleMap[type] || dataTitle || '';
   const text = typeTextMap[type] || '';
+
+  const shareEnabled = shareEnabledDefault !== undefined ? shareEnabledDefault : true;
+  const [shareState, setShareState] = useState<"on" | "off">(shareEnabled ? "on" : "off");
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#425D5F]/75 backdrop-blur-xs z-50 select-none">
@@ -216,12 +222,32 @@ export default function Popup({ type, dataTitle, dataBody, dataTT, closeLink, ac
               <div className="break-words w-full text-center mt-2 mb-4">
                 {text}
               </div>
-              <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
-                <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-[#606060] font-semibold">
-                  {dataBody}
+
+              {shareState === "on" && (
+                <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
+                  <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-[#606060] font-semibold">
+                    {dataBody}
+                  </div>
+                  <ZButton type="regular" text="Copy" color="blue" forceColor={theme[1]} onClick={() => copy(dataBody || "")} />
                 </div>
-                <ZButton type="regular" text="Copy" color="yellow" forceColor={theme[1]} onClick={() => copy(dataBody || "")} />
+              )}
+
+              <div className="flex flex-row items-center justify-center gap-4 mt-4 mb-4">
+                <div className={`${shareState === "on" ? "text-[#0E595D]" : "text-[#661800]"} text-xl font-semibold mt-2 mb-2`}>
+                  Sharing Link is {shareState === "on" ? "Public" : "Private"}
+                </div>
+                <BasicToggleButton
+                  isDefaultOn={shareEnabled}
+                  onToggle={
+                    (state: "on" | "off") => {
+                      setShareState(state);
+                      if (shareSwitchAction) shareSwitchAction(state);
+                      else alert("No action provided for share switch toggle.");
+                    }
+                  }
+                />
               </div>
+
             </div>
           )}
 
