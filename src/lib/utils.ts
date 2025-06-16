@@ -69,34 +69,17 @@ export function generateTT(courseData: fullCourseData[], discardClashCombination
     const temp: timetableDisplayData[][] = [];
     for (const partial of combinations) {
       for (const item of subject) {
-
-        if (!discardClashCombinations) {
-
-          const included: string[] = [];
-          partial.forEach(p => {
-            const slots = p.slotName.split(/\+|__/);
-            slots.forEach(slot => {
-              included.push(slot);
-              if (clashMap[slot]) included.push(...clashMap[slot]);
-            });
+        const included: string[] = [];
+        partial.forEach(p => {
+          const slots = p.slotName.split(/\+|__/);
+          slots.forEach(slot => {
+            included.push(slot);
+            if (clashMap[slot]) included.push(...clashMap[slot]);
           });
-          const nonePresent = item.slotName.split(/\+|__/).every(slot => !included.includes(slot));
-          if (nonePresent) temp.push([...partial, item]);
-          else temp.push([...partial])
-
-        } else {
-
-          const clashes = partial.some(p => {
-            const pSlots = p.slotName.split(/\+|__/);
-            const iSlots = item.slotName.split(/\+|__/);
-            return pSlots.some(slot => iSlots.includes(slot)) || iSlots.some(slot => pSlots.includes(slot));
-          });
-          if (!clashes) {
-            temp.push([...partial, item]);
-          }
-
-        }
-
+        });
+        const nonePresent = item.slotName.split(/\+|__/).every(slot => !included.includes(slot));
+        if (nonePresent) temp.push([...partial, item]);
+        else if (!discardClashCombinations) temp.push([...partial])
       }
     }
     combinations = temp;

@@ -17,8 +17,13 @@ type ZButtonProps = {
   forceColor?: string;
 };
 
-type ToggleButtonProps = {
+type SlotToggleButtonProps = {
   onToggle?: (selected: string) => void;
+};
+
+type BasicToggleButtonProps = {
+  isDefaultOn: boolean;
+  onToggle: (selected: "on" | "off") => void;
 };
 
 const colorMap: Record<string, string> = {
@@ -31,7 +36,8 @@ const colorMap: Record<string, string> = {
   gray: '#969696',
 };
 
-const toggleOptions = ["Theory", "Lab"];
+const slotToggleOptions = ["Theory", "Lab"];
+
 
 
 export function ZButton({ type, text, color, image, onClick, forceColor, disabled = false, clicked = false, }: ZButtonProps) {
@@ -99,7 +105,7 @@ export function FFCSButton() {
   const router = useRouter();
   return (
     <Image
-      src="/logo_FFCS.svg"
+      src="/logo_ffcs.svg"
       alt="CC Button"
       width={80}
       height={80}
@@ -109,9 +115,8 @@ export function FFCSButton() {
   );
 }
 
-export function ToggleButton({ onToggle }: ToggleButtonProps) {
-
-  const [selected, setSelected] = useState<string>(toggleOptions[0]);
+export function SlotToggleButton({ onToggle }: SlotToggleButtonProps) {
+  const [selected, setSelected] = useState<string>(slotToggleOptions[0]);
   const [sizes, setSizes] = useState<{ [key: string]: { width: number; left: number } }>({});
 
   const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -120,7 +125,7 @@ export function ToggleButton({ onToggle }: ToggleButtonProps) {
     const newSizes: { [key: string]: { width: number; left: number } } = {};
     btnRefs.current.forEach((btn, idx) => {
       if (btn) {
-        newSizes[toggleOptions[idx]] = {
+        newSizes[slotToggleOptions[idx]] = {
           width: btn.offsetWidth,
           left: btn.offsetLeft,
         };
@@ -155,7 +160,7 @@ export function ToggleButton({ onToggle }: ToggleButtonProps) {
         w-fit
         active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]
       `}
-      onClick={() => handleSelect(selected === toggleOptions[0] ? toggleOptions[1] : toggleOptions[0])}
+      onClick={() => handleSelect(selected === slotToggleOptions[0] ? slotToggleOptions[1] : slotToggleOptions[0])}
       onMouseDown={() => setIsActive(true)}
       onMouseUp={() => setIsActive(false)}
       onMouseLeave={() => setIsActive(false)}
@@ -176,7 +181,7 @@ export function ToggleButton({ onToggle }: ToggleButtonProps) {
       )}
 
       {/* Toggle buttons */}
-      {toggleOptions.map((label, idx) => (
+      {slotToggleOptions.map((label, idx) => (
         <button
           key={label}
           ref={(el) => { btnRefs.current[idx] = el; }}
@@ -196,6 +201,159 @@ export function ToggleButton({ onToggle }: ToggleButtonProps) {
     </div>
   );
 }
+
+// export function BasicToggleButton({ onColor, offColor, isDefaultOn, onToggle }: BasicToggleButtonProps) {
+//   const toggleOptions = ["on", "off"];
+//   const [selected, setSelected] = useState<string>(toggleOptions[0]);
+//   const [sizes, setSizes] = useState<{ [key: string]: { width: number; left: number } }>({});
+
+//   const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+//   useEffect(() => {
+//     const newSizes: { [key: string]: { width: number; left: number } } = {};
+//     btnRefs.current.forEach((btn, idx) => {
+//       if (btn) {
+//         newSizes[toggleOptions[idx]] = {
+//           width: btn.offsetWidth,
+//           left: btn.offsetLeft,
+//         };
+//       }
+//     });
+//     setSizes(newSizes);
+//   }, []);
+
+//   const handleSelect = (curruntStateOn: boolean) => {
+//     const label = curruntStateOn ? toggleOptions[0] : toggleOptions[1];
+//     setSelected(label);
+//     onToggle?.(label);
+//   };
+
+//   const setIsActive = useState(false)[1];
+
+//   return (
+//     <div
+//       style={{
+//         fontFamily: 'Poppins, sans-serif',
+//         height: '56px',
+//         borderRadius: '18px',
+//         userSelect: 'none',
+//         cursor: "pointer",
+//       }}
+//       className={`
+//         relative flex items-center
+//         border-[3px] border-black
+//         shadow-[4px_4px_0_0_black]
+//         transition-all duration-100
+//         bg-[${colorMap['yellow']}]
+//         px-2 py-1
+//         w-fit
+//         active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]
+//       `}
+//       onClick={() => handleSelect(selected === toggleOptions[0] ? toggleOptions[1] : toggleOptions[0])}
+//       onMouseDown={() => setIsActive(true)}
+//       onMouseUp={() => setIsActive(false)}
+//       onMouseLeave={() => setIsActive(false)}
+//       onTouchStart={() => setIsActive(true)}
+//       onTouchEnd={() => setIsActive(false)}
+//     >
+//       {/* White highlight that wraps text */}
+//       {sizes[selected] && (
+//         <div
+//           className="absolute top-1/2 -translate-y-1/2 h-[80%] bg-white border border-black transition-all duration-100 ease-in-out"
+//           style={{
+//             left: sizes[selected].left,
+//             width: sizes[selected].width,
+//             zIndex: 1,
+//             borderRadius: '15px',
+//           }}
+//         />
+//       )}
+
+//       {/* Toggle buttons */}
+//       {['on', 'off'].map((label, idx) => (
+//         <button
+//           key={label}
+//           ref={(el) => { btnRefs.current[idx] = el; }}
+//           onClick={e => { e.stopPropagation(); handleSelect(label); }}
+//           className="relative z-10 px-4 py-0 text-base font-semibold transition-colors duration-200"
+//           style={{
+//             fontFamily: "Poppins, sans-serif",
+//             fontWeight: "700",
+//             background: "none",
+//             border: "none",
+//             cursor: "pointer",
+//           }}
+//         >
+//           {label}
+//         </button>
+//       ))}
+//     </div>
+//   );
+// }
+
+export function BasicToggleButton({ isDefaultOn, onToggle }: BasicToggleButtonProps) {
+  const [selected, setSelected] = useState<string>(isDefaultOn ? "on" : "off");
+
+  const handleSelect = (label: "on" | "off") => {
+    setSelected(label);
+    onToggle(label);
+  };
+
+  const setIsActive = useState(false)[1];
+
+  const bgColor = selected === "on" ? colorMap['blue'] : colorMap['red'];
+
+  return (
+    <div
+      className={`
+        relative flex items-center
+        border-[3px] border-black
+        shadow-[4px_4px_0_0_black]
+        transition-all duration-100
+        px-2 py-1
+        w-[60px]
+        h-[36px]
+        rounded-[12px]
+        select-none
+        cursor-pointer
+        font-poppins
+        active:shadow-[2px_2px_0_0_black]
+        active:translate-x-[2px]
+        active:translate-y-[2px]
+      `}
+      style={{
+        backgroundColor: bgColor,
+      }}
+      onClick={() => handleSelect(selected === "on" ? "off" : "on")}
+      onMouseDown={() => setIsActive(true)}
+      onMouseUp={() => setIsActive(false)}
+      onMouseLeave={() => setIsActive(false)}
+      onTouchStart={() => setIsActive(true)}
+      onTouchEnd={() => setIsActive(false)}
+    >
+      <div
+        className={`
+            absolute
+            top-1/2
+            -translate-y-1/2
+            h-[24px]
+            w-[24px]
+            bg-white
+            border
+            border-black
+            transition-all
+            duration-100
+            ease-in-out
+            z-[1]
+            rounded-[8px]
+          `}
+        style={selected === "on" ? { right: 4 } : { left: 4 }}
+      />
+
+    </div>
+  );
+}
+
 
 export function GoogleLoginButton({ onClick }: { onClick?: () => void }) {
 

@@ -130,7 +130,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
             gridRowEnd: cell.rowEnd,
           }}
         >
-          <span className="w-full h-full flex items-center justify-center font-bold whitespace-nowrap overflow-hidden text-ellipsis text-[clamp(8px,0.8vw,18px)]">
+          <span className="w-full h-full flex items-center justify-center font-bold whitespace-nowrap overflow-hidden text-ellipsis text-xs">
             {cell.slotName}
           </span>
         </div>
@@ -147,7 +147,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
             gridRowEnd: cell.rowEnd,
           }}
         >
-          <span className="w-full h-full flex items-center justify-center whitespace-nowrap overflow-hidden text-ellipsis text-[clamp(8px,0.8vw,18px)]">
+          <span className="w-full h-full flex items-center justify-center whitespace-nowrap overflow-hidden text-ellipsis text-xs">
             {cell.slotName}
           </span>
         </div>
@@ -164,7 +164,7 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
             gridRowEnd: slot.rowEnd,
           }}
         >
-          <span className="w-full h-full flex items-center justify-center whitespace-nowrap overflow-hidden text-ellipsis text-[clamp(8px,0.8vw,18px)]">
+          <span className="w-full h-full flex items-center justify-center whitespace-nowrap overflow-hidden text-ellipsis text-xs">
             {slot.slotName}
           </span>
         </div>
