@@ -1,4 +1,3 @@
-import { FoundationCore } from '../FoundationCore';
 import { disciplineElective } from './DisciplineElective';
 import { ScopeDisclipineCore } from './DiscliplineCore';
 import { dsd } from './dles/dsd';
@@ -67,16 +66,12 @@ export const SCOPE_LIST = {
     'BCLE214L - Global Warming': globalWarming,
     'BCLE215L - Waste Management': wasteManagement,
     'BCLE216L - Water Resource Management': waterResourceManagement,
-    'BCSE102L - Structured and Object-Oriented Programming':
-      structuredProgramming,
-    'BCSE102P - Structured and Object-Oriented Programming Lab':
-      structuredProgrammingLab,
+    'BCSE102L - Structured and Object-Oriented Programming': structuredProgramming,
+    'BCSE102P - Structured and Object-Oriented Programming Lab': structuredProgrammingLab,
     'BEEE102L - Basic Electrical and Electronics Engineering': basicElectrical,
-    'BEEE102P - Basic Electrical and Electronics Engineering Lab':
-      basicElectricalLab,
+    'BEEE102P - Basic Electrical and Electronics Engineering Lab': basicElectricalLab,
     'BENG101L - Technical English Communication': technicalEnglishCommunication,
-    'BENG101P - Technical English Communication Lab':
-      technicalEnglishCommunicationLab,
+    'BENG101P - Technical English Communication Lab': technicalEnglishCommunicationLab,
     'BESP101L - Spanish I': spanish,
     'BFRE101L - French I': french,
     'BGER101L - German I': german,
