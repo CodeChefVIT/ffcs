@@ -1,23 +1,18 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 
-import CompoundTable from "@/components/ui/CompoundTable";
+import CompoundTable from "@/components//ui/CompoundTable";
 import { ZButton } from "@/components/ui/Buttons";
 import { useTimetable } from "@/lib/TimeTableContext";
 import Image from "next/image";
 import Popup from "@/components/ui/Popup";
 import AlertModal from "@/components/ui/AlertModal";
-// @ts-expect-error: third-party lib doesn't have types
-import domtoimage from "dom-to-image-more";
 
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
-  const tableRef = useRef(null);
-  const timetableOnlyRef = useRef(null); 
-
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [showSharePopup, setShowSharePopup] = useState(false);
@@ -117,22 +112,6 @@ export default function ViewTimeTable() {
     }
   }
 
-  function handleDownloadImage() {
-    const node = timetableOnlyRef.current;
-    if (!node) return;
-
-    domtoimage.toPng(node)
-      .then((dataUrl: string) => {
-        const link = document.createElement("a");
-        link.download = `timetable.png`;
-        link.href = dataUrl;
-        link.click();
-      })
-      .catch(() => {
-        showAlert("Failed to download image.");
-      });
-  }
-
   function withLoginCheck(action: () => void, skipCheck = false) {
     return () => {
       if (!owner && !skipCheck) {
@@ -175,12 +154,7 @@ export default function ViewTimeTable() {
       icon: "/icons/send.svg",
       onClick: withLoginCheck(handleShare),
     },
-    {
-      label: "Download",
-      color: "yellow",
-      icon: "/icons/download.svg",
-      onClick: withLoginCheck(handleDownloadImage, true),
-    },
+
   ];
 
   function showAlert(msg: string) {
@@ -190,16 +164,16 @@ export default function ViewTimeTable() {
 
   return (
     <div id="timetable-view" className="w-screen mt-12 bg-[#A7D5D7] font-poppins flex items-center justify-center flex-col border-black border-3">
-      <div className="flex flex-col h-full p-12 overflow-hidden" ref={tableRef}>
+      <div className="flex flex-col h-full p-12 overflow-hidden">
         <div className="flex flex-row items-end mb-4 ml-2">
           <div className="text-5xl font-pangolin">Your Timetables</div>
           <div className="text-xl ml-8 font-poppins pb-1">
             ({timetableCount} timetable{timetableCount != 1 ? "s were" : " was"} generated)
           </div>
         </div>
- 
+
         <div className="w-full max-w-[95vw] my-4">
-          <CompoundTable data={convertedData} large={true} timetableRef={timetableOnlyRef} />
+          <CompoundTable data={convertedData} large={true} />
         </div>
 
         <div className="flex flex-row items-center justify-between px-8 pt-8 gap-8">
@@ -253,7 +227,6 @@ export default function ViewTimeTable() {
             ))}
           </div>
         </div>
-        
       </div>
 
       {showSharePopup && (
@@ -294,6 +267,7 @@ export default function ViewTimeTable() {
         open={alertOpen}
         message={alertMsg}
         onClose={() => setAlertOpen(false)}
+        
       />
     </div>
   );
