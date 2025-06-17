@@ -44,6 +44,8 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
             priority
             sizes="100vw"
             className="object-top object-contain w-full h-full"
+            unselectable="on"
+            draggable={false}
           />
         </div>
 
@@ -63,7 +65,15 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
           </div>
 
           <div className="mb-8">
-            <Image src="/logo_ffcs.svg" alt="FFCS Logo" width={120} height={120} />
+            <Image
+              src="/logo_ffcs.svg"
+              alt="FFCS Logo"
+              width={120}
+              height={120}
+              unselectable="on"
+              draggable={false}
+              priority
+            />
           </div>
 
           <div className="text-2xl mb-8 font-poppins text-black">
@@ -149,6 +159,8 @@ export function PopupViewTT({ TTName, TTData, shareLink, closeLink, onDownloadCl
             priority
             sizes="100vw"
             className="object-top object-contain w-full h-full"
+            unselectable="on"
+            draggable={false}
           />
         </div>
 

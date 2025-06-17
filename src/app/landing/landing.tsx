@@ -26,6 +26,7 @@ export default function View() {
           sizes="100vw"
           className="object-top object-contain w-full h-full"
           draggable={false}
+          unselectable="on"
         />
       </div>
 
@@ -108,6 +109,7 @@ export default function View() {
           className="w-full h-auto"
           priority
           draggable={false}
+          unselectable="on"
         />
       </div>
 

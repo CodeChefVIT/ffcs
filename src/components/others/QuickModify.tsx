@@ -98,6 +98,9 @@ const ReplaceSlot = () => {
             alt="quick modify icon"
             width={24}
             height={24}
+            unselectable="on"
+            draggable={false}
+            priority
           />
         </button>
       </div>

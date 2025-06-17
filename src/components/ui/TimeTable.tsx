@@ -116,6 +116,8 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
           height={80}
           className="w-auto h-2/3 block opacity-90 select-none pointer-events-none"
           draggable={false}
+          unselectable="on"
+          priority
         />
       </div>
 

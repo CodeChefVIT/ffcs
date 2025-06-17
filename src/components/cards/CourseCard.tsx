@@ -173,7 +173,15 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
                   type="button"
                   title="Delete Course"
                 >
-                  <Image src={"/icons/trash.svg"} width={1} height={1} alt="delete" className="w-6 h-6" />
+                  <Image
+                    src={"/icons/trash.svg"}
+                    width={1} height={1}
+                    alt="delete"
+                    className="w-6 h-6"
+                    unselectable="on"
+                    draggable={false}
+                    priority
+                  />
                 </button>
 
                 <div className="flex flex-col bg-[#FFFFFF]/50 rounded-xl overflow-hidden leading-none gap-0 p-1 flex-shrink-0 w-8 h-12 -mr-2">
@@ -191,6 +199,9 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
                       height={1}
                       alt="up"
                       className="w-3 h-3"
+                      unselectable="on"
+                      draggable={false}
+                      priority
                     />
                   </button>
 
@@ -208,6 +219,9 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
                       height={1}
                       alt="down"
                       className="w-3 h-3"
+                      unselectable="on"
+                      draggable={false}
+                      priority
                     />
                   </button>
                 </div>

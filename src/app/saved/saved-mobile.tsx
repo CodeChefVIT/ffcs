@@ -42,6 +42,8 @@ export default function SavedMobile() {
           priority
           sizes="100vw"
           className="object-top object-contain w-full h-full"
+          unselectable="on"
+          draggable={false}
         />
       </div>
 

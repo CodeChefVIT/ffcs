@@ -28,6 +28,8 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
             height={1080}
             className="w-full h-auto"
             priority
+            unselectable="on"
+            draggable={false}
           />
         </div>
       </footer>
@@ -70,7 +72,15 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
               },
             ].map(({ href, src, alt }) => (
               <a href={href} key={src} target="_blank" rel="noopener">
-                <Image src={src} alt={alt} width={26} height={26} />
+                <Image
+                  src={src}
+                  alt={alt}
+                  width={26}
+                  height={26}
+                  unselectable="on"
+                  draggable={false}
+                  priority
+                />
               </a>
             ))}
           </div>
