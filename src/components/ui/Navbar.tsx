@@ -5,7 +5,6 @@ import { CCButton, FFCSButton, ZButton } from "./Buttons";
 import { useRouter } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Popup from "./Popup";
-import { set } from "mongoose";
 
 type NavbarProps = {
   page: "landing" | "404" | "slots" | "saved" | "shared" | "mobile";

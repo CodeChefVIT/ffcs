@@ -78,7 +78,7 @@ export default function Saved() {
     setTimetables((prev) => prev.filter((tt) => tt._id !== selectedTT._id));
     setShowPopup(false);
     setSelectedTT(null);
-    setAlertMsg("Timetable deleted!");
+    setAlertMsg("Timetable has been deleted.");
     setAlertOpen(true);
   }
 
@@ -94,7 +94,7 @@ export default function Saved() {
     );
     setShowPopup(false);
     setSelectedTT(null);
-    setAlertMsg("Timetable renamed!");
+    setAlertMsg("Timetable has been renamed.");
     setAlertOpen(true);
   }
 
@@ -165,7 +165,7 @@ export default function Saved() {
             </div>
           ) : timetables.length === 0 ? (
             <div className="flex flex-col items-center justify-center mt-12 mb-6">
-              <div className="text-center text-2xl font-semibold text-[#606060] mb-6">
+              <div className="text-center text-3xl font-semibold text-[#606060] mb-6">
                 (No Timetables Found)
               </div>
               <ZButton
@@ -181,15 +181,15 @@ export default function Saved() {
               {timetables.map((tt, index) => (
                 <li
                   key={tt._id}
-                  className="flex items-center justify-between bg-[#C9E5E6] p-4 rounded-3xl"
+                  className="flex items-center justify-between bg-[#C9E5E6] p-5 rounded-4xl"
                 >
-                  <div className="flex flex-row">
-                    <div className="text-xl mx-4 my-4">{index + 1}.</div>
-                    <div className="text-xl ml-8 mr-4 my-4 overflow-hidden">
+                  <div className="flex flex-row items-center">
+                    <div className="text-xl ml-4">{index + 1}.</div>
+                    <div className="text-xl mx-8 overflow-hidden">
                       {tt.title}
                     </div>
                   </div>
-                  <div className="flex space-x-2">
+                  <div className="flex gap-2">
                     <ZButton
                       type="regular"
                       text="View"
