@@ -7,27 +7,27 @@ const CORE_ASSETS = [
   "/",
   "/offline",
   "/manifest.json",
-  "/icons/logo-ffcs-16x16.webp",
-  "/icons/logo-ffcs-32x32.webp",
-  "/icons/logo-ffcs-48x48.webp",
-  "/icons/logo-ffcs-64x64.webp",
-  "/icons/logo-ffcs-72x72.webp",
-  "/icons/logo-ffcs-76x76.webp",
-  "/icons/logo-ffcs-96x96.webp",
-  "/icons/logo-ffcs-114x114.webp",
-  "/icons/logo-ffcs-120x120.webp",
-  "/icons/logo-ffcs-128x128.webp",
-  "/icons/logo-ffcs-144x144.webp",
-  "/icons/logo-ffcs-152x152.webp",
-  "/icons/logo-ffcs-180x180.webp",
-  "/icons/logo-ffcs-192x192.webp",
-  "/icons/logo-ffcs-196x196.webp",
-  "/icons/logo-ffcs-228x228.webp",
-  "/icons/logo-ffcs-256x256.webp",
-  "/icons/logo-ffcs-384x384.webp",
-  "/logo-ffcs.png",
-  "/logo-ffcs.svg",
-  "/logo-ffcs.webp",
+  "/logo_ffcs/icon-16x16.webp",
+  "/logo_ffcs/icon-32x32.webp",
+  "/logo_ffcs/icon-48x48.webp",
+  "/logo_ffcs/icon-64x64.webp",
+  "/logo_ffcs/icon-72x72.webp",
+  "/logo_ffcs/icon-76x76.webp",
+  "/logo_ffcs/icon-96x96.webp",
+  "/logo_ffcs/icon-114x114.webp",
+  "/logo_ffcs/icon-120x120.webp",
+  "/logo_ffcs/icon-128x128.webp",
+  "/logo_ffcs/icon-144x144.webp",
+  "/logo_ffcs/icon-152x152.webp",
+  "/logo_ffcs/icon-180x180.webp",
+  "/logo_ffcs/icon-192x192.webp",
+  "/logo_ffcs/icon-196x196.webp",
+  "/logo_ffcs/icon-228x228.webp",
+  "/logo_ffcs/icon-256x256.webp",
+  "/logo_ffcs/icon-384x384.webp",
+  "/logo_ffcs.png",
+  "/logo_ffcs.svg",
+  "/logo_ffcs.webp",
   "/logo_ffcs.svg",
 ];
 
@@ -39,7 +39,7 @@ function isCoreAsset(request) {
 function isPublicAsset(request) {
   const url = new URL(request.url);
   return (
-    url.pathname.match(/^\/(icons|art|social)\//) ||
+    url.pathname.match(/^\/(icons|art|social|logo_ffcs)\//) ||
     url.pathname.match(/^\/[^/]+\.(png|svg|webp|jpg|jpeg|gif|ico|json)$/)
   );
 }
