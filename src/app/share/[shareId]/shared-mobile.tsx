@@ -74,6 +74,8 @@ export default function View() {
         priority
         sizes="100vw"
         className="object-top object-contain w-full h-full"
+        unselectable="on"
+        draggable={false}
       />
     </div>
 
@@ -84,6 +86,9 @@ export default function View() {
         width={60}
         height={60}
         className="cursor-pointer mt-8 mb-8"
+        unselectable="on"
+        draggable={false}
+        priority
       />
     </div>
     <div className="text-4xl mb-8 text-black font-pangolin">Shared Timetable</div>

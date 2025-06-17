@@ -21,6 +21,8 @@ export default function View() {
           priority
           sizes="100vw"
           className="object-top object-contain w-full h-full"
+          unselectable="on"
+          draggable={false}
         />
       </div>
 
@@ -36,7 +38,16 @@ export default function View() {
         </div>
 
         <div className="mb-8">
-          <Image src="/logo_ffcs.svg" alt="FFCS Logo" width={120} height={120} />
+          <Image
+            src="/logo_ffcs.svg"
+            alt="FFCS Logo"
+            width={120}
+            height={120}
+            className="select-none"
+            unselectable="on"
+            draggable={false}
+            priority
+          />
         </div>
 
         <div className="text-4xl mb-8 font-pangolin text-black">

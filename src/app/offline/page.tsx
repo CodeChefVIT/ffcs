@@ -14,6 +14,8 @@ export default function OfflinePage() {
           priority
           sizes="100vw"
           className="object-top object-contain w-full h-full"
+          unselectable="on"
+          draggable={false}
         />
       </div>
 
@@ -30,6 +32,9 @@ export default function OfflinePage() {
             alt="FFCS Logo"
             width={120}
             height={120}
+            unselectable="on"
+            draggable={false}
+            priority
           />
         </div>
         <div className="text-3xl mb-8 font-pangolin text-black">

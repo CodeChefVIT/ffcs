@@ -7,10 +7,10 @@ import SavedMobile from './saved-mobile';
 import Loader from '@/components/ui/Loader';
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import AlertModal from '@/components/ui/AlertModal'; 
+import AlertModal from '@/components/ui/AlertModal';
 
 export default function View() {
-  const { status } = useSession(); 
+  const { status } = useSession();
   const router = useRouter();
   const size = useScreenSize();
 
@@ -37,6 +37,7 @@ export default function View() {
             open={showAlert}
             message="Please login to continue."
             onClose={handleCloseAlert}
+            color="red"
           />
         )}
       </>

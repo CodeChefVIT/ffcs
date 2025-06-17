@@ -147,6 +147,8 @@ export default function Saved() {
           priority
           sizes="100vw"
           className="object-top object-contain w-full h-full"
+          unselectable="on"
+          draggable={false}
         />
       </div>
       <Navbar page="saved" />

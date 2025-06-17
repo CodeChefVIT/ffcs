@@ -171,7 +171,7 @@ export default function Popup({
                     height={32}
                     draggable={false}
                     unselectable="on"
-                    style={{ userSelect: "none", pointerEvents: "auto" }}
+                    priority
                   />
                 </div>
               </div>

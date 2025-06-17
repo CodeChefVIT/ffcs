@@ -10,14 +10,14 @@ type ZButtonProps = {
   type: ButtonVariant;
   text?: string;
   color:
-    | "red"
-    | "yellow"
-    | "green"
-    | "green_2"
-    | "blue"
-    | "purple"
-    | "gray"
-    | string;
+  | "red"
+  | "yellow"
+  | "green"
+  | "green_2"
+  | "blue"
+  | "purple"
+  | "gray"
+  | string;
   image?: string;
   onClick?: () => void;
   disabled?: boolean;
@@ -69,13 +69,13 @@ export function ZButton({
     ? disabled
       ? colorMap["gray"]
       : clicked
-      ? colorMap["green_2"]
-      : forceColor
+        ? colorMap["green_2"]
+        : forceColor
     : disabled
-    ? colorMap["gray"]
-    : clicked
-    ? colorMap["green_2"]
-    : colorMap[color];
+      ? colorMap["gray"]
+      : clicked
+        ? colorMap["green_2"]
+        : colorMap[color];
 
   return (
     <button
@@ -90,10 +90,9 @@ export function ZButton({
         transition duration-100
         shadow-[4px_4px_0_0_black]
         ${disabled ? "cursor-normal" : "cursor-pointer"}
-        ${
-          disabled
-            ? ""
-            : "active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
+        ${disabled
+          ? ""
+          : "active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
         }
         ${variantClasses[type]}
       `}
@@ -101,7 +100,15 @@ export function ZButton({
       {text}
       {image && (
         <span style={{ pointerEvents: "none", display: "flex" }}>
-          <Image src={image} alt="" width={imageSize} height={imageSize} />
+          <Image
+            src={image}
+            alt=""
+            width={imageSize}
+            height={imageSize}
+            unselectable="on"
+            draggable={false}
+            priority
+          />
         </span>
       )}
     </button>
@@ -122,6 +129,9 @@ export function CCButton() {
         width={80}
         height={80}
         className="cursor-pointer select-none"
+        unselectable="on"
+        draggable={false}
+        priority
       />
     </a>
   );
@@ -137,6 +147,9 @@ export function FFCSButton() {
       height={80}
       className="cursor-pointer select-none"
       onClick={() => router.push("/")}
+      unselectable="on"
+      draggable={false}
+      priority
     />
   );
 }
@@ -422,7 +435,15 @@ export function GoogleLoginButton({ onClick }: { onClick?: () => void }) {
       `}
     >
       <span style={{ pointerEvents: "none", display: "flex" }}>
-        <Image src="/social/google.svg" alt="" width={24} height={4} />
+        <Image
+          src="/social/google.svg"
+          alt=""
+          width={24}
+          height={4}
+          unselectable="on"
+          draggable={false}
+          priority
+        />
       </span>
 
       {"Login with Google"}

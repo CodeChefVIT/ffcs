@@ -21,8 +21,8 @@ export default function SharedTimetablePage() {
     typeof params.shareId === "string"
       ? params.shareId
       : Array.isArray(params.shareId)
-      ? params.shareId[0]
-      : undefined;
+        ? params.shareId[0]
+        : undefined;
 
   const [data, setData] = useState<dataProps[] | null>(null);
   const [title, setTitle] = useState<string>("");
@@ -61,6 +61,8 @@ export default function SharedTimetablePage() {
             priority
             sizes="100vw"
             className="object-top object-contain w-full h-full"
+            unselectable="on"
+            draggable={false}
           />
         </div>
         <Navbar page="404" />
@@ -82,6 +84,8 @@ export default function SharedTimetablePage() {
           priority
           sizes="100vw"
           className="object-top object-contain w-full h-full"
+          unselectable="on"
+          draggable={false}
         />
       </div>
 

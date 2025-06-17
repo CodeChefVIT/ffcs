@@ -57,6 +57,9 @@ const SelectField = ({
           className="w-5 h-5"
           width={120}
           height={80}
+          unselectable="on"
+          draggable={false}
+          priority
         />
       </div>
       <div className="absolute right-11 top-0 h-full w-[3px] bg-black" />
@@ -240,10 +243,10 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
       labSubject.length == 1 || courseCodeType === "E"
         ? "both"
         : courseCodeType === "P"
-        ? "lab"
-        : courseCodeType === "L"
-        ? "th"
-        : "th";
+          ? "lab"
+          : courseCodeType === "L"
+            ? "th"
+            : "th";
     const courseName = selectedSubject.split(" - ")[1];
     let courseCodeLab;
     let courseNameLab;
@@ -522,6 +525,9 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
                             className="w-7 h-7"
                             width={32}
                             height={32}
+                            unselectable="on"
+                            draggable={false}
+                            priority
                           />
                         </div>
                       </label>
@@ -585,6 +591,9 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
                               height={80}
                               alt="up"
                               className="w-3 h-3"
+                              unselectable="on"
+                              draggable={false}
+                              priority
                             />
                           </button>
                           <button
@@ -601,6 +610,9 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
                               }
                               alt="down"
                               className={`w-3 h-3`}
+                              unselectable="on"
+                              draggable={false}
+                              priority
                             />
                           </button>
                         </div>

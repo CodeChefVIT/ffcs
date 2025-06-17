@@ -185,7 +185,15 @@ export default function ViewTimeTable() {
                 className={` ${timetableNumber === 1 ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'} font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-l-xl shadow-[4px_4px_0_0_black] ${timetableNumber === 1 ? 'cursor-normal' : 'cursor-pointer'} ${timetableNumber === 1 ? '' : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'}`}
               >
                 <span style={{ pointerEvents: 'none', display: 'flex' }}>
-                  <Image src="/icons/start.svg" alt="" width={32} height={32} />
+                  <Image
+                    src="/icons/start.svg"
+                    alt=""
+                    width={32}
+                    height={32}
+                    unselectable="on"
+                    draggable={false}
+                    priority
+                  />
                 </span>
               </button>
 
@@ -207,7 +215,15 @@ export default function ViewTimeTable() {
                 className={` ${timetableNumber === timetableCount ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'} font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-r-xl shadow-[4px_4px_0_0_black] ${timetableNumber === timetableCount ? 'cursor-normal' : 'cursor-pointer'} ${timetableNumber === timetableCount ? '' : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'}`}
               >
                 <span style={{ pointerEvents: 'none', display: 'flex' }}>
-                  <Image src="/icons/end.svg" alt="" width={32} height={32} />
+                  <Image
+                    src="/icons/end.svg"
+                    alt=""
+                    width={32}
+                    height={32}
+                    unselectable="on"
+                    draggable={false}
+                    priority
+                  />
                 </span>
               </button>
             </div>
