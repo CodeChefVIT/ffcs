@@ -154,12 +154,7 @@ export default function ViewTimeTable() {
       icon: "/icons/send.svg",
       onClick: withLoginCheck(handleShare),
     },
-    {
-      label: "Download",
-      color: "yellow",
-      icon: "/icons/download.svg",
-      onClick: withLoginCheck(() => console.log("Download clicked"), true),
-    },
+
   ];
 
   function showAlert(msg: string) {
