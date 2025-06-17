@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
       shareId,
     });
     return NextResponse.json({ success: true, timetable });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to save timetable" }, { status: 500 });
   }
 }

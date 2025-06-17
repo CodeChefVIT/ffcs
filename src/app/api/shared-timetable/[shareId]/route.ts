@@ -5,7 +5,7 @@ import Timetable from "@/models/timetable";
 export async function GET(req: NextRequest) {
   await dbConnect();
 
-  // Get shareId from the URL
+  
   const shareId = req.nextUrl.pathname.split("/").pop();
 
   if (!shareId) {
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
         shareId: timetable.shareId,
       },
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

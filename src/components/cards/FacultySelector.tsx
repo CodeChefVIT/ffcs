@@ -41,13 +41,18 @@ const SelectField = ({ label, value, options, onChange, }: SelectFieldProps) => 
   </div>
 };
 
+type SubjectEntry = {
+  slot: string;
+  faculty: string;
+};
+
 function generateCourseSlotsSingle({
   subjectData,
   selectedFaculties,
   selectedSlot,
   courseType,
 }: {
-  subjectData: any[];
+  subjectData: SubjectEntry[];
   selectedFaculties: string[];
   selectedSlot: string;
   courseType: "th" | "lab";
@@ -70,10 +75,10 @@ function generateCourseSlotsSingle({
       ...new Set(
         subjectData
           .filter(
-            (entry) =>
+            (entry: SubjectEntry) =>
               selectedFaculties.includes(entry.faculty)
           )
-          .map((entry) => entry.slot)
+          .map((entry: SubjectEntry) => entry.slot)
       ),
     ];
     console.log(labSlots)
@@ -82,11 +87,11 @@ function generateCourseSlotsSingle({
       slotName,
       slotFaculties: subjectData
         .filter(
-          (entry) =>
+          (entry: SubjectEntry) =>
             entry.slot === slotName &&
             selectedFaculties.includes(entry.faculty)
         )
-        .map((entry) => ({
+        .map((entry: SubjectEntry) => ({
           facultyName: entry.faculty,
         })),
     }));
@@ -95,6 +100,13 @@ function generateCourseSlotsSingle({
   return [];
 }
 
+type FacultyData = {
+  [school: string]: {
+    [domain: string]: {
+      [subject: string]: SubjectEntry[];
+    };
+  };
+};
 
 function generateCourseSlotsBoth({
   data,
@@ -104,7 +116,7 @@ function generateCourseSlotsBoth({
   selectedSlot,
   selectedFaculties,
 }: {
-  data: any;
+  data: FacultyData;
   selectedSchool: string;
   selectedDomain: string;
   selectedSubject: string;
@@ -119,7 +131,7 @@ function generateCourseSlotsBoth({
     return code.slice(0, -1) === baseCode && (code.endsWith("P") || code.endsWith("E"));
   });
 
-  const labData =
+  const labData: SubjectEntry[] =
     labEntryKey
       ? data[selectedSchool][selectedDomain][labEntryKey]
       : [];
@@ -128,8 +140,8 @@ function generateCourseSlotsBoth({
     let facultyLabSlot: string | undefined = undefined;
 
     const labSlots = labData
-      .filter((entry: any) => entry.faculty === facultyName && entry.slot.startsWith("L"))
-      .map((entry: any) => entry.slot);
+      .filter((entry: SubjectEntry) => entry.faculty === facultyName && entry.slot.startsWith("L"))
+      .map((entry: SubjectEntry) => entry.slot);
 
     if (labSlots.length > 0) {
       facultyLabSlot = labSlots.join(", ");
@@ -148,7 +160,6 @@ function generateCourseSlotsBoth({
     },
   ];
 }
-
 
 export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
 
@@ -173,12 +184,11 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
   };
 
   const handleConfirm = () => {
-
     const courseCode = selectedSubject.split(' - ')[0];
     const courseCodeType = courseCode.at(-1);
     const id = selectedSubject;
 
-    let labSubject = Object.keys(data[selectedSchool][selectedDomain]).filter(subject => {
+    const labSubject = Object.keys(data[selectedSchool][selectedDomain]).filter(subject => {
       const subjectCode = subject.split(' - ')[0];
       return (
         subjectCode.slice(0, -1) === courseCode.slice(0, -1) &&
@@ -186,8 +196,7 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
         subjectCode !== courseCode
       );
     });
-    let courseType: "both" | "th" | "lab";
-    courseType =
+    const courseType: "both" | "th" | "lab" =
       labSubject.length == 1 || courseCodeType === "E"
         ? "both"
         : courseCodeType === "P"
@@ -439,7 +448,7 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
           <div className="bg-[#FFFFFF]/40 rounded-xl overflow-hidden flex flex-col">
             <div className="bg-[#FFFFFF]/60 text-center text-[#000000]/80 p-4 font-semibold text-lg">Select Faculties</div>
             <div className="pt-4 pb-4 px-6 overflow-y-auto space-y-2 scrollbar-thin h-86">
-              {faculties.map((faculty: any, index: number) => (
+              {faculties.map((faculty: string, index: number) => (
                 <div key={index}>
                   <div className="flex items-center justify-between py-1 px-2">
                     <span className='text-[#000000]'>{faculty}</span>

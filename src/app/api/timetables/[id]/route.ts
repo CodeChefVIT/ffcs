@@ -12,7 +12,7 @@ export async function DELETE(
   try {
     await Timetable.findByIdAndDelete(id);
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
   }
 }
@@ -25,7 +25,7 @@ export async function PATCH(
   const { id } = await params;
   const body = await req.json();
 
-  const update: any = {};
+  const update: Record<string, unknown> = {};
   if (body.title !== undefined) update.title = body.title;
   if (body.isPublic !== undefined) update.isPublic = body.isPublic;
 
