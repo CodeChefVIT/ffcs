@@ -259,6 +259,7 @@ export default function Saved() {
         open={alertOpen}
         message={alertMsg}
         onClose={() => setAlertOpen(false)}
+        color='purple'
       />
     </div>
   );

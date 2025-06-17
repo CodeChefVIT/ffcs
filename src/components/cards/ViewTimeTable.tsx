@@ -267,7 +267,7 @@ export default function ViewTimeTable() {
         open={alertOpen}
         message={alertMsg}
         onClose={() => setAlertOpen(false)}
-        
+        color='yellow'
       />
     </div>
   );
