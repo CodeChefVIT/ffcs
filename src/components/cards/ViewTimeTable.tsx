@@ -10,13 +10,13 @@ import { useTimetable } from "@/lib/TimeTableContext";
 import Image from "next/image";
 import Popup from "@/components/ui/Popup";
 import AlertModal from "@/components/ui/AlertModal";
-// @ts-ignore
+// @ts-expect-error
 import domtoimage from "dom-to-image-more";
 
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
   const tableRef = useRef(null);
-  const timetableOnlyRef = useRef(null); // NEW
+  const timetableOnlyRef = useRef(null); 
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
@@ -197,7 +197,7 @@ export default function ViewTimeTable() {
             ({timetableCount} timetable{timetableCount != 1 ? "s were" : " was"} generated)
           </div>
         </div>
-
+ 
         <div className="w-full max-w-[95vw] my-4">
           <CompoundTable data={convertedData} large={true} timetableRef={timetableOnlyRef} />
         </div>

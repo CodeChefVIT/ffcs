@@ -1,7 +1,7 @@
 "use client";
 
 import TimeTable from "./TimeTable";
-import React, { forwardRef } from "react";
+import React from "react";
 
 type dataProps = {
   code: string;
@@ -32,19 +32,20 @@ const getGroupedData = (data: dataProps[]): groupedDataProps => {
   }, {} as groupedDataProps);
 };
 
-const CompoundTable = forwardRef<HTMLDivElement, CompoundTableProps>(({ data, large, timetableRef }, ref) => {
+const CompoundTable = ({ data, large, timetableRef }: CompoundTableProps) => {
   const groupedData = getGroupedData(data);
 
-  const tfs = data.map((d) => {
-    return { slotName: d.slot, showName: true };
-  });
+  const tfs = data.map((d) => ({
+    slotName: d.slot,
+    showName: true,
+  }));
 
   return (
     <div className="flex flex-col lg:flex-row gap-4 m-2 text-black text-sm font-inter select-none lg:overflow-x-auto">
       <div className="overflow-x-auto lg:overflow-x-visible">
         <div
           className={` ${large ? "w-[1000px] h-[480px]" : "w-[830px] h-[400px]"}`}
-          ref={timetableRef} 
+          ref={timetableRef}
         >
           <TimeTable slotNames={tfs} />
         </div>
@@ -52,14 +53,9 @@ const CompoundTable = forwardRef<HTMLDivElement, CompoundTableProps>(({ data, la
 
       <div className="overflow-x-auto lg:overflow-x-visible">
         <div
-          className={`
-            w-full min-w-[400px]
-            ${large ? "h-[360px] lg:h-[480px]" : "h-[320px] lg:h-[400px]"}
-            bg-[#ffffff]/60 p-4
-            border-3 border-black
-            rounded-2xl space-y-2
-            overflow-y-auto
-          `}
+          className={`w-full min-w-[400px] ${
+            large ? "h-[360px] lg:h-[480px]" : "h-[320px] lg:h-[400px]"
+          } bg-[#ffffff]/60 p-4 border-3 border-black rounded-2xl space-y-2 overflow-y-auto`}
         >
           {Object.entries(groupedData).map(([groupKey, entries], idx) => {
             const displayName = groupKey.split("__")[0];
@@ -85,10 +81,8 @@ const CompoundTable = forwardRef<HTMLDivElement, CompoundTableProps>(({ data, la
           })}
         </div>
       </div>
-      
     </div>
   );
-});
+};
 
-CompoundTable.displayName = "CompoundTable";
 export default CompoundTable;
