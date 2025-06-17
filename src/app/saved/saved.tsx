@@ -10,7 +10,6 @@ import Popup from "@/components/ui/Popup";
 import Image from "next/image";
 import AlertModal from "@/components/ui/AlertModal";
 import axios from "axios";
-import LoadingPopup from "@/components/ui/LoadingPopup";
 
 async function fetchTimetablesByOwner(owner: string) {
   const res = await axios.get(
@@ -191,15 +190,13 @@ export default function Saved() {
                   </div>
                   <div className="flex gap-2">
                     <ZButton
-                      type="regular"
-                      text="View"
+                      type="image"
                       color="yellow"
                       image="/icons/eye.svg"
                       onClick={() => handleView(tt)}
                     />
                     <ZButton
-                      type="regular"
-                      text="Rename"
+                      type="image"
                       color="blue"
                       image="/icons/edit.svg"
                       onClick={() => {
@@ -210,8 +207,7 @@ export default function Saved() {
                       }}
                     />
                     <ZButton
-                      type="regular"
-                      text="Delete"
+                      type="image"
                       color="red"
                       image="/icons/trash.svg"
                       onClick={() => {

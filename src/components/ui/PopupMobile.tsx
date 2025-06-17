@@ -4,7 +4,7 @@ import Image from "next/image";
 import React from "react";
 import CompoundTable from "./CompoundTable";
 import Footer from "./Footer";
-import { GoogleLoginButton, ZButton } from "./Buttons";
+import { BasicToggleButton, GoogleLoginButton, ZButton } from "./Buttons";
 
 type dataProps = {
   code: string;
@@ -15,9 +15,10 @@ type dataProps = {
 type PopupViewTTProps = {
   TTName: string;
   TTData: dataProps[];
-  shareLink: string;
   closeLink: () => void;
-  onDownloadClick: () => void;
+  onShareClick: () => void;
+  shareEnabledDefault: boolean;
+  shareSwitchAction: (state: "on" | "off") => void;
 };
 
 type PopupLoginProps = {
@@ -25,11 +26,6 @@ type PopupLoginProps = {
   onLoginClick: () => void;
 };
 
-function copy(text: string) {
-  if (typeof navigator !== "undefined" && navigator.clipboard) {
-    navigator.clipboard.writeText(String(text));
-  }
-}
 
 
 export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
@@ -147,7 +143,7 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
   );
 }
 
-export function PopupViewTT({ TTName, TTData, shareLink, closeLink, onDownloadClick }: PopupViewTTProps) {
+export function PopupViewTT({ TTName, TTData, closeLink, onShareClick, shareEnabledDefault, shareSwitchAction }: PopupViewTTProps) {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-white">
       <div className="flex flex-col min-h-screen relative items-center font-poppins">
@@ -170,9 +166,15 @@ export function PopupViewTT({ TTName, TTData, shareLink, closeLink, onDownloadCl
 
         <div className="text-2xl mt-4 mb-4 text-black font-semibold font-poppins">{TTName}</div>
 
-        <div className="flex flex-row items-center justify-center gap-4 mb-4">
-          <ZButton type="regular" text="Copy Link" color="green" image="/icons/send.svg" forceColor="#C1FF83" onClick={() => copy(shareLink)} />
-          <ZButton type="regular" text="Download" color="yellow" image="/icons/download.svg" forceColor="#FFEA79" onClick={onDownloadClick} />
+        <div className="flex flex-col items-center justify-center gap-4 mb-4">
+          <ZButton type="regular" text="Copy Link" color="green" image="/icons/send.svg" forceColor="#C1FF83" onClick={onShareClick} />
+          <div className="flex flex-row items-center gap-4">
+            <span className="font-semibold text-lg">Public Sharing</span>
+            <BasicToggleButton
+              isDefaultOn={shareEnabledDefault}
+              onToggle={shareSwitchAction ?? (() => { })}
+            />
+          </div>
         </div>
 
         <div className="w-full max-w-7xl overflow-x-auto mb-8">
