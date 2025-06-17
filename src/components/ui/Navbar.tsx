@@ -17,6 +17,13 @@ export default function Navbar({ page }: NavbarProps) {
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
 
+  let userName = "User";
+  let userNameShort = "User";
+  if (loggedin) {
+    userName = (session?.user?.name ?? "").trim().split(" ").slice(0, -1).join(" ") || userName
+    userNameShort = (session?.user?.name ?? "").trim().split(" ")[0] || userNameShort
+  }
+
   return (
     <>
       {showLoginPopup && (
@@ -33,6 +40,7 @@ export default function Navbar({ page }: NavbarProps) {
           action={() => signOut({ callbackUrl: "/" })}
         />
       )}
+
       <div className="absolute top-0 left-0 w-full z-10 select-none">
         <div
           style={{
@@ -42,105 +50,104 @@ export default function Navbar({ page }: NavbarProps) {
             padding: "1rem",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              gap: "1rem",
-              alignItems: "center",
-            }}
-          >
-            {/* B1: CC or FFCS button */}
-            {(page == "landing" || page == "404" || page == "shared") && (
-              <CCButton />
-            )}
-            {(page == "slots" || page == "saved") && <FFCSButton />}
 
-            {/* B2: Slots or Text */}
-            {(page == "landing" || page == "404" || page == "shared") && (
-              <ZButton
-                type="long"
-                text="Slot View"
-                color="yellow"
-                onClick={() => router.push("/slots")}
-              />
-            )}
-            {(page === "slots" || page === "saved") && (
-              <div
-                className="text-4xl font-[pangolin] cursor-pointer"
-                onClick={() => router.push("/")}
-              >
-                FFCS-inator
-              </div>
+          {/* Left Buttons */}
+          <div style={{ display: "flex", gap: "1rem", alignItems: "center", }}>
+
+            {(page == "landing" || page == "404") && (
+              <>
+                <CCButton />
+                <ZButton
+                  type="long"
+                  text="Slot View"
+                  color="yellow"
+                  onClick={() => router.push("/slots")}
+                />
+              </>
             )}
 
-            {/* B3: Mobile */}
-            {page == "mobile" && (
-              <div
+            {(page == "slots" || page == "saved" || page == "shared") && (
+              <>
+                <FFCSButton />
+                <div
+                  className="text-4xl font-[pangolin] cursor-pointer"
+                  onClick={() => router.push("/")}
+                >
+                  FFCS-inator
+                </div>
+              </>
+            )}
+
+            {(page == "mobile") &&
+              (<div
                 className="text-3xl font-[pangolin] cursor-pointer"
                 onClick={() => router.push("/")}
               >
                 FFCS-inator
-              </div>
-            )}
+              </div>)
+            }
+
           </div>
-          <div
-            style={{
-              display: "flex",
-              gap: "1rem",
-              alignItems: "center",
-            }}
-          >
-            {/* B4: Slots or Saved */}
-            {(page === "landing" ||
-              page === "404" ||
-              page == "slots" ||
-              page == "shared") && (
-              <ZButton
+
+          {/* Right Buttons */}
+          <div style={{ display: "flex", gap: "1rem", alignItems: "center", }}>
+
+            {(page === "landing" || page === "404" || page == "slots" || page == "shared") &&
+              (<ZButton
                 type="long"
                 text="Saved Timetables"
                 color="blue"
                 onClick={() => router.push("/saved")}
-              />
-            )}
-            {page === "saved" && (
-              <ZButton
+              />)
+            }
+
+            {(page === "saved") &&
+              (<ZButton
                 type="long"
                 text="Slot View"
                 color="yellow"
                 onClick={() => router.push("/slots")}
-              />
-            )}
+              />)
+            }
 
-            {/* B5: Login Logout */}
-            {(page === "landing" || page === "404" || page == "slots") &&
-              !loggedin && (
+            {(page === "landing" || page === "404" || page == "slots" || page == "shared" || page == "saved") &&
+              ((!loggedin) && (
                 <ZButton
                   type="long"
                   text="Log In"
                   color="green"
                   onClick={() => setShowLoginPopup(true)}
                 />
-              )}
-            {(page === "saved" ||
-              ((page === "landing" || page === "404" || page == "slots") &&
-                loggedin)) && (
-              <ZButton
-                type="long"
-                text={session?.user?.name || "Log Out"}
-                color="green"
-                onClick={() => setShowLogoutPopup(true)}
-              />
-            )}
+              )) ||
+              (loggedin && (
+                <ZButton
+                  type="long"
+                  text={userName}
+                  color="purple"
+                  onClick={() => setShowLogoutPopup(true)}
+                />
+              ))
+            }
 
-            {/* B6: Mobile */}
-            {page == "mobile" && (
-              <ZButton
-                type="regular"
-                text={session?.user?.name || "Log Out"}
-                color="green"
-                onClick={() => signOut({ callbackUrl: "/" })}
-              />
-            )}
+            {(page == "mobile") &&
+              // ((!loggedin) && (
+              //   <ZButton
+              //     type="long"
+              //     text="Log In"
+              //     color="green"
+              //     onClick={() => setShowLoginPopup(true)}
+              //   />
+              // )) ||
+              (loggedin && (
+                <ZButton
+                  type="regular"
+                  text={userNameShort}
+                  color="green"
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                />
+              ))
+            }
+
           </div>
         </div>
       </div>
