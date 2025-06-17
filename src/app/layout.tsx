@@ -1,6 +1,7 @@
 import { Pangolin, Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import SessionProviderWrapper from "./SessionProvider";
+import ServiceWorkerRegister from "../components/ServiceWorkerRegister/ServiceWorkerRegister";
 
 const pangolin = Pangolin({
   weight: "400",
@@ -38,11 +39,13 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <title>FFCS-inator</title>
+        <link rel="manifest" href="/manifest.json" />
       </head>
       <body
         className={`${pangolin.variable} ${poppins.variable} ${inter.variable} antialiased bg-[#CEE4E5] select-none`}
       >
         <SessionProviderWrapper>{children}</SessionProviderWrapper>
+        <ServiceWorkerRegister />
       </body>
     </html>
   );
