@@ -6,38 +6,41 @@ import Image from "next/image";
 import { CCButton, ZButton } from "./Buttons";
 
 export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
-
   if (type === "mobile") {
-    return <footer className="w-full bg-[#CEE4E5] text-center mt-auto relative overflow-hidden">
-      {/* Foreground Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center pt-12 pb-4 px-4">
-        <div className="mb-4">
-          <CCButton />
+    return (
+      <footer className="w-full bg-[#CEE4E5] text-center mt-auto relative overflow-hidden">
+        {/* Foreground Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center pt-12 pb-4 px-4">
+          <div className="mb-4">
+            <CCButton />
+          </div>
+          <p className="text-sm text-black font-poppins font-semibold">
+            Made with <span className="font-[inter]">❤</span> by CodeChef-VIT
+          </p>
         </div>
-        <p className="text-sm text-black font-poppins font-semibold">
-          Made with <span className="font-[inter]">❤</span> by CodeChef-VIT
-        </p>
-      </div>
 
-      {/* Full-width Wave Background */}
-      <div className="absolute bottom-0 left-0 right-0 z-0">
-        <Image
-          src="/art/footer_mobile.svg"
-          alt="Wave Design"
-          width={1920}
-          height={1080}
-          className="w-full h-auto"
-          priority
-        />
-      </div>
-    </footer>
+        {/* Full-width Wave Background */}
+        <div className="absolute bottom-0 left-0 right-0 z-0">
+          <Image
+            src="/art/footer_mobile.svg"
+            alt="Wave Design"
+            width={1920}
+            height={1080}
+            className="w-full h-auto"
+            priority
+          />
+        </div>
+      </footer>
+    );
   }
 
   return (
     <footer className="w-full bg-[#CEE4E5] font-[poppins] text-black relative overflow-hidden flex items-center flex-col select-none">
       <div className="px-8 py-8 sm:py-6 xs:py-4 flex flex-col md:flex-row items-start justify-between relative z-10 w-full bg-[#A7D5D7] border-t-2 border-black gap-y-6">
         <div>
-          <h2 className="text-6xl font-normal mb-4 font-[pangolin] md:text-4xl lg:text-6xl">FFCS-inator</h2>
+          <h2 className="text-6xl font-normal mb-4 font-[pangolin] md:text-4xl lg:text-6xl">
+            FFCS-inator
+          </h2>
           <div className="flex gap-5">
             {[
               {
@@ -64,40 +67,89 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
                 href: "https://www.instagram.com/codechefvit/",
                 src: "/social/instagram.svg",
                 alt: "Instagram",
-              }
+              },
             ].map(({ href, src, alt }) => (
-              <a href={href} key={src} target="_blank">
-                <Image
-                  src={src}
-                  alt={alt}
-                  width={26}
-                  height={26}
-                />
+              <a href={href} key={src} target="_blank" rel="noopener">
+                <Image src={src} alt={alt} width={26} height={26} />
               </a>
             ))}
           </div>
         </div>
 
         <div>
-          <h3 className="font-poppins font-semibold mb-2 text-2xl md:text-xl lg:text-2xl">About Us</h3>
+          <h3 className="font-poppins font-semibold mb-2 text-2xl md:text-xl lg:text-2xl">
+            About Us
+          </h3>
           <ul className="space-y-1">
-            <li><a href="https://www.codechefvit.com/" target="_blank">CodeChef-VIT</a></li>
-            <li><a href="https://www.codechefvit.com/board">Meet The Team</a></li>
-            <li><a href="https://www.codechefvit.com/blog">Blogs</a></li>
+            <li>
+              <a
+                href="https://www.codechefvit.com/"
+                target="_blank"
+                rel="noopener"
+              >
+                CodeChef-VIT
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.codechefvit.com/board"
+                target="_blank"
+                rel="noopener"
+              >
+                Meet The Team
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.codechefvit.com/blog"
+                target="_blank"
+                rel="noopener"
+              >
+                Blogs
+              </a>
+            </li>
           </ul>
         </div>
 
         <div>
-          <h3 className="font-poppins font-semibold mb-2 text-2xl md:text-xl lg:text-2xl">Our Projects</h3>
+          <h3 className="font-poppins font-semibold mb-2 text-2xl md:text-xl lg:text-2xl">
+            Our Projects
+          </h3>
           <ul className="space-y-1">
-            <li><a href="https://contactify.codechefvit.com/" target="_blank">Contactify</a></li>
-            <li><a href="https://ffcs.codechefvit.com/" target="_blank">FFCS-inator</a></li>
-            <li><a href="https://papers.codechefvit.com/" target="_blank">Papers</a></li>
+            <li>
+              <a
+                href="https://contactify.codechefvit.com/"
+                target="_blank"
+                rel="noopener"
+              >
+                Contactify
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://ffcs.codechefvit.com/"
+                target="_blank"
+                rel="noopener"
+              >
+                FFCS-inator
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://papers.codechefvit.com/"
+                target="_blank"
+                rel="noopener"
+              >
+                Papers
+              </a>
+            </li>
           </ul>
         </div>
 
         <div>
-          <h3 className="font-semibold mb-2 text-2xl md:text-xl lg:text-2xl">Get Updates :)</h3>
+          <h3 className="font-semibold mb-2 text-2xl md:text-xl lg:text-2xl">
+            Get Updates :)
+          </h3>
           <div className="flex items-center gap-2">
             <div className="bg-white border-[3px] border-black rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] px-4 py-3">
               <input
@@ -107,8 +159,12 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
               />
             </div>
 
-            <ZButton type="image" color="purple" image="/icons/bell.svg" onClick={() => alert("Subscribed!")} />
-
+            <ZButton
+              type="image"
+              color="purple"
+              image="/icons/bell.svg"
+              onClick={() => alert("Subscribed!")}
+            />
           </div>
         </div>
       </div>
