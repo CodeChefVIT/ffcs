@@ -5,6 +5,7 @@ import { CCButton, FFCSButton, ZButton } from "./Buttons";
 import { useRouter } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Popup from "./Popup";
+import { set } from "mongoose";
 
 type NavbarProps = {
   page: "landing" | "404" | "slots" | "saved" | "shared" | "mobile";
@@ -15,6 +16,7 @@ export default function Navbar({ page }: NavbarProps) {
   const { data: session } = useSession();
   const loggedin = !!session;
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [showLoginPopupSaved, setShowLoginPopupSaved] = useState(false);
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
 
   let userName = "User";
@@ -31,6 +33,13 @@ export default function Navbar({ page }: NavbarProps) {
           type="login"
           closeLink={() => setShowLoginPopup(false)}
           action={() => signIn("google", { callbackUrl: "/", redirect: true })}
+        />
+      )}
+      {showLoginPopupSaved && (
+        <Popup
+          type="login"
+          closeLink={() => setShowLoginPopupSaved(false)}
+          action={() => signIn("google", { callbackUrl: "/saved", redirect: true })}
         />
       )}
       {showLogoutPopup && (
@@ -97,7 +106,7 @@ export default function Navbar({ page }: NavbarProps) {
                 type="long"
                 text="Saved Timetables"
                 color="blue"
-                onClick={() => router.push("/saved")}
+                onClick={loggedin ? () => router.push("/saved") : () => setShowLoginPopupSaved(true)}
               />)
             }
 

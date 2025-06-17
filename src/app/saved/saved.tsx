@@ -10,6 +10,7 @@ import Popup from "@/components/ui/Popup";
 import Image from "next/image";
 import AlertModal from "@/components/ui/AlertModal";
 import axios from "axios";
+import LoadingPopup from "@/components/ui/LoadingPopup";
 
 async function fetchTimetablesByOwner(owner: string) {
   const res = await axios.get(
@@ -45,9 +46,7 @@ export default function Saved() {
   const [timetables, setTimetables] = useState<TimetableEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
-  const [popupType, setPopupType] = useState<
-    "view_tt" | "delete_tt" | "rename_tt" | null
-  >(null);
+  const [popupType, setPopupType] = useState<"view_tt" | "delete_tt" | "rename_tt" | null>(null);
   const [popupSlots, setPopupSlots] = useState<PopupSlot[]>([]);
   const [popupTitle, setPopupTitle] = useState<string>("");
   const [selectedTT, setSelectedTT] = useState<TimetableEntry | null>(null);
@@ -154,14 +153,14 @@ export default function Saved() {
       <Navbar page="saved" />
       <div className="flex-1 flex flex-col items-center">
         <div className="text-6xl mt-48 mb-16 font-pangolin text-black">
-          Your Timetables
+          Saved Timetables
         </div>
         <div className="z-10 w-5/6 max-w-7xl rounded-[60px] border-black border-4 bg-[#A7D5D7] px-24 py-12 mb-24 shadow-[4px_4px_0_0_black]">
           <div className="text-4xl mt-2 mb-8 font-pangolin font-light text-black">
             All Timetables
           </div>
           {loading ? (
-            <div className="text-center text-2xl font-semibold text-[#606060] mb-6">
+            <div className="text-center text-3xl font-semibold text-[#606060] mb-4 mt-8 font-poppins">
               Loading...
             </div>
           ) : timetables.length === 0 ? (

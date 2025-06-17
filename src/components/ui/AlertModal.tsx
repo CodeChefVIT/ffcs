@@ -75,7 +75,7 @@ export default function AlertModal({ open, message, onClose, color }: AlertModal
         <div className="flex flex-col items-center justify-center text-lg font-poppins font-regular p-8">
 
           <div>
-            <div className="break-words max-w-lg w-full text-center mt-2 mb-4 font-semibold">
+            <div className="break-words max-w-lg w-full text-center mt-2 mb-8 font-semibold">
               {message}
             </div>
             <div className="flex flex-row items-center justify-center gap-4 mb-2">
