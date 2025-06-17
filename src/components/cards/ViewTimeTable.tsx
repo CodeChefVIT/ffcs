@@ -10,7 +10,7 @@ import { useTimetable } from "@/lib/TimeTableContext";
 import Image from "next/image";
 import Popup from "@/components/ui/Popup";
 import AlertModal from "@/components/ui/AlertModal";
-// @ts-expect-error
+// @ts-expect-error: third-party lib doesn't have types
 import domtoimage from "dom-to-image-more";
 
 export default function ViewTimeTable() {
