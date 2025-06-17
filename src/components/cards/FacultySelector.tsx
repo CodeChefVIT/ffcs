@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ZButton } from "../ui/Buttons";
 
 import { data } from "@/data/faculty";
 import { fullCourseData } from "@/lib/type";
+import AlertModal from "../ui/AlertModal";
 
 const schools = [
   "SCOPE",
@@ -18,54 +19,101 @@ const schools = [
   "SCE",
 ];
 
+
 type SelectFieldProps = {
   label: string;
   value: string;
   options: string[];
-  onChange: (value: string) => void;
+  onChange: (val: string) => void;
+  renderOption?: (option: string) => string;
 };
 
 type FacultySelectorProps = {
   onConfirm: (course: fullCourseData) => void;
 };
 
-const SelectField = ({
+function SelectField({
   label,
   value,
   options,
   onChange,
   renderOption,
-}: SelectFieldProps & { renderOption?: (option: string) => string }) => {
+}: SelectFieldProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const selectedLabel = value
+    ? renderOption
+      ? renderOption(value)
+      : value
+    : `Select ${label}`;
+
   return (
-    <div className="relative">
-      <select
-        className="w-full p-2 pl-3 pr-10 rounded-xl border-3 border-black bg-white font-semibold text-[#000000B2] outline-none appearance-none cursor-pointer"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+    <div ref={ref} className="relative w-full font-semibold text-[#000000B2]">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        title={selectedLabel}
+        className={`
+    w-full h-10 pl-3 pr-10 text-left bg-white rounded-xl border-3 border-black
+    cursor-pointer relative
+    ${!value ? "text-[#00000080]" : "text-black"}
+    truncate whitespace-nowrap overflow-hidden
+  `}
       >
-        <option value="">{`Select ${label}:`}</option>
-        {options.map((option, index) => (
-          <option key={`${index}+${option}`} value={option}>
-            {renderOption ? renderOption(option) : option}
-          </option>
-        ))}
-      </select>
-      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black text-xl pointer-events-none cursor-pointer">
-        <Image
-          src="/icons/chevron_down.svg"
-          alt="icon"
-          className="w-5 h-5"
-          width={120}
-          height={80}
-          unselectable="on"
-          draggable={false}
-          priority
-        />
-      </div>
-      <div className="absolute right-11 top-0 h-full w-[3px] bg-black" />
+
+        {selectedLabel}
+        <div className="absolute right-11 top-0 h-full w-[3px] bg-black" />
+
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+          <Image
+            src="/icons/chevron_down.svg"
+            alt="icon"
+            className="w-5 h-5"
+            width={20}
+            height={20}
+            unselectable="on"
+            draggable={false}
+            priority
+          />
+        </div>
+      </button>
+
+      {isOpen && (
+        <ul
+          className="absolute left-0 right-0 z-10 bg-white border-3 border-black rounded-xl mt-1 max-h-48 overflow-y-auto shadow-lg"
+        >
+          {options.map((option, index) => (
+            <li
+              key={index}
+              onClick={() => {
+                onChange(option);
+                setIsOpen(false);
+              }}
+              className={`
+                px-4 py-2 cursor-pointer hover:bg-[#FFEA79]
+                ${value === option ? "bg-[#C1FF83] font-bold" : ""}
+              `}
+            >
+              {renderOption ? renderOption(option) : option}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
-};
+}
+
 
 type SubjectEntry = {
   slot: string;
@@ -148,8 +196,8 @@ function generateCourseSlotsBoth({
   selectedFaculties: string[];
 }) {
   const [courseCode] = selectedSubject.split(" - ");
-
   const baseCode = courseCode.slice(0, -1);
+
   const labEntryKey = Object.keys(data[selectedSchool][selectedDomain]).find(
     (key) => {
       const code = key.split(" - ")[0];
@@ -164,23 +212,41 @@ function generateCourseSlotsBoth({
     ? data[selectedSchool][selectedDomain][labEntryKey]
     : [];
 
-  const slotFaculties = selectedFaculties.map((facultyName) => {
-    let facultyLabSlot: string | undefined = undefined;
+  // Determine selected theory slot shift
+  const isMorningTheory = selectedSlot.includes("1");
+  const isEveningTheory = selectedSlot.includes("2");
 
+  // Determine opposite shift for lab
+  const isValidLabSlot = (slot: string): boolean => {
+    const parts = slot.split("+").map(s => parseInt(s.replace("L", ""), 10));
+
+    // Check for invalid numbers
+    if (parts.some(isNaN)) return false;
+
+    const allMorning = parts.every(num => num <= 30);
+    const allEvening = parts.every(num => num >= 31);
+
+    // If theory is morning → lab must be evening
+    if (isMorningTheory) return allEvening;
+
+    // If theory is evening → lab must be morning
+    if (isEveningTheory) return allMorning;
+
+    return false;
+  };
+  const slotFaculties = selectedFaculties.map((facultyName) => {
     const labSlots = labData
       .filter(
-        (entry: SubjectEntry) =>
-          entry.faculty === facultyName && entry.slot.startsWith("L")
+        (entry) =>
+          entry.faculty === facultyName &&
+          entry.slot.startsWith("L") &&
+          isValidLabSlot(entry.slot)
       )
-      .map((entry: SubjectEntry) => entry.slot);
-
-    if (labSlots.length > 0) {
-      facultyLabSlot = labSlots.join(", ");
-    }
+      .map((entry) => entry.slot);
 
     return {
       facultyName,
-      ...(facultyLabSlot && { facultyLabSlot }),
+      ...(labSlots.length > 0 && { facultyLabSlot: labSlots.join(", ") }),
     };
   });
 
@@ -191,6 +257,7 @@ function generateCourseSlotsBoth({
     },
   ];
 }
+
 
 // Helper to prettify domain names
 const prettifyDomain = (domain: string) => {
@@ -214,17 +281,63 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
   const [subjects, setSubjects] = useState<string[]>([]);
   const [slots, setSlots] = useState<string[]>([]);
   const [faculties, setFaculties] = useState<string[]>([]);
+  const [popup, setPopup] = useState({ showPopup: false, message: "" });
+
+  // 1. Dropdown values for morning/evening shifts (all available options)
+  const [labShiftOptions, setLabShiftOptions]: any = useState<{
+    morning: string[];
+    evening: string[];
+  }>({ morning: [], evening: [] });
+
+  // 3. Selected lab shift (when course is lab-only)
+  const [selectedLabShift, setSelectedLabShift]: any = useState("");
+
+
+  // for lab only course: 
+  // dropdown items state
+  // selectedSlots state 
+  // -> set faculties for all slots under selectedSlots
 
   const handleReset = () => {
     setSelectedDomain("");
     setSelectedSubject("");
     setSelectedSlot("");
-    setSelectedFaculties([]);
+    setSubjects([]);
+    setSlots([]);
     setFaculties([]);
+    setSelectedFaculties([]);
     setPriorityList([]);
   };
 
   const handleConfirm = () => {
+    console.log(selectedLabShift)
+    if (!selectedDomain) {
+      setPopup({ showPopup: true, message: "Please select a domain." });
+      return;
+    }
+
+    if (!selectedSubject) {
+      setPopup({ showPopup: true, message: "Please select a subject." });
+      return;
+    }
+    if (!selectedLabShift && selectedSubject.split(" - ")[0].endsWith("P")) {
+      setPopup({ showPopup: true, message: "Please select a slot." });
+      return;
+    }
+    if (!selectedSlot && !selectedSubject.split(" - ")[0].endsWith("P")) {
+      setPopup({ showPopup: true, message: "Please select a slot." });
+      return;
+    }
+
+
+    if (priorityList.length === 0) {
+      setPopup({ showPopup: true, message: "Please select at least one faculty." });
+      return;
+    }
+    else {
+      setPopup({ showPopup: true, message: "Successfully added course" });
+    }
+
     const courseCode = selectedSubject.split(" - ")[0];
     const courseCodeType = courseCode.at(-1);
     const id = selectedSubject;
@@ -235,19 +348,23 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
         return (
           subjectCode.slice(0, -1) === courseCode.slice(0, -1) &&
           (subjectCode.at(-1) === "P" || subjectCode.at(-1) === "E") &&
-          subjectCode !== courseCode
+          subjectCode !== courseCode &&
+          !courseCode.startsWith("BSTS")
         );
       }
     );
+
     const courseType: "both" | "th" | "lab" =
       labSubject.length == 1 || courseCodeType === "E"
         ? "both"
-        : courseCodeType === "P"
+        : courseCodeType === "P" && !courseCode.startsWith("BSTS")
           ? "lab"
-          : courseCodeType === "L"
+          : courseCodeType === "L" || courseCode.startsWith("BSTS")
             ? "th"
             : "th";
+
     const courseName = selectedSubject.split(" - ")[1];
+
     let courseCodeLab;
     let courseNameLab;
     if (courseCodeType == "E") {
@@ -285,12 +402,14 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
         courseType: "lab",
       });
     }
-    setTimeout(() => {
-      const el = document.getElementById("course-card");
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 100);
+
+    // setTimeout(() => {
+    //   const el = document.getElementById("course-card");
+    //   if (el) {
+    //     el.scrollIntoView({ behavior: "smooth" });
+    //   }
+    // }, 100);
+
     const courseData = {
       id,
       courseType,
@@ -302,9 +421,11 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
       }),
       courseSlots: courseSlots,
     };
+
     onConfirm(courseData);
     handleReset();
   };
+
 
   const toggleFaculty = (name: string) => {
     setSelectedFaculties((prev) => {
@@ -372,32 +493,89 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
       if (selectedSubject) {
         const subjectData = domainData[selectedSubject];
 
-        // Check course code ending
         const courseCode = selectedSubject.split(" - ")[0];
-        const isEndWithE = courseCode.endsWith("E");
 
-        // Filter slots
-        const rawSlots = subjectData.map((entry) => entry.slot);
-        const filteredSlots = isEndWithE
-          ? rawSlots.filter((slot) => !slot.startsWith("L"))
-          : rawSlots;
+        if (courseCode.endsWith("P") && !courseCode.startsWith("BSTS")) {
+          const subjectData = domainData[selectedSubject];
+          const allLabSlots = [...new Set(subjectData.map((entry) => entry.slot))];
 
-        const uniqueSlots = [...new Set(filteredSlots)];
-        setSlots(uniqueSlots);
+          const morningLabSlots = allLabSlots.filter((slot) => {
+            const parts = slot.split("+").map((s) => parseInt(s.replace("L", ""), 10));
+            return parts.every((num) => num <= 30);
+          });
+
+          const eveningLabSlots = allLabSlots.filter((slot) => {
+            const parts = slot.split("+").map((s) => parseInt(s.replace("L", ""), 10));
+            return parts.every((num) => num >= 31);
+          });
+
+          // ✅ Set lab shift options (for dropdown)
+          setLabShiftOptions({
+            morning: morningLabSlots,
+            evening: eveningLabSlots,
+          });
+
+          // Slots shown in dropdown should be based on selected shift
+          if (selectedLabShift) {
+            const slotsForShift =
+              selectedLabShift === "morning" ? morningLabSlots : eveningLabSlots;
+            setSlots(slotsForShift);
+          }
+
+          return;
+        }
+        else {
+          const isEndWithE = courseCode.endsWith("E");
+
+          // Filter slots
+          const rawSlots = subjectData.map((entry) => entry.slot);
+          const filteredSlots = isEndWithE
+            ? rawSlots.filter((slot) => !slot.startsWith("L"))
+            : rawSlots;
+
+          const uniqueSlots = [...new Set(filteredSlots)];
+          setSlots(uniqueSlots);
+        }
+
 
         // Faculties (when slot is selected)
         if (selectedSlot) {
+          const courseCode = selectedSubject.split(" - ")[0];
+
           const facultiesForSlot = subjectData
             .filter((entry) => entry.slot === selectedSlot)
-            .map((entry) => entry.faculty);
+            .map((entry) =>
+              courseCode.startsWith("BSTS")
+                ? `${entry.faculty} (${entry.venue})`
+                : entry.faculty
+            );
 
           setSelectedFaculties([]); // Reset on slot change
           setPriorityList([]);
           setFaculties([...new Set(facultiesForSlot)]);
         }
+
       }
     }
-  }, [selectedSchool, selectedDomain, selectedSubject, selectedSlot]);
+  }, [selectedSchool, selectedDomain, selectedSubject, selectedSlot, selectedLabShift]);
+
+  useEffect(() => {
+    if (!selectedSubject || !selectedLabShift) return;
+
+    const labSlots = labShiftOptions[selectedLabShift];
+    if (!labSlots || labSlots.length === 0) return;
+
+    const subjectData = data[selectedSchool]?.[selectedDomain]?.[selectedSubject];
+    if (!subjectData) return;
+
+    const facultiesInSelectedShift = subjectData
+      .filter((entry) => labSlots.includes(entry.slot))
+      .map((entry) => entry.faculty);
+
+    setSelectedFaculties([]);
+    setPriorityList([]);
+    setFaculties([...new Set(facultiesInSelectedShift)]);
+  }, [selectedLabShift, labShiftOptions, selectedSubject]);
 
   const handleSchoolChange = (school: string) => {
     setSelectedSchool(school);
@@ -429,6 +607,9 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
+
+    setSelectedLabShift("");
+    setLabShiftOptions({ morning: [], evening: [] });
   };
   const handleSlotChange = (slot: string) => {
     setSelectedSlot(slot);
@@ -484,12 +665,29 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
               options={subjects}
               onChange={handleSubjectChange}
             />
-            <SelectField
-              label="Slot"
-              value={selectedSlot}
-              options={slots}
-              onChange={handleSlotChange}
-            />
+            {selectedSubject.split(" - ")[0].endsWith("P") && !selectedSubject.split(" - ")[0].startsWith("BSTS") ? (
+              <SelectField
+                label="Slot"
+                value={selectedLabShift}
+                onChange={(e) => {
+                  setSelectedLabShift(e);
+                  setFaculties([]);
+                  setSelectedFaculties([]);
+                  setPriorityList([]);
+                }}
+
+                options={['morning', 'evening'].filter((shift) => labShiftOptions[shift]?.length > 0)}
+              />
+
+            ) : (
+              <SelectField
+                label="Slot"
+                value={selectedSlot}
+                options={slots}
+                onChange={handleSlotChange}
+              />
+            )}
+
           </div>
 
           {/* Divider */}
@@ -637,6 +835,7 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
                   image="icons/reset.svg"
                   onClick={handleReset}
                   color="red"
+
                 />
                 <ZButton
                   type="long"
@@ -650,6 +849,12 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
           </div>
         </div>
       </div>
+      <AlertModal
+        open={popup.showPopup}
+        message={popup.message}
+        onClose={() => {
+          setPopup({ showPopup: false, message: "" });
+        }} color={""} />
     </div>
   );
 }
