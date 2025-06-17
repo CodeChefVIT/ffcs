@@ -8,7 +8,6 @@ import { ZButton } from "@/components/ui/Buttons";
 
 type PopupType =
   | "google"
-  | "email"
   | "remove"
   | "save"
   | "share"
@@ -56,8 +55,6 @@ export default function Home() {
             dataBody="Engineering Rizzology"
           />
         );
-      case "email":
-        return <Popup type="email_tt" closeLink={closePopup} />;
       case "share":
         return (
           <Popup
@@ -118,12 +115,6 @@ export default function Home() {
           text="Google"
           color="yellow"
           onClick={() => setPopupType("google")}
-        />
-        <ZButton
-          type="regular"
-          text="Email"
-          color="purple"
-          onClick={() => setPopupType("email")}
         />
         <ZButton
           type="regular"

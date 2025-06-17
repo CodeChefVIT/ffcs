@@ -13,15 +13,14 @@ type dataProps = {
 
 type PopupProps = {
   type:
-    | "login"
-    | "rem_course"
-    | "email_tt"
-    | "share_tt"
-    | "save_tt"
-    | "delete_tt"
-    | "view_tt"
-    | "logout"
-    | "rename_tt"; 
+  | "login"
+  | "rem_course"
+  | "share_tt"
+  | "save_tt"
+  | "delete_tt"
+  | "view_tt"
+  | "logout"
+  | "rename_tt";
   dataTitle?: string;
   dataBody?: string;
   dataTT?: dataProps[];
@@ -43,19 +42,17 @@ const colorMap = {
 const typeColorMap = {
   login: "yellow",
   rem_course: "red",
-  email_tt: "purple",
   share_tt: "blue",
   save_tt: "green",
   delete_tt: "red",
   view_tt: "blue",
   logout: "red",
-  rename_tt: "purple", 
+  rename_tt: "purple",
 };
 
 const typeTitleMap = {
   login: "Sign In",
   rem_course: "Remove Course",
-  email_tt: "Email Report",
   share_tt: "Share Timetable",
   save_tt: "Save Timetable",
   delete_tt: "Delete Timetable",
@@ -67,7 +64,6 @@ const typeTitleMap = {
 const typeTextMap = {
   login: "Please log-in to save and share your time-tables.",
   rem_course: "Are you sure you want to remove this course?",
-  email_tt: "A report has been sent to your email ID.",
   share_tt: "Share your timetable with anyone.",
   save_tt: "Save this timetable in your collection.",
   delete_tt: "Are you sure you want to delete this timetable?",
@@ -93,18 +89,13 @@ export default function Popup({
   shareSwitchAction,
   onInputChange,
 }: PopupProps) {
-  const theme = colorMap[typeColorMap[type] as keyof typeof colorMap] || [
-    "#E4E9FC",
-    "#94ACFF",
-  ];
+
+  const theme = colorMap[typeColorMap[type] as keyof typeof colorMap] || ["#E4E9FC", "#94ACFF",];
   const title = typeTitleMap[type] || dataTitle || "";
   const text = typeTextMap[type] || "";
 
-  const shareEnabled =
-    shareEnabledDefault !== undefined ? shareEnabledDefault : true;
-  const [shareState, setShareState] = useState<"on" | "off">(
-    shareEnabled ? "on" : "off"
-  );
+  const shareEnabled = shareEnabledDefault !== undefined ? shareEnabledDefault : true;
+  const [shareState, setShareState] = useState<"on" | "off">(shareEnabled ? "on" : "off");
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#425D5F]/75 backdrop-blur-xs z-50 select-none">
@@ -150,19 +141,18 @@ export default function Popup({
 
           {/* popup title */}
           <div className="absolute left-1/2 -translate-x-1/2 text-center flex items-center justify-center font-poppins font-bold text-2xl">
-            {type === "rename_tt" ? "Rename Timetable" : title}
+            {title}
           </div>
 
           {/* close button */}
           {!(
             type == "delete_tt" ||
             type == "rem_course" ||
-            type == "email_tt" ||
             type == "logout"
           ) && (
-            <div className="flex-1 text-right flex items-center justify-end">
-              <div
-                className={`
+              <div className="flex-1 text-right flex items-center justify-end">
+                <div
+                  className={`
                   w-12 h-12
                   bg-[#FF9A9A]
                   rounded-tr-3xl
@@ -172,23 +162,24 @@ export default function Popup({
                   outline-4 outline-black
                   pt-1 pr-1
                 `}
-                onClick={() => closeLink()}
-              >
-                <Image
-                  src="/icons/cross.svg"
-                  alt="close"
-                  width={32}
-                  height={32}
-                  draggable={false}
-                  unselectable="on"
-                  style={{ userSelect: "none", pointerEvents: "auto" }}
-                />
+                  onClick={() => closeLink()}
+                >
+                  <Image
+                    src="/icons/cross.svg"
+                    alt="close"
+                    width={32}
+                    height={32}
+                    draggable={false}
+                    unselectable="on"
+                    style={{ userSelect: "none", pointerEvents: "auto" }}
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
 
         <div className="flex flex-col items-center justify-center text-lg font-poppins font-regular p-8">
+
           {type == "login" && (
             <div className="flex flex-col items-center justify-center relative">
               {/* Top-left */}
@@ -351,32 +342,10 @@ export default function Popup({
             </div>
           )}
 
-          {type == "email_tt" && (
-            <div>
-              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
-                {text}
-                <br />
-                {dataBody && (
-                  <span className="font-semibold">&quot;{dataBody}&quot;</span>
-                )}
-              </div>
-              <div className="flex flex-row items-center justify-center gap-4 mb-2">
-                <ZButton
-                  type="long"
-                  text="OK"
-                  color="blue"
-                  forceColor={theme[1]}
-                  onClick={closeLink}
-                />
-              </div>
-            </div>
-          )}
-
           {type == "save_tt" && (
             <div>
               <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
                 {text}
-                <br />
               </div>
               <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
                 <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-black font-semibold">
@@ -402,7 +371,7 @@ export default function Popup({
           {type == "rename_tt" && (
             <div>
               <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
-                Enter a new name for your timetable.
+                {text}
               </div>
               <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
                 <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-black font-semibold">
@@ -438,7 +407,7 @@ export default function Popup({
                   </span>
                   <BasicToggleButton
                     isDefaultOn={shareEnabled}
-                    onToggle={shareSwitchAction ?? (() => {})}
+                    onToggle={shareSwitchAction ?? (() => { })}
                   />
                   <span className="text-base whitespace-nowrap">
                     {shareEnabled ? "Anyone with the link can view" : "Only you can view"}
@@ -488,6 +457,7 @@ export default function Popup({
               </div>
             </div>
           )}
+
         </div>
       </div>
     </div>
