@@ -31,6 +31,12 @@ interface TimetableEntry {
   }[];
 }
 
+type PopupSlot = {
+  code: string;
+  slot: string;
+  name: string;
+};
+
 export default function Saved() {
   const router = useRouter();
   const { data: session } = useSession();
@@ -42,7 +48,7 @@ export default function Saved() {
   const [popupType, setPopupType] = useState<
     "view_tt" | "delete_tt" | "rename_tt" | null
   >(null);
-  const [popupSlots, setPopupSlots] = useState<any[]>([]);
+  const [popupSlots, setPopupSlots] = useState<PopupSlot[]>([]);
   const [popupTitle, setPopupTitle] = useState<string>("");
   const [selectedTT, setSelectedTT] = useState<TimetableEntry | null>(null);
   const [renameValue, setRenameValue] = useState<string>("");
@@ -59,7 +65,7 @@ export default function Saved() {
       .finally(() => setLoading(false));
   }, [userEmail]);
 
-  function convertSlots(slots: TimetableEntry["slots"]) {
+  function convertSlots(slots: TimetableEntry["slots"]): PopupSlot[] {
     return slots.map((item) => ({
       code: item.courseCode,
       slot: item.slot,

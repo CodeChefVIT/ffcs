@@ -37,7 +37,7 @@ export default function SharedTimetablePage() {
         if (json && json.timetable && Array.isArray(json.timetable.slots)) {
           setTitle(json.timetable.title || "");
           setData(
-            json.timetable.slots.map((item: any) => ({
+            json.timetable.slots.map((item: { courseCode: string; slot: string; facultyName: string }): dataProps => ({
               code: item.courseCode,
               slot: item.slot,
               name: item.facultyName,
