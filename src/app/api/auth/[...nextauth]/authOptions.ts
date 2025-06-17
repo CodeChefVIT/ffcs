@@ -13,6 +13,7 @@ export const authOptions: AuthOptions = {
         params: {
           scope: "openid email profile",
           hd: "vitstudent.ac.in",
+          prompt: "select_account",
         },
       },
     }),
