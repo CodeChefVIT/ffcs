@@ -4,13 +4,13 @@ import React from 'react';
 import ExcelJS from 'exceljs';
 
 export default function Home() {
-  const data: number[][] = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9],
-  ];
 
   const exportToExcel = async () => {
+    const data: (number | string)[][] = [
+      [1, 2, 3],
+      [4, "test download", 6],
+      [7, "Please wait for feature implementation", 9],
+    ];
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet('Sheet1');
 
@@ -34,7 +34,7 @@ export default function Home() {
 
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'data.xlsx';
+    a.download = 'report.xlsx';
     a.click();
     URL.revokeObjectURL(url);
   };

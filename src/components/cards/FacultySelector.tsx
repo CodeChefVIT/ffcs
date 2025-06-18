@@ -284,6 +284,8 @@ export default function FacultySelector({
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
+    setSelectedLabShift("");
+    setLabShiftOptions({ morning: [], evening: [] });
   };
 
   const handleConfirm = () => {
@@ -421,7 +423,8 @@ export default function FacultySelector({
     }
 
     onConfirm(courseData);
-    handleReset();
+    setSelectedFaculties([]);
+    setPriorityList([]);
   };
 
   const toggleFaculty = (name: string) => {
@@ -574,6 +577,8 @@ export default function FacultySelector({
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
+    setSelectedLabShift("");
+    setLabShiftOptions({ morning: [], evening: [] });
   };
 
   const handleDomainChange = (domain: string) => {
@@ -596,7 +601,6 @@ export default function FacultySelector({
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
-
     setSelectedLabShift("");
     setLabShiftOptions({ morning: [], evening: [] });
   };
@@ -606,6 +610,8 @@ export default function FacultySelector({
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
+    setSelectedLabShift("");
+    setLabShiftOptions({ morning: [], evening: [] });
   };
 
   return (
