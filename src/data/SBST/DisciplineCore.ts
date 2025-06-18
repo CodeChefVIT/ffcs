@@ -44,17 +44,9 @@ export const disciplineCore = {
     { slot: "B1+TB1", venue: "SMV219", faculty: "AANCHAL MITTAL" },
   ],
   "BBIT328P - Downstream Processing Lab": [
-    {
-      slot: "L39+L40+L41+L42",
-      venue: "SMV225",
-      faculty: "SANGEETHA SUBRAMANIAN",
-    },
+    { slot: "L39+L40+L41+L42", venue: "SMV225", faculty: "SANGEETHA SUBRAMANIAN", },
     { slot: "L43+L44+L45+L46", venue: "SMV225", faculty: "AANCHAL MITTAL" },
-    {
-      slot: "L27+L28+L29+L30",
-      venue: "SMV225",
-      faculty: "SANGEETHA SUBRAMANIAN",
-    },
+    { slot: "L27+L28+L29+L30", venue: "SMV225", faculty: "SANGEETHA SUBRAMANIAN", },
     { slot: "L27+L28+L29+L30", venue: "SMV225", faculty: "DHANYA V" },
     { slot: "L43+L44+L45+L46", venue: "SMV225", faculty: "SABAREESH V" },
     { slot: "L39+L40+L41+L42", venue: "SMV225", faculty: "ROHIT" },

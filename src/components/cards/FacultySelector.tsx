@@ -19,7 +19,6 @@ const schools = [
   "SCE",
 ];
 
-
 type SelectFieldProps = {
   label: string;
   value: string;
