@@ -60,7 +60,7 @@ function SelectField({
         onClick={() => setIsOpen(!isOpen)}
         title={selectedLabel}
         className={`
-         w-full h-10 pl-3 pr-10 text-left bg-white rounded-xl border-3 border-black
+         w-full h-10 pl-3 pr-12 text-left bg-white rounded-xl border-3 border-black
          cursor-pointer relative
          ${!value ? "text-[#00000080]" : "text-black"}
          truncate whitespace-nowrap overflow-hidden
@@ -83,7 +83,7 @@ function SelectField({
       </button>
 
       {isOpen && (
-        <ul className="absolute left-0 right-0 z-10 bg-white border-3 border-black rounded-xl mt-1 max-h-48 overflow-y-auto shadow-lg">
+        <ul className="absolute -left-7 -right-7 z-10 bg-white border-3 border-black rounded-xl mt-1 max-h-120 overflow-y-auto shadow-lg">
           {options.map((option, index) => (
             <li
               key={index}
@@ -284,6 +284,8 @@ export default function FacultySelector({
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
+    setSelectedLabShift("");
+    setLabShiftOptions({ morning: [], evening: [] });
   };
 
   const handleConfirm = () => {
@@ -421,7 +423,8 @@ export default function FacultySelector({
     }
 
     onConfirm(courseData);
-    handleReset();
+    setSelectedFaculties([]);
+    setPriorityList([]);
   };
 
   const toggleFaculty = (name: string) => {
@@ -574,6 +577,8 @@ export default function FacultySelector({
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
+    setSelectedLabShift("");
+    setLabShiftOptions({ morning: [], evening: [] });
   };
 
   const handleDomainChange = (domain: string) => {
@@ -596,7 +601,6 @@ export default function FacultySelector({
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
-
     setSelectedLabShift("");
     setLabShiftOptions({ morning: [], evening: [] });
   };
@@ -606,6 +610,8 @@ export default function FacultySelector({
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
+    setSelectedLabShift("");
+    setLabShiftOptions({ morning: [], evening: [] });
   };
 
   return (
