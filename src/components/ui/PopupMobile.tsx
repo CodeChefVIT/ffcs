@@ -19,11 +19,14 @@ type PopupViewTTProps = {
   onShareClick: () => Promise<void>;
   shareEnabledDefault: boolean;
   shareSwitchAction: (state: "on" | "off") => Promise<void>;
+  shareLink: string;
 };
+
 type PopupLoginProps = {
   closeLink: () => void;
   onLoginClick: () => void;
 };
+
 export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-white">
@@ -126,6 +129,7 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
     </div>
   );
 }
+
 export function PopupViewTT({
   TTName,
   TTData,
@@ -133,6 +137,7 @@ export function PopupViewTT({
   onShareClick,
   shareEnabledDefault,
   shareSwitchAction,
+  shareLink,
 }: PopupViewTTProps) {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-white">
@@ -155,6 +160,10 @@ export function PopupViewTT({
         </div>
 
         <div className="text-2xl mt-4 mb-2 text-black font-semibold font-poppins">{TTName}</div>
+
+        <div className="text-center text-sm mb-2 text-gray-700 px-4 break-words">
+          Shareable Link: <span className="underline">{shareLink}</span>
+        </div>
 
         <div className="text-center text-sm mb-4 text-gray-600 px-4">
           {shareEnabledDefault ? "Publicly Shareable" : "Private"}
