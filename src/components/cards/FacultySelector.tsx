@@ -8,16 +8,7 @@ import { data } from "@/data/faculty";
 import { fullCourseData } from "@/lib/type";
 import AlertModal from "../ui/AlertModal";
 
-const schools = [
-  "SCOPE",
-  "SELECT",
-  "SCORE",
-  "SMEC",
-  "SBST",
-  "SCHEME",
-  "SENSE",
-  "SCE",
-];
+const schools = ["SCOPE", "SELECT", "SCORE", "SMEC", "SBST", "SCHEME", "SENSE", "SCE"];
 
 type SelectFieldProps = {
   label: string;
@@ -31,13 +22,8 @@ type FacultySelectorProps = {
   onConfirm: (course: fullCourseData) => void;
 };
 
-function SelectField({
-  label,
-  value,
-  options,
-  onChange,
-  renderOption,
-}: SelectFieldProps) {
+function SelectField({ label, value, options, onChange, renderOption, }: SelectFieldProps) {
+
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -64,11 +50,11 @@ function SelectField({
         onClick={() => setIsOpen(!isOpen)}
         title={selectedLabel}
         className={`
-    w-full h-10 pl-3 pr-10 text-left bg-white rounded-xl border-3 border-black
-    cursor-pointer relative
-    ${!value ? "text-[#00000080]" : "text-black"}
-    truncate whitespace-nowrap overflow-hidden
-  `}
+          w-full h-10 pl-3 pr-14 text-left bg-white rounded-xl border-3 border-black
+          cursor-pointer relative
+          ${!value ? "text-[#00000080]" : "text-black"}
+          truncate whitespace-nowrap overflow-hidden
+        `}
       >
 
         {selectedLabel}
@@ -90,7 +76,7 @@ function SelectField({
 
       {isOpen && (
         <ul
-          className="absolute left-0 right-0 z-10 bg-white border-3 border-black rounded-xl mt-1 max-h-48 overflow-y-auto shadow-lg"
+          className="absolute -left-7 -right-7 z-10 bg-white border-3 border-black rounded-xl mt-1 max-h-120 overflow-y-auto shadow-lg"
         >
           {options.map((option, index) => (
             <li
@@ -112,7 +98,6 @@ function SelectField({
     </div>
   );
 }
-
 
 type SubjectEntry = {
   slot: string;
@@ -257,7 +242,6 @@ function generateCourseSlotsBoth({
   ];
 }
 
-
 // Helper to prettify domain names
 const prettifyDomain = (domain: string) => {
   return domain
@@ -270,27 +254,23 @@ const prettifyDomain = (domain: string) => {
 };
 
 export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
+  const [popup, setPopup] = useState({ showPopup: false, message: "" });
+
   const [selectedSchool, setSelectedSchool] = useState("SCOPE");
-  const [selectedFaculties, setSelectedFaculties] = useState<string[]>([]);
-  const [priorityList, setPriorityList] = useState<string[]>([]);
   const [selectedDomain, setSelectedDomain] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedSlot, setSelectedSlot] = useState("");
+
   const [domains, setDomains] = useState<string[]>([]);
   const [subjects, setSubjects] = useState<string[]>([]);
   const [slots, setSlots] = useState<string[]>([]);
   const [faculties, setFaculties] = useState<string[]>([]);
-  const [popup, setPopup] = useState({ showPopup: false, message: "" });
+  const [selectedFaculties, setSelectedFaculties] = useState<string[]>([]);
+  const [priorityList, setPriorityList] = useState<string[]>([]);
 
-  // 1. Dropdown values for morning/evening shifts (all available options)
-  const [labShiftOptions, setLabShiftOptions]: any = useState<{
-    morning: string[];
-    evening: string[];
-  }>({ morning: [], evening: [] });
-
-  // 3. Selected lab shift (when course is lab-only)
+  // for lab-only courses, show "Morning" and "Evening" as slot optiions
+  const [labShiftOptions, setLabShiftOptions]: any = useState<{ morning: string[]; evening: string[]; }>({ morning: [], evening: [] });
   const [selectedLabShift, setSelectedLabShift]: any = useState("");
-
 
   // for lab only course: 
   // dropdown items state
@@ -306,6 +286,8 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
+    setSelectedLabShift("");
+    setLabShiftOptions({ morning: [], evening: [] });
   };
 
   const handleConfirm = () => {
@@ -319,15 +301,16 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
       setPopup({ showPopup: true, message: "Please select a subject." });
       return;
     }
-    if (!selectedLabShift && selectedSubject.split(" - ")[0].endsWith("P")) {
-      setPopup({ showPopup: true, message: "Please select a slot." });
-      return;
-    }
-    if (!selectedSlot && !selectedSubject.split(" - ")[0].endsWith("P") && !selectedSubject.split(" - ")[0].startsWith("BSTS")) {
-      setPopup({ showPopup: true, message: "Please select a slot." });
+
+    if (!selectedLabShift && selectedSubject.split(" - ")[0].endsWith("P") && !selectedSubject.split(" - ")[0].startsWith("BSTS")) {
+      setPopup({ showPopup: true, message: "Please select a lab slot." });
       return;
     }
 
+    if (!selectedSlot && (!selectedSubject.split(" - ")[0].endsWith("P") || selectedSubject.split(" - ")[0].startsWith("BSTS"))) {
+      setPopup({ showPopup: true, message: "Please select a theory slot." });
+      return;
+    }
 
     if (priorityList.length === 0) {
       setPopup({ showPopup: true, message: "Please select at least one faculty." });
@@ -358,25 +341,22 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
         ? "both"
         : courseCodeType === "P" && !courseCode.startsWith("BSTS")
           ? "lab"
-          : courseCodeType === "L" || courseCode.startsWith("BSTS")
-            ? "th"
-            : "th";
+          : "th"
 
     const courseName = selectedSubject.split(" - ")[1];
 
     let courseCodeLab;
     let courseNameLab;
+    let courseSlots;
+
     if (courseCodeType == "E") {
       courseCodeLab = courseCode;
       courseNameLab = courseName;
     } else {
-      courseCodeLab =
-        labSubject.length == 1 ? labSubject[0].split(" - ")[0] : "";
-      courseNameLab =
-        labSubject.length == 1 ? labSubject[0].split(" - ")[1] : "";
+      courseCodeLab = labSubject.length == 1 ? labSubject[0].split(" - ")[0] : "";
+      courseNameLab = labSubject.length == 1 ? labSubject[0].split(" - ")[1] : "";
     }
 
-    let courseSlots;
     if (courseType == "both") {
       courseSlots = generateCourseSlotsBoth({
         data,
@@ -422,7 +402,8 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
     };
 
     onConfirm(courseData);
-    handleReset();
+    setSelectedFaculties([]);
+    setPriorityList([]);
   };
 
 
@@ -431,14 +412,12 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
       const updated = prev.includes(name)
         ? prev.filter((f) => f !== name)
         : [...prev, name];
-
       setPriorityList((prevPriority) => {
         const updatedPriority = updated.map((faculty) =>
           prevPriority.includes(faculty) ? faculty : faculty
         );
         return updatedPriority;
       });
-
       return updated;
     });
   };
@@ -476,6 +455,7 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
       const domainData = schoolData[selectedDomain];
       const allSubjects = Object.keys(domainData);
 
+      // show only theory component where both exists
       const filteredSubjects = allSubjects.filter((subject) => {
         const code = subject.split(" - ")[0];
         const base = code.slice(0, -1); // Strip last char (P or L)
@@ -495,7 +475,7 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
         const courseCode = selectedSubject.split(" - ")[0];
 
         if (courseCode.endsWith("P") && !courseCode.startsWith("BSTS")) {
-          const subjectData = domainData[selectedSubject];
+
           const allLabSlots = [...new Set(subjectData.map((entry) => entry.slot))];
 
           const morningLabSlots = allLabSlots.filter((slot) => {
@@ -524,13 +504,9 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
           return;
         }
         else {
-          const isEndWithE = courseCode.endsWith("E");
-
           // Filter slots
           const rawSlots = subjectData.map((entry) => entry.slot);
-          const filteredSlots = isEndWithE
-            ? rawSlots.filter((slot) => !slot.startsWith("L"))
-            : rawSlots;
+          const filteredSlots = rawSlots.filter((slot) => !slot.startsWith("L"))
 
           const uniqueSlots = [...new Set(filteredSlots)];
           setSlots(uniqueSlots);
@@ -586,6 +562,8 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
+    setSelectedLabShift("");
+    setLabShiftOptions({ morning: [], evening: [] });
   };
 
   const handleDomainChange = (domain: string) => {
@@ -597,6 +575,8 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
+    setSelectedLabShift("");
+    setLabShiftOptions({ morning: [], evening: [] });
   };
 
   const handleSubjectChange = (subject: string) => {
@@ -606,10 +586,10 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
-
     setSelectedLabShift("");
     setLabShiftOptions({ morning: [], evening: [] });
   };
+
   const handleSlotChange = (slot: string) => {
     setSelectedSlot(slot);
     setFaculties([]);
@@ -827,15 +807,14 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
               </div>
 
               {/* Action buttons */}
-              <div className="flex justify-center gap-4">
-                <ZButton
-                  type="long"
-                  text="Reset"
-                  image="icons/reset.svg"
-                  onClick={handleReset}
-                  color="red"
-
-                />
+              <div className="flex flex-row justify-center gap-4">
+                  <ZButton
+                    type="long"
+                    text="Reset"
+                    image="icons/reset.svg"
+                    onClick={handleReset}
+                    color="red"
+                  />
                 <ZButton
                   type="long"
                   text="Confirm"

@@ -34,7 +34,7 @@ export default function View() {
 
       <Hero />
 
-      <div className="max-w-6xl mx-4 pt-12" id="start">
+      <div className="w-4xl mx-4 pt-12" id="start">
         <FacultySelector
           onConfirm={(newCourse) => {
             setSelectedCourses((prevCourses) => {
