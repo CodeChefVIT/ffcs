@@ -27,7 +27,7 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
   const [deletePopupOpen, setDeletePopupOpen] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState<fullCourseData | null>(null);
 
-  // Initialize from localStorage or props on first mount
+
   useEffect(() => {
     if (!hasInitialized.current && typeof window !== "undefined") {
       try {
@@ -45,7 +45,7 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     }
   }, [selectedCourses]);
 
-  // Update when parent props actually change after init
+  
   useEffect(() => {
     if (hasInitialized.current) {
       const prev = prevSelected.current;
