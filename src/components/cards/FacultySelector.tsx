@@ -18,10 +18,7 @@ const schools = [
   "SENSE",
   "SCE",
 ];
-type LabShiftOptions = {
-  morning: string[];
-  evening: string[];
-};
+
 
 type SelectFieldProps = {
   label: string;
@@ -31,9 +28,6 @@ type SelectFieldProps = {
   renderOption?: (option: string) => string;
 };
 
-type FacultySelectorProps = {
-  onConfirm: (course: fullCourseData) => void;
-};
 
 function SelectField({
   label,
@@ -256,8 +250,7 @@ const prettifyDomain = (domain: string) => {
     .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2")
     .trim();
 };
-const shiftKeys = ["morning", "evening"] as const;
-type ShiftKey = (typeof shiftKeys)[number];
+type ShiftKey = "morning" | "evening";
 export default function FacultySelector({
   onConfirm,
 }: {
