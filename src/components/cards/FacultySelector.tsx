@@ -324,7 +324,7 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
       setPopup({ showPopup: true, message: "Please select a slot." });
       return;
     }
-    if (!selectedSlot && !selectedSubject.split(" - ")[0].endsWith("P")) {
+    if (!selectedSlot && !selectedSubject.split(" - ")[0].endsWith("P") && !selectedSubject.split(" - ")[0].startsWith("BSTS")) {
       setPopup({ showPopup: true, message: "Please select a slot." });
       return;
     }
