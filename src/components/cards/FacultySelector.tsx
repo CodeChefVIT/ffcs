@@ -18,6 +18,10 @@ const schools = [
   "SENSE",
   "SCE",
 ];
+type LabShiftOptions = {
+  morning: string[];
+  evening: string[];
+};
 
 type SelectFieldProps = {
   label: string;
@@ -30,8 +34,6 @@ type SelectFieldProps = {
 type FacultySelectorProps = {
   onConfirm: (course: fullCourseData) => void;
 };
-
-const LOCAL_STORAGE_KEY = "selectedCourses";
 
 function SelectField({
   label,
@@ -89,9 +91,7 @@ function SelectField({
       </button>
 
       {isOpen && (
-        <ul
-          className="absolute left-0 right-0 z-10 bg-white border-3 border-black rounded-xl mt-1 max-h-48 overflow-y-auto shadow-lg"
-        >
+        <ul className="absolute left-0 right-0 z-10 bg-white border-3 border-black rounded-xl mt-1 max-h-48 overflow-y-auto shadow-lg">
           {options.map((option, index) => (
             <li
               key={index}
@@ -211,11 +211,11 @@ function generateCourseSlotsBoth({
   const isEveningTheory = selectedSlot.includes("2");
 
   const isValidLabSlot = (slot: string): boolean => {
-    const parts = slot.split("+").map(s => parseInt(s.replace("L", ""), 10));
+    const parts = slot.split("+").map((s) => parseInt(s.replace("L", ""), 10));
     if (parts.some(isNaN)) return false;
 
-    const allMorning = parts.every(num => num <= 30);
-    const allEvening = parts.every(num => num >= 31);
+    const allMorning = parts.every((num) => num <= 30);
+    const allEvening = parts.every((num) => num >= 31);
 
     if (isMorningTheory) return allEvening;
     if (isEveningTheory) return allMorning;
@@ -256,8 +256,20 @@ const prettifyDomain = (domain: string) => {
     .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2")
     .trim();
 };
-
-export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
+const shiftKeys = ["morning", "evening"] as const;
+type ShiftKey = (typeof shiftKeys)[number];
+export default function FacultySelector({
+  onConfirm,
+}: {
+  onConfirm: (course: fullCourseData) => void;
+}) {
+  const [selectedLabShift, setSelectedLabShift] = useState<"" | ShiftKey>("");
+  const [labShiftOptions, setLabShiftOptions] = useState<
+    Record<ShiftKey, string[]>
+  >({
+    morning: [],
+    evening: [],
+  });
   const [selectedSchool, setSelectedSchool] = useState("SCOPE");
   const [selectedFaculties, setSelectedFaculties] = useState<string[]>([]);
   const [priorityList, setPriorityList] = useState<string[]>([]);
@@ -269,13 +281,6 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
   const [slots, setSlots] = useState<string[]>([]);
   const [faculties, setFaculties] = useState<string[]>([]);
   const [popup, setPopup] = useState({ showPopup: false, message: "" });
-
-  const [labShiftOptions, setLabShiftOptions]: any = useState<{
-    morning: string[];
-    evening: string[];
-  }>({ morning: [], evening: [] });
-
-  const [selectedLabShift, setSelectedLabShift]: any = useState("");
 
   const LOCAL_STORAGE_KEY = "selectedCourses";
 
@@ -314,7 +319,10 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
     }
 
     if (priorityList.length === 0) {
-      setPopup({ showPopup: true, message: "Please select at least one faculty." });
+      setPopup({
+        showPopup: true,
+        message: "Please select at least one faculty.",
+      });
       return;
     } else {
       setPopup({ showPopup: true, message: "Successfully added course" });
@@ -353,8 +361,10 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
       courseCodeLab = courseCode;
       courseNameLab = courseName;
     } else {
-      courseCodeLab = labSubject.length == 1 ? labSubject[0].split(" - ")[0] : "";
-      courseNameLab = labSubject.length == 1 ? labSubject[0].split(" - ")[1] : "";
+      courseCodeLab =
+        labSubject.length == 1 ? labSubject[0].split(" - ")[0] : "";
+      courseNameLab =
+        labSubject.length == 1 ? labSubject[0].split(" - ")[1] : "";
     }
 
     let courseSlots;
@@ -404,7 +414,9 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
 
         const exists = savedCourses.some((c) => c.id === id);
         const newCourses = exists
-          ? savedCourses.map((course) => (course.id === id ? courseData : course))
+          ? savedCourses.map((course) =>
+              course.id === id ? courseData : course
+            )
           : [...savedCourses, courseData];
 
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newCourses));
@@ -474,15 +486,21 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
         const courseCode = selectedSubject.split(" - ")[0];
 
         if (courseCode.endsWith("P") && !courseCode.startsWith("BSTS")) {
-          const allLabSlots = [...new Set(subjectData.map((entry) => entry.slot))];
+          const allLabSlots = [
+            ...new Set(subjectData.map((entry) => entry.slot)),
+          ];
 
           const morningLabSlots = allLabSlots.filter((slot) => {
-            const parts = slot.split("+").map((s) => parseInt(s.replace("L", ""), 10));
+            const parts = slot
+              .split("+")
+              .map((s) => parseInt(s.replace("L", ""), 10));
             return parts.every((num) => num <= 30);
           });
 
           const eveningLabSlots = allLabSlots.filter((slot) => {
-            const parts = slot.split("+").map((s) => parseInt(s.replace("L", ""), 10));
+            const parts = slot
+              .split("+")
+              .map((s) => parseInt(s.replace("L", ""), 10));
             return parts.every((num) => num >= 31);
           });
 
@@ -492,7 +510,10 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
           });
 
           if (selectedLabShift) {
-            const slotsForShift = selectedLabShift === "morning" ? morningLabSlots : eveningLabSlots;
+            const slotsForShift =
+              selectedLabShift === "morning"
+                ? morningLabSlots
+                : eveningLabSlots;
             setSlots(slotsForShift);
           }
 
@@ -500,7 +521,9 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
         } else {
           const isEndWithE = courseCode.endsWith("E");
           const rawSlots = subjectData.map((entry) => entry.slot);
-          const filteredSlots = isEndWithE ? rawSlots.filter((slot) => !slot.startsWith("L")) : rawSlots;
+          const filteredSlots = isEndWithE
+            ? rawSlots.filter((slot) => !slot.startsWith("L"))
+            : rawSlots;
           const uniqueSlots = [...new Set(filteredSlots)];
           setSlots(uniqueSlots);
         }
@@ -509,7 +532,9 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
           const facultiesForSlot = subjectData
             .filter((entry) => entry.slot === selectedSlot)
             .map((entry) =>
-              courseCode.startsWith("BSTS") ? `${entry.faculty} (${entry.venue})` : entry.faculty
+              courseCode.startsWith("BSTS")
+                ? `${entry.faculty} (${entry.venue})`
+                : entry.faculty
             );
 
           setSelectedFaculties([]);
@@ -518,7 +543,13 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
         }
       }
     }
-  }, [selectedSchool, selectedDomain, selectedSubject, selectedSlot, selectedLabShift]);
+  }, [
+    selectedSchool,
+    selectedDomain,
+    selectedSubject,
+    selectedSlot,
+    selectedLabShift,
+  ]);
 
   useEffect(() => {
     if (!selectedSubject || !selectedLabShift) return;
@@ -526,7 +557,8 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
     const labSlots = labShiftOptions[selectedLabShift];
     if (!labSlots || labSlots.length === 0) return;
 
-    const subjectData = data[selectedSchool]?.[selectedDomain]?.[selectedSubject];
+    const subjectData =
+      data[selectedSchool]?.[selectedDomain]?.[selectedSubject];
     if (!subjectData) return;
 
     const facultiesInSelectedShift = subjectData
@@ -619,13 +651,19 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
                 label="Slot"
                 value={selectedLabShift}
                 onChange={(e) => {
-                  setSelectedLabShift(e);
+                  if (e === "morning" || e === "evening") {
+                    setSelectedLabShift(e);
+                  } else {
+                    setSelectedLabShift("");
+                  }
                   setFaculties([]);
                   setSelectedFaculties([]);
                   setPriorityList([]);
                 }}
                 options={["morning", "evening"].filter(
-                  (shift) => labShiftOptions[shift]?.length > 0
+                  (shift) =>
+                    labShiftOptions[shift as keyof typeof labShiftOptions]
+                      ?.length > 0
                 )}
               />
             ) : (
