@@ -80,6 +80,12 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
   };
 
   const handleGenerate = async () => {
+
+    if (courses.length === 0) {
+      setError("Please add at least one course to generate a timetable.");
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
