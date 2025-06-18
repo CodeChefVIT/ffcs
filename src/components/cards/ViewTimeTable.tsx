@@ -128,33 +128,26 @@ export default function ViewTimeTable() {
 
   const actionButtons = [
     {
-      label: "Email",
+      label: "Share",
       color: "yellow",
-      icon: "/icons/mail.svg",
-      onClick: withLoginCheck(() => console.log("Email clicked")),
+      icon: "/icons/send.svg",
+      onClick: withLoginCheck(handleShare),
+    },
+    {
+      label: "Report",
+      color: "green",
+      icon: "/icons/report.svg",
+      onClick: withLoginCheck(() => console.log("Report clicked")),
     },
     {
       label: "Save",
-      color: "green",
+      color: "purple",
       icon: "/icons/save.svg",
       onClick: withLoginCheck(() => {
         setSaveTTName("");
         setShowSavePopup(true);
       }),
     },
-    {
-      label: "Report",
-      color: "purple",
-      icon: "/icons/report.svg",
-      onClick: withLoginCheck(() => console.log("Report clicked")),
-    },
-    {
-      label: "Share",
-      color: "green",
-      icon: "/icons/send.svg",
-      onClick: withLoginCheck(handleShare),
-    },
-
   ];
 
   function showAlert(msg: string) {
@@ -168,7 +161,13 @@ export default function ViewTimeTable() {
         <div className="flex flex-row items-end mb-4 ml-2">
           <div className="text-5xl font-pangolin">Your Timetables</div>
           <div className="text-xl ml-8 font-poppins pb-1">
-            ({timetableCount} timetable{timetableCount != 1 ? "s were" : " was"} generated)
+            {
+              (timetableCount == 0) ?
+                "(Empty List)" :
+                timetableCount == 1 ?
+                  "(1 timetable was generated)" :
+                  `(${timetableCount} timetables were generated)`
+            }
           </div>
         </div>
 
@@ -176,7 +175,7 @@ export default function ViewTimeTable() {
           <CompoundTable data={convertedData} large={true} />
         </div>
 
-        <div className="flex flex-row items-center justify-between px-8 pt-8 gap-8">
+        <div className="flex flex-row items-center justify-between px-16 pt-4 gap-8">
           <div className="w-auto">
             <div className=" w-full flex justify-center">
               <button
@@ -229,11 +228,11 @@ export default function ViewTimeTable() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-4">
             {actionButtons.map((btn, idx) => (
               <div key={idx}>
                 <ZButton
-                  type="regular"
+                  type="long"
                   text={btn.label}
                   image={btn.icon}
                   color={btn.color || "blue"}
