@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useRef, useEffect } from "react";
 
 import { useTimetable } from "../../lib/TimeTableContext";
@@ -25,7 +24,7 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
         const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (saved) return JSON.parse(saved) as fullCourseData[];
       } catch {
-        // Ignore parse errors
+        
       }
     }
     return selectedCourses;
@@ -204,7 +203,7 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
               {/* Course namee */}
               <div className="flex w-[480px] text-sm text-black font-normal">
                 <div className="flex flex-col gap-1 break-words max-w-full">
-                  <p key={course.courseName} className="break-words leading-snug">
+                  <p key={course.courseName} className="break-words leading-snug">More actions
                     {course.courseName}
                   </p>
                   {course.courseType === "both" && (
@@ -357,4 +356,3 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     </div>
   );
 }
-
