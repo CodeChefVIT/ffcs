@@ -19,7 +19,6 @@ const schools = [
   "SCE",
 ];
 
-
 type SelectFieldProps = {
   label: string;
   value: string;
@@ -27,7 +26,6 @@ type SelectFieldProps = {
   onChange: (val: string) => void;
   renderOption?: (option: string) => string;
 };
-
 
 function SelectField({
   label,
