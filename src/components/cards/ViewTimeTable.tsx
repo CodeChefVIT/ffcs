@@ -142,7 +142,7 @@ export default function ViewTimeTable() {
       color: "green",
       icon: "/icons/report.svg",
       onClick: withLoginCheck(() => {
-        exportToExcel();
+        exportToExcel([]);
       }),
     },
     {

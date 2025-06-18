@@ -96,13 +96,14 @@ export function getCurrentDateTime() {
 }
 
 export const exportToExcel = async (timetableData?: fullCourseData[]) => {
+  const workbook = new ExcelJS.Workbook();
+  const sheet = workbook.addWorksheet('Sheet1');
+
   const data: (number | string)[][] = [
     [1, 2, 3],
     [4, "test download", 6],
     [7, "Please wait for feature implementation", 9],
   ];
-  const workbook = new ExcelJS.Workbook();
-  const sheet = workbook.addWorksheet('Sheet1');
 
   data.forEach((row) => {
     const newRow = sheet.addRow(row);
