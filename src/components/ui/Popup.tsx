@@ -13,14 +13,14 @@ type dataProps = {
 
 type PopupProps = {
   type:
-  | "login"
-  | "rem_course"
-  | "share_tt"
-  | "save_tt"
-  | "delete_tt"
-  | "view_tt"
-  | "logout"
-  | "rename_tt";
+    | "login"
+    | "rem_course"
+    | "share_tt"
+    | "save_tt"
+    | "delete_tt"
+    | "view_tt"
+    | "logout"
+    | "rename_tt";
   dataTitle?: string;
   dataBody?: string;
   dataTT?: dataProps[];
@@ -89,13 +89,18 @@ export default function Popup({
   shareSwitchAction,
   onInputChange,
 }: PopupProps) {
-
-  const theme = colorMap[typeColorMap[type] as keyof typeof colorMap] || ["#E4E9FC", "#94ACFF",];
+  const theme = colorMap[typeColorMap[type] as keyof typeof colorMap] || [
+    "#E4E9FC",
+    "#94ACFF",
+  ];
   const title = typeTitleMap[type] || dataTitle || "";
   const text = typeTextMap[type] || "";
 
-  const shareEnabled = shareEnabledDefault !== undefined ? shareEnabledDefault : true;
-  const [shareState, setShareState] = useState<"on" | "off">(shareEnabled ? "on" : "off");
+  const shareEnabled =
+    shareEnabledDefault !== undefined ? shareEnabledDefault : true;
+  const [shareState, setShareState] = useState<"on" | "off">(
+    shareEnabled ? "on" : "off"
+  );
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#425D5F]/75 backdrop-blur-xs z-50 select-none">
@@ -150,9 +155,9 @@ export default function Popup({
             type == "rem_course" ||
             type == "logout"
           ) && (
-              <div className="flex-1 text-right flex items-center justify-end">
-                <div
-                  className={`
+            <div className="flex-1 text-right flex items-center justify-end">
+              <div
+                className={`
                   w-12 h-12
                   bg-[#FF9A9A]
                   rounded-tr-3xl
@@ -162,24 +167,23 @@ export default function Popup({
                   outline-4 outline-black
                   pt-1 pr-1
                 `}
-                  onClick={() => closeLink()}
-                >
-                  <Image
-                    src="/icons/cross.svg"
-                    alt="close"
-                    width={32}
-                    height={32}
-                    draggable={false}
-                    unselectable="on"
-                    priority
-                  />
-                </div>
+                onClick={() => closeLink()}
+              >
+                <Image
+                  src="/icons/cross.svg"
+                  alt="close"
+                  width={32}
+                  height={32}
+                  draggable={false}
+                  unselectable="on"
+                  priority
+                />
               </div>
-            )}
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col items-center justify-center text-lg font-poppins font-regular p-8">
-
           {type == "login" && (
             <div className="flex flex-col items-center justify-center relative">
               {/* Top-left */}
@@ -354,7 +358,9 @@ export default function Popup({
                     className="bg-transparent outline-none w-full text-center font-semibold"
                     placeholder="Enter timetable name"
                     value={dataBody}
-                    onChange={e => onInputChange && onInputChange(e.target.value)}
+                    onChange={(e) =>
+                      onInputChange && onInputChange(e.target.value)
+                    }
                   />
                 </div>
                 <ZButton
@@ -380,7 +386,9 @@ export default function Popup({
                     className="bg-transparent outline-none w-full text-center font-semibold"
                     placeholder="Enter timetable name"
                     value={dataBody}
-                    onChange={e => onInputChange && onInputChange(e.target.value)}
+                    onChange={(e) =>
+                      onInputChange && onInputChange(e.target.value)
+                    }
                     autoFocus
                   />
                 </div>
@@ -396,11 +404,13 @@ export default function Popup({
           )}
 
           {type == "view_tt" && (
-            <div>
-              <div className="break-words max-w-[80vw] w-full text-center p-2 -mt-4">
-                <CompoundTable data={dataTT || []} />
+            <div className="flex flex-col w-full max-h-[90vh] overflow-hidden">
+              <div className="overflow-auto w-full max-h-[calc(70vh-80px)]">
+                <div className="min-w-[768px] text-center p-4">
+                  <CompoundTable data={dataTT || []} />
+                </div>
               </div>
-              <div className="flex flex-row flex-wrap items-center justify-center gap-16 mb-4 w-full">
+              <div className="flex flex-row flex-wrap items-center justify-center gap-16 px-4 py-3">
                 <div className="flex flex-row items-center gap-3">
                   <ZButton
                     type="regular"
@@ -411,11 +421,12 @@ export default function Popup({
                     onClick={action}
                   />
                 </div>
+
                 <div className="flex flex-row items-center gap-4">
                   <span className="font-semibold text-lg">Public Sharing</span>
                   <BasicToggleButton
                     isDefaultOn={shareEnabled}
-                    onToggle={shareSwitchAction ?? (() => { })}
+                    onToggle={shareSwitchAction ?? (() => {})}
                   />
                 </div>
               </div>
@@ -445,7 +456,6 @@ export default function Popup({
               </div>
             </div>
           )}
-
         </div>
       </div>
     </div>
