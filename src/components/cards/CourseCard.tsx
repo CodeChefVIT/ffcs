@@ -50,14 +50,14 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     }
   }, [courses]);
 
-  // Also update local courses if selectedCourses prop changes (sync from parent)
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       try {
         const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (saved) {
           const savedCourses = JSON.parse(saved) as fullCourseData[];
-          // If saved courses differ from new selectedCourses prop, update state
+          
           if (
             JSON.stringify(savedCourses) !== JSON.stringify(selectedCourses)
           ) {
@@ -70,6 +70,9 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
         setCourses(selectedCourses);
       }
     }
+  }, [selectedCourses]);
+  useEffect(() => {
+    setCourses(selectedCourses); 
   }, [selectedCourses]);
 
   const resetDragRefs = () => {
@@ -203,7 +206,7 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
               {/* Course namee */}
               <div className="flex w-[480px] text-sm text-black font-normal">
                 <div className="flex flex-col gap-1 break-words max-w-full">
-                  <p key={course.courseName} className="break-words leading-snug">More actions
+                  <p key={course.courseName} className="break-words leading-snug">
                     {course.courseName}
                   </p>
                   {course.courseType === "both" && (
