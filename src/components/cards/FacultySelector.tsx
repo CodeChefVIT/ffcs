@@ -345,10 +345,10 @@ export default function FacultySelector({
       labSubject.length == 1 || courseCodeType === "E"
         ? "both"
         : courseCodeType === "P" && !courseCode.startsWith("BSTS")
-        ? "lab"
-        : courseCodeType === "L" || courseCode.startsWith("BSTS")
-        ? "th"
-        : "th";
+          ? "lab"
+          : courseCodeType === "L" || courseCode.startsWith("BSTS")
+            ? "th"
+            : "th";
 
     const courseName = selectedSubject.split(" - ")[1];
 
@@ -412,8 +412,8 @@ export default function FacultySelector({
         const exists = savedCourses.some((c) => c.id === id);
         const newCourses = exists
           ? savedCourses.map((course) =>
-              course.id === id ? courseData : course
-            )
+            course.id === id ? courseData : course
+          )
           : [...savedCourses, courseData];
 
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newCourses));
@@ -565,7 +565,13 @@ export default function FacultySelector({
     setSelectedFaculties([]);
     setPriorityList([]);
     setFaculties([...new Set(facultiesInSelectedShift)]);
-  }, [selectedLabShift, labShiftOptions, selectedSubject]);
+  }, [
+    selectedLabShift,
+    labShiftOptions,
+    selectedSubject,
+    selectedDomain,
+    selectedSchool,
+  ]);
 
   const handleSchoolChange = (school: string) => {
     setSelectedSchool(school);
@@ -624,9 +630,8 @@ export default function FacultySelector({
               <button
                 key={school}
                 onClick={() => handleSchoolChange(school)}
-                className={`px-3 py-1 rounded-full text-sm font-bold border-2 shadow-[2px_2px_0_0_black] border-black cursor-pointer transition duration-100 active:shadow-[1px_1px_0_0_black] active:translate-x-[1px] active:translate-y-[1px] ${
-                  selectedSchool === school ? "bg-[#FFEA79]" : "bg-white"
-                }`}
+                className={`px-3 py-1 rounded-full text-sm font-bold border-2 shadow-[2px_2px_0_0_black] border-black cursor-pointer transition duration-100 active:shadow-[1px_1px_0_0_black] active:translate-x-[1px] active:translate-y-[1px] ${selectedSchool === school ? "bg-[#FFEA79]" : "bg-white"
+                  }`}
               >
                 {school}
               </button>
@@ -648,7 +653,7 @@ export default function FacultySelector({
               onChange={handleSubjectChange}
             />
             {selectedSubject.split(" - ")[0].endsWith("P") &&
-            !selectedSubject.split(" - ")[0].startsWith("BSTS") ? (
+              !selectedSubject.split(" - ")[0].startsWith("BSTS") ? (
               <SelectField
                 label="Slot"
                 value={selectedLabShift}
@@ -812,7 +817,7 @@ export default function FacultySelector({
               </div>
 
               <div className="flex flex-row justify-center gap-4">
-            
+
                 <ZButton
                   type="long"
                   text="Reset"
