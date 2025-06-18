@@ -3,11 +3,7 @@ export const ScoreOpenElective = {
     { slot: "E2+TE2", venue: "TT524", faculty: "RAJA SELLAPPAN" },
   ],
   "BECE203L - Circuit Theory": [
-    {
-      slot: "C2+TC2+TCC2",
-      venue: "TT524",
-      faculty: "SHAH ARPAN HASMUKH MAYURI",
-    },
+    { slot: "C2+TC2+TCC2", venue: "TT524", faculty: "SHAH ARPAN HASMUKH MAYURI", },
   ],
   "BHUM201L - Mass Communication": [
     { slot: "B2+TB2", venue: "SMVG21", faculty: "PRABAKAR S" },
@@ -56,11 +52,7 @@ export const ScoreOpenElective = {
     { slot: "L9+L10+L21+L22", venue: "MB111", faculty: "BIKASH ROUTH" },
   ],
   "BMEE201L - Engineering Mechanics": [
-    {
-      slot: "B1+TB1",
-      venue: "MB225",
-      faculty: "MOHAN VARMA DAMU SESHADRI",
-    },
+    { slot: "B1+TB1", venue: "MB225", faculty: "MOHAN VARMA DAMU SESHADRI" },
     { slot: "B2+TB2", venue: "MB306A", faculty: "SEENUVASAPERUMAL P" },
     { slot: "B2+TB2", venue: "MB309", faculty: "BABU S" },
     { slot: "B1+TB1", venue: "MB306", faculty: "VELU M" },

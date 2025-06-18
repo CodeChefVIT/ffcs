@@ -46,28 +46,12 @@ export const ScoreDisciplineCore = {
     { slot: "L49+L50", venue: "SJT219", faculty: "MEENATCHI S" },
   ],
   "BITE306L - Theory of Computation": [
-    {
-      slot: "C2+TC2+TCC2",
-      venue: "SJT124",
-      faculty: "DHARMENDRA SINGH RAJPUT",
-    },
+    { slot: "C2+TC2+TCC2", venue: "SJT124", faculty: "DHARMENDRA SINGH RAJPUT", },
     { slot: "C1+TC1+TCC1", venue: "SJT112", faculty: "HARSHITA PATEL" },
     { slot: "C2+TC2+TCC2", venue: "SJT115", faculty: "HARSHITA PATEL" },
-    {
-      slot: "C1+TC1+TCC1",
-      venue: "SJT105",
-      faculty: "CHIRANJI LAL CHOWDHARY",
-    },
-    {
-      slot: "C2+TC2+TCC2",
-      venue: "SJT215",
-      faculty: "CHIRANJI LAL CHOWDHARY",
-    },
-    {
-      slot: "C1+TC1+TCC1",
-      venue: "SJT104",
-      faculty: "DHARMENDRA SINGH RAJPUT",
-    },
+    { slot: "C1+TC1+TCC1", venue: "SJT105", faculty: "CHIRANJI LAL CHOWDHARY", },
+    { slot: "C2+TC2+TCC2", venue: "SJT215", faculty: "CHIRANJI LAL CHOWDHARY", },
+    { slot: "C1+TC1+TCC1", venue: "SJT104", faculty: "DHARMENDRA SINGH RAJPUT", },
   ],
   "BITE307L - Software Engineering": [
     { slot: "E2+TE2", venue: "SJTG05", faculty: "SANTHOSH KUMAR S V N" },
@@ -86,11 +70,7 @@ export const ScoreDisciplineCore = {
     { slot: "L45+L46", venue: "SJT122", faculty: "GITANJALI J" },
   ],
   "BITE401L - Network and Information Security": [
-    {
-      slot: "C1+TC1",
-      venue: "SJTG05",
-      faculty: "ASWANI KUMAR CHERUKURI",
-    },
+    { slot: "C1+TC1", venue: "SJTG05", faculty: "ASWANI KUMAR CHERUKURI", },
     { slot: "C1+TC1", venue: "SJTG14", faculty: "JEYANTHI N" },
     { slot: "C2+TC2", venue: "SJTG02", faculty: "JEYANTHI N" },
     { slot: "C1+TC1", venue: "SJTG08", faculty: "SHANTHARAJAH S P" },

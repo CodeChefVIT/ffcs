@@ -100,11 +100,7 @@ export const SmecDiscplineCore = {
   ],
   "BMEE303L - Thermal Engineering Systems": [
     { slot: "D1+TD1", venue: "MB211", faculty: "ANOOP KUMAR" },
-    {
-      slot: "D2+TD2",
-      venue: "MB212",
-      faculty: "DSILVA WINFRED RUFUSS D",
-    },
+    { slot: "D2+TD2", venue: "MB212", faculty: "DSILVA WINFRED RUFUSS D", },
     { slot: "D1+TD1", venue: "MB212", faculty: "DEVENDRA KUMAR PATEL" },
     { slot: "D1+TD1", venue: "MB213", faculty: "NATARAJ G" },
     { slot: "D1+TD1", venue: "MB214", faculty: "NATARAJAN M" },
@@ -117,11 +113,7 @@ export const SmecDiscplineCore = {
     { slot: "L33+L34", venue: "GDNG11", faculty: "DEVENDRA KUMAR PATEL" },
     { slot: "L31+L32", venue: "GDNG11", faculty: "ANOOP KUMAR" },
     { slot: "L51+L52", venue: "GDNG11", faculty: "NATARAJ G" },
-    {
-      slot: "L3+L4",
-      venue: "GDNG11",
-      faculty: "DSILVA WINFRED RUFUSS D",
-    },
+    { slot: "L3+L4", venue: "GDNG11", faculty: "DSILVA WINFRED RUFUSS D", },
     { slot: "L5+L6", venue: "GDNG11", faculty: "GAURAV GUPTA" },
     { slot: "L9+L10", venue: "GDNG11", faculty: "GAURAV GUPTA" },
     { slot: "L37+L38", venue: "GDNG11", faculty: "DEVENDRA KUMAR PATEL" },
@@ -132,11 +124,7 @@ export const SmecDiscplineCore = {
     { slot: "L23+L24", venue: "GDNG11", faculty: "SENTHUR PRABU S" },
     { slot: "L29+L30", venue: "GDNG11", faculty: "PRAKASH R" },
     { slot: "L27+L28", venue: "GDNG11", faculty: "SENTHUR PRABU S" },
-    {
-      slot: "L13+L14",
-      venue: "GDNG11",
-      faculty: "DSILVA WINFRED RUFUSS D",
-    },
+    { slot: "L13+L14", venue: "GDNG11", faculty: "DSILVA WINFRED RUFUSS D", },
   ],
   "BMEE304L - Metal Forming and Machining": [
     { slot: "B1+TB1", venue: "GDN122", faculty: "DEVASRI FULORIA" },

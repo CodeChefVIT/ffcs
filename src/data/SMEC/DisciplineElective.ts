@@ -11,11 +11,7 @@ export const SmecDisciplineElective = {
     { slot: "B2+TB2", venue: "GDN122", faculty: "SAMPATH KUMAR T" },
   ],
   "BMEE305L - Manufacturing Planning and Control": [
-    {
-      slot: "A2+TA2",
-      venue: "GDN121",
-      faculty: "CHINMAYA PRASAD MOHANTY",
-    },
+    { slot: "A2+TA2", venue: "GDN121", faculty: "CHINMAYA PRASAD MOHANTY", },
   ],
   "BMEE307L - Product Design and Development": [
     { slot: "A2+TA2", venue: "GDN107", faculty: "ARUN TOM MATHEW" },
