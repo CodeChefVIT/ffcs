@@ -6,12 +6,6 @@ import CompoundTable from "./CompoundTable";
 import Footer from "./Footer";
 import { BasicToggleButton, GoogleLoginButton, ZButton } from "./Buttons";
 
-type dataProps = {
-  code: string;
-  slot: string;
-  name: string;
-}
-
 type PopupViewTTProps = {
   TTName: string;
   TTData: { code: string; slot: string; name: string }[];
@@ -19,15 +13,12 @@ type PopupViewTTProps = {
   onShareClick: () => void;
   shareEnabledDefault: boolean;
   shareSwitchAction: (state: "on" | "off") => void;
-  shareLink: string;
-  onDownloadClick: () => void;
-}; 
+};
 
 type PopupLoginProps = {
   closeLink: () => void;
   onLoginClick: () => void;
 };
-
 
 export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
   return (
@@ -50,9 +41,7 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
           <ZButton type="regular" text="Go Back" color="red" onClick={closeLink} />
         </div>
 
-
         <div className="flex-grow mt-4 flex flex-col items-center text-center relative">
-
           <div className="text-5xl mb-2 font-pangolin text-black">
             FFCS-inator
           </div>
@@ -79,7 +68,6 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
           </div>
 
           <div className="flex flex-col items-center justify-center relative mt-8 mb-4">
-            {/* Top-left */}
             <div className="absolute -top-7 -left-11 rotate-[-5deg] z-[1]">
               <Image
                 src="/art/art_rice.svg"
@@ -92,7 +80,6 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
                 priority
               />
             </div>
-            {/* Top-right */}
             <div className="absolute -top-7 -right-11 rotate-[-15deg] z-[1]">
               <Image
                 src="/art/art_boom.svg"
@@ -105,7 +92,6 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
                 priority
               />
             </div>
-            {/* Bottom-left */}
             <div className="absolute -bottom-4 -left-15 rotate-[-25deg] z-[1]">
               <Image
                 src="/art/art_arrow.svg"
@@ -118,7 +104,6 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
                 priority
               />
             </div>
-            {/* Bottom-right */}
             <div className="absolute -bottom-5 -right-15 rotate-[17deg] z-[1]">
               <Image
                 src="/art/art_loop.svg"
@@ -151,8 +136,6 @@ export function PopupViewTT({
   onShareClick,
   shareEnabledDefault,
   shareSwitchAction,
-  shareLink,
-  onDownloadClick,
 }: PopupViewTTProps) {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-white">
@@ -192,7 +175,6 @@ export function PopupViewTT({
         </div>
 
         <Footer type="mobile" />
-
       </div>
     </div>
   );
