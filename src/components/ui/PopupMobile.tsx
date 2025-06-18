@@ -14,12 +14,14 @@ type dataProps = {
 
 type PopupViewTTProps = {
   TTName: string;
-  TTData: dataProps[];
+  TTData: { code: string; slot: string; name: string }[];
   closeLink: () => void;
   onShareClick: () => void;
   shareEnabledDefault: boolean;
   shareSwitchAction: (state: "on" | "off") => void;
-};
+  shareLink: string;
+  onDownloadClick: () => void;
+}; 
 
 type PopupLoginProps = {
   closeLink: () => void;
@@ -142,7 +144,16 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
   );
 }
 
-export function PopupViewTT({ TTName, TTData, closeLink, onShareClick, shareEnabledDefault, shareSwitchAction }: PopupViewTTProps) {
+export function PopupViewTT({
+  TTName,
+  TTData,
+  closeLink,
+  onShareClick,
+  shareEnabledDefault,
+  shareSwitchAction,
+  shareLink,
+  onDownloadClick,
+}: PopupViewTTProps) {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-white">
       <div className="flex flex-col min-h-screen relative items-center font-poppins">
