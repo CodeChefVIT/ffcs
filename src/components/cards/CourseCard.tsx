@@ -14,11 +14,23 @@ type CourseCardProps = {
   selectedCourses: fullCourseData[];
 };
 
+const LOCAL_STORAGE_KEY = "selectedCourses";
 
 export default function CourseCard({ selectedCourses }: CourseCardProps) {
   const { setTimetableData } = useTimetable();
 
-  const [courses, setCourses] = useState<fullCourseData[]>(selectedCourses);
+  const [courses, setCourses] = useState<fullCourseData[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (saved) return JSON.parse(saved) as fullCourseData[];
+      } catch {
+        // Ignore parse errors
+      }
+    }
+    return selectedCourses;
+  });
+
   const draggedItemIndex = useRef<number | null>(null);
   const dragOverItemIndex = useRef<number | null>(null);
 
@@ -28,13 +40,47 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
   const [deletePopupOpen, setDeletePopupOpen] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState<fullCourseData | null>(null);
 
+  // Sync courses state to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(courses));
+      } catch {
+        // ignore localStorage errors
+      }
+    }
+  }, [courses]);
+
+  // Also update local courses if selectedCourses prop changes (sync from parent)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (saved) {
+          const savedCourses = JSON.parse(saved) as fullCourseData[];
+          // If saved courses differ from new selectedCourses prop, update state
+          if (
+            JSON.stringify(savedCourses) !== JSON.stringify(selectedCourses)
+          ) {
+            setCourses(savedCourses);
+          }
+        } else {
+          setCourses(selectedCourses);
+        }
+      } catch {
+        setCourses(selectedCourses);
+      }
+    }
+  }, [selectedCourses]);
+
   const resetDragRefs = () => {
     draggedItemIndex.current = null;
     dragOverItemIndex.current = null;
   };
 
   const confirmDeleteCourse = () => {
-    if (courseToDelete) setCourses((prev) => prev.filter((c) => c.id !== courseToDelete.id));
+    if (courseToDelete)
+      setCourses((prev) => prev.filter((c) => c.id !== courseToDelete.id));
     setDeletePopupOpen(false);
     setCourseToDelete(null);
   };
@@ -44,13 +90,17 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     e.dataTransfer.effectAllowed = "move";
   };
 
-  const handleDragEnter = (index: number) => dragOverItemIndex.current = index;
+  const handleDragEnter = (index: number) => (dragOverItemIndex.current = index);
 
   const handleDragEnd = () => {
     const draggedIdx = draggedItemIndex.current;
     const dragOverIdx = dragOverItemIndex.current;
 
-    if (draggedIdx === null || dragOverIdx === null || draggedIdx === dragOverIdx) {
+    if (
+      draggedIdx === null ||
+      dragOverIdx === null ||
+      draggedIdx === dragOverIdx
+    ) {
       resetDragRefs();
       return;
     }
@@ -75,7 +125,10 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
   const moveCourseDown = (index: number) => {
     if (index === courses.length - 1) return;
     const updatedCourses = [...courses];
-    [updatedCourses[index + 1], updatedCourses[index]] = [updatedCourses[index], updatedCourses[index + 1]];
+    [updatedCourses[index + 1], updatedCourses[index]] = [
+      updatedCourses[index],
+      updatedCourses[index + 1],
+    ];
     setCourses(updatedCourses);
   };
 
@@ -97,27 +150,24 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
         const el = document.getElementById("timetable-view");
         if (el) el.scrollIntoView({ behavior: "smooth" });
       }, 100);
-
     } catch {
       setError("Failed to generate timetable. Please try again.");
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    setCourses(selectedCourses);
-    console.log(selectedCourses)
-  }, [selectedCourses]);
-
   return (
     <div className="px-12">
-      <div id="course-card" className="bg-[#A7D5D7] mt-4 font-poppins rounded-4xl border-[3px] border-black p-6 shadow-[4px_4px_0_0_black] text-black font-medium px-12 mb-16">
+      <div
+        id="course-card"
+        className="bg-[#A7D5D7] mt-4 font-poppins rounded-4xl border-[3px] border-black p-6 shadow-[4px_4px_0_0_black] text-black font-medium px-12 mb-16"
+      >
         <div className="flex justify-between items-start mt-4">
           <h2 className="text-3xl font-pangolin">Your Courses</h2>
           <div className="text-sm text-[#B93C21] text-right mr-6">
-            *Use arrows or drag-drop to set course priority,<br />
+            *Use arrows or drag-drop to set course priority,
+            <br />
             multiple timetables will be generated.
           </div>
         </div>
@@ -139,10 +189,14 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
               {/* Course Codes */}
               <div className="flex items-center w-[120px] text-sm text-black font-normal">
                 <div className="flex items-start">
-                  <div className="w-6 text-right mr-4 text-sm font-inter">{index + 1}.</div>
-                  <div className={"flex flex-col px-4 gap-1"}                  >
+                  <div className="w-6 text-right mr-4 text-sm font-inter">
+                    {index + 1}.
+                  </div>
+                  <div className={"flex flex-col px-4 gap-1"}>
                     <p key={course.courseCode}>{course.courseCode}</p>
-                    {course.courseType === "both" && <p key={course.courseCodeLab}>{course.courseCodeLab}</p>}
+                    {course.courseType === "both" && (
+                      <p key={course.courseCodeLab}>{course.courseCodeLab}</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -150,20 +204,41 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
               {/* Course namee */}
               <div className="flex w-[480px] text-sm text-black font-normal">
                 <div className="flex flex-col gap-1 break-words max-w-full">
-                  <p key={course.courseName} className="break-words leading-snug">{course.courseName}</p>
-                  {course.courseType === "both" && <p key={course.courseNameLab} className="break-words leading-snug">{course.courseNameLab}</p>}
+                  <p key={course.courseName} className="break-words leading-snug">
+                    {course.courseName}
+                  </p>
+                  {course.courseType === "both" && (
+                    <p
+                      key={course.courseNameLab}
+                      className="break-words leading-snug"
+                    >
+                      {course.courseNameLab}
+                    </p>
+                  )}
                 </div>
               </div>
-
 
               {/* Slots */}
               <div className="flex items-center w-[120px] text-sm text-left text-black font-normal">
                 <div className="flex flex-col gap-1">
-                  {course.courseType == "lab" && <p key={course.courseName + "slot"} className="break-words leading-snug">(Lab)</p>}
-                  {course.courseType != "lab" &&
-                    <p key={course.courseName + "slot"} className="break-words leading-snug">{course.courseSlots.map((slot) => slot.slotName).join(", ")}                  </p>
-                  }
-
+                  {course.courseType == "lab" && (
+                    <p
+                      key={course.courseName + "slot"}
+                      className="break-words leading-snug"
+                    >
+                      (Lab)
+                    </p>
+                  )}
+                  {course.courseType != "lab" && (
+                    <p
+                      key={course.courseName + "slot"}
+                      className="break-words leading-snug"
+                    >
+                      {course.courseSlots
+                        .map((slot) => slot.slotName)
+                        .join(", ")}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -181,7 +256,8 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
                 >
                   <Image
                     src={"/icons/trash.svg"}
-                    width={1} height={1}
+                    width={1}
+                    height={1}
                     alt="delete"
                     className="w-6 h-6"
                     unselectable="on"
@@ -200,7 +276,11 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
                     disabled={index === 0}
                   >
                     <Image
-                      src={index === 0 ? "/icons/chevron_up_gray.svg" : "/icons/chevron_up.svg"}
+                      src={
+                        index === 0
+                          ? "/icons/chevron_up_gray.svg"
+                          : "/icons/chevron_up.svg"
+                      }
                       width={1}
                       height={1}
                       alt="up"
@@ -220,7 +300,11 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
                     disabled={index === courses.length - 1}
                   >
                     <Image
-                      src={index === courses.length - 1 ? "/icons/chevron_down_gray.svg" : "/icons/chevron_down.svg"}
+                      src={
+                        index === courses.length - 1
+                          ? "/icons/chevron_down_gray.svg"
+                          : "/icons/chevron_down.svg"
+                      }
                       width={1}
                       height={1}
                       alt="down"
@@ -247,14 +331,22 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
           />
         </div>
 
-        {error && (<div className="mt-6 text-center text-[#CC3312] font-semibold" role="alert">{error}</div>)}
-
+        {error && (
+          <div className="mt-6 text-center text-[#CC3312] font-semibold" role="alert">
+            {error}
+          </div>
+        )}
       </div>
 
       {deletePopupOpen && courseToDelete && (
         <Popup
           type="rem_course"
-          dataBody={courseToDelete.courseName + (courseToDelete.courseType === "both" ? ` & ${courseToDelete.courseNameLab}` : "")}
+          dataBody={
+            courseToDelete.courseName +
+            (courseToDelete.courseType === "both"
+              ? ` & ${courseToDelete.courseNameLab}`
+              : "")
+          }
           action={confirmDeleteCourse}
           closeLink={() => {
             setDeletePopupOpen(false);
@@ -264,4 +356,5 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
       )}
     </div>
   );
-};
+}
+

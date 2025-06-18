@@ -8,7 +8,16 @@ import { data } from "@/data/faculty";
 import { fullCourseData } from "@/lib/type";
 import AlertModal from "../ui/AlertModal";
 
-const schools = ["SCOPE", "SELECT", "SCORE", "SMEC", "SBST", "SCHEME", "SENSE", "SCE"];
+const schools = [
+  "SCOPE",
+  "SELECT",
+  "SCORE",
+  "SMEC",
+  "SBST",
+  "SCHEME",
+  "SENSE",
+  "SCE",
+];
 
 type SelectFieldProps = {
   label: string;
@@ -18,12 +27,13 @@ type SelectFieldProps = {
   renderOption?: (option: string) => string;
 };
 
-type FacultySelectorProps = {
-  onConfirm: (course: fullCourseData) => void;
-};
-
-function SelectField({ label, value, options, onChange, renderOption, }: SelectFieldProps) {
-
+function SelectField({
+  label,
+  value,
+  options,
+  onChange,
+  renderOption,
+}: SelectFieldProps) {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -50,16 +60,14 @@ function SelectField({ label, value, options, onChange, renderOption, }: SelectF
         onClick={() => setIsOpen(!isOpen)}
         title={selectedLabel}
         className={`
-          w-full h-10 pl-3 pr-14 text-left bg-white rounded-xl border-3 border-black
-          cursor-pointer relative
-          ${!value ? "text-[#00000080]" : "text-black"}
-          truncate whitespace-nowrap overflow-hidden
-        `}
+         w-full h-10 pl-3 pr-10 text-left bg-white rounded-xl border-3 border-black
+         cursor-pointer relative
+         ${!value ? "text-[#00000080]" : "text-black"}
+         truncate whitespace-nowrap overflow-hidden
+       `}
       >
-
         {selectedLabel}
         <div className="absolute right-11 top-0 h-full w-[3px] bg-black" />
-
         <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
           <Image
             src="/icons/chevron_down.svg"
@@ -75,9 +83,7 @@ function SelectField({ label, value, options, onChange, renderOption, }: SelectF
       </button>
 
       {isOpen && (
-        <ul
-          className="absolute -left-7 -right-7 z-10 bg-white border-3 border-black rounded-xl mt-1 max-h-120 overflow-y-auto shadow-lg"
-        >
+        <ul className="absolute left-0 right-0 z-10 bg-white border-3 border-black rounded-xl mt-1 max-h-48 overflow-y-auto shadow-lg">
           {options.map((option, index) => (
             <li
               key={index}
@@ -86,9 +92,9 @@ function SelectField({ label, value, options, onChange, renderOption, }: SelectF
                 setIsOpen(false);
               }}
               className={`
-                px-4 py-2 cursor-pointer hover:bg-[#FFEA79]
-                ${value === option ? "bg-[#C1FF83] font-bold" : ""}
-              `}
+               px-4 py-2 cursor-pointer hover:bg-[#FFEA79]
+               ${value === option ? "bg-[#C1FF83] font-bold" : ""}
+             `}
             >
               {renderOption ? renderOption(option) : option}
             </li>
@@ -116,7 +122,6 @@ function generateCourseSlotsSingle({
   courseType: "th" | "lab";
 }) {
   if (courseType === "th") {
-    // Theory course: no lab slots
     return [
       {
         slotName: selectedSlot,
@@ -128,7 +133,6 @@ function generateCourseSlotsSingle({
   }
 
   if (courseType === "lab") {
-    // Lab course: include only lab-style slots
     const labSlots = [
       ...new Set(
         subjectData
@@ -138,7 +142,6 @@ function generateCourseSlotsSingle({
           .map((entry: SubjectEntry) => entry.slot)
       ),
     ];
-    console.log(labSlots);
 
     return labSlots.map((slotName) => ({
       slotName,
@@ -196,28 +199,22 @@ function generateCourseSlotsBoth({
     ? data[selectedSchool][selectedDomain][labEntryKey]
     : [];
 
-  // Determine selected theory slot shift
   const isMorningTheory = selectedSlot.includes("1");
   const isEveningTheory = selectedSlot.includes("2");
 
-  // Determine opposite shift for lab
   const isValidLabSlot = (slot: string): boolean => {
-    const parts = slot.split("+").map(s => parseInt(s.replace("L", ""), 10));
-
-    // Check for invalid numbers
+    const parts = slot.split("+").map((s) => parseInt(s.replace("L", ""), 10));
     if (parts.some(isNaN)) return false;
 
-    const allMorning = parts.every(num => num <= 30);
-    const allEvening = parts.every(num => num >= 31);
+    const allMorning = parts.every((num) => num <= 30);
+    const allEvening = parts.every((num) => num >= 31);
 
-    // If theory is morning → lab must be evening
     if (isMorningTheory) return allEvening;
-
-    // If theory is evening → lab must be morning
     if (isEveningTheory) return allMorning;
 
     return false;
   };
+
   const slotFaculties = selectedFaculties.map((facultyName) => {
     const labSlots = labData
       .filter(
@@ -242,40 +239,41 @@ function generateCourseSlotsBoth({
   ];
 }
 
-// Helper to prettify domain names
 const prettifyDomain = (domain: string) => {
   return domain
-    .replace(/([a-z])([A-Z])/g, "$1 $2") // Add space before capital letters
-    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2") // Handle consecutive capitals
-    .replace(/([a-zA-Z])([0-9])/g, "$1 $2") // Add space before numbers
-    .replace(/([0-9])([a-zA-Z])/g, "$1 $2") // Add space after numbers
-    .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2") // e.g. OpenElective -> Open Elective
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2")
+    .replace(/([a-zA-Z])([0-9])/g, "$1 $2")
+    .replace(/([0-9])([a-zA-Z])/g, "$1 $2")
+    .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2")
     .trim();
 };
-
-export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
-  const [popup, setPopup] = useState({ showPopup: false, message: "" });
-
+type ShiftKey = "morning" | "evening";
+export default function FacultySelector({
+  onConfirm,
+}: {
+  onConfirm: (course: fullCourseData) => void;
+}) {
+  const [selectedLabShift, setSelectedLabShift] = useState<"" | ShiftKey>("");
+  const [labShiftOptions, setLabShiftOptions] = useState<
+    Record<ShiftKey, string[]>
+  >({
+    morning: [],
+    evening: [],
+  });
   const [selectedSchool, setSelectedSchool] = useState("SCOPE");
+  const [selectedFaculties, setSelectedFaculties] = useState<string[]>([]);
+  const [priorityList, setPriorityList] = useState<string[]>([]);
   const [selectedDomain, setSelectedDomain] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedSlot, setSelectedSlot] = useState("");
-
   const [domains, setDomains] = useState<string[]>([]);
   const [subjects, setSubjects] = useState<string[]>([]);
   const [slots, setSlots] = useState<string[]>([]);
   const [faculties, setFaculties] = useState<string[]>([]);
-  const [selectedFaculties, setSelectedFaculties] = useState<string[]>([]);
-  const [priorityList, setPriorityList] = useState<string[]>([]);
+  const [popup, setPopup] = useState({ showPopup: false, message: "" });
 
-  // for lab-only courses, show "Morning" and "Evening" as slot optiions
-  const [labShiftOptions, setLabShiftOptions]: any = useState<{ morning: string[]; evening: string[]; }>({ morning: [], evening: [] });
-  const [selectedLabShift, setSelectedLabShift]: any = useState("");
-
-  // for lab only course: 
-  // dropdown items state
-  // selectedSlots state 
-  // -> set faculties for all slots under selectedSlots
+  const LOCAL_STORAGE_KEY = "selectedCourses";
 
   const handleReset = () => {
     setSelectedDomain("");
@@ -286,12 +284,9 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
-    setSelectedLabShift("");
-    setLabShiftOptions({ morning: [], evening: [] });
   };
 
   const handleConfirm = () => {
-    console.log(selectedLabShift)
     if (!selectedDomain) {
       setPopup({ showPopup: true, message: "Please select a domain." });
       return;
@@ -301,22 +296,30 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
       setPopup({ showPopup: true, message: "Please select a subject." });
       return;
     }
-
-    if (!selectedLabShift && selectedSubject.split(" - ")[0].endsWith("P") && !selectedSubject.split(" - ")[0].startsWith("BSTS")) {
+    if (
+      !selectedLabShift &&
+      selectedSubject.split(" - ")[0].endsWith("P") &&
+      !selectedSubject.split(" - ")[0].startsWith("BSTS")
+    ) {
       setPopup({ showPopup: true, message: "Please select a lab slot." });
       return;
     }
-
-    if (!selectedSlot && (!selectedSubject.split(" - ")[0].endsWith("P") || selectedSubject.split(" - ")[0].startsWith("BSTS"))) {
+    if (
+      !selectedSlot &&
+      (!selectedSubject.split(" - ")[0].endsWith("P") ||
+        selectedSubject.split(" - ")[0].startsWith("BSTS"))
+    ) {
       setPopup({ showPopup: true, message: "Please select a theory slot." });
       return;
     }
 
     if (priorityList.length === 0) {
-      setPopup({ showPopup: true, message: "Please select at least one faculty." });
+      setPopup({
+        showPopup: true,
+        message: "Please select at least one faculty.",
+      });
       return;
-    }
-    else {
+    } else {
       setPopup({ showPopup: true, message: "Successfully added course" });
     }
 
@@ -340,21 +343,24 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
       labSubject.length == 1 || courseCodeType === "E"
         ? "both"
         : courseCodeType === "P" && !courseCode.startsWith("BSTS")
-          ? "lab"
-          : "th"
+        ? "lab"
+        : courseCodeType === "L" || courseCode.startsWith("BSTS")
+        ? "th"
+        : "th";
 
     const courseName = selectedSubject.split(" - ")[1];
 
     let courseCodeLab;
     let courseNameLab;
     let courseSlots;
-
     if (courseCodeType == "E") {
       courseCodeLab = courseCode;
       courseNameLab = courseName;
     } else {
-      courseCodeLab = labSubject.length == 1 ? labSubject[0].split(" - ")[0] : "";
-      courseNameLab = labSubject.length == 1 ? labSubject[0].split(" - ")[1] : "";
+      courseCodeLab = courseCodeLab =
+        labSubject.length == 1 ? labSubject[0].split(" - ")[0] : "";
+      courseNameLab =
+        labSubject.length == 1 ? labSubject[0].split(" - ")[1] : "";
     }
 
     if (courseType == "both") {
@@ -382,14 +388,7 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
       });
     }
 
-    // setTimeout(() => {
-    //   const el = document.getElementById("course-card");
-    //   if (el) {
-    //     el.scrollIntoView({ behavior: "smooth" });
-    //   }
-    // }, 100);
-
-    const courseData = {
+    const courseData: fullCourseData = {
       id,
       courseType,
       courseCode,
@@ -401,28 +400,47 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
       courseSlots: courseSlots,
     };
 
-    onConfirm(courseData);
-    setSelectedFaculties([]);
-    setPriorityList([]);
-  };
+    try {
+      if (typeof window !== "undefined") {
+        const savedCoursesJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
+        const savedCourses: fullCourseData[] = savedCoursesJSON
+          ? JSON.parse(savedCoursesJSON)
+          : [];
 
+        const exists = savedCourses.some((c) => c.id === id);
+        const newCourses = exists
+          ? savedCourses.map((course) =>
+              course.id === id ? courseData : course
+            )
+          : [...savedCourses, courseData];
+
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newCourses));
+      }
+    } catch (error) {
+      console.warn("Failed to update localStorage for selectedCourses", error);
+    }
+
+    onConfirm(courseData);
+    handleReset();
+  };
 
   const toggleFaculty = (name: string) => {
     setSelectedFaculties((prev) => {
       const updated = prev.includes(name)
         ? prev.filter((f) => f !== name)
         : [...prev, name];
+
       setPriorityList((prevPriority) => {
         const updatedPriority = updated.map((faculty) =>
           prevPriority.includes(faculty) ? faculty : faculty
         );
         return updatedPriority;
       });
+
       return updated;
     });
   };
 
-  // Move priority item up
   const moveUp = (index: number) => {
     if (index === 0) return;
     const newList = [...priorityList];
@@ -430,7 +448,6 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
     setPriorityList(newList);
   };
 
-  // Move priority item down
   const moveDown = (index: number) => {
     if (index === priorityList.length - 1) return;
     const newList = [...priorityList];
@@ -438,29 +455,20 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
     setPriorityList(newList);
   };
 
-  // Object.keys(data['SCORE']); // domain list for each school
-  // Object.keys(data['SCORE']['FoundationCore']); // courses for each domain, school
-  // data['SCORE']['FoundationCore']['BCHY101L - Engineering Chemistry'].map(entry => entry.slot)) // slots for each domain, school
-  // entries.filter(entry => entry.slot === 'C1+TC1').map(entry => entry.faculty); // faculty based on slot
-
   useEffect(() => {
     const schoolData = data[selectedSchool];
     if (!schoolData) return;
 
-    // 1. Domains
     setDomains(Object.keys(schoolData));
 
-    // 2. Subjects (when domain is selected)
     if (selectedDomain) {
       const domainData = schoolData[selectedDomain];
       const allSubjects = Object.keys(domainData);
 
-      // show only theory component where both exists
       const filteredSubjects = allSubjects.filter((subject) => {
         const code = subject.split(" - ")[0];
-        const base = code.slice(0, -1); // Strip last char (P or L)
+        const base = code.slice(0, -1);
         if (code.endsWith("P")) {
-          // If the corresponding L exists, skip the lab (P)
           return !allSubjects.some((s) => s.startsWith(base + "L"));
         }
         return true;
@@ -468,55 +476,53 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
 
       setSubjects(filteredSubjects);
 
-      // 3. Slots (when subject is selected)
       if (selectedSubject) {
         const subjectData = domainData[selectedSubject];
-
         const courseCode = selectedSubject.split(" - ")[0];
 
         if (courseCode.endsWith("P") && !courseCode.startsWith("BSTS")) {
-
-          const allLabSlots = [...new Set(subjectData.map((entry) => entry.slot))];
+          const allLabSlots = [
+            ...new Set(subjectData.map((entry) => entry.slot)),
+          ];
 
           const morningLabSlots = allLabSlots.filter((slot) => {
-            const parts = slot.split("+").map((s) => parseInt(s.replace("L", ""), 10));
+            const parts = slot
+              .split("+")
+              .map((s) => parseInt(s.replace("L", ""), 10));
             return parts.every((num) => num <= 30);
           });
 
           const eveningLabSlots = allLabSlots.filter((slot) => {
-            const parts = slot.split("+").map((s) => parseInt(s.replace("L", ""), 10));
+            const parts = slot
+              .split("+")
+              .map((s) => parseInt(s.replace("L", ""), 10));
             return parts.every((num) => num >= 31);
           });
 
-          // ✅ Set lab shift options (for dropdown)
           setLabShiftOptions({
             morning: morningLabSlots,
             evening: eveningLabSlots,
           });
 
-          // Slots shown in dropdown should be based on selected shift
           if (selectedLabShift) {
             const slotsForShift =
-              selectedLabShift === "morning" ? morningLabSlots : eveningLabSlots;
+              selectedLabShift === "morning"
+                ? morningLabSlots
+                : eveningLabSlots;
             setSlots(slotsForShift);
           }
 
           return;
-        }
-        else {
-          // Filter slots
+        } else {
           const rawSlots = subjectData.map((entry) => entry.slot);
-          const filteredSlots = rawSlots.filter((slot) => !slot.startsWith("L"))
-
+          const filteredSlots = rawSlots.filter(
+            (slot) => !slot.startsWith("L")
+          );
           const uniqueSlots = [...new Set(filteredSlots)];
           setSlots(uniqueSlots);
         }
 
-
-        // Faculties (when slot is selected)
         if (selectedSlot) {
-          const courseCode = selectedSubject.split(" - ")[0];
-
           const facultiesForSlot = subjectData
             .filter((entry) => entry.slot === selectedSlot)
             .map((entry) =>
@@ -525,14 +531,19 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
                 : entry.faculty
             );
 
-          setSelectedFaculties([]); // Reset on slot change
+          setSelectedFaculties([]);
           setPriorityList([]);
           setFaculties([...new Set(facultiesForSlot)]);
         }
-
       }
     }
-  }, [selectedSchool, selectedDomain, selectedSubject, selectedSlot, selectedLabShift]);
+  }, [
+    selectedSchool,
+    selectedDomain,
+    selectedSubject,
+    selectedSlot,
+    selectedLabShift,
+  ]);
 
   useEffect(() => {
     if (!selectedSubject || !selectedLabShift) return;
@@ -540,7 +551,8 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
     const labSlots = labShiftOptions[selectedLabShift];
     if (!labSlots || labSlots.length === 0) return;
 
-    const subjectData = data[selectedSchool]?.[selectedDomain]?.[selectedSubject];
+    const subjectData =
+      data[selectedSchool]?.[selectedDomain]?.[selectedSubject];
     if (!subjectData) return;
 
     const facultiesInSelectedShift = subjectData
@@ -562,8 +574,6 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
-    setSelectedLabShift("");
-    setLabShiftOptions({ morning: [], evening: [] });
   };
 
   const handleDomainChange = (domain: string) => {
@@ -586,6 +596,7 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
+
     setSelectedLabShift("");
     setLabShiftOptions({ morning: [], evening: [] });
   };
@@ -599,37 +610,23 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
 
   return (
     <div>
-      {/* Main container */}
       <div className="relative inline-block mb-20">
         <div className="font-poppins relative bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[4px_4px_0_0_black] mx-auto overflow-hidden">
-          {/* School selector buttons */}
           <div className="flex items-center gap-4 pt-4 px-4 m-4">
             <span className="font-semibold text-lg mr-2">Select School:</span>
             {schools.map((school) => (
               <button
                 key={school}
                 onClick={() => handleSchoolChange(school)}
-                className={`
-                px-3 py-1
-                rounded-full
-                text-sm font-bold
-                border-2
-                shadow-[2px_2px_0_0_black]
-                border-black
-                cursor-pointer
-                transition duration-100
-                active:shadow-[1px_1px_0_0_black]
-                active:translate-x-[1px]
-                active:translate-y-[1px]
-                ${selectedSchool === school ? "bg-[#FFEA79]" : "bg-white"}
-              `}
+                className={`px-3 py-1 rounded-full text-sm font-bold border-2 shadow-[2px_2px_0_0_black] border-black cursor-pointer transition duration-100 active:shadow-[1px_1px_0_0_black] active:translate-x-[1px] active:translate-y-[1px] ${
+                  selectedSchool === school ? "bg-[#FFEA79]" : "bg-white"
+                }`}
               >
                 {school}
               </button>
             ))}
           </div>
 
-          {/* Filters: Domain, Subject, Slot */}
           <div className="grid grid-cols-3 gap-4 m-4 px-4">
             <SelectField
               label={"Domain"}
@@ -644,20 +641,27 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
               options={subjects}
               onChange={handleSubjectChange}
             />
-            {selectedSubject.split(" - ")[0].endsWith("P") && !selectedSubject.split(" - ")[0].startsWith("BSTS") ? (
+            {selectedSubject.split(" - ")[0].endsWith("P") &&
+            !selectedSubject.split(" - ")[0].startsWith("BSTS") ? (
               <SelectField
                 label="Slot"
                 value={selectedLabShift}
                 onChange={(e) => {
-                  setSelectedLabShift(e);
+                  if (e === "morning" || e === "evening") {
+                    setSelectedLabShift(e);
+                  } else {
+                    setSelectedLabShift("");
+                  }
                   setFaculties([]);
                   setSelectedFaculties([]);
                   setPriorityList([]);
                 }}
-
-                options={['morning', 'evening'].filter((shift) => labShiftOptions[shift]?.length > 0)}
+                options={["morning", "evening"].filter(
+                  (shift) =>
+                    labShiftOptions[shift as keyof typeof labShiftOptions]
+                      ?.length > 0
+                )}
               />
-
             ) : (
               <SelectField
                 label="Slot"
@@ -666,15 +670,11 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
                 onChange={handleSlotChange}
               />
             )}
-
           </div>
 
-          {/* Divider */}
           <div className="w-full h-[2px] bg-black mt-6 mb-6" />
 
-          {/* Faculties & Priority */}
           <div className="grid grid-cols-2 gap-4 px-4 pb-4 h-full m-4">
-            {/* Faculty selection list */}
             <div className="bg-[#FFFFFF]/40 rounded-xl overflow-hidden flex flex-col">
               <div className="bg-[#FFFFFF]/60 text-center text-[#000000]/80 p-4 font-semibold text-lg">
                 Select Faculties
@@ -718,7 +718,6 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
               </div>
             </div>
 
-            {/* Faculty priority list and buttons */}
             <div className="flex flex-col h-full justify-between">
               <div className="bg-[#FFFFFF]/40 rounded-xl overflow-hidden mb-4">
                 <div className="bg-[#FFFFFF]/60 text-center text-[#000000]/80 p-4 font-semibold text-lg">
@@ -786,7 +785,7 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
                                   : "/icons/chevron_down_gray.svg"
                               }
                               alt="down"
-                              className={`w-3 h-3`}
+                              className="w-3 h-3"
                               unselectable="on"
                               draggable={false}
                               priority
@@ -806,15 +805,15 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
                 </div>
               </div>
 
-              {/* Action buttons */}
               <div className="flex flex-row justify-center gap-4">
-                  <ZButton
-                    type="long"
-                    text="Reset"
-                    image="icons/reset.svg"
-                    onClick={handleReset}
-                    color="red"
-                  />
+            
+                <ZButton
+                  type="long"
+                  text="Reset"
+                  image="icons/reset.svg"
+                  onClick={handleReset}
+                  color="red"
+                />
                 <ZButton
                   type="long"
                   text="Confirm"
@@ -832,7 +831,9 @@ export default function FacultySelector({ onConfirm }: FacultySelectorProps) {
         message={popup.message}
         onClose={() => {
           setPopup({ showPopup: false, message: "" });
-        }} color={""} />
+        }}
+        color={""}
+      />
     </div>
   );
 }
