@@ -141,8 +141,12 @@ export default function ViewTimeTable() {
       label: "Report",
       color: "green",
       icon: "/icons/report.svg",
-      onClick: withLoginCheck(() => {
-        exportToExcel([]);
+      onClick: (() => {
+        if (!selectedData || selectedData.length === 0) {
+          showAlert("No Timetables generated");
+          return;
+        }
+        exportToExcel();
       }),
     },
     {
