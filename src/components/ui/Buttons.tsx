@@ -9,15 +9,7 @@ type ButtonVariant = "regular" | "image" | "long" | "large";
 type ZButtonProps = {
   type: ButtonVariant;
   text?: string;
-  color:
-  | "red"
-  | "yellow"
-  | "green"
-  | "green_2"
-  | "blue"
-  | "purple"
-  | "gray"
-  | string;
+  color: "red" | "yellow" | "green" | "green_2" | "blue" | "purple" | "gray" | string;
   image?: string;
   onClick?: () => void;
   disabled?: boolean;
@@ -30,7 +22,7 @@ type SlotToggleButtonProps = {
 };
 
 type BasicToggleButtonProps = {
-  isDefaultOn: boolean;
+  defaultState: "on" | "off";
   onToggle: (selected: "on" | "off") => void;
 };
 
@@ -69,13 +61,13 @@ export function ZButton({
     ? disabled
       ? colorMap["gray"]
       : clicked
-        ? colorMap["green_2"]
-        : forceColor
+      ? colorMap["green_2"]
+      : forceColor
     : disabled
-      ? colorMap["gray"]
-      : clicked
-        ? colorMap["green_2"]
-        : colorMap[color];
+    ? colorMap["gray"]
+    : clicked
+    ? colorMap["green_2"]
+    : colorMap[color];
 
   return (
     <button
@@ -90,9 +82,10 @@ export function ZButton({
         transition duration-100
         shadow-[4px_4px_0_0_black]
         ${disabled ? "cursor-normal" : "cursor-pointer"}
-        ${disabled
-          ? ""
-          : "active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
+        ${
+          disabled
+            ? ""
+            : "active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
         }
         ${variantClasses[type]}
       `}
@@ -142,7 +135,7 @@ export function FFCSButton() {
   return (
     <Image
       src="/logo_ffcs.svg"
-      alt="CC Button"
+      alt="FFCS Button"
       width={80}
       height={80}
       className="cursor-pointer select-none"
@@ -156,10 +149,7 @@ export function FFCSButton() {
 
 export function SlotToggleButton({ onToggle }: SlotToggleButtonProps) {
   const [selected, setSelected] = useState<string>(slotToggleOptions[0]);
-  const [sizes, setSizes] = useState<{
-    [key: string]: { width: number; left: number };
-  }>({});
-
+  const [sizes, setSizes] = useState<{ [key: string]: { width: number; left: number } }>({});
   const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   useEffect(() => {
@@ -203,9 +193,7 @@ export function SlotToggleButton({ onToggle }: SlotToggleButtonProps) {
       `}
       onClick={() =>
         handleSelect(
-          selected === slotToggleOptions[0]
-            ? slotToggleOptions[1]
-            : slotToggleOptions[0]
+          selected === slotToggleOptions[0] ? slotToggleOptions[1] : slotToggleOptions[0]
         )
       }
       onMouseDown={() => setIsActive(true)}
@@ -214,7 +202,6 @@ export function SlotToggleButton({ onToggle }: SlotToggleButtonProps) {
       onTouchStart={() => setIsActive(true)}
       onTouchEnd={() => setIsActive(false)}
     >
-      {/* White highlight that wraps text */}
       {sizes[selected] && (
         <div
           className="absolute top-1/2 -translate-y-1/2 h-[80%] bg-white border border-black transition-all duration-100 ease-in-out"
@@ -227,7 +214,6 @@ export function SlotToggleButton({ onToggle }: SlotToggleButtonProps) {
         />
       )}
 
-      {/* Toggle buttons */}
       {slotToggleOptions.map((label, idx) => (
         <button
           key={label}
@@ -254,100 +240,11 @@ export function SlotToggleButton({ onToggle }: SlotToggleButtonProps) {
   );
 }
 
-// export function BasicToggleButton({ onColor, offColor, isDefaultOn, onToggle }: BasicToggleButtonProps) {
-//   const toggleOptions = ["on", "off"];
-//   const [selected, setSelected] = useState<string>(toggleOptions[0]);
-//   const [sizes, setSizes] = useState<{ [key: string]: { width: number; left: number } }>({});
-
-//   const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
-
-//   useEffect(() => {
-//     const newSizes: { [key: string]: { width: number; left: number } } = {};
-//     btnRefs.current.forEach((btn, idx) => {
-//       if (btn) {
-//         newSizes[toggleOptions[idx]] = {
-//           width: btn.offsetWidth,
-//           left: btn.offsetLeft,
-//         };
-//       }
-//     });
-//     setSizes(newSizes);
-//   }, []);
-
-//   const handleSelect = (curruntStateOn: boolean) => {
-//     const label = curruntStateOn ? toggleOptions[0] : toggleOptions[1];
-//     setSelected(label);
-//     onToggle?.(label);
-//   };
-
-//   const setIsActive = useState(false)[1];
-
-//   return (
-//     <div
-//       style={{
-//         fontFamily: 'Poppins, sans-serif',
-//         height: '56px',
-//         borderRadius: '18px',
-//         userSelect: 'none',
-//         cursor: "pointer",
-//       }}
-//       className={`
-//         relative flex items-center
-//         border-[3px] border-black
-//         shadow-[4px_4px_0_0_black]
-//         transition-all duration-100
-//         bg-[${colorMap['yellow']}]
-//         px-2 py-1
-//         w-fit
-//         active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]
-//       `}
-//       onClick={() => handleSelect(selected === toggleOptions[0] ? toggleOptions[1] : toggleOptions[0])}
-//       onMouseDown={() => setIsActive(true)}
-//       onMouseUp={() => setIsActive(false)}
-//       onMouseLeave={() => setIsActive(false)}
-//       onTouchStart={() => setIsActive(true)}
-//       onTouchEnd={() => setIsActive(false)}
-//     >
-//       {/* White highlight that wraps text */}
-//       {sizes[selected] && (
-//         <div
-//           className="absolute top-1/2 -translate-y-1/2 h-[80%] bg-white border border-black transition-all duration-100 ease-in-out"
-//           style={{
-//             left: sizes[selected].left,
-//             width: sizes[selected].width,
-//             zIndex: 1,
-//             borderRadius: '15px',
-//           }}
-//         />
-//       )}
-
-//       {/* Toggle buttons */}
-//       {['on', 'off'].map((label, idx) => (
-//         <button
-//           key={label}
-//           ref={(el) => { btnRefs.current[idx] = el; }}
-//           onClick={e => { e.stopPropagation(); handleSelect(label); }}
-//           className="relative z-10 px-4 py-0 text-base font-semibold transition-colors duration-200"
-//           style={{
-//             fontFamily: "Poppins, sans-serif",
-//             fontWeight: "700",
-//             background: "none",
-//             border: "none",
-//             cursor: "pointer",
-//           }}
-//         >
-//           {label}
-//         </button>
-//       ))}
-//     </div>
-//   );
-// }
-
 export function BasicToggleButton({
-  isDefaultOn,
+  defaultState,
   onToggle,
 }: BasicToggleButtonProps) {
-  const [selected, setSelected] = useState<string>(isDefaultOn ? "on" : "off");
+  const [selected, setSelected] = useState<"on" | "off">(defaultState);
 
   const handleSelect = (label: "on" | "off") => {
     setSelected(label);
@@ -376,9 +273,7 @@ export function BasicToggleButton({
         active:translate-x-[2px]
         active:translate-y-[2px]
       `}
-      style={{
-        backgroundColor: bgColor,
-      }}
+      style={{ backgroundColor: bgColor }}
       onClick={() => handleSelect(selected === "on" ? "off" : "on")}
       onMouseDown={() => setIsActive(true)}
       onMouseUp={() => setIsActive(false)}
@@ -388,25 +283,26 @@ export function BasicToggleButton({
     >
       <div
         className={`
-            absolute
-            top-1/2
-            -translate-y-1/2
-            h-[24px]
-            w-[24px]
-            bg-white
-            border
-            border-black
-            transition-all
-            duration-100
-            ease-in-out
-            z-[1]
-            rounded-[8px]
-          `}
+          absolute
+          top-1/2
+          -translate-y-1/2
+          h-[24px]
+          w-[24px]
+          bg-white
+          border
+          border-black
+          transition-all
+          duration-100
+          ease-in-out
+          z-[1]
+          rounded-[8px]
+        `}
         style={selected === "on" ? { right: 4 } : { left: 4 }}
       />
     </div>
   );
 }
+
 
 export function GoogleLoginButton({ onClick }: { onClick?: () => void }) {
   const buttonColor = "#ffffff";

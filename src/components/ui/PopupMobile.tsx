@@ -1,24 +1,29 @@
 "use client";
 
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
 import CompoundTable from "./CompoundTable";
 import Footer from "./Footer";
-import { BasicToggleButton, GoogleLoginButton, ZButton } from "./Buttons";
+import { GoogleLoginButton, BasicToggleButton, ZButton } from "./Buttons";
+
+type dataProps = {
+  code: string;
+  slot: string;
+  name: string;
+};
 
 type PopupViewTTProps = {
   TTName: string;
-  TTData: { code: string; slot: string; name: string }[];
+  TTData: dataProps[];
   closeLink: () => void;
-  shareLink: string;
-  onDownloadClick: () => void;
+  onShareClick: () => Promise<void>;
+  shareEnabledDefault: boolean;
+  shareSwitchAction: (state: "on" | "off") => Promise<void>;
 };
-
 type PopupLoginProps = {
   closeLink: () => void;
   onLoginClick: () => void;
 };
-
 export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-white">
@@ -121,13 +126,13 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
     </div>
   );
 }
-
 export function PopupViewTT({
   TTName,
   TTData,
   closeLink,
-  shareLink,
-  onDownloadClick,
+  onShareClick,
+  shareEnabledDefault,
+  shareSwitchAction,
 }: PopupViewTTProps) {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-white">
@@ -151,17 +156,25 @@ export function PopupViewTT({
 
         <div className="text-2xl mt-4 mb-2 text-black font-semibold font-poppins">{TTName}</div>
 
-        <div className="text-center text-sm mb-4 text-gray-600 px-4">{shareLink}</div>
+        <div className="text-center text-sm mb-4 text-gray-600 px-4">
+          {shareEnabledDefault ? "Publicly Shareable" : "Private"}
+        </div>
 
         <div className="flex flex-col items-center justify-center gap-4 mb-4">
           <ZButton
             type="regular"
-            text="Download Image"
+            text="Copy Share Link"
             color="green"
             image="/icons/send.svg"
             forceColor="#C1FF83"
-            onClick={onDownloadClick}
+            onClick={onShareClick}
           />
+          <div className="flex gap-2">
+            <BasicToggleButton
+              defaultState={shareEnabledDefault ? "on" : "off"}
+              onToggle={shareSwitchAction}
+            />
+          </div>
         </div>
 
         <div className="w-full max-w-7xl overflow-x-auto mb-8">

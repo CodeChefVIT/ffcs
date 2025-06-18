@@ -9,9 +9,7 @@ import axios from "axios";
 import { PopupViewTT } from "@/components/ui/PopupMobile";
 
 async function fetchTimetablesByOwner(owner: string) {
-  const res = await axios.get(
-    `/api/timetables?owner=${encodeURIComponent(owner)}`
-  );
+  const res = await axios.get(`/api/timetables?owner=${encodeURIComponent(owner)}`);
   return res.data;
 }
 
@@ -81,8 +79,7 @@ export default function SavedMobile() {
       if (!updated.shareId) throw new Error("No shareId found");
       const url = `${window.location.origin}/share/${updated.shareId}`;
       await navigator.clipboard.writeText(url);
-    } catch {
-    }
+    } catch {}
   }
 
   async function handleTogglePublic(state: "on" | "off") {
@@ -115,9 +112,7 @@ export default function SavedMobile() {
 
       <Navbar page="mobile" />
 
-      <div className="text-4xl mb-8 mt-28 text-black font-pangolin">
-        Saved Timetables
-      </div>
+      <div className="text-4xl mb-8 mt-28 text-black font-pangolin">Saved Timetables</div>
 
       <ul className="w-full space-y-4 px-6">
         {timetables.map((tt, index) => (
@@ -134,10 +129,11 @@ export default function SavedMobile() {
 
       <div className="flex items-center w-full mt-8 mb-8 text-sm font-poppins font-semibold text-black/50 px-8">
         <div className="flex-grow h-0.5 bg-gradient-to-r from-transparent to-black/33" />
-        {loading ? (null) : timetables.length === 0 ?
-          (<span className="mx-4">Nothing To Show Here</span>) :
-          (<span className="mx-4">End of List</span>)
-        }
+        {loading ? null : timetables.length === 0 ? (
+          <span className="mx-4">Nothing To Show Here</span>
+        ) : (
+          <span className="mx-4">End of List</span>
+        )}
         <div className="flex-grow h-0.5 bg-gradient-to-r from-black/33 to-transparent" />
       </div>
 
@@ -156,7 +152,6 @@ export default function SavedMobile() {
       <Footer type="mobile" />
 
       {showPopup && popupType === "view_tt" && selectedTT && (
-
         <PopupViewTT
           TTName={popupTitle}
           TTData={popupSlots}
@@ -166,7 +161,6 @@ export default function SavedMobile() {
           shareSwitchAction={handleTogglePublic}
         />
       )}
-
     </div>
   );
 }

@@ -275,7 +275,7 @@ export default function Popup({
                   Sharing Link is {shareState === "on" ? "Public" : "Private"}
                 </div>
                 <BasicToggleButton
-                  isDefaultOn={shareEnabled}
+                  defaultState="on"
                   onToggle={(state: "on" | "off") => {
                     setShareState(state);
                     if (shareSwitchAction) shareSwitchAction(state);
@@ -414,7 +414,7 @@ export default function Popup({
                 <div className="flex flex-row items-center gap-4">
                   <span className="font-semibold text-lg">Public Sharing</span>
                   <BasicToggleButton
-                    isDefaultOn={shareEnabled}
+                    defaultState="on"
                     onToggle={shareSwitchAction ?? (() => { })}
                   />
                 </div>
