@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import axios from "axios";
 
@@ -16,6 +16,7 @@ type dataProps = {
 };
 
 export default function SharedTimetablePage() {
+  const router = useRouter();
   const params = useParams();
   const shareId =
     typeof params.shareId === "string"
@@ -51,27 +52,7 @@ export default function SharedTimetablePage() {
   }, [shareId]);
 
   if (notFound) {
-    return (
-      <div className="flex flex-col min-h-screen relative select-none">
-        <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
-          <Image
-            src="/art/bg_dots.svg"
-            alt="Background"
-            fill
-            priority
-            sizes="100vw"
-            className="object-top object-contain w-full h-full"
-            unselectable="on"
-            draggable={false}
-          />
-        </div>
-        <Navbar page="shared" />
-        <div className="flex-1 flex flex-col items-center justify-center">
-          <div className="text-4xl font-bold mt-48 mb-8 text-black">Timetable Not Found</div>
-        </div>
-        <Footer />
-      </div>
-    );
+    router.push("/404");
   }
 
   return (

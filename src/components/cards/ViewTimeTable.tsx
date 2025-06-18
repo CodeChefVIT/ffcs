@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import axios from "axios";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 import CompoundTable from "@/components//ui/CompoundTable";
 import { ZButton } from "@/components/ui/Buttons";
@@ -10,6 +10,7 @@ import { useTimetable } from "@/lib/TimeTableContext";
 import Image from "next/image";
 import Popup from "@/components/ui/Popup";
 import AlertModal from "@/components/ui/AlertModal";
+import { getCurrentDateTime } from "@/lib/utils";
 
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
@@ -27,7 +28,7 @@ export default function ViewTimeTable() {
   const owner = session?.user?.email || null;
 
   const timetableNumber = selectedIndex + 1;
-  const allTimatables = timetableData ? timetableData : [[]];
+  const allTimatables = timetableData ? timetableData : [];
   const timetableCount = allTimatables.length;
   const selectedData = allTimatables[selectedIndex] || [];
   const visibleIndexes = getVisibleIndexes(timetableNumber, timetableCount);
@@ -94,7 +95,7 @@ export default function ViewTimeTable() {
       }));
 
       const res = await axios.post("/api/save-timetable", {
-        title: saveTTName || `Shared Timetable`,
+        title: saveTTName || getCurrentDateTime(),
         slots,
         owner: owner,
         isPublic: sharePublic,
@@ -128,33 +129,26 @@ export default function ViewTimeTable() {
 
   const actionButtons = [
     {
-      label: "Email",
-      color: "yellow",
-      icon: "/icons/mail.svg",
-      onClick: withLoginCheck(() => console.log("Email clicked")),
-    },
-    {
-      label: "Save",
-      color: "green",
-      icon: "/icons/save.svg",
-      onClick: withLoginCheck(() => {
-        setSaveTTName("");
-        setShowSavePopup(true);
-      }),
-    },
-    {
-      label: "Report",
-      color: "purple",
-      icon: "/icons/report.svg",
-      onClick: withLoginCheck(() => console.log("Report clicked")),
-    },
-    {
       label: "Share",
-      color: "green",
+      color: "yellow",
       icon: "/icons/send.svg",
       onClick: withLoginCheck(handleShare),
     },
-
+    {
+      label: "Report",
+      color: "green",
+      icon: "/icons/report.svg",
+      onClick: withLoginCheck(() => { }),
+    },
+    {
+      label: "Save",
+      color: "purple",
+      icon: "/icons/save.svg",
+      onClick: withLoginCheck(() => {
+        setSaveTTName(getCurrentDateTime());
+        setShowSavePopup(true);
+      }),
+    },
   ];
 
   function showAlert(msg: string) {
@@ -168,7 +162,13 @@ export default function ViewTimeTable() {
         <div className="flex flex-row items-end mb-4 ml-2">
           <div className="text-5xl font-pangolin">Your Timetables</div>
           <div className="text-xl ml-8 font-poppins pb-1">
-            ({timetableCount} timetable{timetableCount != 1 ? "s were" : " was"} generated)
+            {
+              (timetableCount == 0) ?
+                "(Empty List)" :
+                timetableCount == 1 ?
+                  "(1 timetable was generated)" :
+                  `(${timetableCount} timetables were generated)`
+            }
           </div>
         </div>
 
@@ -176,7 +176,7 @@ export default function ViewTimeTable() {
           <CompoundTable data={convertedData} large={true} />
         </div>
 
-        <div className="flex flex-row items-center justify-between px-8 pt-8 gap-8">
+        <div className="flex flex-row items-center justify-between px-16 pt-4 gap-8">
           <div className="w-auto">
             <div className=" w-full flex justify-center">
               <button
@@ -229,11 +229,11 @@ export default function ViewTimeTable() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="flex flex-wrap items-center justify-center gap-4">
             {actionButtons.map((btn, idx) => (
               <div key={idx}>
                 <ZButton
-                  type="regular"
+                  type="long"
                   text={btn.label}
                   image={btn.icon}
                   color={btn.color || "blue"}
@@ -258,6 +258,7 @@ export default function ViewTimeTable() {
       {showLoginPopup && (
         <Popup
           type="login"
+          action={() => signIn("google", { callbackUrl: "/", redirect: true })}
           closeLink={() => setShowLoginPopup(false)}
         />
       )}
