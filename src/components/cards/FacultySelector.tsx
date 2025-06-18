@@ -60,7 +60,7 @@ function SelectField({
         onClick={() => setIsOpen(!isOpen)}
         title={selectedLabel}
         className={`
-         w-full h-10 pl-3 pr-10 text-left bg-white rounded-xl border-3 border-black
+         w-full h-10 pl-3 pr-12 text-left bg-white rounded-xl border-3 border-black
          cursor-pointer relative
          ${!value ? "text-[#00000080]" : "text-black"}
          truncate whitespace-nowrap overflow-hidden
@@ -83,7 +83,7 @@ function SelectField({
       </button>
 
       {isOpen && (
-        <ul className="absolute left-0 right-0 z-10 bg-white border-3 border-black rounded-xl mt-1 max-h-48 overflow-y-auto shadow-lg">
+        <ul className="absolute -left-7 -right-7 z-10 bg-white border-3 border-black rounded-xl mt-1 max-h-120 overflow-y-auto shadow-lg">
           {options.map((option, index) => (
             <li
               key={index}
@@ -284,6 +284,8 @@ export default function FacultySelector({
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
+    setSelectedLabShift("");
+    setLabShiftOptions({ morning: [], evening: [] });
   };
 
   const handleConfirm = () => {
@@ -343,10 +345,10 @@ export default function FacultySelector({
       labSubject.length == 1 || courseCodeType === "E"
         ? "both"
         : courseCodeType === "P" && !courseCode.startsWith("BSTS")
-        ? "lab"
-        : courseCodeType === "L" || courseCode.startsWith("BSTS")
-        ? "th"
-        : "th";
+          ? "lab"
+          : courseCodeType === "L" || courseCode.startsWith("BSTS")
+            ? "th"
+            : "th";
 
     const courseName = selectedSubject.split(" - ")[1];
 
@@ -410,8 +412,8 @@ export default function FacultySelector({
         const exists = savedCourses.some((c) => c.id === id);
         const newCourses = exists
           ? savedCourses.map((course) =>
-              course.id === id ? courseData : course
-            )
+            course.id === id ? courseData : course
+          )
           : [...savedCourses, courseData];
 
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newCourses));
@@ -421,7 +423,8 @@ export default function FacultySelector({
     }
 
     onConfirm(courseData);
-    handleReset();
+    setSelectedFaculties([]);
+    setPriorityList([]);
   };
 
   const toggleFaculty = (name: string) => {
@@ -562,7 +565,13 @@ export default function FacultySelector({
     setSelectedFaculties([]);
     setPriorityList([]);
     setFaculties([...new Set(facultiesInSelectedShift)]);
-  }, [selectedLabShift, labShiftOptions, selectedSubject]);
+  }, [
+    selectedLabShift,
+    labShiftOptions,
+    selectedSubject,
+    selectedDomain,
+    selectedSchool,
+  ]);
 
   const handleSchoolChange = (school: string) => {
     setSelectedSchool(school);
@@ -574,6 +583,8 @@ export default function FacultySelector({
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
+    setSelectedLabShift("");
+    setLabShiftOptions({ morning: [], evening: [] });
   };
 
   const handleDomainChange = (domain: string) => {
@@ -596,7 +607,6 @@ export default function FacultySelector({
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
-
     setSelectedLabShift("");
     setLabShiftOptions({ morning: [], evening: [] });
   };
@@ -606,6 +616,8 @@ export default function FacultySelector({
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
+    setSelectedLabShift("");
+    setLabShiftOptions({ morning: [], evening: [] });
   };
 
   return (
@@ -618,9 +630,8 @@ export default function FacultySelector({
               <button
                 key={school}
                 onClick={() => handleSchoolChange(school)}
-                className={`px-3 py-1 rounded-full text-sm font-bold border-2 shadow-[2px_2px_0_0_black] border-black cursor-pointer transition duration-100 active:shadow-[1px_1px_0_0_black] active:translate-x-[1px] active:translate-y-[1px] ${
-                  selectedSchool === school ? "bg-[#FFEA79]" : "bg-white"
-                }`}
+                className={`px-3 py-1 rounded-full text-sm font-bold border-2 shadow-[2px_2px_0_0_black] border-black cursor-pointer transition duration-100 active:shadow-[1px_1px_0_0_black] active:translate-x-[1px] active:translate-y-[1px] ${selectedSchool === school ? "bg-[#FFEA79]" : "bg-white"
+                  }`}
               >
                 {school}
               </button>
@@ -642,7 +653,7 @@ export default function FacultySelector({
               onChange={handleSubjectChange}
             />
             {selectedSubject.split(" - ")[0].endsWith("P") &&
-            !selectedSubject.split(" - ")[0].startsWith("BSTS") ? (
+              !selectedSubject.split(" - ")[0].startsWith("BSTS") ? (
               <SelectField
                 label="Slot"
                 value={selectedLabShift}
@@ -806,7 +817,7 @@ export default function FacultySelector({
               </div>
 
               <div className="flex flex-row justify-center gap-4">
-            
+
                 <ZButton
                   type="long"
                   text="Reset"
