@@ -142,7 +142,11 @@ export default function ViewTimeTable() {
       color: "green",
       icon: "/icons/report.svg",
       onClick: withLoginCheck(() => {
-        exportToExcel([]);
+        if (!selectedData || selectedData.length === 0) {
+          showAlert("No Timetables generated");
+          return;
+        }
+        exportToExcel();
       }),
     },
     {

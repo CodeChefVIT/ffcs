@@ -8,6 +8,7 @@ import { ZButton } from "../ui/Buttons";
 import Image from "next/image";
 import { generateTT } from "@/lib/utils";
 import { fullCourseData } from "@/lib/type";
+import { setGlobalCourses } from "@/lib/globalCourses";
 
 type CourseCardProps = {
   selectedCourses: fullCourseData[];
@@ -146,6 +147,7 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
 
     try {
       const generatedTT = generateTT(courses);
+      setGlobalCourses(courses);
       setTimetableData(generatedTT);
 
       setTimeout(() => {

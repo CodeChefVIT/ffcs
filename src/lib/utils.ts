@@ -1,10 +1,12 @@
+import { getGlobalCourses } from "./globalCourses";
 import { clashMap } from "./slots";
 import { fullCourseData, timetableDisplayData } from "./type";
-import ExcelJS from 'exceljs';
+import ExcelJS from "exceljs";
 
-
-export function generateTT(courseData: fullCourseData[], discardClashCombinations: boolean = true): timetableDisplayData[][] {
-
+export function generateTT(
+  courseData: fullCourseData[],
+  discardClashCombinations: boolean = true
+): timetableDisplayData[][] {
   function simplify(data: fullCourseData[]): timetableDisplayData[][] {
     const coursesSimple: timetableDisplayData[][] = [];
     for (const course of data) {
@@ -16,7 +18,7 @@ export function generateTT(courseData: fullCourseData[], discardClashCombination
               courseCode: course.courseCode,
               courseName: course.courseName,
               slotName: slot.slotName,
-              facultyName: faculty.facultyName
+              facultyName: faculty.facultyName,
             });
           }
         }
@@ -28,7 +30,7 @@ export function generateTT(courseData: fullCourseData[], discardClashCombination
               courseCode: course.courseCode + "__" + course.courseCodeLab,
               courseName: course.courseName + "__" + course.courseNameLab,
               slotName: slot.slotName + "__" + faculty.facultyLabSlot,
-              facultyName: faculty.facultyName
+              facultyName: faculty.facultyName,
             });
           }
         }
@@ -38,7 +40,9 @@ export function generateTT(courseData: fullCourseData[], discardClashCombination
     return coursesSimple;
   }
 
-  function breakClubbed(combinations: timetableDisplayData[][]): timetableDisplayData[][] {
+  function breakClubbed(
+    combinations: timetableDisplayData[][]
+  ): timetableDisplayData[][] {
     return combinations.map((combo) =>
       combo.flatMap((item: timetableDisplayData): timetableDisplayData[] => {
         if (item.slotName.includes("__")) {
@@ -57,7 +61,7 @@ export function generateTT(courseData: fullCourseData[], discardClashCombination
               courseName: labName,
               slotName: labSlots,
               facultyName: item.facultyName,
-            }
+            },
           ];
         }
         return [item];
@@ -72,16 +76,18 @@ export function generateTT(courseData: fullCourseData[], discardClashCombination
     for (const partial of combinations) {
       for (const item of subject) {
         const included: string[] = [];
-        partial.forEach(p => {
+        partial.forEach((p) => {
           const slots = p.slotName.split(/\+|__/);
-          slots.forEach(slot => {
+          slots.forEach((slot) => {
             included.push(slot);
             if (clashMap[slot]) included.push(...clashMap[slot]);
           });
         });
-        const nonePresent = item.slotName.split(/\+|__/).every(slot => !included.includes(slot));
+        const nonePresent = item.slotName
+          .split(/\+|__/)
+          .every((slot) => !included.includes(slot));
         if (nonePresent) temp.push([...partial, item]);
-        else if (!discardClashCombinations) temp.push([...partial])
+        else if (!discardClashCombinations) temp.push([...partial]);
       }
     }
     combinations = temp;
@@ -91,30 +97,61 @@ export function generateTT(courseData: fullCourseData[], discardClashCombination
 
 export function getCurrentDateTime() {
   const now = new Date();
-  const pad = (n: number) => n.toString().padStart(2, '0');
-  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(
+    now.getDate()
+  )} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
 }
 
-export const exportToExcel = async (timetableData?: fullCourseData[]) => {
+export const exportToExcel = async () => {
+  const courses: fullCourseData[] = getGlobalCourses();
+
+  if (!courses || courses.length === 0) {
+    throw new Error('No course data available to export.');
+  }
   const workbook = new ExcelJS.Workbook();
-  const sheet = workbook.addWorksheet('Sheet1');
+  const sheet = workbook.addWorksheet('Faculty Slots');
 
-  const data: (number | string)[][] = [
-    [1, 2, 3],
-    [4, "test download", 6],
-    [7, "Please wait for feature implementation", 9],
-  ];
+  const header = ['Course Name', 'Faculty Name', 'Slot'];
+  const headerRow = sheet.addRow(header);
+  headerRow.font = { bold: true };
+  headerRow.fill = {
+    type: 'pattern',
+    pattern: 'solid',
+    fgColor: { argb: 'FF4F81BD' },
+  };
 
-  data.forEach((row) => {
-    const newRow = sheet.addRow(row);
-    newRow.eachCell((cell) => {
-      cell.font = { bold: true, italic: true, color: { argb: 'FF0000FF' } };
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'FFFFFF00' }, // Yellow background
-      };
+  courses.forEach((course) => {
+    const courseLabel =
+      course.courseType === 'both'
+        ? `${course.courseName} / ${course.courseNameLab}`
+        : course.courseName;
+
+    course.courseSlots.forEach((slot) => {
+      slot.slotFaculties.forEach((faculty, idx) => {
+        const isFirstRow = idx === 0;
+        const slotInfo =
+          course.courseType === 'both'
+            ? `${slot.slotName} / ${faculty.facultyLabSlot ?? 'NIL'}`
+            : slot.slotName;
+
+        sheet.addRow([
+          isFirstRow ? courseLabel : '',
+          faculty.facultyName,
+          slotInfo,
+        ]);
+      });
+      sheet.addRow([]);
     });
+  });
+
+  sheet.columns.forEach((col) => {
+    let max = 10;
+    col.eachCell?.((cell) => {
+      const len = cell.value?.toString().length ?? 0;
+      max = Math.max(max, len + 2);
+    });
+    col.width = max;
   });
 
   const buffer = await workbook.xlsx.writeBuffer();
@@ -125,7 +162,7 @@ export const exportToExcel = async (timetableData?: fullCourseData[]) => {
 
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'report.xlsx';
+  a.download = 'faculty-slots.xlsx';
   a.click();
   URL.revokeObjectURL(url);
 };
