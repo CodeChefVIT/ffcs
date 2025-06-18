@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useRef, useEffect } from "react";
 
 import { useTimetable } from "../../lib/TimeTableContext";
@@ -25,7 +24,7 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
         const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (saved) return JSON.parse(saved) as fullCourseData[];
       } catch {
-        // Ignore parse errors
+        
       }
     }
     return selectedCourses;
@@ -51,14 +50,14 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     }
   }, [courses]);
 
-  // Also update local courses if selectedCourses prop changes (sync from parent)
+  
   useEffect(() => {
     if (typeof window !== "undefined") {
       try {
         const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (saved) {
           const savedCourses = JSON.parse(saved) as fullCourseData[];
-          // If saved courses differ from new selectedCourses prop, update state
+          
           if (
             JSON.stringify(savedCourses) !== JSON.stringify(selectedCourses)
           ) {
@@ -71,6 +70,9 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
         setCourses(selectedCourses);
       }
     }
+  }, [selectedCourses]);
+  useEffect(() => {
+    setCourses(selectedCourses); 
   }, [selectedCourses]);
 
   const resetDragRefs = () => {
@@ -357,4 +359,3 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     </div>
   );
 }
-

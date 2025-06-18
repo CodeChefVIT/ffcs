@@ -31,7 +31,7 @@ const data = [
   { code: "BBRT101P", slot: "L47+L48", name: "Ishan Jindal" },
 ];
 
-const handleShareSwitchAction = (state: "on" | "off") => {
+const handleShareSwitchAction = async (state: "on" | "off") => {
   if (state == "on") alert("yippee");
   else alert("oh no");
 };
@@ -92,16 +92,22 @@ export default function Home() {
       case "phone1":
         return (
           <PopupViewTT
-            TTName={"Morning Theory"}
+            TTName="Morning Theory"
             TTData={data}
-            shareLink={"ffcs.codechefvit.com/share?id=ABC123"}
+            shareLink="ffcs.codechefvit.com/share?id=ABC123"
             closeLink={closePopup}
-            onDownloadClick={closePopup}
+            onShareClick={async () => {
+              await navigator.clipboard.writeText(
+                "ffcs.codechefvit.com/share?id=ABC123"
+              );
+              alert("Link copied!");
+            }}
+            shareEnabledDefault={false}
+            shareSwitchAction={handleShareSwitchAction}
           />
         );
       case "phone2":
         return <PopupLogin closeLink={closePopup} onLoginClick={closePopup} />;
-
       default:
         return null;
     }

@@ -1,33 +1,31 @@
 "use client";
 
-import Image from "next/image";
 import React from "react";
+import Image from "next/image";
 import CompoundTable from "./CompoundTable";
 import Footer from "./Footer";
-import { BasicToggleButton, GoogleLoginButton, ZButton } from "./Buttons";
+import { GoogleLoginButton, BasicToggleButton, ZButton } from "./Buttons";
 
 type dataProps = {
   code: string;
   slot: string;
   name: string;
-}
+};
 
 type PopupViewTTProps = {
   TTName: string;
-  TTData: { code: string; slot: string; name: string }[];
+  TTData: dataProps[];
   closeLink: () => void;
-  onShareClick: () => void;
+  onShareClick: () => Promise<void>;
   shareEnabledDefault: boolean;
-  shareSwitchAction: (state: "on" | "off") => void;
+  shareSwitchAction: (state: "on" | "off") => Promise<void>;
   shareLink: string;
-  onDownloadClick: () => void;
-}; 
+};
 
 type PopupLoginProps = {
   closeLink: () => void;
   onLoginClick: () => void;
 };
-
 
 export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
   return (
@@ -50,16 +48,9 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
           <ZButton type="regular" text="Go Back" color="red" onClick={closeLink} />
         </div>
 
-
         <div className="flex-grow mt-4 flex flex-col items-center text-center relative">
-
-          <div className="text-5xl mb-2 font-pangolin text-black">
-            FFCS-inator
-          </div>
-
-          <div className="text-2xl mb-8 font-pangolin text-black">
-            By CodeChef-VIT
-          </div>
+          <div className="text-5xl mb-2 font-pangolin text-black">FFCS-inator</div>
+          <div className="text-2xl mb-8 font-pangolin text-black">By CodeChef-VIT</div>
 
           <div className="mb-8">
             <Image
@@ -79,7 +70,6 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
           </div>
 
           <div className="flex flex-col items-center justify-center relative mt-8 mb-4">
-            {/* Top-left */}
             <div className="absolute -top-7 -left-11 rotate-[-5deg] z-[1]">
               <Image
                 src="/art/art_rice.svg"
@@ -92,7 +82,6 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
                 priority
               />
             </div>
-            {/* Top-right */}
             <div className="absolute -top-7 -right-11 rotate-[-15deg] z-[1]">
               <Image
                 src="/art/art_boom.svg"
@@ -105,7 +94,6 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
                 priority
               />
             </div>
-            {/* Bottom-left */}
             <div className="absolute -bottom-4 -left-15 rotate-[-25deg] z-[1]">
               <Image
                 src="/art/art_arrow.svg"
@@ -118,7 +106,6 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
                 priority
               />
             </div>
-            {/* Bottom-right */}
             <div className="absolute -bottom-5 -right-15 rotate-[17deg] z-[1]">
               <Image
                 src="/art/art_loop.svg"
@@ -137,7 +124,6 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
         </div>
 
         <div className="h-6" />
-
         <Footer type="mobile" />
       </div>
     </div>
@@ -152,7 +138,6 @@ export function PopupViewTT({
   shareEnabledDefault,
   shareSwitchAction,
   shareLink,
-  onDownloadClick,
 }: PopupViewTTProps) {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-white">
@@ -174,15 +159,29 @@ export function PopupViewTT({
           <ZButton type="regular" text="Go Back" color="red" onClick={closeLink} />
         </div>
 
-        <div className="text-2xl mt-4 mb-4 text-black font-semibold font-poppins">{TTName}</div>
+        <div className="text-2xl mt-4 mb-2 text-black font-semibold font-poppins">{TTName}</div>
+
+        <div className="text-center text-sm mb-2 text-gray-700 px-4 break-words">
+          Shareable Link: <span className="underline">{shareLink}</span>
+        </div>
+
+        <div className="text-center text-sm mb-4 text-gray-600 px-4">
+          {shareEnabledDefault ? "Publicly Shareable" : "Private"}
+        </div>
 
         <div className="flex flex-col items-center justify-center gap-4 mb-4">
-          <ZButton type="regular" text="Copy Link" color="green" image="/icons/send.svg" forceColor="#C1FF83" onClick={onShareClick} />
-          <div className="flex flex-row items-center gap-4">
-            <span className="font-semibold text-lg">Public Sharing</span>
+          <ZButton
+            type="regular"
+            text="Copy Share Link"
+            color="green"
+            image="/icons/send.svg"
+            forceColor="#C1FF83"
+            onClick={onShareClick}
+          />
+          <div className="flex gap-2">
             <BasicToggleButton
-              isDefaultOn={shareEnabledDefault}
-              onToggle={shareSwitchAction ?? (() => { })}
+              defaultState={shareEnabledDefault ? "on" : "off"}
+              onToggle={shareSwitchAction}
             />
           </div>
         </div>
@@ -192,7 +191,6 @@ export function PopupViewTT({
         </div>
 
         <Footer type="mobile" />
-
       </div>
     </div>
   );
