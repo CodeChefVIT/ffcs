@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import axios from "axios";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 
 import CompoundTable from "@/components//ui/CompoundTable";
 import { ZButton } from "@/components/ui/Buttons";
@@ -10,6 +10,7 @@ import { useTimetable } from "@/lib/TimeTableContext";
 import Image from "next/image";
 import Popup from "@/components/ui/Popup";
 import AlertModal from "@/components/ui/AlertModal";
+import { getCurrentDateTime } from "@/lib/utils";
 
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
@@ -27,7 +28,7 @@ export default function ViewTimeTable() {
   const owner = session?.user?.email || null;
 
   const timetableNumber = selectedIndex + 1;
-  const allTimatables = timetableData ? timetableData : [[]];
+  const allTimatables = timetableData ? timetableData : [];
   const timetableCount = allTimatables.length;
   const selectedData = allTimatables[selectedIndex] || [];
   const visibleIndexes = getVisibleIndexes(timetableNumber, timetableCount);
@@ -94,7 +95,7 @@ export default function ViewTimeTable() {
       }));
 
       const res = await axios.post("/api/save-timetable", {
-        title: saveTTName || `Shared Timetable`,
+        title: saveTTName || getCurrentDateTime(),
         slots,
         owner: owner,
         isPublic: sharePublic,
@@ -137,14 +138,14 @@ export default function ViewTimeTable() {
       label: "Report",
       color: "green",
       icon: "/icons/report.svg",
-      onClick: withLoginCheck(() => console.log("Report clicked")),
+      onClick: withLoginCheck(() => { }),
     },
     {
       label: "Save",
       color: "purple",
       icon: "/icons/save.svg",
       onClick: withLoginCheck(() => {
-        setSaveTTName("");
+        setSaveTTName(getCurrentDateTime());
         setShowSavePopup(true);
       }),
     },
@@ -257,6 +258,7 @@ export default function ViewTimeTable() {
       {showLoginPopup && (
         <Popup
           type="login"
+          action={() => signIn("google", { callbackUrl: "/", redirect: true })}
           closeLink={() => setShowLoginPopup(false)}
         />
       )}
