@@ -1,8 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-
 import { useTimetable } from "../../lib/TimeTableContext";
-
 import Popup from "../ui/Popup";
 import { ZButton } from "../ui/Buttons";
 import Image from "next/image";
@@ -17,63 +15,56 @@ const LOCAL_STORAGE_KEY = "selectedCourses";
 
 export default function CourseCard({ selectedCourses }: CourseCardProps) {
   const { setTimetableData } = useTimetable();
-
-  const [courses, setCourses] = useState<fullCourseData[]>(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (saved) return JSON.parse(saved) as fullCourseData[];
-      } catch {
-        
-      }
-    }
-    return selectedCourses;
-  });
+  const [courses, setCourses] = useState<fullCourseData[]>([]);
+  const hasInitialized = useRef(false);
+  const prevSelected = useRef<fullCourseData[]>(selectedCourses);
 
   const draggedItemIndex = useRef<number | null>(null);
   const dragOverItemIndex = useRef<number | null>(null);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const [deletePopupOpen, setDeletePopupOpen] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState<fullCourseData | null>(null);
 
-  // Sync courses state to localStorage whenever it changes
+  // Initialize from localStorage or props on first mount
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      try {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(courses));
-      } catch {
-        // ignore localStorage errors
-      }
-    }
-  }, [courses]);
-
-  
-  useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (!hasInitialized.current && typeof window !== "undefined") {
       try {
         const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (saved) {
-          const savedCourses = JSON.parse(saved) as fullCourseData[];
-          
-          if (
-            JSON.stringify(savedCourses) !== JSON.stringify(selectedCourses)
-          ) {
-            setCourses(savedCourses);
-          }
+          setCourses(JSON.parse(saved));
         } else {
           setCourses(selectedCourses);
         }
       } catch {
         setCourses(selectedCourses);
       }
+      hasInitialized.current = true;
+      prevSelected.current = selectedCourses;
     }
   }, [selectedCourses]);
+
+  // Update when parent props actually change after init
   useEffect(() => {
-    setCourses(selectedCourses); 
+    if (hasInitialized.current) {
+      const prev = prevSelected.current;
+      if (JSON.stringify(prev) !== JSON.stringify(selectedCourses)) {
+        setCourses(selectedCourses);
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(selectedCourses));
+        prevSelected.current = selectedCourses;
+      }
+    }
   }, [selectedCourses]);
+
+  
+  useEffect(() => {
+    if (typeof window !== "undefined" && hasInitialized.current) {
+      try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(courses));
+      } catch {}
+    }
+  }, [courses]);
 
   const resetDragRefs = () => {
     draggedItemIndex.current = null;
@@ -135,7 +126,6 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
   };
 
   const handleGenerate = async () => {
-
     if (courses.length === 0) {
       setError("Please add at least one course to generate a timetable.");
       return;
