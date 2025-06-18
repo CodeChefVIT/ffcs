@@ -10,7 +10,7 @@ import { useTimetable } from "@/lib/TimeTableContext";
 import Image from "next/image";
 import Popup from "@/components/ui/Popup";
 import AlertModal from "@/components/ui/AlertModal";
-import { getCurrentDateTime } from "@/lib/utils";
+import { exportToExcel, getCurrentDateTime } from "@/lib/utils";
 
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
@@ -44,7 +44,10 @@ export default function ViewTimeTable() {
   }));
 
   async function handleSave(ttName?: string) {
-    if (!selectedData || selectedData.length === 0) return;
+    if (!selectedData || selectedData.length === 0) {
+      showAlert("No timetable to save.");
+      return;
+    }
 
     const slots = selectedData.map((item: {
       slotName?: string;
@@ -138,13 +141,19 @@ export default function ViewTimeTable() {
       label: "Report",
       color: "green",
       icon: "/icons/report.svg",
-      onClick: withLoginCheck(() => { }),
+      onClick: withLoginCheck(() => {
+        exportToExcel();
+      }),
     },
     {
       label: "Save",
       color: "purple",
       icon: "/icons/save.svg",
       onClick: withLoginCheck(() => {
+        if (!selectedData || selectedData.length === 0) {
+          showAlert("No timetable to share.");
+          return;
+        }
         setSaveTTName(getCurrentDateTime());
         setShowSavePopup(true);
       }),
