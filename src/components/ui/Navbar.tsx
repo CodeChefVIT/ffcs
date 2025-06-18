@@ -15,13 +15,12 @@ export default function Navbar({ page }: NavbarProps) {
   const { data: session } = useSession();
   const loggedin = !!session;
   const [showLoginPopup, setShowLoginPopup] = useState(false);
+  const [showLoginPopupSaved, setShowLoginPopupSaved] = useState(false);
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
 
   let userName = "User";
-  let userNameShort = "User";
   if (loggedin) {
     userName = (session?.user?.name ?? "").trim().split(" ").slice(0, -1).join(" ") || userName
-    userNameShort = (session?.user?.name ?? "").trim().split(" ")[0] || userNameShort
   }
 
   return (
@@ -31,6 +30,13 @@ export default function Navbar({ page }: NavbarProps) {
           type="login"
           closeLink={() => setShowLoginPopup(false)}
           action={() => signIn("google", { callbackUrl: "/", redirect: true })}
+        />
+      )}
+      {showLoginPopupSaved && (
+        <Popup
+          type="login"
+          closeLink={() => setShowLoginPopupSaved(false)}
+          action={() => signIn("google", { callbackUrl: "/saved", redirect: true })}
         />
       )}
       {showLogoutPopup && (
@@ -97,7 +103,7 @@ export default function Navbar({ page }: NavbarProps) {
                 type="long"
                 text="Saved Timetables"
                 color="blue"
-                onClick={() => router.push("/saved")}
+                onClick={loggedin ? () => router.push("/saved") : () => setShowLoginPopupSaved(true)}
               />)
             }
 
@@ -111,7 +117,7 @@ export default function Navbar({ page }: NavbarProps) {
             }
 
             {(page === "landing" || page === "404" || page == "slots" || page == "shared" || page == "saved") &&
-              ((!loggedin) && (
+              (((!loggedin) && (
                 <ZButton
                   type="long"
                   text="Log In"
@@ -119,14 +125,14 @@ export default function Navbar({ page }: NavbarProps) {
                   onClick={() => setShowLoginPopup(true)}
                 />
               )) ||
-              (loggedin && (
-                <ZButton
-                  type="long"
-                  text={userName}
-                  color="purple"
-                  onClick={() => setShowLogoutPopup(true)}
-                />
-              ))
+                (loggedin && (
+                  <ZButton
+                    type="long"
+                    text={userName}
+                    color="purple"
+                    onClick={() => setShowLogoutPopup(true)}
+                  />
+                )))
             }
 
             {(page == "mobile") &&
@@ -141,8 +147,8 @@ export default function Navbar({ page }: NavbarProps) {
               (loggedin && (
                 <ZButton
                   type="regular"
-                  text={userNameShort}
-                  color="green"
+                  text="Log Out"
+                  color="purple"
                   onClick={() => signOut({ callbackUrl: "/" })}
                 />
               ))

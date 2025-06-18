@@ -45,9 +45,7 @@ export default function Saved() {
   const [timetables, setTimetables] = useState<TimetableEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
-  const [popupType, setPopupType] = useState<
-    "view_tt" | "delete_tt" | "rename_tt" | null
-  >(null);
+  const [popupType, setPopupType] = useState<"view_tt" | "delete_tt" | "rename_tt" | null>(null);
   const [popupSlots, setPopupSlots] = useState<PopupSlot[]>([]);
   const [popupTitle, setPopupTitle] = useState<string>("");
   const [selectedTT, setSelectedTT] = useState<TimetableEntry | null>(null);
@@ -79,7 +77,7 @@ export default function Saved() {
     setTimetables((prev) => prev.filter((tt) => tt._id !== selectedTT._id));
     setShowPopup(false);
     setSelectedTT(null);
-    setAlertMsg("Timetable deleted!");
+    setAlertMsg("Timetable has been deleted.");
     setAlertOpen(true);
   }
 
@@ -95,7 +93,7 @@ export default function Saved() {
     );
     setShowPopup(false);
     setSelectedTT(null);
-    setAlertMsg("Timetable renamed!");
+    setAlertMsg("Timetable has been renamed.");
     setAlertOpen(true);
   }
 
@@ -154,19 +152,19 @@ export default function Saved() {
       <Navbar page="saved" />
       <div className="flex-1 flex flex-col items-center">
         <div className="text-6xl mt-48 mb-16 font-pangolin text-black">
-          Your Timetables
+          Saved Timetables
         </div>
         <div className="z-10 w-5/6 max-w-7xl rounded-[60px] border-black border-4 bg-[#A7D5D7] px-24 py-12 mb-24 shadow-[4px_4px_0_0_black]">
           <div className="text-4xl mt-2 mb-8 font-pangolin font-light text-black">
             All Timetables
           </div>
           {loading ? (
-            <div className="text-center text-2xl font-semibold text-[#606060] mb-6">
+            <div className="text-center text-3xl font-semibold text-[#606060] mb-4 mt-8 font-poppins">
               Loading...
             </div>
           ) : timetables.length === 0 ? (
             <div className="flex flex-col items-center justify-center mt-12 mb-6">
-              <div className="text-center text-2xl font-semibold text-[#606060] mb-6">
+              <div className="text-center text-3xl font-semibold text-[#606060] mb-6">
                 (No Timetables Found)
               </div>
               <ZButton
@@ -182,25 +180,23 @@ export default function Saved() {
               {timetables.map((tt, index) => (
                 <li
                   key={tt._id}
-                  className="flex items-center justify-between bg-[#C9E5E6] p-4 rounded-3xl"
+                  className="flex items-center justify-between bg-[#C9E5E6] p-5 rounded-4xl"
                 >
-                  <div className="flex flex-row">
-                    <div className="text-xl mx-4 my-4">{index + 1}.</div>
-                    <div className="text-xl ml-8 mr-4 my-4 overflow-hidden">
+                  <div className="flex flex-row items-center">
+                    <div className="text-xl ml-4">{index + 1}.</div>
+                    <div className="text-xl mx-8 overflow-hidden">
                       {tt.title}
                     </div>
                   </div>
-                  <div className="flex space-x-2">
+                  <div className="flex gap-2">
                     <ZButton
-                      type="regular"
-                      text="View"
+                      type="image"
                       color="yellow"
                       image="/icons/eye.svg"
                       onClick={() => handleView(tt)}
                     />
                     <ZButton
-                      type="regular"
-                      text="Rename"
+                      type="image"
                       color="blue"
                       image="/icons/edit.svg"
                       onClick={() => {
@@ -211,8 +207,7 @@ export default function Saved() {
                       }}
                     />
                     <ZButton
-                      type="regular"
-                      text="Delete"
+                      type="image"
                       color="red"
                       image="/icons/trash.svg"
                       onClick={() => {

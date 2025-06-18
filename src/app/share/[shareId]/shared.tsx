@@ -65,7 +65,7 @@ export default function SharedTimetablePage() {
             draggable={false}
           />
         </div>
-        <Navbar page="404" />
+        <Navbar page="shared" />
         <div className="flex-1 flex flex-col items-center justify-center">
           <div className="text-4xl font-bold mt-48 mb-8 text-black">Timetable Not Found</div>
         </div>
@@ -89,7 +89,7 @@ export default function SharedTimetablePage() {
         />
       </div>
 
-      <Navbar page="404" />
+      <Navbar page="shared" />
 
       <div className="flex-1 flex flex-col items-center mb-16">
         <div className="text-5xl mt-48 mb-8 font-pangolin text-black">
