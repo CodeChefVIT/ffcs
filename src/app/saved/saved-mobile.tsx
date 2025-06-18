@@ -159,6 +159,11 @@ export default function SavedMobile() {
           onShareClick={() => handleCopyLink(selectedTT)}
           shareEnabledDefault={publicToggle}
           shareSwitchAction={handleTogglePublic}
+          shareLink={
+            selectedTT.shareId
+              ? `${typeof window !== "undefined" ? window.location.origin : ""}/share/${selectedTT.shareId}`
+              : ""
+          }
         />
       )}
     </div>

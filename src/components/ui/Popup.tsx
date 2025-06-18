@@ -395,32 +395,33 @@ export default function Popup({
             </div>
           )}
 
-          {type == "view_tt" && (
-            <div>
-              <div className="break-words max-w-[80vw] w-full text-center p-2 -mt-4">
-                <CompoundTable data={dataTT || []} />
-              </div>
-              <div className="flex flex-row flex-wrap items-center justify-center gap-16 mb-4 w-full">
-                <div className="flex flex-row items-center gap-3">
-                  <ZButton
-                    type="regular"
-                    text="Copy Link"
-                    color="green"
-                    image="/icons/send.svg"
-                    forceColor="#C1FF83"
-                    onClick={action}
-                  />
-                </div>
-                <div className="flex flex-row items-center gap-4">
-                  <span className="font-semibold text-lg">Public Sharing</span>
-                  <BasicToggleButton
-                    defaultState="on"
-                    onToggle={shareSwitchAction ?? (() => { })}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
+          {type === "view_tt" && (
+  <div>
+    <div className="break-words max-w-[80vw] w-full text-center p-2 -mt-4">
+      <CompoundTable data={dataTT || []} />
+    </div>
+    <div className="flex flex-row flex-wrap items-center justify-center gap-16 mb-4 w-full">
+      <div className="flex flex-row items-center gap-3">
+        <ZButton
+          type="regular"
+          text="Copy Link"
+          color="green"
+          image="/icons/send.svg"
+          forceColor="#C1FF83"
+          onClick={action}
+        />
+      </div>
+      <div className="flex flex-row items-center gap-4">
+        <span className="font-semibold text-lg">Public Sharing</span>
+        <BasicToggleButton
+          key={shareEnabledDefault ? "on" : "off"}      
+          defaultState={shareEnabledDefault ? "on" : "off"}
+          onToggle={shareSwitchAction ?? (() => {})}
+        />
+      </div>
+    </div>
+  </div>
+)}
 
           {type == "logout" && (
             <div>
