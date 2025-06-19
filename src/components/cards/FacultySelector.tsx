@@ -131,7 +131,6 @@ function generateCourseSlotsSingle({
       },
     ];
   }
-
   if (courseType === "lab") {
     const labSlots = [
       ...new Set(
@@ -166,6 +165,58 @@ type FacultyData = {
     };
   };
 };
+
+function generateCourseSlotsLabOnly({
+  subjectData,
+  selectedFaculties,
+  labShift,
+}: {
+  subjectData: SubjectEntry[];
+  selectedFaculties: string[];
+  labShift: "morning" | "evening";
+}) {
+  const isMorningSlot = (slot: string) => {
+    const parts = slot
+      .split("+")
+      .map((s) => parseInt(s.replace("L", ""), 10));
+    return parts.every((num) => num <= 30); // Define morning range
+  };
+
+  const isEveningSlot = (slot: string) => {
+    const parts = slot
+      .split("+")
+      .map((s) => parseInt(s.replace("L", ""), 10));
+    return parts.every((num) => num > 30); // Define evening range
+  };
+
+  const isSlotInShift = labShift === "morning" ? isMorningSlot : isEveningSlot;
+
+  const labSlots = [
+    ...new Set(
+      subjectData
+        .filter(
+          (entry) =>
+            selectedFaculties.includes(entry.faculty) &&
+            isSlotInShift(entry.slot)
+        )
+        .map((entry) => entry.slot)
+    ),
+  ];
+
+  return labSlots.map((slotName) => ({
+    slotName,
+    slotFaculties: subjectData
+      .filter(
+        (entry) =>
+          entry.slot === slotName &&
+          selectedFaculties.includes(entry.faculty)
+      )
+      .map((entry) => ({
+        facultyName: entry.faculty,
+      })),
+  }));
+}
+
 
 function generateCourseSlotsBoth({
   data,
@@ -364,32 +415,38 @@ export default function FacultySelector({
       courseNameLab =
         labSubject.length == 1 ? labSubject[0].split(" - ")[1] : "";
     }
-
-    if (courseType == "both") {
-      courseSlots = generateCourseSlotsBoth({
-        data,
-        selectedSchool,
-        selectedDomain,
-        selectedSubject,
-        selectedSlot,
-        selectedFaculties: priorityList,
-      });
-    } else if (courseType == "th") {
-      courseSlots = generateCourseSlotsSingle({
+    if (selectedLabShift) {
+      courseSlots = generateCourseSlotsLabOnly({
         subjectData: data[selectedSchool][selectedDomain][selectedSubject],
-        selectedFaculties,
-        selectedSlot,
-        courseType: "th",
+        selectedFaculties: priorityList,
+        labShift: selectedLabShift
       });
     } else {
-      courseSlots = generateCourseSlotsSingle({
-        subjectData: data[selectedSchool][selectedDomain][selectedSubject],
-        selectedFaculties,
-        selectedSlot,
-        courseType: "lab",
-      });
+      if (courseType == "both") {
+        courseSlots = generateCourseSlotsBoth({
+          data,
+          selectedSchool,
+          selectedDomain,
+          selectedSubject,
+          selectedSlot,
+          selectedFaculties: priorityList,
+        });
+      } else if (courseType == "th") {
+        courseSlots = generateCourseSlotsSingle({
+          subjectData: data[selectedSchool][selectedDomain][selectedSubject],
+          selectedFaculties,
+          selectedSlot,
+          courseType: "th",
+        });
+      } else {
+        courseSlots = generateCourseSlotsSingle({
+          subjectData: data[selectedSchool][selectedDomain][selectedSubject],
+          selectedFaculties,
+          selectedSlot,
+          courseType: "lab",
+        });
+      }
     }
-
     const courseData: fullCourseData = {
       id,
       courseType,
@@ -399,7 +456,7 @@ export default function FacultySelector({
         courseCodeLab,
         courseNameLab,
       }),
-      courseSlots: courseSlots,
+      courseSlots: courseSlots!,
     };
 
     try {
@@ -501,7 +558,6 @@ export default function FacultySelector({
               .map((s) => parseInt(s.replace("L", ""), 10));
             return parts.every((num) => num >= 31);
           });
-
           setLabShiftOptions({
             morning: morningLabSlots,
             evening: eveningLabSlots,
