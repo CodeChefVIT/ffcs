@@ -54,6 +54,7 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
         setCourses(selectedCourses);
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(selectedCourses));
         prevSelected.current = selectedCourses;
+        console.log(selectedCourses);
       }
     }
   }, [selectedCourses]);
