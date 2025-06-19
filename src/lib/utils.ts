@@ -241,7 +241,7 @@ export const exportToExcel = async () => {
               const rowLabSlot = row.getCell(6).value?.toString() || "";
               const clashCheck = [...rowTheorySlot.split("+"), ...rowLabSlot.split("+")]
 
-              var occupiedSlots: string[] = []
+              const occupiedSlots: string[] = []
               clashCheck.forEach((slot) => {
                 if (clashMap[slot]) {
                   occupiedSlots.push(...clashMap[slot]);

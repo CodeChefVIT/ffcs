@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { useTimetable } from "../../lib/TimeTableContext";
 import Popup from "../ui/Popup";
 import { ZButton } from "../ui/Buttons";

@@ -41,7 +41,7 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
           color: "red",
         });
       }
-    } catch (error) {
+    } catch {
       setAlertState({
         open: true,
         message: "Something went wrong. Please try again.",
