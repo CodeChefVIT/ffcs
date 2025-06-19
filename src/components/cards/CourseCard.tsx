@@ -46,7 +46,7 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     }
   }, [selectedCourses]);
 
-  
+
   useEffect(() => {
     if (hasInitialized.current) {
       const prev = prevSelected.current;
@@ -59,12 +59,12 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     }
   }, [selectedCourses]);
 
-  
+
   useEffect(() => {
     if (typeof window !== "undefined" && hasInitialized.current) {
       try {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(courses));
-      } catch {}
+      } catch { }
     }
   }, [courses]);
 
@@ -126,58 +126,58 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     ];
     setCourses(updatedCourses);
   };
-const [alert, setAlert] = useState({
-  open: false,
-  message: '',
-  color: 'red',
-});
+  const [alert, setAlert] = useState({
+    open: false,
+    message: '',
+    color: 'red',
+  });
   const handleGenerate = async () => {
-  if (courses.length === 0) {
-    setError("Please add at least one course to generate a timetable.");
-    return;
-  }
-
-  setLoading(true);
-  setError(null);
-
-  try {
-    const { result, clashes } = generateTT(courses);
-
-    setGlobalCourses(courses);
-    setTimetableData(result);
-
-    if (clashes) {
-      setAlert({
-        open: true,
-        message: clashes,
-        color: "red",
-      });
-    } else {
-      setAlert({
-        open: false,
-        message: "",
-        color: "red",
-      });
+    if (courses.length === 0) {
+      setError("Please add at least one course to generate a timetable.");
+      return;
     }
 
-    setTimeout(() => {
-      const el = document.getElementById("timetable-view");
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  } catch {
-    setError("Failed to generate timetable. Please try again.");
-  } finally {
-    setLoading(false);
-  }
-};
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { result, clashes } = generateTT(courses);
+
+      setGlobalCourses(courses);
+      setTimetableData(result);
+
+      if (clashes) {
+        setAlert({
+          open: true,
+          message: clashes,
+          color: "red",
+        });
+      } else {
+        setAlert({
+          open: false,
+          message: "",
+          color: "red",
+        });
+      }
+
+      setTimeout(() => {
+        const el = document.getElementById("timetable-view");
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } catch {
+      setError("Failed to generate timetable. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="px-12">
       <AlertModal
-  open={alert.open}
-  message={alert.message}
-  color={alert.color}
-  onClose={() => setAlert({ ...alert, open: false })}
-/>
+        open={alert.open}
+        message={alert.message}
+        color={alert.color}
+        onClose={() => setAlert({ ...alert, open: false })}
+      />
       <div
         id="course-card"
         className="bg-[#A7D5D7] mt-4 font-poppins rounded-4xl border-[3px] border-black p-6 shadow-[4px_4px_0_0_black] text-black font-medium px-12 mb-16"
@@ -214,7 +214,7 @@ const [alert, setAlert] = useState({
                   <div className={"flex flex-col px-4 gap-1"}>
                     <p key={course.courseCode}>{course.courseCode}</p>
                     {course.courseType === "both" && (
-                      <p key={course.courseCodeLab}>{course.courseCodeLab}</p>
+                      <p key={course.courseCodeLab + "_lab"}>{course.courseCodeLab}</p>
                     )}
                   </div>
                 </div>
@@ -228,10 +228,14 @@ const [alert, setAlert] = useState({
                   </p>
                   {course.courseType === "both" && (
                     <p
-                      key={course.courseNameLab}
+                      key={course.courseNameLab + "_Lab"}
                       className="break-words leading-snug"
                     >
-                      {course.courseNameLab}
+                      {course.courseNameLab && course.courseNameLab.endsWith("Lab")
+                        ? course.courseNameLab
+                        : course.courseNameLab
+                          ? course.courseNameLab + " Lab"
+                          : ""}
                     </p>
                   )}
                 </div>
