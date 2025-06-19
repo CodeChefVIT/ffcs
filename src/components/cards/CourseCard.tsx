@@ -7,7 +7,7 @@ import Image from "next/image";
 import { generateTT } from "@/lib/utils";
 import { fullCourseData } from "@/lib/type";
 import { setGlobalCourses } from "@/lib/globalCourses";
-
+import AlertModal from "../ui/AlertModal";
 type CourseCardProps = {
   selectedCourses: fullCourseData[];
 };
@@ -54,6 +54,7 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
         setCourses(selectedCourses);
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(selectedCourses));
         prevSelected.current = selectedCourses;
+        console.log(selectedCourses);
       }
     }
   }, [selectedCourses]);
@@ -125,34 +126,58 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     ];
     setCourses(updatedCourses);
   };
-
+const [alert, setAlert] = useState({
+  open: false,
+  message: '',
+  color: 'red',
+});
   const handleGenerate = async () => {
-    if (courses.length === 0) {
-      setError("Please add at least one course to generate a timetable.");
-      return;
+  if (courses.length === 0) {
+    setError("Please add at least one course to generate a timetable.");
+    return;
+  }
+
+  setLoading(true);
+  setError(null);
+
+  try {
+    const { result, clashes } = generateTT(courses);
+
+    setGlobalCourses(courses);
+    setTimetableData(result);
+
+    if (clashes) {
+      setAlert({
+        open: true,
+        message: clashes,
+        color: "red",
+      });
+    } else {
+      setAlert({
+        open: false,
+        message: "",
+        color: "red",
+      });
     }
 
-    setLoading(true);
-    setError(null);
-
-    try {
-      const generatedTT = generateTT(courses);
-      setGlobalCourses(courses);
-      setTimetableData(generatedTT);
-
-      setTimeout(() => {
-        const el = document.getElementById("timetable-view");
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    } catch {
-      setError("Failed to generate timetable. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+    setTimeout(() => {
+      const el = document.getElementById("timetable-view");
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  } catch {
+    setError("Failed to generate timetable. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="px-12">
+      <AlertModal
+  open={alert.open}
+  message={alert.message}
+  color={alert.color}
+  onClose={() => setAlert({ ...alert, open: false })}
+/>
       <div
         id="course-card"
         className="bg-[#A7D5D7] mt-4 font-poppins rounded-4xl border-[3px] border-black p-6 shadow-[4px_4px_0_0_black] text-black font-medium px-12 mb-16"
