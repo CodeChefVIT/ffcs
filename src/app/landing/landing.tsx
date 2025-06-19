@@ -51,7 +51,7 @@ export default function View() {
             )
         );
 
-        const mergedSlots = [...updatedSlots, ...preservedOldSlots];
+        const mergedSlots = [...preservedOldSlots, ...updatedSlots];
 
         const updatedCourse = {
           ...existingCourse,

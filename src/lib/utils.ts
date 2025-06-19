@@ -187,37 +187,47 @@ export const exportToExcel = async () => {
   const workbook = new ExcelJS.Workbook();
   const sheet = workbook.addWorksheet("Faculty Slots");
 
-  const header = ["Course Name", "Faculty Name", "Slot"];
+  const header = ['Course Name', 'Faculty', 'Theory Slot', 'Lab Slot', 'Notes'];
   const headerRow = sheet.addRow(header);
   headerRow.font = { bold: true };
   headerRow.fill = {
-    type: "pattern",
-    pattern: "solid",
-    fgColor: { argb: "FF4F81BD" },
+    type: 'pattern',
+    pattern: 'solid',
+    fgColor: { argb: 'FFF0F0F0' },
   };
+  headerRow.eachCell((cell) => {
+    cell.border = {
+      bottom: { style: 'thin', color: { argb: 'FF000000' } }
+    };
+  });
+  sheet.addRow([]); // Add an empty row for spacing
 
   courses.forEach((course) => {
     const courseLabel =
-      course.courseType === "both"
-        ? `${course.courseName} / ${course.courseNameLab}`
+      course.courseType === 'both'
+        ? `${course.courseName} & Lab`
         : course.courseName;
 
-    course.courseSlots.forEach((slot) => {
-      slot.slotFaculties.forEach((faculty, idx) => {
-        const isFirstRow = idx === 0;
+    course.courseSlots.forEach((slot, idx1) => {
+      const isFirstSubjectRow = idx1 === 0;
+      slot.slotFaculties.forEach((faculty, idx2) => {
+        const isFirstFacultyRow = idx2 === 0;
+
+        // const theorySlot
+
         const slotInfo =
           course.courseType === "both"
             ? `${slot.slotName} / ${faculty.facultyLabSlot ?? "NIL"}`
             : slot.slotName;
 
         sheet.addRow([
-          isFirstRow ? courseLabel : "",
+          isFirstSubjectRow && isFirstFacultyRow ? courseLabel : '',
           faculty.facultyName,
           slotInfo,
         ]);
       });
-      sheet.addRow([]);
     });
+    sheet.addRow([]);
   });
 
   sheet.columns.forEach((col) => {
