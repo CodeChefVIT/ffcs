@@ -12,11 +12,21 @@ import CourseCard from "@/components/cards/CourseCard";
 import ViewTimeTable from "@/components/cards/ViewTimeTable";
 import { TimetableProvider } from "@/lib/TimeTableContext";
 import { fullCourseData } from "@/lib/type";
+const LOCAL_STORAGE_KEY = "selectedCourses";
 
 export default function View() {
-  const [selectedCourses, setSelectedCourses] = useState<fullCourseData[]>([]);
+  const [selectedCourses, setSelectedCourses] = useState<fullCourseData[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const saved = localStorage.getItem("selectedCourses");
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
 
-  const facultySelectorOnCorfirm = (newCourse: fullCourseData) => {
+
+  const facultySelectorOnConfirm = (newCourse: fullCourseData) => {
     setSelectedCourses((prevCourses) => {
       const existingIndex = prevCourses.findIndex(
         (course) => course.id === newCourse.id
@@ -60,6 +70,7 @@ export default function View() {
 
         const updatedCourses = [...prevCourses];
         updatedCourses[existingIndex] = updatedCourse;
+
         return updatedCourses;
       } else {
         // New course, add directly
@@ -70,8 +81,15 @@ export default function View() {
   };
 
   useEffect(() => {
-    console.log(selectedCourses);
-  }, [selectedCourses])
+    if (typeof window === "undefined") return;
+
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(selectedCourses));
+    } catch (e) {
+      console.error("Failed to save courses to localStorage", e);
+    }
+  }, [selectedCourses]);
+
 
   return (
     <div className="flex flex-col min-h-screen relative w-full items-center justify-center overflow-x-hidden">
@@ -93,16 +111,18 @@ export default function View() {
       <Hero />
 
       <div className="w-4xl mx-4 pt-12" id="start">
-        <FacultySelector onConfirm={facultySelectorOnCorfirm} />
+        <FacultySelector onConfirm={facultySelectorOnConfirm} />
       </div>
 
       <TimetableProvider>
         <div className="w-full px-8">
-          <CourseCard selectedCourses={selectedCourses} onDelete={(id) => {
-            setSelectedCourses((prevCourses) =>
-              prevCourses.filter((course) => course.id !== id)
-            );
-          }} />
+          <CourseCard
+            selectedCourses={selectedCourses}
+            onDelete={(id) =>
+              setSelectedCourses((prev) => prev.filter((c) => c.id !== id))
+            }
+            onUpdate={(updatedCourses) => setSelectedCourses(updatedCourses)}
+          />
         </div>
 
         <div className="w-screen p-0 m-0">
