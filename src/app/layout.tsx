@@ -26,9 +26,25 @@ const inter = Inter({
 
 export const metadata = {
   title: "FFCS-inator",
-  description: "",
+  description:
+    "Generate priority-based timetables in seconds with FFCS-inator. No hassle. No stress. No more clashes. The smartest way to plan your VIT FFCS.",
   icons: {
     icon: "/logo_ffcs.svg",
+  },
+  openGraph: {
+    title: "FFCS-inator",
+    description:
+      "Generate priority-based timetables in seconds with FFCS-inator. No hassle. No stress. No more clashes. The smartest way to plan your VIT VIT FFCS.",
+    site_name: "FFCS-inator",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        alt: "FFCS-inator - Timetable Generator for VIT",
+        width: 1200,
+        height: 630,
+      },
+    ],
   },
 };
 
