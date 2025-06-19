@@ -8,6 +8,7 @@ import { generateTT } from "@/lib/utils";
 import { fullCourseData } from "@/lib/type";
 import { setGlobalCourses } from "@/lib/globalCourses";
 import AlertModal from "../ui/AlertModal";
+
 type CourseCardProps = {
   selectedCourses: fullCourseData[];
 };
@@ -18,7 +19,6 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
   const { setTimetableData } = useTimetable();
   const [courses, setCourses] = useState<fullCourseData[]>([]);
   const hasInitialized = useRef(false);
-  const prevSelected = useRef<fullCourseData[]>(selectedCourses);
 
   const draggedItemIndex = useRef<number | null>(null);
   const dragOverItemIndex = useRef<number | null>(null);
@@ -28,7 +28,13 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
   const [deletePopupOpen, setDeletePopupOpen] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState<fullCourseData | null>(null);
 
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    color: "red",
+  });
 
+  
   useEffect(() => {
     if (!hasInitialized.current && typeof window !== "undefined") {
       try {
@@ -42,24 +48,9 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
         setCourses(selectedCourses);
       }
       hasInitialized.current = true;
-      prevSelected.current = selectedCourses;
     }
   }, [selectedCourses]);
 
-  
-  useEffect(() => {
-    if (hasInitialized.current) {
-      const prev = prevSelected.current;
-      if (JSON.stringify(prev) !== JSON.stringify(selectedCourses)) {
-        setCourses(selectedCourses);
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(selectedCourses));
-        prevSelected.current = selectedCourses;
-        console.log(selectedCourses);
-      }
-    }
-  }, [selectedCourses]);
-
-  
   useEffect(() => {
     if (typeof window !== "undefined" && hasInitialized.current) {
       try {
@@ -68,14 +59,42 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     }
   }, [courses]);
 
+
+  useEffect(() => {
+    if (!hasInitialized.current) return;
+
+    const currentCourseIds = new Set(courses.map((c) => c.id));
+    const merged = [
+      ...courses,
+      ...selectedCourses.filter((c) => !currentCourseIds.has(c.id)),
+    ];
+
+    if (merged.length !== courses.length) {
+      setCourses(merged);
+    }
+  }, [selectedCourses]);
+
   const resetDragRefs = () => {
     draggedItemIndex.current = null;
     dragOverItemIndex.current = null;
   };
 
   const confirmDeleteCourse = () => {
-    if (courseToDelete)
-      setCourses((prev) => prev.filter((c) => c.id !== courseToDelete.id));
+    if (courseToDelete) {
+      const updatedCourses = courses.filter((c) => c.id !== courseToDelete.id);
+      setCourses(updatedCourses);
+
+      try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedCourses));
+      } catch (error) {
+        console.warn("Failed to update localStorage:", error);
+      }
+
+      setGlobalCourses(updatedCourses);
+      const { result } = generateTT(updatedCourses);
+      setTimetableData(result);
+    }
+
     setDeletePopupOpen(false);
     setCourseToDelete(null);
   };
@@ -85,7 +104,9 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     e.dataTransfer.effectAllowed = "move";
   };
 
-  const handleDragEnter = (index: number) => (dragOverItemIndex.current = index);
+  const handleDragEnter = (index: number) => {
+    dragOverItemIndex.current = index;
+  };
 
   const handleDragEnd = () => {
     const draggedIdx = draggedItemIndex.current;
@@ -126,50 +147,39 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     ];
     setCourses(updatedCourses);
   };
-const [alert, setAlert] = useState({
-  open: false,
-  message: '',
-  color: 'red',
-});
+
   const handleGenerate = async () => {
-  if (courses.length === 0) {
-    setError("Please add at least one course to generate a timetable.");
-    return;
-  }
+    if (courses.length === 0) {
+      setError("Please add at least one course to generate a timetable.");
+      return;
+    }
 
-  setLoading(true);
-  setError(null);
+    setLoading(true);
+    setError(null);
 
-  try {
-    const { result, clashes } = generateTT(courses);
+    try {
+      const { result } = generateTT(courses);
 
-    setGlobalCourses(courses);
-    setTimetableData(result);
+      setGlobalCourses(courses);
+      setTimetableData(result);
 
-    if (clashes) {
-      setAlert({
-        open: true,
-        message: clashes,
-        color: "red",
-      });
-    } else {
       setAlert({
         open: false,
         message: "",
         color: "red",
       });
-    }
 
-    setTimeout(() => {
-      const el = document.getElementById("timetable-view");
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  } catch {
-    setError("Failed to generate timetable. Please try again.");
-  } finally {
-    setLoading(false);
-  }
-};
+      setTimeout(() => {
+        const el = document.getElementById("timetable-view");
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } catch {
+      setError("Failed to generate timetable. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="px-12">
       <AlertModal
