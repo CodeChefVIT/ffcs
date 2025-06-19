@@ -1,4 +1,17 @@
 export const FoundationCore = {
+  "0SAMPLEP - Test Lab": [
+    { slot: "L51+L52", venue: "SMVG009", faculty: "BARNALI MAITI" },
+    { slot: "L21+L22", venue: "SMVG027", faculty: "BARNALI MAITI" },
+    { slot: "L29+L30", venue: "SMVG009", faculty: "RAJAGOPAL D" },
+    { slot: "L41+L42", venue: "SMVG009", faculty: "MOHANA ROOPAN S" },
+    { slot: "L43+L44", venue: "SMVG009", faculty: "AKHILA MAHESWARI M" },
+    { slot: "L39+L40", venue: "SMVG027", faculty: "SHEELA A" },
+    { slot: "L15+L16", venue: "SMVG009", faculty: "MADHUMITHA G" },
+    { slot: "L23+L24", venue: "SMVG009", faculty: "SUSEEM S.R" },
+    { slot: "L55+L56", venue: "SMVG009", faculty: "NAWAZ KHAN F" },
+    { slot: "L9+L10", venue: "SMVG027", faculty: "BADAL KUMAR MANDAL" },
+    { slot: "L13+L14", venue: "SMVG009", faculty: "MADHVESH PATHAK" },
+  ],
   "BARB101L - Arabic": [
     { slot: "B2", venue: "SJT715", faculty: "MOHD SAQIB" },
     { slot: "C2", venue: "SJT715", faculty: "MOHD SAQIB" },
