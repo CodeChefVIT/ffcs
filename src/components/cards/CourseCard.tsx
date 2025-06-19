@@ -34,7 +34,7 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     color: "red",
   });
 
-  
+
   useEffect(() => {
     if (!hasInitialized.current && typeof window !== "undefined") {
       try {
@@ -52,17 +52,17 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
   }, [selectedCourses]);
 
 
-  useEffect(() => {
-    if (hasInitialized.current) {
-      const prev = prevSelected.current;
-      if (JSON.stringify(prev) !== JSON.stringify(selectedCourses)) {
-        setCourses(selectedCourses);
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(selectedCourses));
-        prevSelected.current = selectedCourses;
-        console.log(selectedCourses);
-      }
-    }
-  }, [selectedCourses]);
+  // useEffect(() => {
+  //   if (hasInitialized.current) {
+  //     const prev = prevSelected.current;
+  //     if (JSON.stringify(prev) !== JSON.stringify(selectedCourses)) {
+  //       setCourses(selectedCourses);
+  //       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(selectedCourses));
+  //       prevSelected.current = selectedCourses;
+  //       console.log(selectedCourses);
+  //     }
+  //   }
+  // }, [selectedCourses]);
 
 
   useEffect(() => {
@@ -86,7 +86,7 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     if (merged.length !== courses.length) {
       setCourses(merged);
     }
-  }, [selectedCourses]);
+  }, [selectedCourses, courses]);
 
   const resetDragRefs = () => {
     draggedItemIndex.current = null;
@@ -162,16 +162,12 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     setCourses(updatedCourses);
   };
 
-  const [alert, setAlert] = useState({
-    open: false,
-    message: '',
-    color: 'red',
-  });
 
   const handleGenerate = async () => {
     if (courses.length === 0) {
       setError("Please add at least one course to generate a timetable.");
       return;
+    }
 
     setLoading(true);
     setError(null);
