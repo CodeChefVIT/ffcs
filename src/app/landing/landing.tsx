@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
 import Hero from "@/components/ui/Hero";
@@ -69,6 +69,10 @@ export default function View() {
     );
   };
 
+  useEffect(() => {
+    console.log(selectedCourses);
+  }, [selectedCourses])
+
   return (
     <div className="flex flex-col min-h-screen relative w-full items-center justify-center overflow-x-hidden">
       <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
@@ -94,7 +98,11 @@ export default function View() {
 
       <TimetableProvider>
         <div className="w-full px-8">
-          <CourseCard selectedCourses={selectedCourses} />
+          <CourseCard selectedCourses={selectedCourses} onDelete={(id) => {
+            setSelectedCourses((prevCourses) =>
+              prevCourses.filter((course) => course.id !== id)
+            );
+          }} />
         </div>
 
         <div className="w-screen p-0 m-0">

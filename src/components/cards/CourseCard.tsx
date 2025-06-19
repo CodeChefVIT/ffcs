@@ -11,11 +11,12 @@ import AlertModal from "../ui/AlertModal";
 
 type CourseCardProps = {
   selectedCourses: fullCourseData[];
+  onDelete: (id: string) => void;
 };
 
 const LOCAL_STORAGE_KEY = "selectedCourses";
 
-export default function CourseCard({ selectedCourses }: CourseCardProps) {
+export default function CourseCard({ selectedCourses, onDelete }: CourseCardProps) {
   const { setTimetableData } = useTimetable();
   const [courses, setCourses] = useState<fullCourseData[]>([]);
   const hasInitialized = useRef(false);
@@ -34,7 +35,7 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     color: "red",
   });
 
-  
+
   useEffect(() => {
     if (!hasInitialized.current && typeof window !== "undefined") {
       try {
@@ -55,7 +56,7 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     if (typeof window !== "undefined" && hasInitialized.current) {
       try {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(courses));
-      } catch {}
+      } catch { }
     }
   }, [courses]);
 
@@ -81,6 +82,7 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
 
   const confirmDeleteCourse = () => {
     if (courseToDelete) {
+      onDelete(courseToDelete.id);
       const updatedCourses = courses.filter((c) => c.id !== courseToDelete.id);
       setCourses(updatedCourses);
 
@@ -183,11 +185,11 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
   return (
     <div className="px-12">
       <AlertModal
-  open={alert.open}
-  message={alert.message}
-  color={alert.color}
-  onClose={() => setAlert({ ...alert, open: false })}
-/>
+        open={alert.open}
+        message={alert.message}
+        color={alert.color}
+        onClose={() => setAlert({ ...alert, open: false })}
+      />
       <div
         id="course-card"
         className="bg-[#A7D5D7] mt-4 font-poppins rounded-4xl border-[3px] border-black p-6 shadow-[4px_4px_0_0_black] text-black font-medium px-12 mb-16"
