@@ -28,12 +28,17 @@ export function generateTT(
       } else if (course.courseType === "both") {
         for (const slot of course.courseSlots) {
           for (const faculty of slot.slotFaculties) {
-            subjectOptions.push({
-              courseCode: course.courseCode + "__" + course.courseCodeLab,
-              courseName: course.courseName + "__" + course.courseNameLab,
-              slotName: slot.slotName + "__" + faculty.facultyLabSlot,
-              facultyName: faculty.facultyName,
-            });
+            if (faculty.facultyLabSlot) {
+              const labSlots = faculty.facultyLabSlot.split(", ");
+              for (const labSlot of labSlots) {
+                subjectOptions.push({
+                  courseCode: course.courseCode + "__" + course.courseCodeLab,
+                  courseName: course.courseName + "__" + course.courseNameLab,
+                  slotName: slot.slotName + "__" + labSlot,
+                  facultyName: faculty.facultyName,
+                });
+              }
+            }
           }
         }
       }
@@ -118,7 +123,7 @@ export function generateTT(
   let clashMessage: string | null = null;
 
   if (final.length === 0 && clashGroups.size > 0) {
-    clashMessage = ` No valid timetables due to slot clashes.\nConflicting combinations:`;
+    clashMessage = `No timetables due to conflicting combinations:`;
 
     for (const [slot, conflicts] of clashGroups.entries()) {
       const expandedSlots = Array.from(
@@ -187,7 +192,7 @@ export const exportToExcel = async () => {
   const workbook = new ExcelJS.Workbook();
   const sheet = workbook.addWorksheet("Faculty Slots");
 
-  const header = ['Course Name', 'Faculty', 'Theory Slot', 'Lab Slot', 'Notes'];
+  const header = ['Course Name', 'Faculty', 'Theory Slot', 'Lab Slot', 'Clashes with'];
   const headerRow = sheet.addRow(header);
   headerRow.font = { bold: true };
   headerRow.fill = {
@@ -246,7 +251,7 @@ export const exportToExcel = async () => {
 
   const a = document.createElement("a");
   a.href = url;
-  a.download = "faculty-slots.xlsx";
+  a.download = "report.xlsx";
   a.click();
   URL.revokeObjectURL(url);
 };
