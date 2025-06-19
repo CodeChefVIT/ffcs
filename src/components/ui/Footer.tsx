@@ -1,11 +1,57 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-
 import { CCButton, ZButton } from "./Buttons";
+import AlertModal from "./AlertModal";
 
 export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
+  const [email, setEmail] = useState("");
+  const [isSubscribing, setIsSubscribing] = useState(false);
+  const [alertState, setAlertState] = useState({
+    open: false,
+    message: "",
+    color: "",
+  });
+
+  const handleSubscribe = async () => {
+    if (!email || isSubscribing) return;
+
+    try {
+      setIsSubscribing(true);
+      const response = await fetch("/api/collect-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        setAlertState({
+          open: true,
+          message: "Thanks for subscribing!",
+          color: "green",
+        });
+        setEmail("");
+      } else {
+        setAlertState({
+          open: true,
+          message: "Failed to subscribe. Please try again.",
+          color: "red",
+        });
+      }
+    } catch (error) {
+      setAlertState({
+        open: true,
+        message: "Something went wrong. Please try again.",
+        color: "red",
+      });
+    } finally {
+      setIsSubscribing(false);
+    }
+  };
+
   if (type === "mobile") {
     return (
       <footer className="w-full bg-[#CEE4E5] text-center mt-auto relative overflow-hidden">
@@ -32,6 +78,14 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
             draggable={false}
           />
         </div>
+
+        {/* Alert Modal */}
+        <AlertModal
+          open={alertState.open}
+          onClose={() => setAlertState({ ...alertState, open: false })}
+          message={alertState.message}
+          color={alertState.color}
+        />
       </footer>
     );
   }
@@ -166,6 +220,9 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
                 type="email"
                 placeholder="Your email address"
                 className="text-sm bg-transparent outline-none placeholder:text-black/50 w-full"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyPress={(e) => e.key === "Enter" && handleSubscribe()}
               />
             </div>
 
@@ -173,7 +230,8 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
               type="image"
               color="purple"
               image="/icons/bell.svg"
-              onClick={() => alert("Subscribed!")}
+              onClick={handleSubscribe}
+              disabled={isSubscribing}
             />
           </div>
         </div>
@@ -182,6 +240,14 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
       <div className="font-poppins font-semibold text-xl text-center py-4 bg-[#A7D5D7] w-full">
         Made with <span className="font-[inter]">❤</span> by CodeChef–VIT
       </div>
+
+      {/* Alert Modal */}
+      <AlertModal
+        open={alertState.open}
+        onClose={() => setAlertState({ ...alertState, open: false })}
+        message={alertState.message}
+        color={alertState.color}
+      />
     </footer>
   );
 }
