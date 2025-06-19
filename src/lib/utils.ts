@@ -201,6 +201,7 @@ export const exportToExcel = async () => {
     };
   });
   sheet.addRow([]); // Add an empty row for spacing
+  sheet.addRow([]); // Add an empty row for spacing
 
   courses.forEach((course) => {
     const courseLabel =
@@ -214,7 +215,7 @@ export const exportToExcel = async () => {
         const isFirstFacultyRow = idx2 === 0;
 
         const theorySlot = (course.courseType === 'th' || course.courseType === 'both') ? slot.slotName : "";
-        const labSlot = (course.courseType === 'lab') ? slot.slotName : faculty.facultyLabSlot ?? 'NIL';
+        const labSlot = (course.courseType === 'lab') ? slot.slotName : faculty.facultyLabSlot ?? "";
 
         sheet.addRow([
           isFirstSubjectRow && isFirstFacultyRow ? courseLabel : '',
@@ -224,6 +225,7 @@ export const exportToExcel = async () => {
         ]);
       });
     });
+    sheet.addRow([]);
     sheet.addRow([]);
   });
 
