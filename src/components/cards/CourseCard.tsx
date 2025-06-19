@@ -12,14 +12,12 @@ import AlertModal from "../ui/AlertModal";
 type CourseCardProps = {
   selectedCourses: fullCourseData[];
   onDelete: (id: string) => void;
+  onUpdate: (updatedCourses: fullCourseData[]) => void;
 };
 
-const LOCAL_STORAGE_KEY = "selectedCourses";
 
-export default function CourseCard({ selectedCourses, onDelete }: CourseCardProps) {
+export default function CourseCard({ selectedCourses, onDelete, onUpdate }: CourseCardProps) {
   const { setTimetableData } = useTimetable();
-  const [courses, setCourses] = useState<fullCourseData[]>([]);
-  const hasInitialized = useRef(false);
 
   const draggedItemIndex = useRef<number | null>(null);
   const dragOverItemIndex = useRef<number | null>(null);
@@ -35,46 +33,6 @@ export default function CourseCard({ selectedCourses, onDelete }: CourseCardProp
     color: "red",
   });
 
-
-  useEffect(() => {
-    if (!hasInitialized.current && typeof window !== "undefined") {
-      try {
-        const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (saved) {
-          setCourses(JSON.parse(saved));
-        } else {
-          setCourses(selectedCourses);
-        }
-      } catch {
-        setCourses(selectedCourses);
-      }
-      hasInitialized.current = true;
-    }
-  }, [selectedCourses]);
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && hasInitialized.current) {
-      try {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(courses));
-      } catch { }
-    }
-  }, [courses]);
-
-
-  useEffect(() => {
-    if (!hasInitialized.current) return;
-
-    const currentCourseIds = new Set(courses.map((c) => c.id));
-    const merged = [
-      ...courses,
-      ...selectedCourses.filter((c) => !currentCourseIds.has(c.id)),
-    ];
-
-    if (merged.length !== courses.length) {
-      setCourses(merged);
-    }
-  }, [selectedCourses]);
-
   const resetDragRefs = () => {
     draggedItemIndex.current = null;
     dragOverItemIndex.current = null;
@@ -82,15 +40,11 @@ export default function CourseCard({ selectedCourses, onDelete }: CourseCardProp
 
   const confirmDeleteCourse = () => {
     if (courseToDelete) {
+      const updatedCourses = selectedCourses.filter(
+        (c) => c.id !== courseToDelete.id
+      );
       onDelete(courseToDelete.id);
-      const updatedCourses = courses.filter((c) => c.id !== courseToDelete.id);
-      setCourses(updatedCourses);
-
-      try {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedCourses));
-      } catch (error) {
-        console.warn("Failed to update localStorage:", error);
-      }
+      onUpdate(updatedCourses);
 
       setGlobalCourses(updatedCourses);
       const { result } = generateTT(updatedCourses);
@@ -123,35 +77,35 @@ export default function CourseCard({ selectedCourses, onDelete }: CourseCardProp
       return;
     }
 
-    const updatedCourses = [...courses];
+    const updatedCourses = [...selectedCourses];
     const [draggedCourse] = updatedCourses.splice(draggedIdx, 1);
     updatedCourses.splice(dragOverIdx, 0, draggedCourse);
-    setCourses(updatedCourses);
+    onUpdate(updatedCourses);
     resetDragRefs();
   };
 
   const moveCourseUp = (index: number) => {
     if (index === 0) return;
-    const updatedCourses = [...courses];
+    const updatedCourses = [...selectedCourses];
     [updatedCourses[index - 1], updatedCourses[index]] = [
       updatedCourses[index],
       updatedCourses[index - 1],
     ];
-    setCourses(updatedCourses);
+    onUpdate(updatedCourses);
   };
 
   const moveCourseDown = (index: number) => {
-    if (index === courses.length - 1) return;
-    const updatedCourses = [...courses];
+    if (index === selectedCourses.length - 1) return;
+    const updatedCourses = [...selectedCourses];
     [updatedCourses[index + 1], updatedCourses[index]] = [
       updatedCourses[index],
       updatedCourses[index + 1],
     ];
-    setCourses(updatedCourses);
+    onUpdate(updatedCourses);
   };
 
   const handleGenerate = async () => {
-    if (courses.length === 0) {
+    if (selectedCourses.length === 0) {
       setError("Please add at least one course to generate a timetable.");
       return;
     }
@@ -160,9 +114,8 @@ export default function CourseCard({ selectedCourses, onDelete }: CourseCardProp
     setError(null);
 
     try {
-      const { result } = generateTT(courses);
-
-      setGlobalCourses(courses);
+      const { result } = generateTT(selectedCourses);
+      setGlobalCourses(selectedCourses);
       setTimetableData(result);
 
       setAlert({
@@ -207,7 +160,7 @@ export default function CourseCard({ selectedCourses, onDelete }: CourseCardProp
           id="course-list"
           className="mt-6 space-y-4 max-h-[350px] overflow-y-auto pr-2 font-poppins w-full"
         >
-          {courses.map((course, index) => (
+          {selectedCourses.map((course, index) => (
             <div
               key={`${course.id}-${index}`}
               className="course-row bg-[#ffffff]/40 rounded-3xl px-6 py-4 flex flex-row items-center justify-between gap-2 sm:space-x-4 w-full cursor-grab active:cursor-grabbing"
@@ -226,7 +179,7 @@ export default function CourseCard({ selectedCourses, onDelete }: CourseCardProp
                   <div className={"flex flex-col px-4 gap-1"}>
                     <p key={course.courseCode}>{course.courseCode}</p>
                     {course.courseType === "both" && (
-                      <p key={course.courseCodeLab + "_lab"}>{course.courseCodeLab}</p>
+                      <p key={course.courseCodeLab}>{course.courseCodeLab}</p>
                     )}
                   </div>
                 </div>
@@ -240,7 +193,7 @@ export default function CourseCard({ selectedCourses, onDelete }: CourseCardProp
                   </p>
                   {course.courseType === "both" && (
                     <p
-                      key={course.courseNameLab + "_lab"}
+                      key={course.courseNameLab}
                       className="break-words leading-snug"
                     >
                       {course.courseNameLab}
@@ -328,11 +281,11 @@ export default function CourseCard({ selectedCourses, onDelete }: CourseCardProp
                     className="px-1 py-0.5 m-0 leading-none transition rounded-b-lg cursor-pointer w-6 h-6 flex items-center justify-center"
                     type="button"
                     title="Move Down"
-                    disabled={index === courses.length - 1}
+                    disabled={index === selectedCourses.length - 1}
                   >
                     <Image
                       src={
-                        index === courses.length - 1
+                        index === selectedCourses.length - 1
                           ? "/icons/chevron_down_gray.svg"
                           : "/icons/chevron_down.svg"
                       }
