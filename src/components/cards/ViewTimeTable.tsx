@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { signIn, useSession } from "next-auth/react";
 
@@ -42,6 +42,10 @@ export default function ViewTimeTable() {
     slot: item.slotName || "NIL",
     name: item.facultyName || "Unknown",
   }));
+
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [timetableData]);
 
   async function handleSave(ttName?: string) {
     if (!selectedData || selectedData.length === 0) {
