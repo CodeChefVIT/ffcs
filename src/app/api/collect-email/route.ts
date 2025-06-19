@@ -41,19 +41,24 @@ export async function POST(req: Request) {
     try {
       await appendEmailToSheet(email);
       return NextResponse.json({ message: "Email added successfully" });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error adding email to sheet:", error);
-      if (error.code === 403) {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "code" in error &&
+        (error as { code?: unknown }).code === 403
+      ) {
         return NextResponse.json(
           {
             error:
               "Permission denied. Make sure the service account has editor access to the spreadsheet.",
-            details: error.message,
+            details: (error as { message?: string }).message,
           },
           { status: 403 }
         );
       }
-      throw error; // Re-throw other errors to be handled by outer catch
+      throw error;
     }
   } catch (error) {
     console.error("Error processing request:", error);
