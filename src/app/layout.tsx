@@ -26,7 +26,8 @@ const inter = Inter({
 
 export const metadata = {
   title: "FFCS-inator",
-  description: "",
+  description:
+    "Generate priority-based timetables in seconds with FFCS-inator. No hassle. No stress. No more clashes. The smartest way to plan your VIT FFCS.",
   icons: {
     icon: "/logo_ffcs.svg",
   },
