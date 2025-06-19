@@ -226,7 +226,7 @@ export default function CourseCard({ selectedCourses, onDelete }: CourseCardProp
                   <div className={"flex flex-col px-4 gap-1"}>
                     <p key={course.courseCode}>{course.courseCode}</p>
                     {course.courseType === "both" && (
-                      <p key={course.courseCodeLab}>{course.courseCodeLab}</p>
+                      <p key={course.courseCodeLab + "_lab"}>{course.courseCodeLab}</p>
                     )}
                   </div>
                 </div>
@@ -240,7 +240,7 @@ export default function CourseCard({ selectedCourses, onDelete }: CourseCardProp
                   </p>
                   {course.courseType === "both" && (
                     <p
-                      key={course.courseNameLab}
+                      key={course.courseNameLab + "_lab"}
                       className="break-words leading-snug"
                     >
                       {course.courseNameLab}
