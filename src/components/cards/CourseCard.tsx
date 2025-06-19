@@ -8,6 +8,7 @@ import { generateTT } from "@/lib/utils";
 import { fullCourseData } from "@/lib/type";
 import { setGlobalCourses } from "@/lib/globalCourses";
 import AlertModal from "../ui/AlertModal";
+
 type CourseCardProps = {
   selectedCourses: fullCourseData[];
 };
@@ -18,7 +19,6 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
   const { setTimetableData } = useTimetable();
   const [courses, setCourses] = useState<fullCourseData[]>([]);
   const hasInitialized = useRef(false);
-  const prevSelected = useRef<fullCourseData[]>(selectedCourses);
 
   const draggedItemIndex = useRef<number | null>(null);
   const dragOverItemIndex = useRef<number | null>(null);
@@ -27,6 +27,12 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
   const [error, setError] = useState<string | null>(null);
   const [deletePopupOpen, setDeletePopupOpen] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState<fullCourseData | null>(null);
+
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    color: "red",
+  });
 
 
   useEffect(() => {
@@ -42,31 +48,45 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
         setCourses(selectedCourses);
       }
       hasInitialized.current = true;
-      prevSelected.current = selectedCourses;
     }
   }, [selectedCourses]);
 
-  
-  useEffect(() => {
-    if (hasInitialized.current) {
-      const prev = prevSelected.current;
-      if (JSON.stringify(prev) !== JSON.stringify(selectedCourses)) {
-        setCourses(selectedCourses);
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(selectedCourses));
-        prevSelected.current = selectedCourses;
-        console.log(selectedCourses);
-      }
-    }
-  }, [selectedCourses]);
 
-  
+  // useEffect(() => {
+  //   if (hasInitialized.current) {
+  //     const prev = prevSelected.current;
+  //     if (JSON.stringify(prev) !== JSON.stringify(selectedCourses)) {
+  //       setCourses(selectedCourses);
+  //       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(selectedCourses));
+  //       prevSelected.current = selectedCourses;
+  //       console.log(selectedCourses);
+  //     }
+  //   }
+  // }, [selectedCourses]);
+
+
   useEffect(() => {
     if (typeof window !== "undefined" && hasInitialized.current) {
       try {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(courses));
-      } catch {}
+      } catch { }
     }
   }, [courses]);
+
+
+  useEffect(() => {
+    if (!hasInitialized.current) return;
+
+    const currentCourseIds = new Set(courses.map((c) => c.id));
+    const merged = [
+      ...courses,
+      ...selectedCourses.filter((c) => !currentCourseIds.has(c.id)),
+    ];
+
+    if (merged.length !== courses.length) {
+      setCourses(merged);
+    }
+  }, [selectedCourses, courses]);
 
   const resetDragRefs = () => {
     draggedItemIndex.current = null;
@@ -74,8 +94,21 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
   };
 
   const confirmDeleteCourse = () => {
-    if (courseToDelete)
-      setCourses((prev) => prev.filter((c) => c.id !== courseToDelete.id));
+    if (courseToDelete) {
+      const updatedCourses = courses.filter((c) => c.id !== courseToDelete.id);
+      setCourses(updatedCourses);
+
+      try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedCourses));
+      } catch (error) {
+        console.warn("Failed to update localStorage:", error);
+      }
+
+      setGlobalCourses(updatedCourses);
+      const { result } = generateTT(updatedCourses);
+      setTimetableData(result);
+    }
+
     setDeletePopupOpen(false);
     setCourseToDelete(null);
   };
@@ -85,7 +118,9 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     e.dataTransfer.effectAllowed = "move";
   };
 
-  const handleDragEnter = (index: number) => (dragOverItemIndex.current = index);
+  const handleDragEnter = (index: number) => {
+    dragOverItemIndex.current = index;
+  };
 
   const handleDragEnd = () => {
     const draggedIdx = draggedItemIndex.current;
@@ -126,58 +161,56 @@ export default function CourseCard({ selectedCourses }: CourseCardProps) {
     ];
     setCourses(updatedCourses);
   };
-const [alert, setAlert] = useState({
-  open: false,
-  message: '',
-  color: 'red',
-});
+
+
   const handleGenerate = async () => {
-  if (courses.length === 0) {
-    setError("Please add at least one course to generate a timetable.");
-    return;
-  }
-
-  setLoading(true);
-  setError(null);
-
-  try {
-    const { result, clashes } = generateTT(courses);
-
-    setGlobalCourses(courses);
-    setTimetableData(result);
-
-    if (clashes) {
-      setAlert({
-        open: true,
-        message: clashes,
-        color: "red",
-      });
-    } else {
-      setAlert({
-        open: false,
-        message: "",
-        color: "red",
-      });
+    if (courses.length === 0) {
+      setError("Please add at least one course to generate a timetable.");
+      return;
     }
 
-    setTimeout(() => {
-      const el = document.getElementById("timetable-view");
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  } catch {
-    setError("Failed to generate timetable. Please try again.");
-  } finally {
-    setLoading(false);
-  }
-};
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { result, clashes } = generateTT(courses);
+
+      setGlobalCourses(courses);
+      setTimetableData(result);
+
+      if (clashes) {
+        setAlert({
+          open: true,
+          message: clashes,
+          color: "red",
+        });
+      } else {
+        setAlert({
+          open: false,
+          message: "",
+          color: "red",
+        });
+      }
+
+      setTimeout(() => {
+        const el = document.getElementById("timetable-view");
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } catch {
+      setError("Failed to generate timetable. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="px-12">
       <AlertModal
-  open={alert.open}
-  message={alert.message}
-  color={alert.color}
-  onClose={() => setAlert({ ...alert, open: false })}
-/>
+        open={alert.open}
+        message={alert.message}
+        color={alert.color}
+        onClose={() => setAlert({ ...alert, open: false })}
+      />
       <div
         id="course-card"
         className="bg-[#A7D5D7] mt-4 font-poppins rounded-4xl border-[3px] border-black p-6 shadow-[4px_4px_0_0_black] text-black font-medium px-12 mb-16"
@@ -214,7 +247,7 @@ const [alert, setAlert] = useState({
                   <div className={"flex flex-col px-4 gap-1"}>
                     <p key={course.courseCode}>{course.courseCode}</p>
                     {course.courseType === "both" && (
-                      <p key={course.courseCodeLab}>{course.courseCodeLab}</p>
+                      <p key={course.courseCodeLab + "_lab"}>{course.courseCodeLab}</p>
                     )}
                   </div>
                 </div>
@@ -228,10 +261,14 @@ const [alert, setAlert] = useState({
                   </p>
                   {course.courseType === "both" && (
                     <p
-                      key={course.courseNameLab}
+                      key={course.courseNameLab + "_Lab"}
                       className="break-words leading-snug"
                     >
-                      {course.courseNameLab}
+                      {course.courseNameLab && course.courseNameLab.endsWith("Lab")
+                        ? course.courseNameLab
+                        : course.courseNameLab
+                          ? course.courseNameLab + " Lab"
+                          : ""}
                     </p>
                   )}
                 </div>
