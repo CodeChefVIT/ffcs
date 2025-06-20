@@ -1,3 +1,4 @@
+
 import { Pangolin, Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import SessionProviderWrapper from "./SessionProvider";
@@ -31,11 +32,13 @@ export const metadata = {
   icons: {
     icon: "/logo_ffcs.svg",
   },
+  manifest: "/manifest.json",
+
   openGraph: {
     title: "FFCS-inator",
     description:
-      "Generate priority-based timetables in seconds with FFCS-inator. No hassle. No stress. No more clashes. The smartest way to plan your VIT VIT FFCS.",
-    site_name: "FFCS-inator",
+      "Generate priority-based timetables in seconds with FFCS-inator. No hassle. No stress. No more clashes. The smartest way to plan your VIT FFCS.",
+    siteName: "FFCS-inator",
     type: "website",
     images: [
       {
@@ -46,6 +49,14 @@ export const metadata = {
       },
     ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "FFCS-inator",
+    description:
+      "Generate priority-based timetables in seconds with FFCS-inator.",
+    images: ["/og-image.png"],
+  },
+  robots: "index, follow",
 };
 
 export default function RootLayout({
@@ -53,10 +64,6 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <head>
-        <title>FFCS-inator</title>
-        <link rel="manifest" href="/manifest.json" />
-      </head>
       <body
         className={`${pangolin.variable} ${poppins.variable} ${inter.variable} antialiased bg-[#CEE4E5] select-none`}
       >
@@ -66,3 +73,4 @@ export default function RootLayout({
     </html>
   );
 }
+
