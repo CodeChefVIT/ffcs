@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Footer from '@/components/ui/Footer';
+import Accordion from '@/components/ui/Accordion';
+
 import { ZButton } from '@/components/ui/Buttons';
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from 'next-auth/react';
@@ -63,7 +65,6 @@ export default function View() {
           <div className="text-xl mb-8 font-poppins text-black">
             Use PC or Tablet For All Features
           </div>
-
           <ZButton
             type="regular"
             text="Saved Timetables"
@@ -73,6 +74,8 @@ export default function View() {
         </div>
 
         <div className="h-6" />
+        
+        <Accordion />
 
         <Footer type="mobile" />
       </div>

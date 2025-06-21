@@ -6,6 +6,7 @@ import Image from "next/image";
 import Hero from "@/components/ui/Hero";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
+import Accordion from "@/components/ui/Accordion";
 
 import FacultySelector from "@/components/cards/FacultySelector";
 import CourseCard from "@/components/cards/CourseCard";
@@ -105,10 +106,9 @@ export default function View() {
           unselectable="on"
         />
       </div>
+      <Navbar page="landing"/>
 
-      <Navbar page="landing" />
-
-      <Hero />
+      <Hero page="normal"/>
 
       <div className="w-4xl mx-4 pt-12" id="start">
         <FacultySelector onConfirm={facultySelectorOnConfirm} />
@@ -142,6 +142,8 @@ export default function View() {
           unselectable="on"
         />
       </div>
+      
+      <Accordion />
 
       <Footer />
     </div>

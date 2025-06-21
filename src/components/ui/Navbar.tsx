@@ -7,7 +7,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import Popup from "./Popup";
 
 type NavbarProps = {
-  page: "landing" | "404" | "slots" | "saved" | "shared" | "mobile";
+  page: "landing" | "404" | "slots" | "saved" | "shared" | "mobile" | "placeholder";
 };
 
 export default function Navbar({ page }: NavbarProps) {
@@ -60,7 +60,7 @@ export default function Navbar({ page }: NavbarProps) {
           {/* Left Buttons */}
           <div style={{ display: "flex", gap: "1rem", alignItems: "center", }}>
 
-            {(page == "landing" || page == "404") && (
+            {(page == "landing" || page == "404" || page == "placeholder") && (
               <>
                 <CCButton />
                 <ZButton
@@ -98,15 +98,14 @@ export default function Navbar({ page }: NavbarProps) {
           {/* Right Buttons */}
           <div style={{ display: "flex", gap: "1rem", alignItems: "center", }}>
 
-            {(page === "landing" || page === "404" || page == "slots" || page == "shared") &&
-              (<ZButton
+            {(page === "landing" || page === "404" || page == "shared" || page === "slots") &&
+               (<ZButton
                 type="long"
                 text="Saved Timetables"
                 color="blue"
                 onClick={loggedin ? () => router.push("/saved") : () => setShowLoginPopupSaved(true)}
               />)
             }
-
             {(page === "saved") &&
               (<ZButton
                 type="long"
@@ -116,7 +115,7 @@ export default function Navbar({ page }: NavbarProps) {
               />)
             }
 
-            {(page === "landing" || page === "404" || page == "slots" || page == "shared" || page == "saved") &&
+            {(page === "landing" || page === "404" || page == "shared" || page == "saved" || page === "slots") &&
               (((!loggedin) && (
                 <ZButton
                   type="long"
