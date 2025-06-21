@@ -32,9 +32,9 @@ export default function Hero({page} : NavbarProps) {
         </div>
         {(page == "placeholder") && 
         <div className="text-lg sm:text-xl font-poppins font-semibold text-black mb-6">
-          We're almost ready!
+          We&apos;re almost ready!
           <br />
-          The website will be up as soon as the coming semester’s faculty list is available.
+          The website will be up as soon as the coming semester&apos;s faculty list is available.
         </div>}
         {(page == "normal") && 
         <ZButton
