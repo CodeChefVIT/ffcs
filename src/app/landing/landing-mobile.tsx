@@ -65,18 +65,12 @@ export default function View() {
           <div className="text-xl mb-8 font-poppins text-black">
             Use PC or Tablet For All Features
           </div>
-
-          <div className="text-lg sm:text-xl font-poppins font-semibold text-black mb-6">
-            We're almost ready!
-            <br />
-            The website will be up as soon as the coming semester’s faculty list is available.
-          </div>
-          {/* <ZButton
+          <ZButton
             type="regular"
             text="Saved Timetables"
             color="green"
             onClick={loggedin ? () => router.push("/saved") : () => setShowLoginPopupSaved(true)}
-          /> */}
+          />
         </div>
 
         <div className="h-6" />

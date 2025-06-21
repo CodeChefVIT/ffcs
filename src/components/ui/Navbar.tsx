@@ -98,7 +98,7 @@ export default function Navbar({ page }: NavbarProps) {
           {/* Right Buttons */}
           <div style={{ display: "flex", gap: "1rem", alignItems: "center", }}>
 
-            {(page === "landing" || page === "404" || page == "shared") &&
+            {(page === "landing" || page === "404" || page == "shared" || page === "slots") &&
                (<ZButton
                 type="long"
                 text="Saved Timetables"
@@ -106,7 +106,6 @@ export default function Navbar({ page }: NavbarProps) {
                 onClick={loggedin ? () => router.push("/saved") : () => setShowLoginPopupSaved(true)}
               />)
             }
-
             {(page === "saved") &&
               (<ZButton
                 type="long"
@@ -116,7 +115,7 @@ export default function Navbar({ page }: NavbarProps) {
               />)
             }
 
-            {(page === "landing" || page === "404" || page == "shared" || page == "saved") &&
+            {(page === "landing" || page === "404" || page == "shared" || page == "saved" || page === "slots") &&
               (((!loggedin) && (
                 <ZButton
                   type="long"

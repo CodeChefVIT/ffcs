@@ -106,11 +106,11 @@ export default function View() {
           unselectable="on"
         />
       </div>
-      <Navbar page="placeholder" />
+      <Navbar page="landing"/>
 
-      <Hero page="placeholder"/>
+      <Hero page="normal"/>
 
-      {/* <div className="w-4xl mx-4 pt-12" id="start">
+      <div className="w-4xl mx-4 pt-12" id="start">
         <FacultySelector onConfirm={facultySelectorOnConfirm} />
       </div>
 
@@ -141,7 +141,7 @@ export default function View() {
           draggable={false}
           unselectable="on"
         />
-      </div> */}
+      </div>
       
       <Accordion />
 
