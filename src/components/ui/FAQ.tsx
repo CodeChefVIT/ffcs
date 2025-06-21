@@ -1,7 +1,7 @@
 "use client;"
 
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
-import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
 
 type FAQProps = {
   question: string;
@@ -29,14 +29,14 @@ const FAQ = ({ question, answer }: FAQProps) => {
           <p className='font-small text-xs md:text-md lg:text-lg lg:font-semibold mr-6 text-[#438eff]'>
             {question}
           </p>
-          <FaChevronUp className='cursor-pointer text-2xl fill-[#438eff]'/>
+          <ChevronUp className='cursor-pointer text-2xl text-[#438eff]'/>
           </>
         ) : (
          <>
           <p className='font-small text-xs md:text-md lg:text-lg lg:font-semibold mr-6'>
             {question}
           </p>
-          <FaChevronDown className='cursor-pointer text-2xl'/>
+          <ChevronDown className='cursor-pointer text-2xl'/>
           </>
         )}
       </div>
