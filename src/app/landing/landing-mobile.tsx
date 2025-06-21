@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Footer from '@/components/ui/Footer';
+import Accordion from '@/components/ui/Accordion';
+
 import { ZButton } from '@/components/ui/Buttons';
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from 'next-auth/react';
@@ -64,15 +66,22 @@ export default function View() {
             Use PC or Tablet For All Features
           </div>
 
-          <ZButton
+          <div className="text-lg sm:text-xl font-poppins font-semibold text-black mb-6">
+            We're almost ready!
+            <br />
+            The website will be up as soon as the coming semester’s faculty list is available.
+          </div>
+          {/* <ZButton
             type="regular"
             text="Saved Timetables"
             color="green"
             onClick={loggedin ? () => router.push("/saved") : () => setShowLoginPopupSaved(true)}
-          />
+          /> */}
         </div>
 
         <div className="h-6" />
+        
+        <Accordion />
 
         <Footer type="mobile" />
       </div>

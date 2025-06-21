@@ -3,7 +3,11 @@
 import Image from "next/image";
 import { ZButton } from "../ui/Buttons";
 
-export default function Hero() {
+type NavbarProps = {
+  page: "placeholder" | "normal";
+};
+
+export default function Hero({page} : NavbarProps) {
   return (
     <div className="relative w-[1280px] h-[720px] sm:w-[640px] sm:h-[800px] md:w-[960px] md:h-[960px] lg:w-[1280px] lg:h-[720px] flex justify-center items-center font-pangolin text-black overflow-hidden">
       <div className="absolute left-1/2 top-36 w-full transform -translate-x-1/2 flex flex-col items-center text-center">
@@ -26,6 +30,13 @@ export default function Hero() {
         <div className="text-xl sm:text-2xl md:text-3xl mb-8">
           Create Your Ideal Timetable!
         </div>
+        {(page == "placeholder") && 
+        <div className="text-lg sm:text-xl font-poppins font-semibold text-black mb-6">
+          We're almost ready!
+          <br />
+          The website will be up as soon as the coming semester’s faculty list is available.
+        </div>}
+        {(page == "normal") && 
         <ZButton
           type="large"
           text="Start"
@@ -37,7 +48,7 @@ export default function Hero() {
               el.scrollIntoView({ behavior: "smooth" });
             }
           }}
-        />
+        />}
       </div>
 
      
