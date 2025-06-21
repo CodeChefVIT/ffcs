@@ -5,15 +5,15 @@ import Image from 'next/image';
 import Footer from '@/components/ui/Footer';
 import Accordion from '@/components/ui/Accordion';
 
-import { ZButton } from '@/components/ui/Buttons';
-import { useRouter } from "next/navigation";
-import { signIn, useSession } from 'next-auth/react';
+// import { ZButton } from '@/components/ui/Buttons';
+// import { useRouter } from "next/navigation";
+import { signIn } from 'next-auth/react';
 import { PopupLogin } from '@/components/ui/PopupMobile';
 
 export default function View() {
-  const router = useRouter();
-  const { data: session } = useSession();
-  const loggedin = !!session;
+  // const router = useRouter();
+  // const { data: session } = useSession();
+  // const loggedin = !!session;
   const [showLoginPopupSaved, setShowLoginPopupSaved] = useState(false);
 
   return (
@@ -67,9 +67,9 @@ export default function View() {
           </div>
 
           <div className="text-lg sm:text-xl font-poppins font-semibold text-black mb-6">
-            We're almost ready!
+            We&apos;re almost ready!
             <br />
-            The website will be up as soon as the coming semester’s faculty list is available.
+            The website will be up as soon as the coming semester&apos;s faculty list is available.
           </div>
           {/* <ZButton
             type="regular"
