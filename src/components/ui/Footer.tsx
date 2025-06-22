@@ -199,15 +199,6 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
             </li>
             <li>
               <a
-                href="https://ffcs.codechefvit.com/"
-                target="_blank"
-                rel="noopener"
-              >
-                FFCS-inator
-              </a>
-            </li>
-            <li>
-              <a
                 href="https://papers.codechefvit.com/"
                 target="_blank"
                 rel="noopener"
