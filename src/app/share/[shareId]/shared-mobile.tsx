@@ -11,6 +11,7 @@ import { useSession, signIn } from "next-auth/react";
 import { ZButton } from "@/components/ui/Buttons";
 import Popup from "@/components/ui/Popup";
 import AlertModal from "@/components/ui/AlertModal";
+import LoadingPopup from "@/components/ui/LoadingPopup";
 
 type dataProps = {
   code: string;
@@ -39,6 +40,7 @@ export default function SharedTimetablePageMobile() {
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMsg, setAlertMsg] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (!shareId) return;
@@ -86,6 +88,7 @@ export default function SharedTimetablePageMobile() {
       setShowLoginPopup(true);
       return;
     }
+    setIsSaving(true);
     try {
       const slots = data.map((item) => ({
         slot: item.slot,
@@ -106,6 +109,7 @@ export default function SharedTimetablePageMobile() {
     } catch {
       showAlert("Error saving timetable.");
     } finally {
+      setIsSaving(false);
       setShowSavePopup(false);
     }
   }
@@ -166,6 +170,7 @@ export default function SharedTimetablePageMobile() {
       )}
 
       <Footer type="mobile" />
+      {isSaving && <LoadingPopup isLoading={isSaving} />}
 
       {showSavePopup && (
         <Popup

@@ -10,6 +10,7 @@ import { useTimetable } from "@/lib/TimeTableContext";
 import Image from "next/image";
 import Popup from "@/components/ui/Popup";
 import AlertModal from "@/components/ui/AlertModal";
+import LoadingPopup from "@/components/ui/LoadingPopup";
 import { exportToExcel, getCurrentDateTime } from "@/lib/utils";
 
 export default function ViewTimeTable() {
@@ -23,6 +24,7 @@ export default function ViewTimeTable() {
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMsg, setAlertMsg] = useState("");
   const [sharePublic, setSharePublic] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   const { data: session } = useSession();
   const owner = session?.user?.email || null;
@@ -33,15 +35,17 @@ export default function ViewTimeTable() {
   const selectedData = allTimatables[selectedIndex] || [];
   const visibleIndexes = getVisibleIndexes(timetableNumber, timetableCount);
 
-  const convertedData = selectedData.map((item: {
-    courseCode?: string;
-    slotName?: string;
-    facultyName?: string;
-  }) => ({
-    code: item.courseCode || "00000000",
-    slot: item.slotName || "NIL",
-    name: item.facultyName || "Unknown",
-  }));
+  const convertedData = selectedData.map(
+    (item: {
+      courseCode?: string;
+      slotName?: string;
+      facultyName?: string;
+    }) => ({
+      code: item.courseCode || "00000000",
+      slot: item.slotName || "NIL",
+      name: item.facultyName || "Unknown",
+    })
+  );
 
   useEffect(() => {
     setSelectedIndex(0);
@@ -52,18 +56,20 @@ export default function ViewTimeTable() {
       showAlert("No timetable to save.");
       return;
     }
-
-    const slots = selectedData.map((item: {
-      slotName?: string;
-      courseCode?: string;
-      courseName?: string;
-      facultyName?: string;
-    }) => ({
-      slot: item.slotName || "NIL",
-      courseCode: item.courseCode || "00000000",
-      courseName: item.courseName || "Unknown",
-      facultyName: item.facultyName || "Unknown",
-    }));
+    setIsSaving(true);
+    const slots = selectedData.map(
+      (item: {
+        slotName?: string;
+        courseCode?: string;
+        courseName?: string;
+        facultyName?: string;
+      }) => ({
+        slot: item.slotName || "NIL",
+        courseCode: item.courseCode || "00000000",
+        courseName: item.courseName || "Unknown",
+        facultyName: item.facultyName || "Unknown",
+      })
+    );
 
     try {
       const res = await axios.post("/api/save-timetable", {
@@ -79,6 +85,8 @@ export default function ViewTimeTable() {
       }
     } catch {
       showAlert("Error saving timetable.");
+    } finally {
+      setIsSaving(false);
     }
   }
 
@@ -89,17 +97,19 @@ export default function ViewTimeTable() {
     }
 
     try {
-      const slots = selectedData.map((item: {
-        slotName?: string;
-        courseCode?: string;
-        courseName?: string;
-        facultyName?: string;
-      }) => ({
-        slot: item.slotName || "NIL",
-        courseCode: item.courseCode || "00000000",
-        courseName: item.courseName || "Unknown",
-        facultyName: item.facultyName || "Unknown",
-      }));
+      const slots = selectedData.map(
+        (item: {
+          slotName?: string;
+          courseCode?: string;
+          courseName?: string;
+          facultyName?: string;
+        }) => ({
+          slot: item.slotName || "NIL",
+          courseCode: item.courseCode || "00000000",
+          courseName: item.courseName || "Unknown",
+          facultyName: item.facultyName || "Unknown",
+        })
+      );
 
       const res = await axios.post("/api/save-timetable", {
         title: saveTTName || getCurrentDateTime(),
@@ -145,13 +155,13 @@ export default function ViewTimeTable() {
       label: "Report",
       color: "green",
       icon: "/icons/report.svg",
-      onClick: (() => {
+      onClick: () => {
         if (!selectedData || selectedData.length === 0) {
           showAlert("No Timetables generated");
           return;
         }
         exportToExcel();
-      }),
+      },
     },
     {
       label: "Save",
@@ -174,18 +184,19 @@ export default function ViewTimeTable() {
   }
 
   return (
-    <div id="timetable-view" className="w-screen mt-12 bg-[#A7D5D7] font-poppins flex items-center justify-center flex-col border-black border-3">
+    <div
+      id="timetable-view"
+      className="w-screen mt-12 bg-[#A7D5D7] font-poppins flex items-center justify-center flex-col border-black border-3"
+    >
       <div className="flex flex-col h-full p-12 overflow-hidden">
         <div className="flex flex-row items-end mb-4 ml-2">
           <div className="text-5xl font-pangolin">Your Timetables</div>
           <div className="text-xl ml-8 font-poppins pb-1">
-            {
-              (timetableCount == 0) ?
-                "(Empty List)" :
-                timetableCount == 1 ?
-                  "(1 timetable was generated)" :
-                  `(${timetableCount} timetables were generated)`
-            }
+            {timetableCount == 0
+              ? "(Empty List)"
+              : timetableCount == 1
+              ? "(1 timetable was generated)"
+              : `(${timetableCount} timetables were generated)`}
           </div>
         </div>
 
@@ -197,11 +208,21 @@ export default function ViewTimeTable() {
           <div className="w-auto">
             <div className=" w-full flex justify-center">
               <button
-                onClick={timetableNumber === 1 ? undefined : () => setSelectedIndex(0)}
+                onClick={
+                  timetableNumber === 1 ? undefined : () => setSelectedIndex(0)
+                }
                 disabled={timetableNumber === 1}
-                className={` ${timetableNumber === 1 ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'} font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-l-xl shadow-[4px_4px_0_0_black] ${timetableNumber === 1 ? 'cursor-normal' : 'cursor-pointer'} ${timetableNumber === 1 ? '' : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'}`}
+                className={` ${
+                  timetableNumber === 1 ? "bg-[#6CC0C5]" : "bg-[#75E5EA]"
+                } font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-l-xl shadow-[4px_4px_0_0_black] ${
+                  timetableNumber === 1 ? "cursor-normal" : "cursor-pointer"
+                } ${
+                  timetableNumber === 1
+                    ? ""
+                    : "active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
+                }`}
               >
-                <span style={{ pointerEvents: 'none', display: 'flex' }}>
+                <span style={{ pointerEvents: "none", display: "flex" }}>
                   <Image
                     src="/icons/start.svg"
                     alt=""
@@ -219,7 +240,19 @@ export default function ViewTimeTable() {
                   <button
                     key={index}
                     onClick={() => setSelectedIndex(index - 1)}
-                    className={` ${timetableNumber === index ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'} font-poppins border-2 border-black font-bold text-lg flex items-center justify-center text-center transition duration-100 h-12 w-12 shadow-[4px_4px_0_0_black] ${timetableNumber === index ? 'cursor-normal' : 'cursor-pointer'} ${timetableNumber === index ? '' : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'}`}
+                    className={` ${
+                      timetableNumber === index
+                        ? "bg-[#6CC0C5]"
+                        : "bg-[#75E5EA]"
+                    } font-poppins border-2 border-black font-bold text-lg flex items-center justify-center text-center transition duration-100 h-12 w-12 shadow-[4px_4px_0_0_black] ${
+                      timetableNumber === index
+                        ? "cursor-normal"
+                        : "cursor-pointer"
+                    } ${
+                      timetableNumber === index
+                        ? ""
+                        : "active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
+                    }`}
                   >
                     {index}
                   </button>
@@ -227,11 +260,27 @@ export default function ViewTimeTable() {
               </div>
 
               <button
-                onClick={timetableNumber === timetableCount ? undefined : () => setSelectedIndex(timetableCount - 1)}
+                onClick={
+                  timetableNumber === timetableCount
+                    ? undefined
+                    : () => setSelectedIndex(timetableCount - 1)
+                }
                 disabled={timetableNumber === timetableCount}
-                className={` ${timetableNumber === timetableCount ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'} font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-r-xl shadow-[4px_4px_0_0_black] ${timetableNumber === timetableCount ? 'cursor-normal' : 'cursor-pointer'} ${timetableNumber === timetableCount ? '' : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'}`}
+                className={` ${
+                  timetableNumber === timetableCount
+                    ? "bg-[#6CC0C5]"
+                    : "bg-[#75E5EA]"
+                } font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-r-xl shadow-[4px_4px_0_0_black] ${
+                  timetableNumber === timetableCount
+                    ? "cursor-normal"
+                    : "cursor-pointer"
+                } ${
+                  timetableNumber === timetableCount
+                    ? ""
+                    : "active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
+                }`}
               >
-                <span style={{ pointerEvents: 'none', display: 'flex' }}>
+                <span style={{ pointerEvents: "none", display: "flex" }}>
                   <Image
                     src="/icons/end.svg"
                     alt=""
@@ -301,8 +350,10 @@ export default function ViewTimeTable() {
         open={alertOpen}
         message={alertMsg}
         onClose={() => setAlertOpen(false)}
-        color='yellow'
+        color="yellow"
       />
+
+      {isSaving && <LoadingPopup isLoading={isSaving} />}
     </div>
   );
 }
