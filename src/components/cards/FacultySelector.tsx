@@ -85,7 +85,7 @@ function SelectField({
 
       {isOpen && (
         <ul className="absolute -left-7 -right-7 z-10 bg-white border-3 border-black rounded-xl mt-1 max-h-120 overflow-y-auto shadow-lg">
-          {options.map((option, index) => (
+          {[...options].sort().map((option, index) => (
             <li
               key={index}
               onClick={() => {

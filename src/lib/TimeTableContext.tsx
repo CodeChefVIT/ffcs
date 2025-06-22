@@ -3,13 +3,19 @@ import { timetableDisplayData } from "@/lib/type";
 
 type TimetableContextType = {
   timetableData: timetableDisplayData[][] | null;
-  setTimetableData: React.Dispatch<React.SetStateAction<timetableDisplayData[][] | null>>;
+  setTimetableData: React.Dispatch<
+    React.SetStateAction<timetableDisplayData[][] | null>
+  >;
 };
 
-const TimetableContext = createContext<TimetableContextType | undefined>(undefined);
+const TimetableContext = createContext<TimetableContextType | undefined>(
+  undefined
+);
 
 export const TimetableProvider = ({ children }: { children: ReactNode }) => {
-  const [timetableData, setTimetableData] = useState<timetableDisplayData[][] | null>(null);
+  const [timetableData, setTimetableData] = useState<
+    timetableDisplayData[][] | null
+  >(null);
 
   return (
     <TimetableContext.Provider value={{ timetableData, setTimetableData }}>
