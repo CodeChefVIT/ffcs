@@ -129,6 +129,8 @@ export default function View() {
           <ViewTimeTable />
         </div>
       </TimetableProvider>
+      <div className="mt-12" />
+      <Accordion />
 
       <div className="w-full max-w-5xl px-4 sm:px-6 lg:px-12 m-32">
         <Image
@@ -143,7 +145,7 @@ export default function View() {
         />
       </div>
       
-      <Accordion />
+      
 
       <Footer />
     </div>
