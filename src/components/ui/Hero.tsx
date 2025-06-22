@@ -9,7 +9,7 @@ type NavbarProps = {
 
 export default function Hero({ page }: NavbarProps) {
   return (
-    <div className="relative w-[1280px] h-[720px] sm:w-[640px] sm:h-[800px] md:w-[960px] md:h-[960px] lg:w-[1280px] lg:h-[720px] flex justify-center items-center font-pangolin text-black overflow-hidden">
+    <div className="relative w-[1280px] h-[720px] sm:w-[640px] sm:h-[800px] md:w-[960px] md:h-[960px] lg:w-[1280px] lg:h-[720px] flex justify-center items-center font-pangolin text-black overflow-hidden min-h-screen">
       <div className="absolute left-1/2 top-36 w-full transform -translate-x-1/2 flex flex-col items-center text-center">
         <Image
           src="/logo_ffcs.svg"
@@ -60,6 +60,8 @@ export default function Hero({ page }: NavbarProps) {
           alt="rice"
           fill
           className="object-contain"
+          draggable={false}
+          unselectable="on"
         />
       </div>
 
@@ -69,6 +71,8 @@ export default function Hero({ page }: NavbarProps) {
           alt="boom"
           fill
           className="object-contain"
+          draggable={false}
+          unselectable="on"
         />
       </div>
 
@@ -78,6 +82,8 @@ export default function Hero({ page }: NavbarProps) {
           alt="paper"
           fill
           className="object-contain"
+          draggable={false}
+          unselectable="on"
         />
       </div>
 
@@ -87,6 +93,8 @@ export default function Hero({ page }: NavbarProps) {
           alt="plane"
           fill
           className="object-contain"
+          draggable={false}
+          unselectable="on"
         />
       </div>
 
@@ -96,6 +104,8 @@ export default function Hero({ page }: NavbarProps) {
           alt="c"
           fill
           className="object-contain"
+          draggable={false}
+          unselectable="on"
         />
       </div>
 
@@ -105,6 +115,8 @@ export default function Hero({ page }: NavbarProps) {
           alt="h"
           fill
           className="object-contain"
+          draggable={false}
+          unselectable="on"
         />
       </div>
 
@@ -114,6 +126,8 @@ export default function Hero({ page }: NavbarProps) {
           alt="e"
           fill
           className="object-contain"
+          draggable={false}
+          unselectable="on"
         />
       </div>
 
@@ -123,6 +137,8 @@ export default function Hero({ page }: NavbarProps) {
           alt="f"
           fill
           className="object-contain"
+          draggable={false}
+          unselectable="on"
         />
       </div>
 
@@ -132,6 +148,8 @@ export default function Hero({ page }: NavbarProps) {
           alt="i"
           fill
           className="object-contain"
+          draggable={false}
+          unselectable="on"
         />
       </div>
 
@@ -141,6 +159,8 @@ export default function Hero({ page }: NavbarProps) {
           alt="m"
           fill
           className="object-contain"
+          draggable={false}
+          unselectable="on"
         />
       </div>
 
@@ -150,6 +170,8 @@ export default function Hero({ page }: NavbarProps) {
           alt="k"
           fill
           className="object-contain"
+          draggable={false}
+          unselectable="on"
         />
       </div>
     </div>
