@@ -167,7 +167,7 @@ export default function manifest(): MetadataRoute.Manifest {
         purpose: "any",
       },
       {
-        src: "/icons/icon-512x512.webp",
+        src: "/logo_ffcs/icon-512x512.webp",
         sizes: "512x512",
         type: "image/webp",
         purpose: "maskable",

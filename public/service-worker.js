@@ -22,6 +22,7 @@ const CORE_ASSETS = [
   "/logo_ffcs/icon-228x228.webp",
   "/logo_ffcs/icon-256x256.webp",
   "/logo_ffcs/icon-384x384.webp",
+  "/logo_ffcs/icon-512x512.webp",
   "/logo_ffcs.png",
   "/logo_ffcs.svg",
   "/logo_ffcs.webp",
