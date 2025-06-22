@@ -57,7 +57,6 @@ export default function manifest(): MetadataRoute.Manifest {
         type: "image/png",
       },
     ],
-
     icons: [
       {
         src: "/logo_ffcs/icon-16x16.webp",
@@ -211,7 +210,7 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
     protocol_handlers: [
       {
-        protocol: "web+example",
+        protocol: "web+ffcsinator",
         url: "/?q=%s",
       },
     ],
