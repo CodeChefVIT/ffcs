@@ -152,9 +152,9 @@ export default function ViewTimeTable() {
       onClick: withLoginCheck(handleShare),
     },
     {
-      label: "Report",
+      label: "Download",
       color: "green",
-      icon: "/icons/report.svg",
+      icon: "/icons/download.svg",
       onClick: () => {
         if (!selectedData || selectedData.length === 0) {
           showAlert("No Timetables generated");

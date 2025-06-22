@@ -182,7 +182,6 @@ export function getCurrentDateTime() {
   )} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
 }
 
-
 export const exportToExcel = async () => {
   const courses: fullCourseData[] = getGlobalCourses();
 
@@ -193,27 +192,36 @@ export const exportToExcel = async () => {
   const workbook = new ExcelJS.Workbook();
   const sheet = workbook.addWorksheet("Faculty Slots");
 
-  const header = ['Course Name', '', 'Faculty', '', 'Theory Slot', 'Lab Slot', '', 'Clashes with', '', ''];
+  const header = [
+    "Course Name",
+    "",
+    "Faculty",
+    "",
+    "Theory Slot",
+    "Lab Slot",
+    "",
+    "Clashes with",
+    "",
+    "",
+  ];
   const headerRow = sheet.addRow(header);
   headerRow.font = { bold: true, size: 14 };
   headerRow.fill = {
-    type: 'pattern',
-    pattern: 'solid',
-    fgColor: { argb: 'FFF0F0F0' },
+    type: "pattern",
+    pattern: "solid",
+    fgColor: { argb: "FFF0F0F0" },
   };
   headerRow.eachCell((cell) => {
     cell.border = {
-      bottom: { style: 'thick', color: { argb: 'FF000000' } }
+      bottom: { style: "thick", color: { argb: "FF000000" } },
     };
   });
   sheet.addRow([]); // Add an empty row for spacing
   sheet.addRow([]); // Add an empty row for spacing
 
-
-
   courses.forEach((course) => {
     const courseLabel =
-      course.courseType === 'both'
+      course.courseType === "both"
         ? `${course.courseName} & Lab`
         : course.courseName;
 
@@ -222,41 +230,50 @@ export const exportToExcel = async () => {
       slot.slotFaculties.forEach((faculty, idx2) => {
         const isFirstFacultyRow = idx2 === 0;
 
-        const theorySlot = (course.courseType === 'th' || course.courseType === 'both') ? slot.slotName : "";
-        const labSlot = (course.courseType === 'lab') ? slot.slotName : faculty.facultyLabSlot ?? "";
+        const theorySlot =
+          course.courseType === "th" || course.courseType === "both"
+            ? slot.slotName
+            : "";
+        const labSlot =
+          course.courseType === "lab"
+            ? slot.slotName
+            : faculty.facultyLabSlot ?? "";
 
         labSlot.split(", ").forEach((lab, idx3) => {
-
           const notes: string[] = [];
           const currentTheorySlot = theorySlot;
           const currentLabSlot = lab;
 
-          const clashKey = [...currentTheorySlot.split("+"), ...currentLabSlot.split("+")];
+          const clashKey = [
+            ...currentTheorySlot.split("+"),
+            ...currentLabSlot.split("+"),
+          ];
 
           const previousRows = sheet.getRows(2, sheet.rowCount - 1);
           if (previousRows) {
             previousRows.forEach((row) => {
-
               const rowTheorySlot = row.getCell(5).value?.toString() || "";
               const rowLabSlot = row.getCell(6).value?.toString() || "";
-              const clashCheck = [...rowTheorySlot.split("+"), ...rowLabSlot.split("+")]
+              const clashCheck = [
+                ...rowTheorySlot.split("+"),
+                ...rowLabSlot.split("+"),
+              ];
 
-              const occupiedSlots: string[] = []
+              const occupiedSlots: string[] = [];
               clashCheck.forEach((slot) => {
                 if (clashMap[slot]) {
                   occupiedSlots.push(...clashMap[slot]);
                 }
-              })
+              });
 
               if (
                 clashKey.some((slot) => occupiedSlots.includes(slot)) ||
-                clashKey.some((slot) => clashCheck.includes(slot)) &&
-                row.getCell(1).value?.toString() !== courseLabel
+                (clashKey.some((slot) => clashCheck.includes(slot)) &&
+                  row.getCell(1).value?.toString() !== courseLabel)
               ) {
                 const rowFaculty = row.getCell(3).value?.toString() || "";
-                notes.push(rowFaculty)
+                notes.push(rowFaculty);
               }
-
             });
           }
 
@@ -267,28 +284,29 @@ export const exportToExcel = async () => {
 
           const newRow = sheet.addRow([
             courseLabelValue,
-            '',
+            "",
             faculty.facultyName,
-            '',
+            "",
             theorySlot,
             lab,
-            '',
-            notesStr
+            "",
+            notesStr,
           ]);
 
-          if (isFirst) newRow.getCell(1).font = { color: { argb: 'FF000000' }, bold: true };
-          else newRow.getCell(1).font = { color: { argb: 'FFFFFFFF' } };
+          if (isFirst)
+            newRow.getCell(1).font = {
+              color: { argb: "FF000000" },
+              bold: true,
+            };
+          else newRow.getCell(1).font = { color: { argb: "FFFFFFFF" } };
 
-          newRow.getCell(8).font = { color: { argb: 'FFFF0000' }, bold: true };
-
-        })
+          newRow.getCell(8).font = { color: { argb: "FFFF0000" }, bold: true };
+        });
       });
     });
     sheet.addRow([]);
     sheet.addRow([]);
   });
-
-
 
   sheet.columns.forEach((col, idx) => {
     let max = 2;
@@ -299,13 +317,13 @@ export const exportToExcel = async () => {
     col.width = max;
     if (idx === 0) {
       col.border = {
-        right: { style: 'thick', color: { argb: 'FF000000' } }
+        right: { style: "thick", color: { argb: "FF000000" } },
       };
       // Set border for the first cell in the column if it exists and is a cell object
       const firstCellObj = sheet.getCell(1, idx + 1);
       firstCellObj.border = {
-        right: { style: 'thick', color: { argb: 'FF000000' } },
-        bottom: { style: 'thick', color: { argb: 'FF000000' } }
+        right: { style: "thick", color: { argb: "FF000000" } },
+        bottom: { style: "thick", color: { argb: "FF000000" } },
       };
       firstCellObj.font = { bold: true, size: 14 };
     }
@@ -317,9 +335,17 @@ export const exportToExcel = async () => {
   });
   const url = URL.createObjectURL(blob);
 
+  // Generate filename with current date and time
+  const now = new Date();
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  const dateTime = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(
+    now.getDate()
+  )}_${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
+  const filename = `timetable_${dateTime}.xlsx`;
+
   const a = document.createElement("a");
   a.href = url;
-  a.download = "report.xlsx";
+  a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
 };
