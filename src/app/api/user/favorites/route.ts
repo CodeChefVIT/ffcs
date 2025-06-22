@@ -4,26 +4,23 @@ import User from "@/models/user";
 
 import mongoose from "mongoose";
 
-
 // GET request to retrieve user's favourites using email
 export async function GET(req: NextRequest) {
   await dbConnect();
-//   const session: { user: { email: string } } | null = await getServerSession(
-//     authOptions
-//   );
+  //   const session: { user: { email: string } } | null = await getServerSession(
+  //     authOptions
+  //   );
 
-//   const email = session?.user.email;
+  //   const email = session?.user.email;
 
-  
-
-    const email = req.headers.get("email");
-    console.log("Received email:", email);
-    if (!email) {
-        return NextResponse.json(
-          { message: "Favourites retrieval failed: User not authenticated" },
-          { status: 401 }
-        );
-      }
+  const email = req.headers.get("email");
+  console.log("Received email:", email);
+  if (!email) {
+    return NextResponse.json(
+      { message: "Favourites retrieval failed: User not authenticated" },
+      { status: 401 }
+    );
+  }
 
   try {
     const user = await User.findOne({ email: email }, { favourites: 1 });
@@ -51,30 +48,30 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   await dbConnect();
   const body = await req.json();
-//   const session: { user: { email: string } } | null = await getServerSession(
-//     authOptions
-//   );
+  //   const session: { user: { email: string } } | null = await getServerSession(
+  //     authOptions
+  //   );
 
-//   const email = session?.user.email;
+  //   const email = session?.user.email;
 
-//   if (!email) {
-//     return NextResponse.json(
-//       { message: "Favourites retrieval failed: User not authenticated" },
-//       { status: 401 }
-//     );
-//   }
+  //   if (!email) {
+  //     return NextResponse.json(
+  //       { message: "Favourites retrieval failed: User not authenticated" },
+  //       { status: 401 }
+  //     );
+  //   }
 
-    const email = req.headers.get("email");
-    if (!email) {
-        return NextResponse.json(
-        { message: "Favourites retrieval failed: User not authenticated" },
-        { status: 401 }
-        );
-    }
+  const email = req.headers.get("email");
+  if (!email) {
+    return NextResponse.json(
+      { message: "Favourites retrieval failed: User not authenticated" },
+      { status: 401 }
+    );
+  }
 
-    if (!body.timetable) {
-        return NextResponse.json({ message: "No timetable data" }, { status: 401 });
-    }
+  if (!body.timetable) {
+    return NextResponse.json({ message: "No timetable data" }, { status: 401 });
+  }
 
   try {
     await User.updateOne(
@@ -109,21 +106,21 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   await dbConnect();
   const body = await req.json();
-//   const session: { user: { email: string } } | null = await getServerSession(
-//     authOptions
-//   );
+  //   const session: { user: { email: string } } | null = await getServerSession(
+  //     authOptions
+  //   );
 
-//   const email = session?.user.email;
+  //   const email = session?.user.email;
 
-//   if (!email) {
-//     return NextResponse.json(
-//       { message: "Favourites retrieval failed: User not authenticated" },
-//       { status: 401 }
-//     );
-//   }
+  //   if (!email) {
+  //     return NextResponse.json(
+  //       { message: "Favourites retrieval failed: User not authenticated" },
+  //       { status: 401 }
+  //     );
+  //   }
 
-const email = req.headers.get("email");
-if (!email) {
+  const email = req.headers.get("email");
+  if (!email) {
     return NextResponse.json(
       { message: "Favourites retrieval failed: User not authenticated" },
       { status: 401 }
@@ -148,9 +145,6 @@ if (!email) {
   }
 }
 
-
-
-
 export async function PUT(req: NextRequest) {
   await dbConnect();
 
@@ -158,7 +152,10 @@ export async function PUT(req: NextRequest) {
   const email = req.headers.get("email");
 
   if (!email || !id || !newName) {
-    return NextResponse.json({ error: "Missing required data" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Missing required data" },
+      { status: 400 }
+    );
   }
 
   try {
@@ -169,7 +166,10 @@ export async function PUT(req: NextRequest) {
     );
 
     if (!user) {
-      return NextResponse.json({ error: "Favourite not found or user not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Favourite not found or user not found" },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json({ success: true });

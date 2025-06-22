@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React from "react";
 import { ZButton } from "./Buttons";
@@ -7,7 +7,7 @@ type AlertModalProps = {
   open: boolean;
   message: string;
   onClose: () => void;
-  color: 'red' | 'yellow' | 'green' | 'blue' | 'purple' | string;
+  color: "red" | "yellow" | "green" | "blue" | "purple" | string;
 };
 
 const colorMap: Record<string, string[]> = {
@@ -18,7 +18,12 @@ const colorMap: Record<string, string[]> = {
   purple: ["#E4E9FC", "#94ACFF"],
 };
 
-export default function AlertModal({ open, message, onClose, color }: AlertModalProps) {
+export default function AlertModal({
+  open,
+  message,
+  onClose,
+  color,
+}: AlertModalProps) {
   if (!open) return null;
 
   const theme = colorMap[color] || ["#E4E9FC", "#94ACFF"];
@@ -27,7 +32,7 @@ export default function AlertModal({ open, message, onClose, color }: AlertModal
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50 p-4">
       <div
         style={{ backgroundColor: theme[0] }}
-        className="rounded-3xl shadow-[10px_10px_0_0_black] outline outline-4 outline-black
+        className="rounded-3xl shadow-[10px_10px_0_0_black] outline outline-black
                    flex flex-col items-stretch w-full max-w-screen-sm max-h-[85vh] overflow-hidden"
       >
         {/* Fixed Height Header */}
@@ -38,7 +43,10 @@ export default function AlertModal({ open, message, onClose, color }: AlertModal
           {/* Left control dots */}
           <div className="flex gap-2">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="w-4 h-4 rounded-full bg-black opacity-50" />
+              <div
+                key={i}
+                className="w-4 h-4 rounded-full bg-black opacity-50"
+              />
             ))}
           </div>
 

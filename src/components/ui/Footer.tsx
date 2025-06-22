@@ -133,7 +133,13 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
                 alt: "Instagram",
               },
             ].map(({ href, src, alt }) => (
-              <a href={href} key={src} target="_blank" rel="noopener">
+              <a
+                href={href}
+                key={src}
+                target="_blank"
+                rel="noopener"
+                title={`Follow us on ${alt}`}
+              >
                 <Image
                   src={src}
                   alt={alt}
@@ -221,7 +227,7 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
                 className="text-sm bg-transparent outline-none placeholder:text-black/50 w-full"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && handleSubscribe()}
+                onKeyDown={(e) => e.key === "Enter" && handleSubscribe()}
               />
             </div>
 

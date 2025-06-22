@@ -30,7 +30,11 @@ const ReplaceSlot = () => {
 
         {/* From Slot */}
         <div className="relative w-[45%] sm:w-[25%] lg:w-auto min-w-[100px]">
+          <label htmlFor="fromSlot" className="sr-only">
+            From Slot
+          </label>
           <select
+            id="fromSlot"
             value={fromSlot}
             onChange={(e) => setFromSlot(e.target.value)}
             className="w-full rounded-lg border-2 border-black px-6 py-2 pr-10 bg-white focus:outline-none text-[1.1rem] lg:text-[1.2rem] appearance-none"
@@ -51,7 +55,11 @@ const ReplaceSlot = () => {
 
         {/* To Slot */}
         <div className="relative w-[45%] sm:w-[25%] lg:w-auto min-w-[100px]">
+          <label htmlFor="toSlot" className="sr-only">
+            To Slot
+          </label>
           <select
+            id="toSlot"
             value={toSlot}
             onChange={(e) => setToSlot(e.target.value)}
             className="w-full rounded-lg border-2 border-black px-6 py-2 pr-10 bg-white focus:outline-none text-[1.1rem] lg:text-[1.2rem] appearance-none"
@@ -72,7 +80,11 @@ const ReplaceSlot = () => {
 
         {/* Faculty */}
         <div className="relative w-full sm:w-[30%] lg:w-auto min-w-[120px]">
+          <label htmlFor="faculty" className="sr-only">
+            Faculty
+          </label>
           <select
+            id="faculty"
             value={faculty}
             onChange={(e) => setFaculty(e.target.value)}
             className="w-full rounded-lg border-2 border-black px-6 py-2 pr-10 bg-white focus:outline-none text-[1.1rem] lg:text-[1.2rem] appearance-none"
