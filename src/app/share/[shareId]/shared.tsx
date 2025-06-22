@@ -162,7 +162,6 @@ export default function SharedTimetablePage() {
       </div>
 
       <Footer />
-      {/* Centered loading popup overlay */}
       {isSaving && <LoadingPopup isLoading={isSaving} />}
 
       {showSavePopup && (
