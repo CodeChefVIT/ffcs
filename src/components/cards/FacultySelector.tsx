@@ -85,7 +85,7 @@ function SelectField({
 
       {isOpen && (
         <ul className="absolute -left-7 -right-7 z-10 bg-white border-3 border-black rounded-xl mt-1 max-h-120 overflow-y-auto shadow-lg">
-          {[...options].sort().map((option, index) => (
+          {options.map((option, index) => (
             <li
               key={index}
               onClick={() => {
@@ -729,7 +729,7 @@ export default function FacultySelector({
               <SelectField
                 label="Slot"
                 value={selectedSlot}
-                options={slots}
+                options={[...slots].sort((a, b) => a.localeCompare(b))}
                 onChange={handleSlotChange}
                 renderOption={(option) => option}
                 aria-label="Select slot"
