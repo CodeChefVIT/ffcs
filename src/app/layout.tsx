@@ -1,4 +1,3 @@
-
 import { Pangolin, Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import SessionProviderWrapper from "./SessionProvider";
@@ -32,7 +31,7 @@ export const metadata = {
   icons: {
     icon: "/logo_ffcs.svg",
   },
-  manifest: "/manifest.json",
+  manifest: "/manifest.webmanifest",
 
   openGraph: {
     title: "FFCS-inator",
@@ -73,4 +72,3 @@ export default function RootLayout({
     </html>
   );
 }
-

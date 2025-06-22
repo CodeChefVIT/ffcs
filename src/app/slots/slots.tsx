@@ -18,10 +18,8 @@ export default function View() {
   const [selected, setSelected] = useState("Theory");
 
   const handleClick = (index: number) => {
-    if (active.includes(index))
-      setActive(
-        active.filter((i) => i !== index)
-      ); // Deselect if already active
+    if (active.includes(index)) setActive(active.filter((i) => i !== index));
+    // Deselect if already active
     else setActive([...active, index]); // Add this button as active
   };
 

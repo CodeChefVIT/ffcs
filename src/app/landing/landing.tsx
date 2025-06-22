@@ -16,16 +16,17 @@ import { fullCourseData } from "@/lib/type";
 const LOCAL_STORAGE_KEY = "selectedCourses";
 
 export default function View() {
-  const [selectedCourses, setSelectedCourses] = useState<fullCourseData[]>(() => {
-    if (typeof window === "undefined") return [];
-    try {
-      const saved = localStorage.getItem("selectedCourses");
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
+  const [selectedCourses, setSelectedCourses] = useState<fullCourseData[]>(
+    () => {
+      if (typeof window === "undefined") return [];
+      try {
+        const saved = localStorage.getItem("selectedCourses");
+        return saved ? JSON.parse(saved) : [];
+      } catch {
+        return [];
+      }
     }
-  });
-
+  );
 
   const facultySelectorOnConfirm = (newCourse: fullCourseData) => {
     setSelectedCourses((prevCourses) => {
@@ -77,8 +78,7 @@ export default function View() {
         // New course, add directly
         return [...prevCourses, newCourse];
       }
-    }
-    );
+    });
   };
 
   useEffect(() => {
@@ -90,7 +90,6 @@ export default function View() {
       console.error("Failed to save courses to localStorage", e);
     }
   }, [selectedCourses]);
-
 
   return (
     <div className="flex flex-col min-h-screen relative w-full items-center justify-center overflow-x-hidden">
@@ -106,9 +105,9 @@ export default function View() {
           unselectable="on"
         />
       </div>
-      <Navbar page="landing"/>
+      <Navbar page="landing" />
 
-      <Hero page="normal"/>
+      <Hero page="normal" />
 
       <div className="w-4xl mx-4 pt-12" id="start">
         <FacultySelector onConfirm={facultySelectorOnConfirm} />
@@ -144,8 +143,6 @@ export default function View() {
           unselectable="on"
         />
       </div>
-      
-      
 
       <Footer />
     </div>

@@ -9,7 +9,15 @@ type ButtonVariant = "regular" | "image" | "long" | "large";
 type ZButtonProps = {
   type: ButtonVariant;
   text?: string;
-  color: "red" | "yellow" | "green" | "green_2" | "blue" | "purple" | "gray" | string;
+  color:
+    | "red"
+    | "yellow"
+    | "green"
+    | "green_2"
+    | "blue"
+    | "purple"
+    | "gray"
+    | string;
   image?: string;
   onClick?: () => void;
   disabled?: boolean;
@@ -114,6 +122,7 @@ export function CCButton() {
       href="https://codechefvit.com"
       target="_blank"
       rel="noopener noreferrer"
+      title="CodeChef VIT"
       style={{ display: "flex", pointerEvents: "auto" }}
     >
       <Image
@@ -149,7 +158,9 @@ export function FFCSButton() {
 
 export function SlotToggleButton({ onToggle }: SlotToggleButtonProps) {
   const [selected, setSelected] = useState<string>(slotToggleOptions[0]);
-  const [sizes, setSizes] = useState<{ [key: string]: { width: number; left: number } }>({});
+  const [sizes, setSizes] = useState<{
+    [key: string]: { width: number; left: number };
+  }>({});
   const btnRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   useEffect(() => {
@@ -193,7 +204,9 @@ export function SlotToggleButton({ onToggle }: SlotToggleButtonProps) {
       `}
       onClick={() =>
         handleSelect(
-          selected === slotToggleOptions[0] ? slotToggleOptions[1] : slotToggleOptions[0]
+          selected === slotToggleOptions[0]
+            ? slotToggleOptions[1]
+            : slotToggleOptions[0]
         )
       }
       onMouseDown={() => setIsActive(true)}
@@ -302,7 +315,6 @@ export function BasicToggleButton({
     </div>
   );
 }
-
 
 export function GoogleLoginButton({ onClick }: { onClick?: () => void }) {
   const buttonColor = "#ffffff";

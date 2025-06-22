@@ -30,9 +30,9 @@ export default function ViewTimeTable() {
   const owner = session?.user?.email || null;
 
   const timetableNumber = selectedIndex + 1;
-  const allTimatables = timetableData ? timetableData : [];
-  const timetableCount = allTimatables.length;
-  const selectedData = allTimatables[selectedIndex] || [];
+  const allTimetables = timetableData ? timetableData : [];
+  const timetableCount = allTimetables.length;
+  const selectedData = allTimetables[selectedIndex] || [];
   const visibleIndexes = getVisibleIndexes(timetableNumber, timetableCount);
 
   const convertedData = selectedData.map(
@@ -212,6 +212,8 @@ export default function ViewTimeTable() {
                   timetableNumber === 1 ? undefined : () => setSelectedIndex(0)
                 }
                 disabled={timetableNumber === 1}
+                title="Go to first timetable"
+                aria-label="Go to first timetable"
                 className={` ${
                   timetableNumber === 1 ? "bg-[#6CC0C5]" : "bg-[#75E5EA]"
                 } font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-l-xl shadow-[4px_4px_0_0_black] ${
@@ -225,7 +227,7 @@ export default function ViewTimeTable() {
                 <span style={{ pointerEvents: "none", display: "flex" }}>
                   <Image
                     src="/icons/start.svg"
-                    alt=""
+                    alt="Go to first timetable"
                     width={32}
                     height={32}
                     unselectable="on"
@@ -240,6 +242,8 @@ export default function ViewTimeTable() {
                   <button
                     key={index}
                     onClick={() => setSelectedIndex(index - 1)}
+                    aria-label={`Go to timetable ${index}`}
+                    title={`Go to timetable ${index}`}
                     className={` ${
                       timetableNumber === index
                         ? "bg-[#6CC0C5]"
@@ -266,6 +270,8 @@ export default function ViewTimeTable() {
                     : () => setSelectedIndex(timetableCount - 1)
                 }
                 disabled={timetableNumber === timetableCount}
+                title="Go to last timetable"
+                aria-label="Go to last timetable"
                 className={` ${
                   timetableNumber === timetableCount
                     ? "bg-[#6CC0C5]"
@@ -283,7 +289,7 @@ export default function ViewTimeTable() {
                 <span style={{ pointerEvents: "none", display: "flex" }}>
                   <Image
                     src="/icons/end.svg"
-                    alt=""
+                    alt="Go to last timetable"
                     width={32}
                     height={32}
                     unselectable="on"
