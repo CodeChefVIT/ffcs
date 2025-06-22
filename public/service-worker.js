@@ -4,7 +4,6 @@ const CACHE_NAME = "FFCS-CodeChefVIT_v1";
 const CORE_ASSETS = [
   "/",
   "/offline",
-  "/manifest.json",
   "/logo_ffcs/icon-16x16.webp",
   "/logo_ffcs/icon-32x32.webp",
   "/logo_ffcs/icon-48x48.webp",
@@ -28,34 +27,34 @@ const CORE_ASSETS = [
   "/logo_ffcs.webp",
 ];
 
-function isPublicAsset(request) {
-  const url = new URL(request.url);
-  return (
-    url.origin === self.location.origin &&
-    (CORE_ASSETS.includes(url.pathname) ||
-      url.pathname.startsWith("/logo_ffcs/") ||
-      url.pathname.match(/\.(png|svg|webp|jpg|jpeg|gif|ico|json)$/))
+const limitCacheSize = (name, maxItems) => {
+  caches.open(name).then((cache) =>
+    cache.keys().then((keys) => {
+      if (keys.length > maxItems) {
+        cache.delete(keys[0]).then(() => limitCacheSize(name, maxItems));
+      }
+    })
   );
-}
+};
 
 self.addEventListener("install", (event) => {
-  console.log("[SW] Installing...");
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS))
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(CORE_ASSETS);
+    })
   );
   self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
-  console.log("[SW] Activating...");
   event.waitUntil(
     caches
       .keys()
-      .then((names) =>
+      .then((keys) =>
         Promise.all(
-          names
-            .filter((name) => name !== CACHE_NAME)
-            .map((name) => caches.delete(name))
+          keys
+            .filter((key) => key !== CACHE_NAME)
+            .map((key) => caches.delete(key))
         )
       )
   );
@@ -63,16 +62,40 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") return;
+  const { request } = event;
 
-  if (isPublicAsset(event.request)) {
-    event.respondWith(
-      caches.match(event.request).then((cachedResponse) => {
-        return (
-          cachedResponse ||
-          fetch(event.request).catch(() => caches.match("/offline"))
-        );
-      })
-    );
+  if (
+    request.method !== "GET" ||
+    request.url.includes("/api") ||
+    request.url.includes("chrome-extension") ||
+    request.url.startsWith("chrome")
+  ) {
+    return;
   }
+
+  event.respondWith(
+    caches.match(request).then((cacheRes) => {
+      return (
+        cacheRes ||
+        fetch(request)
+          .then((fetchRes) => {
+            return caches.open(CACHE_NAME).then((cache) => {
+              if (
+                request.url.startsWith(self.location.origin) &&
+                !request.url.includes("/api")
+              ) {
+                cache.put(request.url, fetchRes.clone());
+                limitCacheSize(CACHE_NAME, 50);
+              }
+              return fetchRes;
+            });
+          })
+          .catch(() => {
+            if (request.headers.get("accept")?.includes("text/html")) {
+              return caches.match("/offline");
+            }
+          })
+      );
+    })
+  );
 });
