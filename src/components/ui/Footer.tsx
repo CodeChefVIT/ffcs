@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { CCButton, ZButton } from "./Buttons";
 import AlertModal from "./AlertModal";
+import { useSession } from "next-auth/react";
 
 export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
+  const { data: session } = useSession();
   const [email, setEmail] = useState("");
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [alertState, setAlertState] = useState({
@@ -13,6 +15,12 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
     message: "",
     color: "",
   });
+
+  useEffect(() => {
+    if (session && session.user?.email) {
+      setEmail(session.user.email);
+    }
+  }, [session]);
 
   const handleSubscribe = async () => {
     if (!email || isSubscribing) return;
@@ -33,7 +41,7 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
           message: "Thanks for subscribing!",
           color: "green",
         });
-        setEmail("");
+        setEmail(session?.user?.email || "");
       } else {
         setAlertState({
           open: true,
