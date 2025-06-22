@@ -159,7 +159,7 @@ export default function ViewTimeTable() {
       icon: "/icons/save.svg",
       onClick: withLoginCheck(() => {
         if (!selectedData || selectedData.length === 0) {
-          showAlert("No timetable to share.");
+          showAlert("No timetable to save.");
           return;
         }
         setSaveTTName(getCurrentDateTime());
