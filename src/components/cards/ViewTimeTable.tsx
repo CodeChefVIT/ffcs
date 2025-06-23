@@ -11,13 +11,14 @@ import Image from "next/image";
 import Popup from "@/components/ui/Popup";
 import AlertModal from "@/components/ui/AlertModal";
 import LoadingPopup from "@/components/ui/LoadingPopup";
-import { exportToExcel, getCurrentDateTime } from "@/lib/utils";
+import { getCurrentDateTime } from "@/lib/utils";
 import { generateShareId } from "@/lib/shareIDgenerate";
 import { exportToPDF } from "@/lib/exportToPDF";
 import ComboBox from "../ui/ComboBox";
 
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
+  const originalTimetableData = timetableData ? timetableData : [];
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [showSharePopup, setShowSharePopup] = useState(false);
@@ -42,13 +43,12 @@ export default function ViewTimeTable() {
 
   const facultyList = Array.from(
     new Set(
-      allTimetables
+      originalTimetableData
         .flat()
         .map((item: { facultyName?: string }) => item.facultyName || "Unknown")
     )
   ).sort((a, b) => a.localeCompare(b));
 
-  console.log("facultyList", facultyList);
 
   const convertedData = selectedData.map(
     (item: {
@@ -97,7 +97,7 @@ export default function ViewTimeTable() {
       arr.push(record);
       localStorage.setItem(key, JSON.stringify(arr));
     } catch {
-      
+
     }
   }
 
@@ -132,56 +132,115 @@ export default function ViewTimeTable() {
       return false;
     }
   }
-async function handleSave(ttName?: string) {
-  if (!selectedData || selectedData.length === 0) {
-    showAlert("No timetable to save.");
-    return;
-  }
-
-  const slots = selectedData.map((item: {
-    slotName?: string;
-    courseCode?: string;
-    courseName?: string;
-    facultyName?: string;
-  }) => ({
-    slot: item.slotName || "NIL",
-    courseCode: item.courseCode || "00000000",
-    courseName: item.courseName || "Unknown",
-    facultyName: item.facultyName || "Unknown",
-  }));
-
-  const savedKey = 'savedTimetables';
-  const savedList = getSavedTimetables(savedKey);
-
-  for (const rec of savedList) {
-    if (slotsMatch(rec.slots, slots)) {
-      const existingId = rec.shareId || 'N/A';
-    
-      axios.get(`/api/shared-timetable/${existingId}`)
-        .then((res) => {
-          const json = res.data;
-          const title = json?.timetable?.title || "Backend se nahi aya bc";
-          showAlert(`You have already saved this timetable Named (${title}) with ShareID: ${existingId} `);
-        })
-        .catch(() => {
-          showAlert(`You have already saved this timetable with ID: ${existingId}`);
-        });
+  async function handleSave(ttName?: string) {
+    if (!selectedData || selectedData.length === 0) {
+      showAlert("No timetable to save.");
       return;
+    }
+
+    const slots = selectedData.map((item: {
+      slotName?: string;
+      courseCode?: string;
+      courseName?: string;
+      facultyName?: string;
+    }) => ({
+      slot: item.slotName || "NIL",
+      courseCode: item.courseCode || "00000000",
+      courseName: item.courseName || "Unknown",
+      facultyName: item.facultyName || "Unknown",
+    }));
+
+    const savedKey = 'savedTimetables';
+    const savedList = getSavedTimetables(savedKey);
+
+    for (const rec of savedList) {
+      if (slotsMatch(rec.slots, slots)) {
+        const existingId = rec.shareId || 'N/A';
+
+        axios.get(`/api/shared-timetable/${existingId}`)
+          .then((res) => {
+            const json = res.data;
+            const title = json?.timetable?.title || "Backend se nahi aya bc";
+            showAlert(`You have already saved this timetable Named (${title}) with ShareID: ${existingId} `);
+          })
+          .catch(() => {
+            showAlert(`You have already saved this timetable with ID: ${existingId}`);
+          });
+        return;
+      }
+    }
+
+    setIsSaving(true);
+    try {
+      const res = await axios.post("/api/save-timetable", {
+        title: ttName || `Saved Timetable`,
+        slots,
+        owner: owner,
+      });
+
+      if (res.data.success) {
+        const returnedId = res.data.timetable?.shareId;
+        if (returnedId) {
+          saveTimetableToLocal(savedKey, { slots, shareId: returnedId });
+
+          slots.forEach(s => {
+            saveCourseToLocal({
+              courseCode: s.courseCode,
+              courseName: s.courseName,
+            });
+          });
+
+          showAlert("Timetable saved!");
+        } else {
+          showAlert("Failed to save timetable.");
+        }
+      } else {
+        showAlert("Failed to save timetable.");
+      }
+    } catch {
+      showAlert("Error saving timetable.");
+    } finally {
+      setIsSaving(false);
     }
   }
 
-  setIsSaving(true);
-  try {
-    const res = await axios.post("/api/save-timetable", {
-      title: ttName || `Saved Timetable`,
-      slots,
-      owner: owner,
-    });
 
-    if (res.data.success) {
-      const returnedId = res.data.timetable?.shareId;
-      if (returnedId) {
-        saveTimetableToLocal(savedKey, { slots, shareId: returnedId });
+  async function handleShare() {
+    if (!selectedData || selectedData.length === 0) {
+      showAlert("No timetable to share.");
+      return;
+    }
+
+    const slots = selectedData.map((item) => ({
+      slot: item.slotName || "NIL",
+      courseCode: item.courseCode || "00000000",
+      courseName: item.courseName || "Unknown",
+      facultyName: item.facultyName || "Unknown",
+    }));
+
+    const savedKey = 'savedTimetables';
+    const savedList = getSavedTimetables(savedKey);
+
+    for (const rec of savedList) {
+      if (slotsMatch(rec.slots, slots)) {
+        const existingId = rec.shareId || 'N/A';
+        setShareLink(`${window.location.origin}/share/${existingId}`);
+        setShowSharePopup(true);
+        return;
+      }
+    }
+
+    try {
+      const res = await axios.post("/api/save-timetable", {
+        title: saveTTName || getCurrentDateTime(),
+        slots,
+        owner: owner,
+        isPublic: sharePublic,
+      });
+
+      const newShareId = res?.data?.timetable?.shareId;
+      if (newShareId) {
+        saveTimetableToLocal(savedKey, { slots, shareId: newShareId, isShared: true });
 
         slots.forEach(s => {
           saveCourseToLocal({
@@ -190,74 +249,15 @@ async function handleSave(ttName?: string) {
           });
         });
 
-        showAlert("Timetable saved!");
+        setShareLink(`${window.location.origin}/share/${newShareId}`);
+        setShowSharePopup(true);
       } else {
-        showAlert("Failed to save timetable.");
+        showAlert("Failed to generate share link.");
       }
-    } else {
-      showAlert("Failed to save timetable.");
-    }
-  } catch {
-    showAlert("Error saving timetable.");
-  } finally {
-    setIsSaving(false);
-  }
-}
-
-
-  async function handleShare() {
-  if (!selectedData || selectedData.length === 0) {
-    showAlert("No timetable to share.");
-    return;
-  }
-
-  const slots = selectedData.map((item) => ({
-    slot: item.slotName || "NIL",
-    courseCode: item.courseCode || "00000000",
-    courseName: item.courseName || "Unknown",
-    facultyName: item.facultyName || "Unknown",
-  }));
-
-  const savedKey = 'savedTimetables';
-  const savedList = getSavedTimetables(savedKey);
-
-  for (const rec of savedList) {
-    if (slotsMatch(rec.slots, slots)) {
-      const existingId = rec.shareId || 'N/A';
-      setShareLink(`${window.location.origin}/share/${existingId}`);
-      setShowSharePopup(true);
-      return;
+    } catch {
+      showAlert("Error sharing timetable.");
     }
   }
-
-  try {
-    const res = await axios.post("/api/save-timetable", {
-      title: saveTTName || getCurrentDateTime(),
-      slots,
-      owner: owner,
-      isPublic: sharePublic,
-    });
-
-    const newShareId = res?.data?.timetable?.shareId;
-    if (newShareId) {
-      saveTimetableToLocal(savedKey, { slots, shareId: newShareId, isShared: true });
-
-      slots.forEach(s => {
-        saveCourseToLocal({
-          courseCode: s.courseCode,
-          courseName: s.courseName,
-        });
-      });
-
-      setShareLink(`${window.location.origin}/share/${newShareId}`);
-      setShowSharePopup(true);
-    } else {
-      showAlert("Failed to generate share link.");
-    }
-  } catch {
-    showAlert("Error sharing timetable.");
-  }
-}
 
 
 
@@ -335,7 +335,7 @@ async function handleSave(ttName?: string) {
             <ComboBox
               label="Filter by Faculty"
               value={filterFaculty}
-              options={["a", "b", "c"]}
+              options={facultyList}
               onChange={setFilterFaculty}
             />
           </div>
