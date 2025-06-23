@@ -224,6 +224,12 @@ export default function ViewTimeTable() {
     for (const rec of savedList) {
       if (slotsMatch(rec.slots, slots)) {
         const existingId = rec.shareId || 'N/A';
+         axios.get(`/api/shared-timetable/${existingId}`)
+          .then((res) => {
+            const json = res.data;
+            const title = json?.timetable?.title || "Backend se nahi aya bc";
+         showAlert(`You have already saved this timetable with Name:- ${title} . Please check visiblity settings on Saved Timetables page after copying link`);
+})
         setShareLink(`${window.location.origin}/share/${existingId}`);
         setShowSharePopup(true);
         return;
@@ -235,7 +241,7 @@ export default function ViewTimeTable() {
         title: saveTTName || getCurrentDateTime(),
         slots,
         owner: owner,
-        isPublic: sharePublic,
+        isPublic: true,
       });
 
       const newShareId = res?.data?.timetable?.shareId;
@@ -271,9 +277,7 @@ export default function ViewTimeTable() {
     };
   }
 
-  function handleShareToggle(state: "on" | "off") {
-    setSharePublic(state === "on");
-  }
+ 
 
   const actionButtons = [
     {
@@ -454,8 +458,6 @@ export default function ViewTimeTable() {
           type="share_tt"
           dataBody={shareLink}
           closeLink={() => setShowSharePopup(false)}
-          shareEnabledDefault={sharePublic}
-          shareSwitchAction={handleShareToggle}
         />
       )}
 

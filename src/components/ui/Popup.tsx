@@ -274,27 +274,6 @@ export default function Popup({
                   />
                 </div>
               )}
-
-              <div className="flex flex-row items-center justify-center gap-4 mt-4 mb-4">
-                <div
-                  className={`
-                  ${shareState === "on" ? "text-[#0E595D]" : "text-[#661800]"}
-                  text-xl
-                  font-semibold
-                  mt-2 mb-2
-                `}
-                >
-                  Sharing Link is {shareState === "on" ? "Public" : "Private"}
-                </div>
-                <BasicToggleButton
-                  defaultState={shareState}
-                  onToggle={(state: "on" | "off") => {
-                    setShareState(state);
-                    if (shareSwitchAction) shareSwitchAction(state);
-                    else alert("No action provided for share switch toggle.");
-                  }}
-                />
-              </div>
             </div>
           )}
 
