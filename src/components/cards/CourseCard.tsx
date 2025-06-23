@@ -38,6 +38,12 @@ export default function CourseCard({
     color: "red",
   });
 
+  const handleDeleteAllCourses = () => {
+  onUpdate([]);
+  setGlobalCourses([]);
+  setTimetableData([]);
+  };
+
   const resetDragRefs = () => {
     draggedItemIndex.current = null;
     dragOverItemIndex.current = null;
@@ -316,8 +322,21 @@ export default function CourseCard({
 
         <div className="flex justify-between items-center mt-8 mb-4 relative w-full">
 
+          
+    
+
           {/* Right-aligned Toggle */}
-          <div className="mr-auto flex items-center">
+          <div className="mr-auto flex items-center gap-2">
+            
+            {/* Info Button */}
+            <div className="mr-2">
+            <ZButton
+              image="/icons/qmark.svg"
+              color="yellow"
+              type="small"
+            />
+            </div>
+
             <span className="text-md text-black font-semibold mr-2">
               All Subjects Mode
             </span>
@@ -345,6 +364,18 @@ export default function CourseCard({
               onClick={handleGenerate}
             />
           </div>
+
+          {/* Right-aligned ZButton (Delete all)*/}
+          <div className="ml-auto flex items-center">
+            <ZButton
+            type="regular"
+            text="Delete all"
+            image="/icons/trash.svg"
+            color="red"
+            onClick={handleDeleteAllCourses}
+            />
+          </div>
+
 
         </div>
 
