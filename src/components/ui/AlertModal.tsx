@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, {useEffect} from "react";
 import { ZButton } from "./Buttons";
 
 type AlertModalProps = {
@@ -24,6 +24,20 @@ export default function AlertModal({
   onClose,
   color,
 }: AlertModalProps) {
+
+  useEffect(() => {
+  if (open) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "";
+  }
+
+  return () => {
+    document.body.style.overflow = "";
+  };
+}, [open]);
+
+
   if (!open) return null;
 
   const theme = colorMap[color] || ["#E4E9FC", "#94ACFF"];
