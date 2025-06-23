@@ -32,6 +32,11 @@ export default function CourseCard({
 
   const [allSubjectsMode, setAllSubjectsMode] = useState<"on" | "off">("on");
 
+  const [showInfo, setShowInfo] = useState(false);
+  const [deleteAllPopupOpen, setDeleteAllPopupOpen] = useState(false);
+
+
+
   const [alert, setAlert] = useState({
     open: false,
     message: "",
@@ -154,6 +159,14 @@ export default function CourseCard({
         color={alert.color}
         onClose={() => setAlert({ ...alert, open: false })}
       />
+
+      <AlertModal
+        open={showInfo}
+        message="When All Subjects Mode is ON, all selected courses are considered while generating every timetable. When OFF, courses are prioritized based on their order, and alternate timetables are generated with varying inclusion of lower-priority courses."
+        color="yellow"
+        onClose={() => setShowInfo(false)}
+      />
+
       <div
         id="course-card"
         className="bg-[#A7D5D7] mt-4 font-poppins rounded-4xl border-[3px] border-black p-6 shadow-[4px_4px_0_0_black] text-black font-medium px-12 mb-16"
@@ -334,6 +347,7 @@ export default function CourseCard({
               image="/icons/qmark.svg"
               color="yellow"
               type="small"
+              onClick={() => setShowInfo(true)}
             />
             </div>
 
@@ -372,7 +386,7 @@ export default function CourseCard({
             text="Delete all"
             image="/icons/trash.svg"
             color="red"
-            onClick={handleDeleteAllCourses}
+            onClick={() => setDeleteAllPopupOpen(true)}
             />
           </div>
 
@@ -405,6 +419,19 @@ export default function CourseCard({
           }}
         />
       )}
+
+    {deleteAllPopupOpen && (
+      <Popup
+        type="rem_allcourse"
+        dataBody=""
+        action={() => {
+          handleDeleteAllCourses();
+          setDeleteAllPopupOpen(false);
+        }}
+        closeLink={() => setDeleteAllPopupOpen(false)}
+      />
+    )}
+
     </div>
   );
 }
