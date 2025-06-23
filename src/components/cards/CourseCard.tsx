@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useTimetable } from "../../lib/TimeTableContext";
 import Popup from "../ui/Popup";
 import { BasicToggleButton, ZButton } from "../ui/Buttons";
@@ -34,6 +34,19 @@ export default function CourseCard({
 
   const [showInfo, setShowInfo] = useState(false);
   const [deleteAllPopupOpen, setDeleteAllPopupOpen] = useState(false);
+  const [isLargeScreen, setIsLargeScreen] = useState(true);
+
+useEffect(() => {
+  const handleResize = () => {
+    setIsLargeScreen(window.innerWidth >= 1024);
+  };
+
+  handleResize(); // Initial check
+  window.addEventListener("resize", handleResize);
+
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
 
 
 
@@ -341,65 +354,110 @@ export default function CourseCard({
           ))}
         </div>
 
-        <div className="flex justify-between items-center mt-8 mb-4 relative w-full">
+  {isLargeScreen ? (
+  // ---- Desktop View (original code) ----
+  <div className="flex justify-between items-center mt-8 mb-4 relative w-full">
+    {/* Toggle */}
+    <div className="mr-auto flex items-center gap-2">
+      <div className="mr-2">
+        <ZButton
+          image="/icons/qmark.svg"
+          color="yellow"
+          type="small"
+          onClick={() => setShowInfo(true)}
+        />
+      </div>
+      <span className="text-md text-black font-semibold mr-2">
+        All Subjects Mode
+      </span>
+      <BasicToggleButton
+        defaultState={allSubjectsMode}
+        onToggle={() =>
+          setAllSubjectsMode((prev) => (prev === "on" ? "off" : "on"))
+        }
+      />
+      <span className="text-md text-black font-semibold ml-4">
+        {allSubjectsMode === "on" ? "ON" : "OFF"}
+      </span>
+    </div>
 
-          
-    
+    {/* Centered Generate */}
+    <div className="absolute left-1/2 -translate-x-1/2">
+      <ZButton
+        type="large"
+        text={loading ? "Generating..." : "Generate"}
+        image="/icons/thunder.svg"
+        color="blue"
+        disabled={loading}
+        onClick={handleGenerate}
+      />
+    </div>
 
-          {/* Right-aligned Toggle */}
-          <div className="mr-auto flex items-center gap-2">
-            
-            {/* Info Button */}
-            <div className="mr-2">
-            <ZButton
-              image="/icons/qmark.svg"
-              color="yellow"
-              type="small"
-              onClick={() => setShowInfo(true)}
-            />
-            </div>
-
-            <span className="text-md text-black font-semibold mr-2">
-              All Subjects Mode
-            </span>
-            <BasicToggleButton
-              defaultState={allSubjectsMode}
-              onToggle={() => {
-                setAllSubjectsMode((prev) =>
-                  prev === "on" ? "off" : "on"
-                );
-              }}
-            />
-            <span className="text-md text-black font-semibold ml-4">
-              {allSubjectsMode === "on" ? "ON" : "OFF"}
-            </span>
-          </div>
-
-          {/* Centered ZButton */}
-          <div className="absolute left-1/2 -translate-x-1/2">
-            <ZButton
-              type="large"
-              text={loading ? "Generating..." : "Generate"}
-              image="/icons/thunder.svg"
-              color="blue"
-              disabled={loading}
-              onClick={handleGenerate}
-            />
-          </div>
-
-          {/* Right-aligned ZButton (Delete all)*/}
-          <div className="ml-auto flex items-center">
-            <ZButton
-            type="regular"
-            text="Delete all"
-            image="/icons/trash.svg"
-            color="red"
-            onClick={() => setDeleteAllPopupOpen(true)}
-            />
-          </div>
-
-
+    {/* Delete All Button */}
+    <div className="ml-auto flex items-center">
+      <ZButton
+        type="regular"
+        text="Delete all"
+        image="/icons/trash.svg"
+        color="red"
+        onClick={() => setDeleteAllPopupOpen(true)}
+      />
+    </div>
+  </div>
+) : (
+  // ---- Mobile / Tablet View ----
+  <div className="mt-8 mb-4 w-full flex flex-col gap-4">
+    {/* Top Row: Toggle + Delete All */}
+    <div className="w-full flex justify-between items-center">
+      <div className="flex items-center gap-2">
+        <div className="mr-2">
+          <ZButton
+            image="/icons/qmark.svg"
+            color="yellow"
+            type="small"
+            onClick={() => setShowInfo(true)}
+          />
         </div>
+        <span className="text-md text-black font-semibold mr-2">
+          All Subjects Mode
+        </span>
+        <BasicToggleButton
+          defaultState={allSubjectsMode}
+          onToggle={() =>
+            setAllSubjectsMode((prev) => (prev === "on" ? "off" : "on"))
+          }
+        />
+        <span className="text-md text-black font-semibold ml-4">
+          {allSubjectsMode === "on" ? "ON" : "OFF"}
+        </span>
+      </div>
+
+      <div className="flex items-center">
+        <ZButton
+          type="regular"
+          text="Delete all"
+          image="/icons/trash.svg"
+          color="red"
+          onClick={() => setDeleteAllPopupOpen(true)}
+        />
+      </div>
+    </div>
+
+    {/* Bottom Row: Centered Generate */}
+    <div className="flex justify-center w-full py-4">
+      <ZButton
+        type="large"
+        text={loading ? "Generating..." : "Generate"}
+        image="/icons/thunder.svg"
+        color="blue"
+        disabled={loading}
+        onClick={handleGenerate}
+      />
+    </div>
+  </div>
+)}
+
+
 
         {error && (
           <div
