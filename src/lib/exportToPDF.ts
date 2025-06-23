@@ -94,11 +94,15 @@ export const exportToPDF = async () => {
       fontSize: 8,
       textColor: [0, 0, 0],
       cellPadding: 2,
+      lineWidth: 0.2, // Add border width
+      lineColor: [0, 0, 0], // Add border color (black)
     },
     headStyles: {
       fillColor: [166, 213, 215],
       textColor: [0, 0, 0],
       fontStyle: "bold",
+      lineWidth: 0.4, // Thicker border for header
+      lineColor: [0, 0, 0],
     },
     columnStyles: {
       0: { cellWidth: 60 },
