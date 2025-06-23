@@ -114,64 +114,79 @@ export default function ViewTimeTable() {
       return false;
     }
   }
+async function handleSave(ttName?: string) {
+  if (!selectedData || selectedData.length === 0) {
+    showAlert("No timetable to save.");
+    return;
+  }
 
-  async function handleSave(ttName?: string) {
-    if (!selectedData || selectedData.length === 0) {
-      showAlert("No timetable to save.");
+  const slots = selectedData.map((item: {
+    slotName?: string;
+    courseCode?: string;
+    courseName?: string;
+    facultyName?: string;
+  }) => ({
+    slot: item.slotName || "NIL",
+    courseCode: item.courseCode || "00000000",
+    courseName: item.courseName || "Unknown",
+    facultyName: item.facultyName || "Unknown",
+  }));
+
+  const savedKey = 'savedTimetables';
+  const savedList = getSavedTimetables(savedKey);
+
+  for (const rec of savedList) {
+    if (slotsMatch(rec.slots, slots)) {
+      const existingId = rec.shareId || 'N/A';
+
+      axios.get(`/api/shared-timetable/${existingId}`)
+        .then((res) => {
+          const json = res.data;
+          const title = json?.timetable?.title || "Unknown Title";
+          showAlert(`You have already saved this timetable with ID: ${existingId} (${title})`);
+        })
+        .catch(() => {
+          showAlert(`You have already saved this timetable with ID: ${existingId}`);
+        });
+
       return;
     }
-    const slots = selectedData.map(
-      (item: {
-        slotName?: string;
-        courseCode?: string;
-        courseName?: string;
-        facultyName?: string;
-      }) => ({
-        slot: item.slotName || "NIL",
-        courseCode: item.courseCode || "00000000",
-        courseName: item.courseName || "Unknown",
-        facultyName: item.facultyName || "Unknown",
-      })
-    );
-    // local check 
-    const savedKey = 'savedTimetables';
-    const savedList = getSavedTimetables(savedKey);
-    for (const rec of savedList) {
-      if (slotsMatch(rec.slots, slots)) {
-        const existingId = rec.shareId || 'N/A';
-        showAlert(`You have already saved this timetable with ID: ${existingId}`);
-        return;
-      }
-    }
+  }
 
-    setIsSaving(true);
-    try {
-      const res = await axios.post("/api/save-timetable", {
-        title: ttName || `Saved Timetable`,
-        slots,
-        owner: owner,
-      });
+  setIsSaving(true);
+  try {
+    const res = await axios.post("/api/save-timetable", {
+      title: ttName || `Saved Timetable`,
+      slots,
+      owner: owner,
+    });
 
-      if (res.data.success) {
-        const returnedId = res.data.timetable?.shareId;
-        if (returnedId) {
-          
-          saveTimetableToLocal(savedKey, { slots, shareId: returnedId });
-        
-          slots.forEach(s => {
-            saveCourseToLocal({ courseCode: s.courseCode, courseName: s.courseName });
+    if (res.data.success) {
+      const returnedId = res.data.timetable?.shareId;
+      if (returnedId) {
+        saveTimetableToLocal(savedKey, { slots, shareId: returnedId });
+
+        slots.forEach(s => {
+          saveCourseToLocal({
+            courseCode: s.courseCode,
+            courseName: s.courseName,
           });
-        }
+        });
+
         showAlert("Timetable saved!");
       } else {
         showAlert("Failed to save timetable.");
       }
-    } catch {
-      showAlert("Error saving timetable.");
-    } finally {
-      setIsSaving(false);
+    } else {
+      showAlert("Failed to save timetable.");
     }
+  } catch {
+    showAlert("Error saving timetable.");
+  } finally {
+    setIsSaving(false);
   }
+}
+
 
   async function handleShare() {
   if (!selectedData || selectedData.length === 0) {
