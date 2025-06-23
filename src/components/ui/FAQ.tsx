@@ -22,21 +22,21 @@ const FAQ = ({ question, answer }: FAQProps) => {
   }, [isOpen]);
 
   return (
-    <div className="w-72 sm:w-128 md:w-196 lg:w-5xl border-b flex flex-col justify-start pt-4 pb-4 rounded-xl border border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-4 bg-white">
+    <div className="w-72 sm:w-128 md:w-196 lg:w-5xl border-b flex flex-col justify-start pt-4 pb-4 rounded-3xl border-3 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-4 bg-white">
       <div
-        className="group flex flex-row justify-between items-center w-full cursor-pointer"
+        className="group flex flex-row justify-between items-center w-full cursor-pointer font-poppins"
         onClick={() => setIsOpen((prev) => !prev)}
       >
         {isOpen ? (
           <>
-            <p className="font-small text-xs md:text-md lg:text-lg lg:font-semibold mr-6 text-[#438eff]">
+            <p className="font-poppins text-xs md:text-md lg:text-lg lg:font-semibold mr-6 text-[#438eff]">
               {question}
             </p>
             <ChevronUp className="cursor-pointer text-2xl text-[#438eff]" />
           </>
         ) : (
           <>
-            <p className="font-small text-xs md:text-md lg:text-lg lg:font-semibold mr-6">
+            <p className="font-poppins text-xs md:text-md lg:text-lg lg:font-semibold mr-6">
               {question}
             </p>
             <ChevronDown className="cursor-pointer text-2xl" />
@@ -48,7 +48,7 @@ const FAQ = ({ question, answer }: FAQProps) => {
         style={{ maxHeight }}
       >
         <div ref={contentRef}>
-          <p className="font-small text-xs md:text-md lg:text-lg lg:font-semibold mr-6 pt-4">
+          <p className="font-poppins text-xs md:text-md lg:text-lg lg:font-semibold mr-6 pt-4">
             {answer}
           </p>
         </div>

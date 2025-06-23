@@ -11,10 +11,14 @@ import Image from "next/image";
 import Popup from "@/components/ui/Popup";
 import AlertModal from "@/components/ui/AlertModal";
 import LoadingPopup from "@/components/ui/LoadingPopup";
-import { exportToExcel, getCurrentDateTime } from "@/lib/utils";
+import { getCurrentDateTime } from "@/lib/utils";
+import { generateShareId } from "@/lib/shareIDgenerate";
+import { exportToPDF } from "@/lib/exportToPDF";
+import ComboBox from "../ui/ComboBox";
 
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
+  const originalTimetableData = timetableData ? timetableData : [];
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [showSharePopup, setShowSharePopup] = useState(false);
@@ -26,14 +30,25 @@ export default function ViewTimeTable() {
   const [sharePublic, setSharePublic] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
+  const [filterFaculty, setFilterFaculty] = useState("");
+
   const { data: session } = useSession();
   const owner = session?.user?.email || null;
 
   const timetableNumber = selectedIndex + 1;
-  const allTimetables = timetableData ? timetableData : [];
+  var allTimetables = timetableData ? timetableData : [];
   const timetableCount = allTimetables.length;
   const selectedData = allTimetables[selectedIndex] || [];
   const visibleIndexes = getVisibleIndexes(timetableNumber, timetableCount);
+
+  const facultyList = Array.from(
+    new Set(
+      originalTimetableData
+        .flat()
+        .map((item: { facultyName?: string }) => item.facultyName || "Unknown")
+    )
+  ).sort((a, b) => a.localeCompare(b));
+
 
   const convertedData = selectedData.map(
     (item: {
@@ -51,26 +66,111 @@ export default function ViewTimeTable() {
     setSelectedIndex(0);
   }, [timetableData]);
 
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [filterFaculty]);
+
+  useEffect(() => {
+    if (!timetableData || timetableData.length === 0) return;
+
+    timetableData.forEach((timetable, index) => {
+      if (!(timetable as any).shareId) {
+        (timetable as any).shareId = generateShareId();
+      }
+    });
+  }, [timetableData]);
+
+  function getSavedTimetables(key: string) {
+    if (typeof window === 'undefined') return [];
+    try {
+      const str = localStorage.getItem(key);
+      return str ? JSON.parse(str) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveTimetableToLocal(key: string, record: any) {
+    if (typeof window === 'undefined') return;
+    try {
+      const arr = getSavedTimetables(key);
+      arr.push(record);
+      localStorage.setItem(key, JSON.stringify(arr));
+    } catch {
+
+    }
+  }
+
+  function getSavedCourses() {
+    if (typeof window === 'undefined') return [];
+    try {
+      const str = localStorage.getItem('savedCourses');
+      return str ? JSON.parse(str) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveCourseToLocal(course: { courseCode: string; courseName: string }) {
+    if (typeof window === 'undefined') return;
+    try {
+      const arr = getSavedCourses();
+      const exists = arr.some((c: any) => c.courseCode === course.courseCode);
+      if (!exists) {
+        arr.push(course);
+        localStorage.setItem('savedCourses', JSON.stringify(arr));
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  function slotsMatch(a: any[], b: any[]) {
+    try {
+      return JSON.stringify(a) === JSON.stringify(b);
+    } catch {
+      return false;
+    }
+  }
   async function handleSave(ttName?: string) {
     if (!selectedData || selectedData.length === 0) {
       showAlert("No timetable to save.");
       return;
     }
-    setIsSaving(true);
-    const slots = selectedData.map(
-      (item: {
-        slotName?: string;
-        courseCode?: string;
-        courseName?: string;
-        facultyName?: string;
-      }) => ({
-        slot: item.slotName || "NIL",
-        courseCode: item.courseCode || "00000000",
-        courseName: item.courseName || "Unknown",
-        facultyName: item.facultyName || "Unknown",
-      })
-    );
 
+    const slots = selectedData.map((item: {
+      slotName?: string;
+      courseCode?: string;
+      courseName?: string;
+      facultyName?: string;
+    }) => ({
+      slot: item.slotName || "NIL",
+      courseCode: item.courseCode || "00000000",
+      courseName: item.courseName || "Unknown",
+      facultyName: item.facultyName || "Unknown",
+    }));
+
+    const savedKey = 'savedTimetables';
+    const savedList = getSavedTimetables(savedKey);
+
+    for (const rec of savedList) {
+      if (slotsMatch(rec.slots, slots)) {
+        const existingId = rec.shareId || 'N/A';
+
+        axios.get(`/api/shared-timetable/${existingId}`)
+          .then((res) => {
+            const json = res.data;
+            const title = json?.timetable?.title || "Backend se nahi aya bc";
+            showAlert(`You have already saved this timetable Named (${title}) with ShareID: ${existingId} `);
+          })
+          .catch(() => {
+            showAlert(`You have already saved this timetable with ID: ${existingId}`);
+          });
+        return;
+      }
+    }
+
+    setIsSaving(true);
     try {
       const res = await axios.post("/api/save-timetable", {
         title: ttName || `Saved Timetable`,
@@ -79,7 +179,21 @@ export default function ViewTimeTable() {
       });
 
       if (res.data.success) {
-        showAlert("Timetable saved!");
+        const returnedId = res.data.timetable?.shareId;
+        if (returnedId) {
+          saveTimetableToLocal(savedKey, { slots, shareId: returnedId });
+
+          slots.forEach(s => {
+            saveCourseToLocal({
+              courseCode: s.courseCode,
+              courseName: s.courseName,
+            });
+          });
+
+          showAlert("Timetable saved!");
+        } else {
+          showAlert("Failed to save timetable.");
+        }
       } else {
         showAlert("Failed to save timetable.");
       }
@@ -90,27 +204,33 @@ export default function ViewTimeTable() {
     }
   }
 
+
   async function handleShare() {
     if (!selectedData || selectedData.length === 0) {
       showAlert("No timetable to share.");
       return;
     }
 
-    try {
-      const slots = selectedData.map(
-        (item: {
-          slotName?: string;
-          courseCode?: string;
-          courseName?: string;
-          facultyName?: string;
-        }) => ({
-          slot: item.slotName || "NIL",
-          courseCode: item.courseCode || "00000000",
-          courseName: item.courseName || "Unknown",
-          facultyName: item.facultyName || "Unknown",
-        })
-      );
+    const slots = selectedData.map((item) => ({
+      slot: item.slotName || "NIL",
+      courseCode: item.courseCode || "00000000",
+      courseName: item.courseName || "Unknown",
+      facultyName: item.facultyName || "Unknown",
+    }));
 
+    const savedKey = 'savedTimetables';
+    const savedList = getSavedTimetables(savedKey);
+
+    for (const rec of savedList) {
+      if (slotsMatch(rec.slots, slots)) {
+        const existingId = rec.shareId || 'N/A';
+        setShareLink(`${window.location.origin}/share/${existingId}`);
+        setShowSharePopup(true);
+        return;
+      }
+    }
+
+    try {
       const res = await axios.post("/api/save-timetable", {
         title: saveTTName || getCurrentDateTime(),
         slots,
@@ -120,6 +240,15 @@ export default function ViewTimeTable() {
 
       const newShareId = res?.data?.timetable?.shareId;
       if (newShareId) {
+        saveTimetableToLocal(savedKey, { slots, shareId: newShareId, isShared: true });
+
+        slots.forEach(s => {
+          saveCourseToLocal({
+            courseCode: s.courseCode,
+            courseName: s.courseName,
+          });
+        });
+
         setShareLink(`${window.location.origin}/share/${newShareId}`);
         setShowSharePopup(true);
       } else {
@@ -129,6 +258,8 @@ export default function ViewTimeTable() {
       showAlert("Error sharing timetable.");
     }
   }
+
+
 
   function withLoginCheck(action: () => void, skipCheck = false) {
     return () => {
@@ -160,7 +291,7 @@ export default function ViewTimeTable() {
           showAlert("No Timetables generated");
           return;
         }
-        exportToExcel();
+        exportToPDF();
       },
     },
     {
@@ -189,14 +320,24 @@ export default function ViewTimeTable() {
       className="w-screen mt-12 bg-[#A7D5D7] font-poppins flex items-center justify-center flex-col border-black border-3"
     >
       <div className="flex flex-col h-full p-12 overflow-hidden">
-        <div className="flex flex-row items-end mb-4 ml-2">
-          <div className="text-5xl font-pangolin">Your Timetables</div>
-          <div className="text-xl ml-8 font-poppins pb-1">
-            {timetableCount == 0
-              ? "(Empty List)"
-              : timetableCount == 1
-              ? "(1 timetable was generated)"
-              : `(${timetableCount} timetables were generated)`}
+        <div className="flex flex-row items-end mb-4 ml-2 justify-between w-full">
+          <div className="flex flex-row items-end">
+            <div className="text-5xl font-pangolin">Your Timetables</div>
+            <div className="text-xl ml-8 font-poppins pb-1">
+              {timetableCount == 0
+                ? "(Empty List)"
+                : timetableCount == 1
+                  ? "(1 timetable was generated)"
+                  : `(${timetableCount} timetables were generated)`}
+            </div>
+          </div>
+          <div className="mr-4" style={{ width: 400 }}>
+            <ComboBox
+              label="Filter by Faculty"
+              value={filterFaculty}
+              options={facultyList}
+              onChange={setFilterFaculty}
+            />
           </div>
         </div>
 
@@ -214,15 +355,12 @@ export default function ViewTimeTable() {
                 disabled={timetableNumber === 1}
                 title="Go to first timetable"
                 aria-label="Go to first timetable"
-                className={` ${
-                  timetableNumber === 1 ? "bg-[#6CC0C5]" : "bg-[#75E5EA]"
-                } font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-l-xl shadow-[4px_4px_0_0_black] ${
-                  timetableNumber === 1 ? "cursor-normal" : "cursor-pointer"
-                } ${
-                  timetableNumber === 1
+                className={` ${timetableNumber === 1 ? "bg-[#6CC0C5]" : "bg-[#75E5EA]"
+                  } font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-l-xl shadow-[4px_4px_0_0_black] ${timetableNumber === 1 ? "cursor-normal" : "cursor-pointer"
+                  } ${timetableNumber === 1
                     ? ""
                     : "active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
-                }`}
+                  }`}
               >
                 <span style={{ pointerEvents: "none", display: "flex" }}>
                   <Image
@@ -244,19 +382,16 @@ export default function ViewTimeTable() {
                     onClick={() => setSelectedIndex(index - 1)}
                     aria-label={`Go to timetable ${index}`}
                     title={`Go to timetable ${index}`}
-                    className={` ${
-                      timetableNumber === index
-                        ? "bg-[#6CC0C5]"
-                        : "bg-[#75E5EA]"
-                    } font-poppins border-2 border-black font-bold text-lg flex items-center justify-center text-center transition duration-100 h-12 w-12 shadow-[4px_4px_0_0_black] ${
-                      timetableNumber === index
+                    className={` ${timetableNumber === index
+                      ? "bg-[#6CC0C5]"
+                      : "bg-[#75E5EA]"
+                      } font-poppins border-2 border-black font-bold text-lg flex items-center justify-center text-center transition duration-100 h-12 w-12 shadow-[4px_4px_0_0_black] ${timetableNumber === index
                         ? "cursor-normal"
                         : "cursor-pointer"
-                    } ${
-                      timetableNumber === index
+                      } ${timetableNumber === index
                         ? ""
                         : "active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
-                    }`}
+                      }`}
                   >
                     {index}
                   </button>
@@ -272,19 +407,16 @@ export default function ViewTimeTable() {
                 disabled={timetableNumber === timetableCount}
                 title="Go to last timetable"
                 aria-label="Go to last timetable"
-                className={` ${
-                  timetableNumber === timetableCount
-                    ? "bg-[#6CC0C5]"
-                    : "bg-[#75E5EA]"
-                } font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-r-xl shadow-[4px_4px_0_0_black] ${
-                  timetableNumber === timetableCount
+                className={` ${timetableNumber === timetableCount
+                  ? "bg-[#6CC0C5]"
+                  : "bg-[#75E5EA]"
+                  } font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-r-xl shadow-[4px_4px_0_0_black] ${timetableNumber === timetableCount
                     ? "cursor-normal"
                     : "cursor-pointer"
-                } ${
-                  timetableNumber === timetableCount
+                  } ${timetableNumber === timetableCount
                     ? ""
                     : "active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
-                }`}
+                  }`}
               >
                 <span style={{ pointerEvents: "none", display: "flex" }}>
                   <Image
