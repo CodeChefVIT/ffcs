@@ -3,177 +3,170 @@
 import Image from "next/image";
 import { ZButton } from "../ui/Buttons";
 
-type NavbarProps = {
-  page: "placeholder" | "normal";
-};
-
-export default function Hero({ page }: NavbarProps) {
-  return (
-    <div className="relative w-[1280px] h-[720px] sm:w-[640px] sm:h-[800px] md:w-[960px] md:h-[960px] lg:w-[1280px] lg:h-[720px] flex justify-center items-center font-pangolin text-black overflow-hidden min-h-screen">
-      <div className="absolute left-1/2 top-36 w-full transform -translate-x-1/2 flex flex-col items-center text-center">
-        <Image
-          src="/logo_ffcs.svg"
-          alt="I"
-          width={96}
-          height={96}
-          className="mx-auto mb-6 select-none"
-          unselectable="on"
-          draggable={false}
-          priority
-        />
-        <div className="text-4xl sm:text-5xl md:text-6xl mb-6">FFCS-inator</div>
-        <div className="text-sm sm:text-md font-poppins font-semibold text-black mb-6">
-          Generate priority-based timetables in seconds.
-          <br />
-          No more clashes, no more stress.
-        </div>
-        <div className="text-xl sm:text-2xl md:text-3xl mb-8">
-          Create Your Ideal Timetable!
-        </div>
-        {page == "placeholder" && (
-          <div className="text-lg sm:text-xl font-poppins font-semibold text-black mb-6">
-            We&apos;re almost ready!
-            <br />
-            The website will be up as soon as the coming semester&apos;s faculty
-            list is available.
-          </div>
-        )}
-        {page == "normal" && (
-          <ZButton
-            type="large"
-            text="Start"
-            image="/icons/arrow_down.svg"
-            color="purple"
-            onClick={() => {
-              const el = document.getElementById("start");
-              if (el) {
-                el.scrollIntoView({ behavior: "smooth" });
-              }
-            }}
-          />
-        )}
+export default function Hero() {
+  return <div className="relative w-320 h-150 md:h-180 flex justify-center items-center font-pangolin text-black">
+    <div className="absolute left-1/2 top-36 w-full transform -translate-x-1/2 flex flex-col items-center text-center align-center">
+      <Image
+        src="/logo_ffcs.svg"
+        alt=""
+        width={96}
+        height={96}
+        className="mx-auto w-24 h-24 md:w-32 md:h-32 mb-6 select-none"
+        unselectable="on"
+        draggable={false}
+        priority
+      />
+      <div className="text-5xl md:text-6xl mb-6">FFCS-inator</div>
+      <div className="text-sm md:text-base font-poppins font-semibold text-black mb-6">
+        Generate priority-based timetables in seconds.
+        <br />
+        No more clashes, no more stress.
       </div>
-
-      <div className="absolute top-[460px] left-[320px] sm:top-[400px] sm:left-[120px] md:top-[420px] md:left-[240px] rotate-[-60deg] z-[1] w-[36px] h-[36px] sm:w-[48px] sm:h-[48px] md:w-[64px] md:h-[64px]">
-        <Image
-          src="/art/art_rice.svg"
-          alt="rice"
-          fill
-          className="object-contain"
-          draggable={false}
-          unselectable="on"
-        />
-      </div>
-
-      <div className="absolute top-[200px] right-[360px] sm:top-[180px] sm:right-[120px] md:right-[240px] rotate-[-15deg] z-[1] w-[36px] h-[36px] sm:w-[48px] sm:h-[48px] md:w-[64px] md:h-[64px]">
-        <Image
-          src="/art/art_boom.svg"
-          alt="boom"
-          fill
-          className="object-contain"
-          draggable={false}
-          unselectable="on"
-        />
-      </div>
-
-      <div className="absolute top-[200px] left-[160px] sm:top-[160px] sm:left-[60px] md:left-[120px] z-[1] w-[100px] h-[100px] sm:w-[130px] sm:h-[130px] md:w-[160px] md:h-[160px]">
-        <Image
-          src="/art/art_paper.svg"
-          alt="paper"
-          fill
-          className="object-contain"
-          draggable={false}
-          unselectable="on"
-        />
-      </div>
-
-      <div className="absolute top-[240px] right-[128px] sm:top-[200px] sm:right-[32px] md:right-[96px] rotate-[3deg] z-[1] w-[130px] h-[130px] sm:w-[160px] sm:h-[160px] md:w-[200px] md:h-[200px]">
-        <Image
-          src="/art/art_plane.svg"
-          alt="plane"
-          fill
-          className="object-contain"
-          draggable={false}
-          unselectable="on"
-        />
-      </div>
-
-      <div className="absolute top-[520px] left-[148px] sm:top-[480px] sm:left-[40px] md:left-[100px] z-[1] w-[32px] h-[32px] sm:w-[40px] sm:h-[40px] md:w-[50px] md:h-[50px]">
-        <Image
-          src="/art/letter_c.svg"
-          alt="c"
-          fill
-          className="object-contain"
-          draggable={false}
-          unselectable="on"
-        />
-      </div>
-
-      <div className="absolute top-[200px] left-[400px] sm:left-[180px] md:left-[300px] rotate-[8deg] z-[1] w-[32px] h-[32px] sm:w-[40px] sm:h-[40px] md:w-[50px] md:h-[50px]">
-        <Image
-          src="/art/letter_h.svg"
-          alt="h"
-          fill
-          className="object-contain"
-          draggable={false}
-          unselectable="on"
-        />
-      </div>
-
-      <div className="absolute top-[428px] right-[280px] sm:right-[80px] md:right-[160px] z-[1] w-[32px] h-[32px] sm:w-[40px] sm:h-[40px] md:w-[50px] md:h-[50px]">
-        <Image
-          src="/art/letter_e.svg"
-          alt="e"
-          fill
-          className="object-contain"
-          draggable={false}
-          unselectable="on"
-        />
-      </div>
-
-      <div className="absolute top-[528px] right-[120px] sm:right-[40px] md:right-[100px] z-[1] w-[32px] h-[32px] sm:w-[40px] sm:h-[40px] md:w-[50px] md:h-[50px]">
-        <Image
-          src="/art/letter_f.svg"
-          alt="f"
-          fill
-          className="object-contain"
-          draggable={false}
-          unselectable="on"
-        />
-      </div>
-
-      <div className="absolute top-[880px] left-[32px] sm:top-[720px] sm:left-[16px] z-[1] w-[32px] h-[32px] sm:w-[40px] sm:h-[40px] md:w-[50px] md:h-[50px]">
-        <Image
-          src="/art/letter_i.svg"
-          alt="i"
-          fill
-          className="object-contain"
-          draggable={false}
-          unselectable="on"
-        />
-      </div>
-
-      <div className="absolute top-[1200px] left-[92px] sm:top-[900px] sm:left-[32px] z-[1] w-[32px] h-[32px] sm:w-[40px] sm:h-[40px] md:w-[50px] md:h-[50px]">
-        <Image
-          src="/art/letter_m.svg"
-          alt="m"
-          fill
-          className="object-contain"
-          draggable={false}
-          unselectable="on"
-        />
-      </div>
-
-      <div className="absolute top-[1052px] right-[48px] sm:top-[800px] sm:right-[16px] z-[1] w-[32px] h-[32px] sm:w-[40px] sm:h-[40px] md:w-[50px] md:h-[50px]">
-        <Image
-          src="/art/letter_k.svg"
-          alt="k"
-          fill
-          className="object-contain"
-          draggable={false}
-          unselectable="on"
-        />
-      </div>
+      <div className="text-2xl md:text-3xl mb-8">Create Your Ideal Timetable!</div>
+      <ZButton
+        type="large"
+        text="Start"
+        image="/icons/arrow_down.svg"
+        color="purple"
+        onClick={() => {
+          const el = document.getElementById("start");
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth" });
+          }
+        }}
+      />
     </div>
-  );
+
+    <div className="w-16 h-16 left-100 top-108 md:w-24 md:h-24 md:left-80 md:top-115 absolute   rotate-[-60deg] z-[1]">
+      <Image
+        src="/art/art_rice.svg"
+        alt="graphic element"
+        fill
+        className="select-none"
+        unselectable="on"
+        draggable={false}
+        priority
+      />
+    </div>
+
+    <div className="w-16 h-16 top-55 right-100 md:w-24 md:h-24 md:top-50 md:right-90 absolute rotate-[-15deg] z-[1]">
+      <Image
+        src="/art/art_boom.svg"
+        alt="graphic element"
+        fill
+        className="select-none"
+        unselectable="on"
+        draggable={false}
+        priority
+      />
+    </div>
+
+    <div className="w-36 h-36 top-50 left-50 md:w-48 md:h-48 md:top-50 md:left-32 absolute rotate-[0deg] z-[1]">
+      <Image
+        src="/art/art_paper.svg"
+        alt="graphic element"
+        fill
+        className="select-none"
+        unselectable="on"
+        draggable={false}
+        priority
+      />
+    </div>
+
+    <div className="w-42 h-42 top-60 right-58 md:w-64 md:h-64 md:top-50 md:right-32 absolute rotate-[3deg] z-[1]">
+      <Image
+        src="/art/art_plane.svg"
+        alt="graphic element"
+        fill
+        className="select-none"
+        unselectable="on"
+        draggable={false}
+        priority
+      />
+    </div>
+
+    <div className="w-12 h-12 top-110 left-64 md:w-16 md:h-16 md:top-130 md:left-37 absolute rotate-[0deg] z-[1]">
+      <Image
+        src="/art/letter_c.svg"
+        alt="graphic element"
+        fill
+        className="select-none"
+        unselectable="on"
+        draggable={false}
+        priority
+      />
+    </div>
+
+    <div className="w-12 h-12 top-50 left-100 md:w-16 md:h-16 md:top-50 md:left-100 absolute rotate-[8deg] z-[1]">
+      <Image
+        src="/art/letter_h.svg"
+        alt="graphic element"
+        fill
+        className="select-none"
+        unselectable="on"
+        draggable={false}
+        priority
+      />
+    </div>
+
+    <div className="w-12 h-12 top-107 right-96 md:w-16 md:h-16 md:top-107 md:right-70 absolute rotate-[0deg] z-[1]">
+      <Image
+        src="/art/letter_e.svg"
+        alt="graphic element"
+        fill
+        className="select-none"
+        unselectable="on"
+        draggable={false}
+        priority
+      />
+    </div>
+
+    <div className="w-12 h-12 top-120 right-70 md:w-16 md:h-16 md:top-132 md:right-30 absolute rotate-[0deg] z-[1]">
+      <Image
+        src="/art/letter_f.svg"
+        alt="graphic element"
+        fill
+        className="select-none"
+        unselectable="on"
+        draggable={false}
+        priority
+      />
+    </div>
+
+    <div className="w-12 h-12 top-220 left-8 md:w-16 md:h-16 md:top-220 md:left-8 absolute rotate-[0deg] z-[1]">
+      <Image
+        src="/art/letter_i.svg"
+        alt="graphic element"
+        fill
+        className="select-none"
+        unselectable="on"
+        draggable={false}
+        priority
+      />
+    </div>
+
+    <div className="w-12 h-12 top-300 left-23 md:w-16 md:h-16 md:top-300 md:left-23 absolute rotate-[0deg] z-[1]">
+      <Image
+        src="/art/letter_m.svg"
+        alt="graphic element"
+        fill
+        className="select-none"
+        unselectable="on"
+        draggable={false}
+        priority
+      />
+    </div>
+
+    <div className="w-12 h-12 top-263 right-12 md:w-16 md:h-16 md:top-263 md:right-12 absolute rotate-[0deg] z-[1]">
+      <Image
+        src="/art/letter_k.svg"
+        alt="graphic element"
+        fill
+        className="select-none"
+        unselectable="on"
+        draggable={false}
+        priority
+      />
+    </div>
+  </div>
 }
