@@ -55,7 +55,7 @@ export default function View() {
       </div>
 
       {/* Main Content */}
-      <main className="flex-grow flex flex-col items-center">
+      <main className="flex-grow flex flex-col items-center mb-16">
         <Navbar page="slots" />
 
         <div className="text-6xl mt-36 mb-4 font-pangolin text-black">
