@@ -296,7 +296,7 @@ const prettifyDomain = (domain: string) => {
 };
 type ShiftKey = "morning" | "evening";
 export default function FacultySelector({
-  onConfirm,
+  onConfirm
 }: {
   onConfirm: (course: fullCourseData) => void;
 }) {
@@ -473,10 +473,7 @@ export default function FacultySelector({
     } catch (error) {
       console.warn("Failed to update localStorage for selectedCourses", error);
     }
-
     onConfirm(courseData);
-    setSelectedFaculties([]);
-    setPriorityList([]);
   };
 
   const toggleFaculty = (name: string) => {
@@ -613,8 +610,6 @@ export default function FacultySelector({
       .filter((entry) => labSlots.includes(entry.slot))
       .map((entry) => entry.faculty);
 
-    setSelectedFaculties([]);
-    setPriorityList([]);
     setFaculties([...new Set(facultiesInSelectedShift)]);
   }, [
     selectedLabShift,
@@ -670,6 +665,43 @@ export default function FacultySelector({
     setSelectedLabShift("");
     setLabShiftOptions({ morning: [], evening: [] });
   };
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!selectedSubject || (!selectedSlot && !selectedLabShift)) return;
+
+    try {
+      const savedCoursesJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
+      const savedCourses: fullCourseData[] = savedCoursesJSON
+        ? JSON.parse(savedCoursesJSON)
+        : [];
+
+      const course = savedCourses.find((c) => c.id === selectedSubject);
+
+      if (!course) return;
+
+      const matchingSlots = course.courseSlots.filter((slot) => {
+        if (selectedLabShift) {
+          const shiftSlots = labShiftOptions[selectedLabShift] || [];
+          return shiftSlots.includes(slot.slotName);
+        }
+        return slot.slotName === selectedSlot;
+      });
+      if (matchingSlots.length > 0) {
+        const allFaculties = matchingSlots
+          .flatMap((slot) => slot.slotFaculties.map((f) => f.facultyName));
+
+        const uniqueFaculties = Array.from(new Set(allFaculties));
+
+        setSelectedFaculties(uniqueFaculties);
+        setPriorityList(uniqueFaculties);
+      }
+
+    } catch (err) {
+      console.error("Error restoring faculties from localStorage", err);
+    }
+  }, [selectedSubject, selectedSlot, selectedLabShift]);
+
 
   return (
     <div>
