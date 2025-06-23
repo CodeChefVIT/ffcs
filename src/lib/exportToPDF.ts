@@ -1,19 +1,28 @@
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import { getGlobalCourses } from "./globalCourses";
 import { clashMap } from "./slots";
 import { fullCourseData } from "./type";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import type { TDocumentDefinitions } from "pdfmake/interfaces";
 
-export const exportToPDF = async () => {
+// Set up virtual font system
+(pdfMake as typeof pdfMake & { vfs: Record<string, string> }).vfs =
+  pdfFonts.vfs;
+
+export const exportToPDF = async (): Promise<void> => {
+  const colors = {
+    pageBg: "#a6d5d7",
+    headerBg: "#a6d5d7",
+    cellBg: "#cae6e7",
+    emptyBg: "#ffffff",
+    border: "#000000",
+    text: "#000000",
+  };
+
   const courses: fullCourseData[] = getGlobalCourses();
-
   if (!courses || courses.length === 0) {
     throw new Error("No course data available to export.");
   }
-
-  const doc = new jsPDF({ orientation: "landscape" });
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
 
   const now = new Date();
   const pad = (n: number) => n.toString().padStart(2, "0");
@@ -21,7 +30,17 @@ export const exportToPDF = async () => {
     now.getDate()
   )} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
 
-  const tableBody: string[][] = [];
+  const tableBody: Array<
+    Array<{ text: string; alignment?: "center" | "left" }>
+  > = [
+    [
+      { text: "Course Name" },
+      { text: "Faculty" },
+      { text: "Theory Slot", alignment: "center" },
+      { text: "Lab Slot", alignment: "center" },
+      { text: "Clashes With" },
+    ],
+  ];
 
   for (const course of courses) {
     const courseLabel =
@@ -39,15 +58,15 @@ export const exportToPDF = async () => {
           course.courseType === "lab"
             ? slot.slotName
             : faculty.facultyLabSlot ?? "";
-
         const labSlots = labSlot.split(", ");
+
         for (const lab of labSlots) {
           const notes: string[] = [];
 
           const clashKey = [...theorySlot.split("+"), ...lab.split("+")];
-          for (const row of tableBody) {
-            const rowTheory = row[2] || "";
-            const rowLab = row[3] || "";
+          for (const row of tableBody.slice(1)) {
+            const rowTheory = row[2].text;
+            const rowLab = row[3].text;
             const existingSlots = [
               ...rowTheory.split("+"),
               ...rowLab.split("+"),
@@ -55,84 +74,127 @@ export const exportToPDF = async () => {
 
             const occupiedSlots: string[] = [];
             for (const s of existingSlots) {
-              if (clashMap[s]) {
-                occupiedSlots.push(...clashMap[s]);
-              }
+              if (clashMap[s]) occupiedSlots.push(...clashMap[s]);
             }
 
             if (
               clashKey.some((slot) => occupiedSlots.includes(slot)) ||
               clashKey.some((slot) => existingSlots.includes(slot))
             ) {
-              notes.push(row[1] || "");
+              notes.push(row[1].text);
             }
           }
 
           tableBody.push([
-            courseLabel,
-            faculty.facultyName,
-            theorySlot,
-            lab,
-            notes.join(", "),
+            { text: courseLabel },
+            { text: faculty.facultyName },
+            { text: theorySlot, alignment: "center" },
+            { text: lab, alignment: "center" },
+            { text: notes.join(", ") },
           ]);
         }
       }
     }
 
-    tableBody.push(["", "", "", "", ""]);
+    tableBody.push([
+      { text: "" },
+      { text: "" },
+      { text: "" },
+      { text: "" },
+      { text: "" },
+    ]);
   }
 
-  autoTable(doc, {
-    head: [
-      ["Course Name", "Faculty", "Theory Slot", "Lab Slot", "Clashes With"],
+  const docDefinition: TDocumentDefinitions = {
+    pageOrientation: "landscape",
+    pageMargins: [40, 60, 40, 40],
+
+    background: (
+      currentPage: number,
+      pageSize: { width: number; height: number }
+    ) => {
+      return {
+        canvas: [
+          {
+            type: "rect",
+            x: 0,
+            y: 0,
+            w: pageSize.width,
+            h: pageSize.height,
+            color: colors.pageBg,
+          },
+        ],
+      };
+    },
+
+    footer: (currentPage: number, pageCount: number) => ({
+      columns: [
+        {
+          text: "FFCS-inator by CodeChefVIT",
+          alignment: "left",
+          margin: [40, 0, 0, 0],
+          italics: true,
+          fontSize: 9,
+          color: colors.text,
+        },
+        {
+          text: `Page ${currentPage} of ${pageCount}`,
+          alignment: "right",
+          margin: [0, 0, 40, 0],
+          italics: true,
+          fontSize: 9,
+          color: colors.text,
+        },
+      ],
+    }),
+
+    content: [
+      { text: "Faculty Slot Allocation", style: "header", color: colors.text },
+      {
+        text: `Exported on: ${dateTime}`,
+        style: "subheader",
+        color: colors.text,
+      },
+      {
+        style: "tableStyle",
+        table: {
+          headerRows: 1,
+          widths: [120, 100, 80, 80, "*"],
+          body: tableBody,
+        },
+        layout: {
+          fillColor: (
+            rowIndex: number,
+            node: import("pdfmake/interfaces").ContentTable
+          ) => {
+            if (rowIndex === 0) return colors.headerBg;
+            const row = node.table.body[rowIndex];
+            const isEmptyRow = row.every((cell) => {
+              return (
+                typeof cell === "object" &&
+                cell !== null &&
+                "text" in cell &&
+                (cell as { text: string }).text === ""
+              );
+            });
+            return isEmptyRow ? colors.emptyBg : colors.cellBg;
+          },
+          hLineWidth: () => 0.5,
+          vLineWidth: () => 0.5,
+          hLineColor: () => colors.border,
+          vLineColor: () => colors.border,
+        },
+      },
     ],
-    body: tableBody,
-    startY: 30,
-    theme: "striped",
+
     styles: {
-      font: "helvetica",
-      fontSize: 8,
-      textColor: [0, 0, 0],
-      cellPadding: 2,
-      lineWidth: 0.2, // Add border width
-      lineColor: [0, 0, 0], // Add border color (black)
+      header: { fontSize: 18, bold: true, margin: [0, 0, 0, 6] },
+      subheader: { fontSize: 10, margin: [0, 0, 0, 12] },
+      tableStyle: { fontSize: 9 },
     },
-    headStyles: {
-      fillColor: [166, 213, 215],
-      textColor: [0, 0, 0],
-      fontStyle: "bold",
-      lineWidth: 0.4, // Thicker border for header
-      lineColor: [0, 0, 0],
-    },
-    columnStyles: {
-      0: { cellWidth: 60 },
-      1: { cellWidth: 40 },
-      2: { halign: "center", cellWidth: 30 },
-      3: { halign: "center", cellWidth: 30 },
-      4: { cellWidth: 90 },
-    },
-    margin: { top: 30, left: 14, right: 14 },
-    didDrawPage: () => {
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(16);
-      doc.setTextColor(0, 0, 0);
-      doc.text("Faculty Slot Allocation", 14, 16);
+  };
 
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "normal");
-      doc.text(`Exported on: ${dateTime}`, 14, 22);
-
-      const pageNumber = (
-        doc as jsPDF & { internal: { getNumberOfPages: () => number } }
-      ).internal.getNumberOfPages();
-      doc.setFontSize(9);
-      doc.setFont("helvetica", "italic");
-      doc.text("FFCS-inator by CodeChefVIT", 14, pageHeight - 10);
-      doc.text(`Page ${pageNumber}`, pageWidth - 14, pageHeight - 10, {
-        align: "right",
-      });
-    },
-  });
-
-  doc.save(`timetable_${dateTime.replace(/[: ]/g, "_")}.pdf`);
+  pdfMake
+    .createPdf(docDefinition)
+    .download(`timetable_${dateTime.replace(/[: ]/g, "_")}.pdf`);
 };
