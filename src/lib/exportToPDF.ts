@@ -5,9 +5,15 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import type { TDocumentDefinitions } from "pdfmake/interfaces";
 
-// Set up virtual font system
 (pdfMake as typeof pdfMake & { vfs: Record<string, string> }).vfs =
   pdfFonts.vfs;
+
+interface TableCell {
+  text: string;
+  alignment: "center";
+  margin: [number, number];
+  valign: "middle";
+}
 
 export const exportToPDF = async (): Promise<void> => {
   const colors = {
@@ -15,7 +21,7 @@ export const exportToPDF = async (): Promise<void> => {
     headerBg: "#77d3d7",
     cellBg: "#e0eff0",
     altCellBg: "#cae6e7",
-    emptyBg: "#ffffff",
+    emptyBg: "#b8e0e2",
     border: "#000000",
     text: "#000000",
   };
@@ -31,15 +37,20 @@ export const exportToPDF = async (): Promise<void> => {
     now.getDate()
   )} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
 
-  const tableBody: Array<
-    Array<{ text: string; alignment?: "center" | "left" }>
-  > = [
+  const makeCell = (text: string): TableCell => ({
+    text,
+    alignment: "center",
+    margin: [0, 5],
+    valign: "middle",
+  });
+
+  const tableBody: TableCell[][] = [
     [
-      { text: "Course Name" },
-      { text: "Faculty" },
-      { text: "Theory Slot", alignment: "center" },
-      { text: "Lab Slot", alignment: "center" },
-      { text: "Clashes With" },
+      makeCell("Course Name"),
+      makeCell("Faculty"),
+      makeCell("Theory Slot"),
+      makeCell("Lab Slot"),
+      makeCell("Clashes With"),
     ],
   ];
 
@@ -87,22 +98,22 @@ export const exportToPDF = async (): Promise<void> => {
           }
 
           tableBody.push([
-            { text: courseLabel },
-            { text: faculty.facultyName },
-            { text: theorySlot, alignment: "center" },
-            { text: lab, alignment: "center" },
-            { text: notes.join(", ") },
+            makeCell(courseLabel),
+            makeCell(faculty.facultyName),
+            makeCell(theorySlot),
+            makeCell(lab),
+            makeCell(notes.join(", ")),
           ]);
         }
       }
     }
 
     tableBody.push([
-      { text: "" },
-      { text: "" },
-      { text: "" },
-      { text: "" },
-      { text: "" },
+      makeCell(""),
+      makeCell(""),
+      makeCell(""),
+      makeCell(""),
+      makeCell(""),
     ]);
   }
 
@@ -110,25 +121,20 @@ export const exportToPDF = async (): Promise<void> => {
     pageOrientation: "landscape",
     pageMargins: [40, 60, 40, 40],
 
-    background: (
-      currentPage: number,
-      pageSize: { width: number; height: number }
-    ) => {
-      return {
-        canvas: [
-          {
-            type: "rect",
-            x: 0,
-            y: 0,
-            w: pageSize.width,
-            h: pageSize.height,
-            color: colors.pageBg,
-          },
-        ],
-      };
-    },
+    background: (_currentPage, pageSize) => ({
+      canvas: [
+        {
+          type: "rect",
+          x: 0,
+          y: 0,
+          w: pageSize.width,
+          h: pageSize.height,
+          color: colors.pageBg,
+        },
+      ],
+    }),
 
-    footer: (currentPage: number, pageCount: number) => ({
+    footer: (currentPage, pageCount) => ({
       columns: [
         {
           text: "FFCS-inator by CodeChefVIT",
@@ -150,7 +156,11 @@ export const exportToPDF = async (): Promise<void> => {
     }),
 
     content: [
-      { text: "Faculty Slot Allocation", style: "header", color: colors.text },
+      {
+        text: "FFCS - Subjects and Faculties Report",
+        style: "header",
+        color: colors.text,
+      },
       {
         text: `Exported on: ${dateTime}`,
         style: "subheader",
@@ -164,22 +174,15 @@ export const exportToPDF = async (): Promise<void> => {
           body: tableBody,
         },
         layout: {
-          fillColor: (
-            rowIndex: number,
-            node: import("pdfmake/interfaces").ContentTable
-          ) => {
+          fillColor: (rowIndex, node) => {
             if (rowIndex === 0) return colors.headerBg;
 
             const row = node.table.body[rowIndex];
-            const isEmptyRow = row.every((cell) => {
-              return (
-                typeof cell === "object" &&
-                cell !== null &&
-                "text" in cell &&
-                (cell as { text: string }).text === ""
-              );
-            });
-
+            const isTableCell = (cell: unknown): cell is TableCell =>
+              typeof cell === "object" && cell !== null && "text" in cell;
+            const isEmptyRow = row.every(
+              (cell: unknown) => isTableCell(cell) && cell.text === ""
+            );
             if (isEmptyRow) return colors.emptyBg;
 
             return rowIndex % 2 === 0 ? colors.cellBg : colors.altCellBg;
