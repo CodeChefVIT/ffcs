@@ -4,7 +4,6 @@ import { fullCourseData, timetableDisplayData } from "./type";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-// Generate all valid timetable combinations from course data
 export function generateTT(
   courseData: fullCourseData[],
   discardClashCombinations: boolean = true
@@ -184,7 +183,6 @@ export function getCurrentDateTime() {
   )} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
 }
 
-// --- PDF Export Function ---
 export const exportToPDF = async () => {
   const courses: fullCourseData[] = getGlobalCourses();
 
@@ -199,9 +197,23 @@ export const exportToPDF = async () => {
     now.getDate()
   )} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
 
+  doc.setFillColor(166, 213, 215);
+  doc.rect(
+    0,
+    0,
+    doc.internal.pageSize.getWidth(),
+    doc.internal.pageSize.getHeight(),
+    "F"
+  );
+
+  doc.setFont("helvetica", "bold");
   doc.setFontSize(18);
+  doc.setTextColor(0, 0, 0);
   doc.text("Faculty Slot Allocation", 14, 16);
+
   doc.setFontSize(11);
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(0, 0, 0);
   doc.text(`Exported on: ${dateTime}`, 14, 24);
 
   const tableBody: string[][] = [];
@@ -228,7 +240,6 @@ export const exportToPDF = async () => {
           const notes: string[] = [];
 
           const clashKey = [...theorySlot.split("+"), ...lab.split("+")];
-
           for (const row of tableBody) {
             const rowTheory = row[2] || "";
             const rowLab = row[3] || "";
@@ -263,42 +274,68 @@ export const exportToPDF = async () => {
       }
     }
 
-    tableBody.push(["", "", "", "", ""]); // spacing row
+    tableBody.push(["", "", "", "", ""]);
   }
+
+  doc.setFillColor(219, 238, 239);
+  doc.rect(10, 28, 277, 160, "F");
 
   autoTable(doc, {
     head: [
       ["Course Name", "Faculty", "Theory Slot", "Lab Slot", "Clashes with"],
     ],
     body: tableBody,
-    styles: { fontSize: 8 },
-    headStyles: {
-      fillColor: [220, 220, 220],
-      textColor: 0,
-      fontStyle: "bold",
+    styles: {
+      fontSize: 8,
+      font: "helvetica",
+      textColor: [0, 0, 0],
+      cellPadding: 2,
+      lineColor: [0, 0, 0],
+      lineWidth: 0.2,
+      halign: "left",
+      valign: "middle",
+      fillColor: false,
     },
+    headStyles: {
+      fillColor: [166, 213, 215],
+      textColor: [0, 0, 0],
+      fontStyle: "bold",
+      font: "helvetica",
+      halign: "center",
+      valign: "middle",
+      cellPadding: 3,
+    },
+    alternateRowStyles: {
+      fillColor: false,
+      textColor: [0, 0, 0],
+    },
+    columnStyles: {
+      0: { halign: "left" },
+      1: { halign: "left" },
+      2: { halign: "center" },
+      3: { halign: "center" },
+      4: { halign: "left" },
+    },
+    tableWidth: "auto",
     startY: 30,
     theme: "striped",
-    columnStyles: {
-      0: { cellWidth: 60 },
-      1: { cellWidth: 40 },
-      2: { cellWidth: 30 },
-      3: { cellWidth: 30 },
-      4: { cellWidth: 60 },
-    },
     didDrawPage: () => {
-      doc.setFontSize(10);
-      doc.text(
-        `Page ${(
-          doc as jsPDF & { internal: { getNumberOfPages: () => number } }
-        ).internal.getNumberOfPages()}`,
-        270,
-        200,
-        {
-          align: "right",
-        }
-      );
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(13);
+      doc.setTextColor(0, 0, 0);
+      doc.text("FFCS-inator by CodeChefVIT", 14, 200, {
+        align: "left",
+      });
+
+      const pageCount = (
+        doc as jsPDF & { internal: { getNumberOfPages: () => number } }
+      ).internal.getNumberOfPages();
+
+      doc.text(`Page ${pageCount}`, 285 - 14, 200, {
+        align: "right",
+      });
     },
+    margin: { top: 30, left: 12, right: 12 },
   });
 
   doc.save(`timetable_${dateTime.replace(/[: ]/g, "_")}.pdf`);
