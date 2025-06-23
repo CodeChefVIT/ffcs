@@ -46,7 +46,6 @@ export default function CourseCard({
   const handleDeleteAllCourses = () => {
   onUpdate([]);
   setGlobalCourses([]);
-  setTimetableData([]);
   };
 
   const resetDragRefs = () => {
@@ -63,8 +62,8 @@ export default function CourseCard({
       onUpdate(updatedCourses);
 
       setGlobalCourses(updatedCourses);
-      const { result } = generateTT(updatedCourses);
-      setTimetableData(result);
+      //const { result } = generateTT(updatedCourses);
+     // setTimetableData(result);
     }
 
     setDeletePopupOpen(false);
@@ -121,19 +120,27 @@ export default function CourseCard({
   };
 
   const handleGenerate = async () => {
-    if (selectedCourses.length === 0) {
-      setError("Please add at least one course to generate a timetable.");
-      return;
-    }
+  if (selectedCourses.length === 0) {
+    setError("Please add at least one course to generate a timetable.");
+    return;
+  }
 
-    setLoading(true);
-    setError(null);
+  setLoading(true);
+  setError(null);
 
-    try {
-      const { result } = generateTT(selectedCourses, allSubjectsMode === "on");
-      setGlobalCourses(selectedCourses);
+  try {
+    const { result } = generateTT(selectedCourses, allSubjectsMode === "on");
+
+    if (!result || result.length === 0) {
+      setTimetableData([]);
+      setAlert({
+        open: true,
+        message: "No timetables were generated because there were clashes in all possible timetables. Please adjust your courses or mode.",
+        color: "red",
+      });
+    } else {
       setTimetableData(result);
-
+      setGlobalCourses(selectedCourses);
       setAlert({
         open: false,
         message: "",
@@ -144,12 +151,13 @@ export default function CourseCard({
         const el = document.getElementById("timetable-view");
         if (el) el.scrollIntoView({ behavior: "smooth" });
       }, 100);
-    } catch {
-      setError("Failed to generate timetable. Please try again.");
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch {
+    setError("Failed to generate timetable. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="px-12">
@@ -162,7 +170,7 @@ export default function CourseCard({
 
       <AlertModal
         open={showInfo}
-        message="When All Subjects Mode is ON, all selected courses are considered while generating every timetable. When OFF, courses are prioritized based on their order, and alternate timetables are generated with varying inclusion of lower-priority courses."
+        message="When All Subjects Mode is ON, only timetables containing all the selected subjects are generated.When OFF, courses are prioritized based on their order, if a clash is detected the course with lower priority is excluded."
         color="yellow"
         onClose={() => setShowInfo(false)}
       />
