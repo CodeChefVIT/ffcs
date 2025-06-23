@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ZButton } from "../ui/Buttons";
 
@@ -702,6 +702,10 @@ export default function FacultySelector({
     }
   }, [selectedSubject, selectedSlot, selectedLabShift, labShiftOptions]);
 
+  const [tooltipFacultyIndex, setTooltipFacultyIndex] = React.useState<
+    number | null
+  >(null);
+
   return (
     <div>
       <div className="relative inline-block mb-20">
@@ -810,12 +814,47 @@ export default function FacultySelector({
                     }
                   }
                   return (
-                    <div key={index}>
-                      <div className="flex items-center justify-between py-1 px-2">
-                        <span
-                          className="text-[#000000]"
-                          title={labTooltip || undefined}
-                        >
+                    <div key={index} className="relative">
+                      <div
+                        className="flex items-center justify-between py-1 px-2 relative"
+                        tabIndex={labTooltip ? 0 : -1}
+                        aria-label={labTooltip || undefined}
+                        onMouseEnter={() =>
+                          labTooltip && setTooltipFacultyIndex(index)
+                        }
+                        onMouseLeave={() =>
+                          labTooltip && setTooltipFacultyIndex(null)
+                        }
+                        onFocus={() =>
+                          labTooltip && setTooltipFacultyIndex(index)
+                        }
+                        onBlur={() =>
+                          labTooltip && setTooltipFacultyIndex(null)
+                        }
+                        style={{ cursor: labTooltip ? "pointer" : "default" }}
+                      >
+                        {labTooltip && tooltipFacultyIndex === index && (
+                          <div
+                            className="z-50 absolute left-1/2 -translate-x-1 translate-y-[-50%] px-3 py-2 text-sm shadow-lg border"
+                            style={{
+                              background: "var(--color-popover, #fff)",
+                              color: "var(--color-popover-foreground, #222)",
+                              borderColor: "var(--color-border, #ccc)",
+                              borderRadius: "var(--radius-md, 8px)",
+                              minWidth: "max-content",
+                              maxWidth: 240,
+                              whiteSpace: "pre-line",
+                              fontFamily:
+                                "var(--font-inter, Inter, sans-serif)",
+                              boxShadow: "0 4px 16px 0 rgba(0,0,0,0.10)",
+                              pointerEvents: "none",
+                            }}
+                            role="tooltip"
+                          >
+                            {labTooltip}
+                          </div>
+                        )}
+                        <span className="text-[#000000] relative">
                           {faculty}
                         </span>
                         <label className="inline-flex items-center gap-1 cursor-pointer">
