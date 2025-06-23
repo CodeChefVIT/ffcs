@@ -4,20 +4,20 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-type ButtonVariant = "regular" | "image" | "long" | "large" |"small";
+type ButtonVariant = "regular" | "image" | "long" | "large" | "small";
 
 type ZButtonProps = {
   type: ButtonVariant;
   text?: string;
   color:
-    | "red"
-    | "yellow"
-    | "green"
-    | "green_2"
-    | "blue"
-    | "purple"
-    | "gray"
-    | string;
+  | "red"
+  | "yellow"
+  | "green"
+  | "green_2"
+  | "blue"
+  | "purple"
+  | "gray"
+  | string;
   image?: string;
   onClick?: () => void;
   disabled?: boolean;
@@ -58,7 +58,7 @@ export function ZButton({
 }: ZButtonProps) {
   const variantClasses = {
     regular: "h-12 rounded-xl px-4 text-base gap-2.5",
-    small: "h-9 rounded-xl px-1 text-base gap-2.5",
+    small: "h-10 w-10 rounded-full p-1 text-base gap-2.5",
     image: "h-13 w-13 rounded-xl text-base gap-2.5",
     long: "h-12 rounded-xl px-8 text-base gap-2.5",
     large: "h-[60px] rounded-[20px] px-8 text-2xl gap-6",
@@ -70,13 +70,13 @@ export function ZButton({
     ? disabled
       ? colorMap["gray"]
       : clicked
-      ? colorMap["green_2"]
-      : forceColor
+        ? colorMap["green_2"]
+        : forceColor
     : disabled
-    ? colorMap["gray"]
-    : clicked
-    ? colorMap["green_2"]
-    : colorMap[color];
+      ? colorMap["gray"]
+      : clicked
+        ? colorMap["green_2"]
+        : colorMap[color];
 
   return (
     <button
@@ -89,11 +89,12 @@ export function ZButton({
         font-semibold
         flex items-center justify-center text-center
         transition duration-100
-        shadow-[4px_4px_0_0_black]
+        ${type === "small" ? "shadow-[2px_2px_0_0_black]" : "shadow-[4px_4px_0_0_black]"}
         ${disabled ? "cursor-normal" : "cursor-pointer"}
-        ${
-          disabled
-            ? ""
+        ${disabled
+          ? ""
+          : type === "small"
+            ? "active:shadow-[1px_1px_0_0_black] active:translate-x-[1px] active:translate-y-[1px]"
             : "active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
         }
         ${variantClasses[type]}
