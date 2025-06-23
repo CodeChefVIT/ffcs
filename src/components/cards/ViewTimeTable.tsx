@@ -13,6 +13,7 @@ import AlertModal from "@/components/ui/AlertModal";
 import LoadingPopup from "@/components/ui/LoadingPopup";
 import { exportToExcel, getCurrentDateTime } from "@/lib/utils";
 import { generateShareId } from "@/lib/shareIDgenerate";
+import { exportToPDF } from "@/lib/exportToPDF";
 
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
@@ -273,7 +274,7 @@ async function handleSave(ttName?: string) {
           showAlert("No Timetables generated");
           return;
         }
-        exportToExcel();
+        exportToPDF();
       },
     },
     {
