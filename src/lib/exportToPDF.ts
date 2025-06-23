@@ -112,7 +112,7 @@ export const exportToPDF = async (): Promise<void> => {
             makeCell(faculty.facultyName),
             makeCell(theorySlot),
             makeCell(lab),
-            makeCell(notes.join(", ")),
+            makeCell(notes.filter(Boolean).join(", ")), // fix: remove empty strings and trailing commas
           ]);
 
           isFirstEntry = false;
