@@ -296,7 +296,7 @@ const prettifyDomain = (domain: string) => {
 };
 type ShiftKey = "morning" | "evening";
 export default function FacultySelector({
-  onConfirm
+  onConfirm,
 }: {
   onConfirm: (course: fullCourseData) => void;
 }) {
@@ -688,20 +688,19 @@ export default function FacultySelector({
         return slot.slotName === selectedSlot;
       });
       if (matchingSlots.length > 0) {
-        const allFaculties = matchingSlots
-          .flatMap((slot) => slot.slotFaculties.map((f) => f.facultyName));
+        const allFaculties = matchingSlots.flatMap((slot) =>
+          slot.slotFaculties.map((f) => f.facultyName)
+        );
 
         const uniqueFaculties = Array.from(new Set(allFaculties));
 
         setSelectedFaculties(uniqueFaculties);
         setPriorityList(uniqueFaculties);
       }
-
     } catch (err) {
       console.error("Error restoring faculties from localStorage", err);
     }
-  }, [selectedSubject, selectedSlot, selectedLabShift]);
-
+  }, [selectedSubject, selectedSlot, selectedLabShift, labShiftOptions]);
 
   return (
     <div>
@@ -777,47 +776,86 @@ export default function FacultySelector({
                 Select Faculties
               </div>
               <div className="pt-4 pb-4 px-6 overflow-y-auto space-y-2 scrollbar-thin h-86">
-                {faculties.map((faculty: string, index: number) => (
-                  <div key={index}>
-                    <div className="flex items-center justify-between py-1 px-2">
-                      <span className="text-[#000000]">{faculty}</span>
-                      <label className="inline-flex items-center gap-1 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={selectedFaculties.includes(faculty)}
-                          onChange={() => toggleFaculty(faculty)}
-                          className="peer hidden"
-                          aria-label={`Select faculty ${faculty}`}
-                          title={`Select faculty ${faculty}`}
-                        />
-                        <div className="w-7 h-7 rounded-md border-3 border-black flex items-center justify-center peer-checked:bg-[#C1FF83]">
-                          <Image
-                            src={
-                              selectedFaculties.includes(faculty)
-                                ? "/icons/check.svg"
-                                : "/icons/blank.svg"
-                            }
-                            alt={
-                              selectedFaculties.includes(faculty)
-                                ? `Selected ${faculty}`
-                                : `Not selected ${faculty}`
-                            }
-                            className="w-7 h-7"
-                            width={32}
-                            height={32}
-                            unselectable="on"
-                            draggable={false}
-                            priority
+                {faculties.map((faculty: string, index: number) => {
+                  // Tooltip logic: check for lab association
+                  let labTooltip = "";
+                  if (
+                    selectedDomain &&
+                    selectedSubject &&
+                    data[selectedSchool]?.[selectedDomain]
+                  ) {
+                    const courseCode = selectedSubject.split(" - ")[0];
+                    const baseCode = courseCode.slice(0, -1);
+                    const domainData = data[selectedSchool][selectedDomain];
+                    // Find lab subject with same base code
+                    const labSubjectKey = Object.keys(domainData).find(
+                      (subject) => {
+                        const subjectCode = subject.split(" - ")[0];
+                        return (
+                          subjectCode.slice(0, -1) === baseCode &&
+                          (subjectCode.endsWith("P") ||
+                            subjectCode.endsWith("E"))
+                        );
+                      }
+                    );
+                    if (labSubjectKey) {
+                      const labEntries = domainData[labSubjectKey].filter(
+                        (entry: SubjectEntry) => entry.faculty === faculty
+                      );
+                      if (labEntries.length > 0) {
+                        labTooltip = `Lab Slots: ${labEntries
+                          .map((e) => e.slot)
+                          .join(", ")}`;
+                      }
+                    }
+                  }
+                  return (
+                    <div key={index}>
+                      <div className="flex items-center justify-between py-1 px-2">
+                        <span
+                          className="text-[#000000]"
+                          title={labTooltip || undefined}
+                        >
+                          {faculty}
+                        </span>
+                        <label className="inline-flex items-center gap-1 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={selectedFaculties.includes(faculty)}
+                            onChange={() => toggleFaculty(faculty)}
+                            className="peer hidden"
+                            aria-label={`Select faculty ${faculty}`}
+                            title={`Select faculty ${faculty}`}
                           />
-                        </div>
-                      </label>
+                          <div className="w-7 h-7 rounded-md border-3 border-black flex items-center justify-center peer-checked:bg-[#C1FF83]">
+                            <Image
+                              src={
+                                selectedFaculties.includes(faculty)
+                                  ? "/icons/check.svg"
+                                  : "/icons/blank.svg"
+                              }
+                              alt={
+                                selectedFaculties.includes(faculty)
+                                  ? `Selected ${faculty}`
+                                  : `Not selected ${faculty}`
+                              }
+                              className="w-7 h-7"
+                              width={32}
+                              height={32}
+                              unselectable="on"
+                              draggable={false}
+                              priority
+                            />
+                          </div>
+                        </label>
+                      </div>
+                      <div
+                        className="w-full mt-1 bg-black"
+                        style={{ height: `${1 / window.devicePixelRatio}px` }}
+                      />
                     </div>
-                    <div
-                      className="w-full mt-1 bg-black"
-                      style={{ height: `${1 / window.devicePixelRatio}px` }}
-                    />
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
