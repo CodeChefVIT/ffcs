@@ -183,7 +183,7 @@ useEffect(() => {
 
       <AlertModal
         open={showInfo}
-        message="When All Subjects Mode is ON, only timetables containing all the selected subjects are generated.When OFF, courses are prioritized based on their order, if a clash is detected the course with lower priority is excluded."
+        message="When All Subjects Mode is ON, only timetables containing all the selected subjects are generated. When OFF, courses are prioritized based on their order, if a clash is detected the course with lower priority is excluded."
         color="yellow"
         onClose={() => setShowInfo(false)}
       />
