@@ -38,6 +38,7 @@ type PopupSlot = {
   name: string;
 };
 
+
 export default function Saved() {
   const router = useRouter();
   const { data: session } = useSession();
@@ -78,7 +79,11 @@ export default function Saved() {
     if (!selectedTT) return;
     await axios.delete(`/api/timetables/${selectedTT._id}`);
     setTimetables((prev) => prev.filter((t) => t._id !== selectedTT._id));
-    closePopup("Timetable has been deleted.");
+    const savedTimetables = JSON.parse(localStorage.getItem('savedTimetables') || '[]') as { shareId: string }[];
+  const updatedTimetables = savedTimetables.filter((tt: { shareId: string }) => tt.shareId !== selectedTT.shareId);
+  localStorage.setItem('savedTimetables', JSON.stringify(updatedTimetables));
+
+  closePopup("Timetable has been deleted.");
   }
 
   async function handleRename() {
