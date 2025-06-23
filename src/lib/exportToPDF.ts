@@ -12,8 +12,9 @@ import type { TDocumentDefinitions } from "pdfmake/interfaces";
 export const exportToPDF = async (): Promise<void> => {
   const colors = {
     pageBg: "#a6d5d7",
-    headerBg: "#a6d5d7",
-    cellBg: "#cae6e7",
+    headerBg: "#77d3d7",
+    cellBg: "#e0eff0",
+    altCellBg: "#cae6e7",
     emptyBg: "#ffffff",
     border: "#000000",
     text: "#000000",
@@ -168,6 +169,7 @@ export const exportToPDF = async (): Promise<void> => {
             node: import("pdfmake/interfaces").ContentTable
           ) => {
             if (rowIndex === 0) return colors.headerBg;
+
             const row = node.table.body[rowIndex];
             const isEmptyRow = row.every((cell) => {
               return (
@@ -177,7 +179,10 @@ export const exportToPDF = async (): Promise<void> => {
                 (cell as { text: string }).text === ""
               );
             });
-            return isEmptyRow ? colors.emptyBg : colors.cellBg;
+
+            if (isEmptyRow) return colors.emptyBg;
+
+            return rowIndex % 2 === 0 ? colors.cellBg : colors.altCellBg;
           },
           hLineWidth: () => 0.5,
           vLineWidth: () => 0.5,
