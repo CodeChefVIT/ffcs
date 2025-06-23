@@ -36,16 +36,16 @@ export default function CourseCard({
   const [deleteAllPopupOpen, setDeleteAllPopupOpen] = useState(false);
   const [isLargeScreen, setIsLargeScreen] = useState(true);
 
-useEffect(() => {
-  const handleResize = () => {
-    setIsLargeScreen(window.innerWidth >= 1024);
-  };
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
 
-  handleResize(); // Initial check
-  window.addEventListener("resize", handleResize);
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize);
 
-  return () => window.removeEventListener("resize", handleResize);
-}, []);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
 
 
@@ -57,8 +57,8 @@ useEffect(() => {
   });
 
   const handleDeleteAllCourses = () => {
-  onUpdate([]);
-  setGlobalCourses([]);
+    onUpdate([]);
+    setGlobalCourses([]);
   };
 
   const resetDragRefs = () => {
@@ -76,7 +76,7 @@ useEffect(() => {
 
       setGlobalCourses(updatedCourses);
       //const { result } = generateTT(updatedCourses);
-     // setTimetableData(result);
+      // setTimetableData(result);
     }
 
     setDeletePopupOpen(false);
@@ -133,44 +133,44 @@ useEffect(() => {
   };
 
   const handleGenerate = async () => {
-  if (selectedCourses.length === 0) {
-    setError("Please add at least one course to generate a timetable.");
-    return;
-  }
-
-  setLoading(true);
-  setError(null);
-
-  try {
-    const { result } = generateTT(selectedCourses, allSubjectsMode === "on");
-
-    if (!result || result.length === 0) {
-      setTimetableData([]);
-      setAlert({
-        open: true,
-        message: "No timetables were generated because there were clashes in all possible timetables. Please adjust your courses or mode.",
-        color: "red",
-      });
-    } else {
-      setTimetableData(result);
-      setGlobalCourses(selectedCourses);
-      setAlert({
-        open: false,
-        message: "",
-        color: "red",
-      });
-
-      setTimeout(() => {
-        const el = document.getElementById("timetable-view");
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      }, 100);
+    if (selectedCourses.length === 0) {
+      setError("Please add at least one course to generate a timetable.");
+      return;
     }
-  } catch {
-    setError("Failed to generate timetable. Please try again.");
-  } finally {
-    setLoading(false);
-  }
-};
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { result } = generateTT(selectedCourses, allSubjectsMode === "on");
+
+      if (!result || result.length === 0) {
+        setTimetableData([]);
+        setAlert({
+          open: true,
+          message: "No timetables were generated because there were clashes in all possible timetables. Please adjust your courses or mode.",
+          color: "red",
+        });
+      } else {
+        setTimetableData(result);
+        setGlobalCourses(selectedCourses);
+        setAlert({
+          open: false,
+          message: "",
+          color: "red",
+        });
+
+        setTimeout(() => {
+          const el = document.getElementById("timetable-view");
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+      }
+    } catch {
+      setError("Failed to generate timetable. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="px-12">
@@ -183,15 +183,16 @@ useEffect(() => {
 
       <AlertModal
         open={showInfo}
-        message="When All Subjects Mode is ON, only timetables containing all the selected subjects are generated. When OFF, courses are prioritized based on their order, if a clash is detected the course with lower priority is excluded."
-        color="yellow"
+        message={
+          "**All Subjects Mode - ON**\nGenerated timetables strictly include all of the selected subjects.\n\n**All Subjects Mode - OFF**\nSubjects are prioritized based on their order. If a clash is detected then the subject with lower priority is excluded."
+        } color="yellow"
         onClose={() => setShowInfo(false)}
       />
 
       <div
         id="course-card"
         className="bg-[#A7D5D7] mt-4 font-poppins rounded-4xl border-[3px] border-black p-6 shadow-[4px_4px_0_0_black] text-black font-medium px-12 mb-16"
-      > 
+      >
         <div className="flex justify-between items-start mt-4">
           <h2 className="text-3xl font-pangolin">Your Courses</h2>
           <div className="text-sm text-[#B93C21] text-right mr-6">
@@ -354,108 +355,108 @@ useEffect(() => {
           ))}
         </div>
 
-  {isLargeScreen ? (
-  // ---- Desktop View (original code) ----
-  <div className="flex justify-between items-center mt-8 mb-4 relative w-full">
-    {/* Toggle */}
-    <div className="mr-auto flex items-center gap-2">
-      <div className="mr-2">
-        <ZButton
-          image="/icons/qmark.svg"
-          color="yellow"
-          type="small"
-          onClick={() => setShowInfo(true)}
-        />
-      </div>
-      <span className="text-md text-black font-semibold mr-2">
-        All Subjects Mode
-      </span>
-      <BasicToggleButton
-        defaultState={allSubjectsMode}
-        onToggle={() =>
-          setAllSubjectsMode((prev) => (prev === "on" ? "off" : "on"))
-        }
-      />
-      <span className="text-md text-black font-semibold ml-4">
-        {allSubjectsMode === "on" ? "ON" : "OFF"}
-      </span>
-    </div>
+        {isLargeScreen ? (
+          // ---- Desktop View (original code) ----
+          <div className="flex justify-between items-center mt-8 mb-4 relative w-full">
+            {/* Toggle */}
+            <div className="mr-auto flex items-center gap-2">
+              <div className="mr-2">
+                <ZButton
+                  image="/icons/qmark.svg"
+                  color="yellow"
+                  type="small"
+                  onClick={() => setShowInfo(true)}
+                />
+              </div>
+              <span className="text-md text-black font-semibold mr-0">
+                All Subjects Mode
+              </span>
+              <BasicToggleButton
+                defaultState={allSubjectsMode}
+                onToggle={() =>
+                  setAllSubjectsMode((prev) => (prev === "on" ? "off" : "on"))
+                }
+              />
+              <span className="text-md text-black font-semibold ml-2">
+                {allSubjectsMode === "on" ? "ON" : "OFF"}
+              </span>
+            </div>
 
-    {/* Centered Generate */}
-    <div className="absolute left-1/2 -translate-x-1/2">
-      <ZButton
-        type="large"
-        text={loading ? "Generating..." : "Generate"}
-        image="/icons/thunder.svg"
-        color="blue"
-        disabled={loading}
-        onClick={handleGenerate}
-      />
-    </div>
+            {/* Centered Generate */}
+            <div className="absolute left-1/2 -translate-x-1/2">
+              <ZButton
+                type="large"
+                text={loading ? "Generating..." : "Generate"}
+                image="/icons/thunder.svg"
+                color="blue"
+                disabled={loading}
+                onClick={handleGenerate}
+              />
+            </div>
 
-    {/* Delete All Button */}
-    <div className="ml-auto flex items-center">
-      <ZButton
-        type="regular"
-        text="Delete all"
-        image="/icons/trash.svg"
-        color="red"
-        onClick={() => setDeleteAllPopupOpen(true)}
-      />
-    </div>
-  </div>
-) : (
-  // ---- Mobile / Tablet View ----
-  <div className="mt-8 mb-4 w-full flex flex-col gap-4">
-    {/* Top Row: Toggle + Delete All */}
-    <div className="w-full flex justify-between items-center">
-      <div className="flex items-center gap-2">
-        <div className="mr-2">
-          <ZButton
-            image="/icons/qmark.svg"
-            color="yellow"
-            type="small"
-            onClick={() => setShowInfo(true)}
-          />
-        </div>
-        <span className="text-md text-black font-semibold mr-2">
-          All Subjects Mode
-        </span>
-        <BasicToggleButton
-          defaultState={allSubjectsMode}
-          onToggle={() =>
-            setAllSubjectsMode((prev) => (prev === "on" ? "off" : "on"))
-          }
-        />
-        <span className="text-md text-black font-semibold ml-4">
-          {allSubjectsMode === "on" ? "ON" : "OFF"}
-        </span>
-      </div>
+            {/* Delete All Button */}
+            <div className="ml-auto flex items-center">
+              <ZButton
+                type="regular"
+                text="Remove all"
+                image="/icons/trash.svg"
+                color="red"
+                onClick={() => setDeleteAllPopupOpen(true)}
+              />
+            </div>
+          </div>
+        ) : (
+          // ---- Mobile / Tablet View ----
+          <div className="mt-8 mb-4 w-full flex flex-col gap-4">
+            {/* Top Row: Toggle + Delete All */}
+            <div className="w-full flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <div className="mr-2">
+                  <ZButton
+                    image="/icons/qmark.svg"
+                    color="yellow"
+                    type="small"
+                    onClick={() => setShowInfo(true)}
+                  />
+                </div>
+                <span className="text-md text-black font-semibold mr-2">
+                  All Subjects Mode
+                </span>
+                <BasicToggleButton
+                  defaultState={allSubjectsMode}
+                  onToggle={() =>
+                    setAllSubjectsMode((prev) => (prev === "on" ? "off" : "on"))
+                  }
+                />
+                <span className="text-md text-black font-semibold ml-4">
+                  {allSubjectsMode === "on" ? "ON" : "OFF"}
+                </span>
+              </div>
 
-      <div className="flex items-center">
-        <ZButton
-          type="regular"
-          text="Delete all"
-          image="/icons/trash.svg"
-          color="red"
-          onClick={() => setDeleteAllPopupOpen(true)}
-        />
-      </div>
-    </div>
+              <div className="flex items-center">
+                <ZButton
+                  type="regular"
+                  text="Remove all"
+                  image="/icons/trash.svg"
+                  color="red"
+                  onClick={() => setDeleteAllPopupOpen(true)}
+                />
+              </div>
+            </div>
 
-    {/* Bottom Row: Centered Generate */}
-    <div className="flex justify-center w-full py-4">
-      <ZButton
-        type="large"
-        text={loading ? "Generating..." : "Generate"}
-        image="/icons/thunder.svg"
-        color="blue"
-        disabled={loading}
-        onClick={handleGenerate}
-      />
-    </div>
-  </div>
-)}
+            {/* Bottom Row: Centered Generate */}
+            <div className="flex justify-center w-full py-4">
+              <ZButton
+                type="large"
+                text={loading ? "Generating..." : "Generate"}
+                image="/icons/thunder.svg"
+                color="blue"
+                disabled={loading}
+                onClick={handleGenerate}
+              />
+            </div>
+          </div>
+        )}
 
 
 
@@ -486,17 +487,17 @@ useEffect(() => {
         />
       )}
 
-    {deleteAllPopupOpen && (
-      <Popup
-        type="rem_allcourse"
-        dataBody=""
-        action={() => {
-          handleDeleteAllCourses();
-          setDeleteAllPopupOpen(false);
-        }}
-        closeLink={() => setDeleteAllPopupOpen(false)}
-      />
-    )}
+      {deleteAllPopupOpen && (
+        <Popup
+          type="rem_allcourse"
+          dataBody=""
+          action={() => {
+            handleDeleteAllCourses();
+            setDeleteAllPopupOpen(false);
+          }}
+          closeLink={() => setDeleteAllPopupOpen(false)}
+        />
+      )}
 
     </div>
   );
