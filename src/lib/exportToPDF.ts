@@ -19,9 +19,9 @@ export const exportToPDF = async (): Promise<void> => {
   const colors = {
     pageBg: "#a6d5d7",
     headerBg: "#77d3d7",
-    cellBg: "#e0eff0",
+    cellBg: "#b8e0e2",
     altCellBg: "#cae6e7",
-    emptyBg: "#b8e0e2",
+    emptyBg: "#e0eff0",
     border: "#000000",
     text: "#000000",
   };
@@ -33,9 +33,17 @@ export const exportToPDF = async (): Promise<void> => {
 
   const now = new Date();
   const pad = (n: number) => n.toString().padStart(2, "0");
+  const getAmPmTime = (date: Date) => {
+    let hours = date.getHours();
+    const minutes = pad(date.getMinutes());
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    return `${pad(hours)}:${minutes} ${ampm}`;
+  };
   const dateTime = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(
     now.getDate()
-  )} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  )} ${getAmPmTime(now)}`;
 
   const makeCell = (text: string): TableCell => ({
     text,
@@ -59,6 +67,8 @@ export const exportToPDF = async (): Promise<void> => {
       course.courseType === "both"
         ? `${course.courseName} & Lab`
         : course.courseName;
+
+    let isFirstEntry = true;
 
     for (const slot of course.courseSlots) {
       for (const faculty of slot.slotFaculties) {
@@ -98,12 +108,14 @@ export const exportToPDF = async (): Promise<void> => {
           }
 
           tableBody.push([
-            makeCell(courseLabel),
+            makeCell(isFirstEntry ? courseLabel : ""),
             makeCell(faculty.facultyName),
             makeCell(theorySlot),
             makeCell(lab),
             makeCell(notes.join(", ")),
           ]);
+
+          isFirstEntry = false;
         }
       }
     }
