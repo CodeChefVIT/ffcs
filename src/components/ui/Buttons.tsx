@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-type ButtonVariant = "regular" | "image" | "long" | "large";
+type ButtonVariant = "regular" | "image" | "long" | "large" |"small";
 
 type ZButtonProps = {
   type: ButtonVariant;
@@ -58,6 +58,7 @@ export function ZButton({
 }: ZButtonProps) {
   const variantClasses = {
     regular: "h-12 rounded-xl px-4 text-base gap-2.5",
+    small: "h-9 rounded-xl px-1 text-base gap-2.5",
     image: "h-13 w-13 rounded-xl text-base gap-2.5",
     long: "h-12 rounded-xl px-8 text-base gap-2.5",
     large: "h-[60px] rounded-[20px] px-8 text-2xl gap-6",

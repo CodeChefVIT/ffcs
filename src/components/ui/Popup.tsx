@@ -15,6 +15,7 @@ type PopupProps = {
   type:
     | "login"
     | "rem_course"
+    | "rem_allcourse"
     | "share_tt"
     | "save_tt"
     | "delete_tt"
@@ -42,6 +43,7 @@ const colorMap = {
 const typeColorMap = {
   login: "yellow",
   rem_course: "red",
+  rem_allcourse: "red",
   share_tt: "blue",
   save_tt: "green",
   delete_tt: "red",
@@ -53,6 +55,7 @@ const typeColorMap = {
 const typeTitleMap = {
   login: "Sign In",
   rem_course: "Remove Course",
+  rem_allcourse: "Delete All",
   share_tt: "Share Timetable",
   save_tt: "Save Timetable",
   delete_tt: "Delete Timetable",
@@ -64,6 +67,7 @@ const typeTitleMap = {
 const typeTextMap = {
   login: "Please log-in to save and share your time-tables.",
   rem_course: "Are you sure you want to remove this course?",
+  rem_allcourse: "Are you sure you want to delete all courses?",
   share_tt: "Share your timetable with anyone.",
   save_tt: "Save this timetable in your collection.",
   delete_tt: "Are you sure you want to delete this timetable?",
@@ -295,6 +299,34 @@ export default function Popup({
           )}
 
           {type == "rem_course" && (
+            <div>
+              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
+                {text}
+                <br />
+                {dataBody && (
+                  <span className="font-semibold">&quot;{dataBody}&quot;</span>
+                )}
+              </div>
+              <div className="flex flex-row items-center justify-center gap-4 mb-4">
+                <ZButton
+                  type="regular"
+                  text="Cancel"
+                  color="yellow"
+                  forceColor="#FFEA79"
+                  onClick={closeLink}
+                />
+                <ZButton
+                  type="regular"
+                  text="Remove"
+                  color="red"
+                  forceColor={theme[1]}
+                  onClick={action}
+                />
+              </div>
+            </div>
+          )}
+
+           {type == "rem_allcourse" && (
             <div>
               <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
                 {text}
