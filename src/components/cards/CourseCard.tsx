@@ -191,7 +191,7 @@ useEffect(() => {
       <div
         id="course-card"
         className="bg-[#A7D5D7] mt-4 font-poppins rounded-4xl border-[3px] border-black p-6 shadow-[4px_4px_0_0_black] text-black font-medium px-12 mb-16"
-      >
+      > 
         <div className="flex justify-between items-start mt-4">
           <h2 className="text-3xl font-pangolin">Your Courses</h2>
           <div className="text-sm text-[#B93C21] text-right mr-6">
