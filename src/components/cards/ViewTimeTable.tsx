@@ -138,17 +138,16 @@ async function handleSave(ttName?: string) {
   for (const rec of savedList) {
     if (slotsMatch(rec.slots, slots)) {
       const existingId = rec.shareId || 'N/A';
-
+    
       axios.get(`/api/shared-timetable/${existingId}`)
         .then((res) => {
           const json = res.data;
-          const title = json?.timetable?.title || "Unknown Title";
-          showAlert(`You have already saved this timetable with ID: ${existingId} (${title})`);
+          const title = json?.timetable?.title || "Backend se nahi aya bc";
+          showAlert(`You have already saved this timetable Named (${title}) with ShareID: ${existingId} `);
         })
         .catch(() => {
           showAlert(`You have already saved this timetable with ID: ${existingId}`);
         });
-
       return;
     }
   }
@@ -201,14 +200,12 @@ async function handleSave(ttName?: string) {
     facultyName: item.facultyName || "Unknown",
   }));
 
-  // Check local storage for existing shared timetables
-  const sharedKey = 'sharedTimetables';
-  const sharedList = getSavedTimetables(sharedKey);
-  
-  for (const rec of sharedList) {
+  const savedKey = 'savedTimetables';
+  const savedList = getSavedTimetables(savedKey);
+
+  for (const rec of savedList) {
     if (slotsMatch(rec.slots, slots)) {
       const existingId = rec.shareId || 'N/A';
-     // showAlert(`You have already shared this timetable with ID: ${existingId}`);
       setShareLink(`${window.location.origin}/share/${existingId}`);
       setShowSharePopup(true);
       return;
@@ -225,12 +222,15 @@ async function handleSave(ttName?: string) {
 
     const newShareId = res?.data?.timetable?.shareId;
     if (newShareId) {
-      
-      saveTimetableToLocal(sharedKey, { slots, shareId: newShareId });
-      
+      saveTimetableToLocal(savedKey, { slots, shareId: newShareId, isShared: true });
+
       slots.forEach(s => {
-        saveCourseToLocal({ courseCode: s.courseCode, courseName: s.courseName });
+        saveCourseToLocal({
+          courseCode: s.courseCode,
+          courseName: s.courseName,
+        });
       });
+
       setShareLink(`${window.location.origin}/share/${newShareId}`);
       setShowSharePopup(true);
     } else {
@@ -240,6 +240,7 @@ async function handleSave(ttName?: string) {
     showAlert("Error sharing timetable.");
   }
 }
+
 
 
   function withLoginCheck(action: () => void, skipCheck = false) {
