@@ -104,10 +104,8 @@ export default function Popup({
 
 
  useEffect(() => {
-  // Lock scroll when Popup mounts
   document.body.style.overflow = 'hidden';
 
-  // Clean up when Popup unmounts
   return () => {
     document.body.style.overflow = '';
   };
