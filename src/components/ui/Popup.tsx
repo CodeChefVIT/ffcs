@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { BasicToggleButton, GoogleLoginButton, ZButton } from "./Buttons";
 import CompoundTable from "./CompoundTable";
 
@@ -101,6 +101,20 @@ export default function Popup({
   const [shareState, setShareState] = useState<"on" | "off">(
     shareEnabled ? "on" : "off"
   );
+
+
+ useEffect(() => {
+  // Lock scroll when Popup mounts
+  document.body.style.overflow = 'hidden';
+
+  // Clean up when Popup unmounts
+  return () => {
+    document.body.style.overflow = '';
+  };
+}, []);
+
+
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#425D5F]/75 backdrop-blur-xs z-50 select-none">
       <div
