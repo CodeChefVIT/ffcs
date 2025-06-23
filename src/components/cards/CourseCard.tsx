@@ -2,7 +2,7 @@
 import React, { useState, useRef } from "react";
 import { useTimetable } from "../../lib/TimeTableContext";
 import Popup from "../ui/Popup";
-import { ZButton } from "../ui/Buttons";
+import { BasicToggleButton, ZButton } from "../ui/Buttons";
 import Image from "next/image";
 import { generateTT } from "@/lib/utils";
 import { fullCourseData } from "@/lib/type";
@@ -28,9 +28,9 @@ export default function CourseCard({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [deletePopupOpen, setDeletePopupOpen] = useState(false);
-  const [courseToDelete, setCourseToDelete] = useState<fullCourseData | null>(
-    null
-  );
+  const [courseToDelete, setCourseToDelete] = useState<fullCourseData | null>(null);
+
+  const [allSubjectsMode, setAllSubjectsMode] = useState<"on" | "off">("on");
 
   const [alert, setAlert] = useState({
     open: false,
@@ -119,7 +119,7 @@ export default function CourseCard({
     setError(null);
 
     try {
-      const { result } = generateTT(selectedCourses);
+      const { result } = generateTT(selectedCourses, allSubjectsMode === "on");
       setGlobalCourses(selectedCourses);
       setTimetableData(result);
 
@@ -183,7 +183,7 @@ export default function CourseCard({
                   </div>
                   <div className={"flex flex-col px-4 gap-1"}>
                     <p key={course.courseCode}>{course.courseCode}</p>
-                    {course.courseType === "both" && (
+                    {course.courseType === "both" && !course.courseCode.endsWith("E") && (
                       <p key={course.courseCodeLab + "_lab"}>
                         {course.courseCodeLab}
                       </p>
@@ -201,7 +201,7 @@ export default function CourseCard({
                   >
                     {course.courseName}
                   </p>
-                  {course.courseType === "both" && (
+                  {course.courseType === "both" && !course.courseCode.endsWith("E") && (
                     <p
                       key={course.courseNameLab + "_lab"}
                       className="break-words leading-snug"
@@ -314,15 +314,38 @@ export default function CourseCard({
           ))}
         </div>
 
-        <div className="flex text-center justify-center mt-8 mb-4">
-          <ZButton
-            type="large"
-            text={loading ? "Generating..." : "Generate"}
-            image="/icons/thunder.svg"
-            color="blue"
-            disabled={loading}
-            onClick={handleGenerate}
-          />
+        <div className="flex justify-between items-center mt-8 mb-4 relative w-full">
+
+          {/* Right-aligned Toggle */}
+          <div className="mr-auto flex items-center">
+            <span className="text-md text-black font-semibold mr-2">
+              All Subjects Mode
+            </span>
+            <BasicToggleButton
+              defaultState={allSubjectsMode}
+              onToggle={() => {
+                setAllSubjectsMode((prev) =>
+                  prev === "on" ? "off" : "on"
+                );
+              }}
+            />
+            <span className="text-md text-black font-semibold ml-4">
+              {allSubjectsMode === "on" ? "ON" : "OFF"}
+            </span>
+          </div>
+
+          {/* Centered ZButton */}
+          <div className="absolute left-1/2 -translate-x-1/2">
+            <ZButton
+              type="large"
+              text={loading ? "Generating..." : "Generate"}
+              image="/icons/thunder.svg"
+              color="blue"
+              disabled={loading}
+              onClick={handleGenerate}
+            />
+          </div>
+
         </div>
 
         {error && (
