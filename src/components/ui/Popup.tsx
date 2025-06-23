@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { BasicToggleButton, GoogleLoginButton, ZButton } from "./Buttons";
 import CompoundTable from "./CompoundTable";
 
@@ -106,16 +106,13 @@ export default function Popup({
     shareEnabled ? "on" : "off"
   );
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
 
- useEffect(() => {
-  document.body.style.overflow = 'hidden';
-
-  return () => {
-    document.body.style.overflow = '';
-  };
-}, []);
-
-
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#425D5F]/75 backdrop-blur-xs z-50 select-none">
@@ -290,7 +287,7 @@ export default function Popup({
                   Sharing Link is {shareState === "on" ? "Public" : "Private"}
                 </div>
                 <BasicToggleButton
-                  defaultState="on"
+                  defaultState={shareState}
                   onToggle={(state: "on" | "off") => {
                     setShareState(state);
                     if (shareSwitchAction) shareSwitchAction(state);
