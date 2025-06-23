@@ -7,6 +7,7 @@ import Footer from "@/components/ui/Footer";
 import Image from "next/image";
 import axios from "axios";
 import { PopupViewTT } from "@/components/ui/PopupMobile";
+import Loader from "@/components/ui/Loader";
 
 async function fetchTimetablesByOwner(owner: string) {
   const res = await axios.get(
@@ -146,9 +147,7 @@ export default function SavedMobile() {
       </div>
 
       {loading ? (
-        <div className="mx-auto my-auto text-center text-sm font-poppins font-semibold text-black/70">
-          Loading...
-        </div>
+        <Loader />
       ) : timetables.length === 0 ? (
         <div className="mx-auto my-auto text-center text-sm font-poppins font-semibold text-black/70">
           No saved timetables found.
