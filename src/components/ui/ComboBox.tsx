@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
@@ -54,7 +56,32 @@ export default function ComboBox({ label, value, options, onChange }: ComboBoxPr
             text-black truncate whitespace-nowrap overflow-hidden
           `}
         />
-        
+
+        {inputValue && (
+          <button
+            type="button"
+            aria-label="Clear"
+            onClick={() => {
+              setInputValue("");
+              onChange("");
+            }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+            tabIndex={-1}
+          >
+            <Image
+              src="/icons/cross.svg"
+              alt="icon"
+              className="w-5 h-5"
+              width={20}
+              height={20}
+              unselectable="on"
+              draggable={false}
+              priority
+            />
+          </button>
+        )}
+
+
       </div>
 
       {isOpen && (

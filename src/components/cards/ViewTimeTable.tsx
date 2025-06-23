@@ -15,6 +15,7 @@ import { getCurrentDateTime } from "@/lib/utils";
 import { generateShareId } from "@/lib/shareIDgenerate";
 import { exportToPDF } from "@/lib/exportToPDF";
 import ComboBox from "../ui/ComboBox";
+import { timetableDisplayData } from "@/lib/type";
 
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
@@ -30,17 +31,10 @@ export default function ViewTimeTable() {
   const [sharePublic, setSharePublic] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
-  const [filterFaculty, setFilterFaculty] = useState("");
-
   const { data: session } = useSession();
   const owner = session?.user?.email || null;
 
-  const timetableNumber = selectedIndex + 1;
-  var allTimetables = timetableData ? timetableData : [];
-  const timetableCount = allTimetables.length;
-  const selectedData = allTimetables[selectedIndex] || [];
-  const visibleIndexes = getVisibleIndexes(timetableNumber, timetableCount);
-
+  const [filterFaculty, setFilterFaculty] = useState("");
   const facultyList = Array.from(
     new Set(
       originalTimetableData
@@ -49,6 +43,25 @@ export default function ViewTimeTable() {
     )
   ).sort((a, b) => a.localeCompare(b));
 
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [filterFaculty]);
+
+  var allTimetables: timetableDisplayData[][];
+  if (filterFaculty && filterFaculty !== "") {
+    allTimetables = originalTimetableData.filter((tt: any[]) =>
+      tt.some((item: { facultyName?: string }) =>
+        (item.facultyName || "Unknown") === filterFaculty
+      )
+    );
+  } else {
+    allTimetables = originalTimetableData;
+  }
+
+  const timetableNumber = selectedIndex + 1;
+  const timetableCount = allTimetables.length;
+  const selectedData = allTimetables[selectedIndex] || [];
+  const visibleIndexes = getVisibleIndexes(timetableNumber, timetableCount);
 
   const convertedData = selectedData.map(
     (item: {
@@ -66,9 +79,6 @@ export default function ViewTimeTable() {
     setSelectedIndex(0);
   }, [timetableData]);
 
-  useEffect(() => {
-    setSelectedIndex(0);
-  }, [filterFaculty]);
 
   useEffect(() => {
     if (!timetableData || timetableData.length === 0) return;
