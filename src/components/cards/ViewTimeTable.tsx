@@ -14,6 +14,7 @@ import LoadingPopup from "@/components/ui/LoadingPopup";
 import { exportToExcel, getCurrentDateTime } from "@/lib/utils";
 import { generateShareId } from "@/lib/shareIDgenerate";
 import { exportToPDF } from "@/lib/exportToPDF";
+import ComboBox from "../ui/ComboBox";
 
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
@@ -28,14 +29,26 @@ export default function ViewTimeTable() {
   const [sharePublic, setSharePublic] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
+  const [filterFaculty, setFilterFaculty] = useState("");
+
   const { data: session } = useSession();
   const owner = session?.user?.email || null;
 
   const timetableNumber = selectedIndex + 1;
-  const allTimetables = timetableData ? timetableData : [];
+  var allTimetables = timetableData ? timetableData : [];
   const timetableCount = allTimetables.length;
   const selectedData = allTimetables[selectedIndex] || [];
   const visibleIndexes = getVisibleIndexes(timetableNumber, timetableCount);
+
+  const facultyList = Array.from(
+    new Set(
+      allTimetables
+        .flat()
+        .map((item: { facultyName?: string }) => item.facultyName || "Unknown")
+    )
+  ).sort((a, b) => a.localeCompare(b));
+
+  console.log("facultyList", facultyList);
 
   const convertedData = selectedData.map(
     (item: {
@@ -52,6 +65,10 @@ export default function ViewTimeTable() {
   useEffect(() => {
     setSelectedIndex(0);
   }, [timetableData]);
+
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [filterFaculty]);
 
   useEffect(() => {
     if (!timetableData || timetableData.length === 0) return;
@@ -303,14 +320,24 @@ async function handleSave(ttName?: string) {
       className="w-screen mt-12 bg-[#A7D5D7] font-poppins flex items-center justify-center flex-col border-black border-3"
     >
       <div className="flex flex-col h-full p-12 overflow-hidden">
-        <div className="flex flex-row items-end mb-4 ml-2">
-          <div className="text-5xl font-pangolin">Your Timetables</div>
-          <div className="text-xl ml-8 font-poppins pb-1">
-            {timetableCount == 0
-              ? "(Empty List)"
-              : timetableCount == 1
-              ? "(1 timetable was generated)"
-              : `(${timetableCount} timetables were generated)`}
+        <div className="flex flex-row items-end mb-4 ml-2 justify-between w-full">
+          <div className="flex flex-row items-end">
+            <div className="text-5xl font-pangolin">Your Timetables</div>
+            <div className="text-xl ml-8 font-poppins pb-1">
+              {timetableCount == 0
+                ? "(Empty List)"
+                : timetableCount == 1
+                  ? "(1 timetable was generated)"
+                  : `(${timetableCount} timetables were generated)`}
+            </div>
+          </div>
+          <div className="mr-4" style={{ width: 400 }}>
+            <ComboBox
+              label="Filter by Faculty"
+              value={filterFaculty}
+              options={["a", "b", "c"]}
+              onChange={setFilterFaculty}
+            />
           </div>
         </div>
 
@@ -328,15 +355,12 @@ async function handleSave(ttName?: string) {
                 disabled={timetableNumber === 1}
                 title="Go to first timetable"
                 aria-label="Go to first timetable"
-                className={` ${
-                  timetableNumber === 1 ? "bg-[#6CC0C5]" : "bg-[#75E5EA]"
-                } font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-l-xl shadow-[4px_4px_0_0_black] ${
-                  timetableNumber === 1 ? "cursor-normal" : "cursor-pointer"
-                } ${
-                  timetableNumber === 1
+                className={` ${timetableNumber === 1 ? "bg-[#6CC0C5]" : "bg-[#75E5EA]"
+                  } font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-l-xl shadow-[4px_4px_0_0_black] ${timetableNumber === 1 ? "cursor-normal" : "cursor-pointer"
+                  } ${timetableNumber === 1
                     ? ""
                     : "active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
-                }`}
+                  }`}
               >
                 <span style={{ pointerEvents: "none", display: "flex" }}>
                   <Image
@@ -358,19 +382,16 @@ async function handleSave(ttName?: string) {
                     onClick={() => setSelectedIndex(index - 1)}
                     aria-label={`Go to timetable ${index}`}
                     title={`Go to timetable ${index}`}
-                    className={` ${
-                      timetableNumber === index
-                        ? "bg-[#6CC0C5]"
-                        : "bg-[#75E5EA]"
-                    } font-poppins border-2 border-black font-bold text-lg flex items-center justify-center text-center transition duration-100 h-12 w-12 shadow-[4px_4px_0_0_black] ${
-                      timetableNumber === index
+                    className={` ${timetableNumber === index
+                      ? "bg-[#6CC0C5]"
+                      : "bg-[#75E5EA]"
+                      } font-poppins border-2 border-black font-bold text-lg flex items-center justify-center text-center transition duration-100 h-12 w-12 shadow-[4px_4px_0_0_black] ${timetableNumber === index
                         ? "cursor-normal"
                         : "cursor-pointer"
-                    } ${
-                      timetableNumber === index
+                      } ${timetableNumber === index
                         ? ""
                         : "active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
-                    }`}
+                      }`}
                   >
                     {index}
                   </button>
@@ -386,19 +407,16 @@ async function handleSave(ttName?: string) {
                 disabled={timetableNumber === timetableCount}
                 title="Go to last timetable"
                 aria-label="Go to last timetable"
-                className={` ${
-                  timetableNumber === timetableCount
-                    ? "bg-[#6CC0C5]"
-                    : "bg-[#75E5EA]"
-                } font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-r-xl shadow-[4px_4px_0_0_black] ${
-                  timetableNumber === timetableCount
+                className={` ${timetableNumber === timetableCount
+                  ? "bg-[#6CC0C5]"
+                  : "bg-[#75E5EA]"
+                  } font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-r-xl shadow-[4px_4px_0_0_black] ${timetableNumber === timetableCount
                     ? "cursor-normal"
                     : "cursor-pointer"
-                } ${
-                  timetableNumber === timetableCount
+                  } ${timetableNumber === timetableCount
                     ? ""
                     : "active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
-                }`}
+                  }`}
               >
                 <span style={{ pointerEvents: "none", display: "flex" }}>
                   <Image
