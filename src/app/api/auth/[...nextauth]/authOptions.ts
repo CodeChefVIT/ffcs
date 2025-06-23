@@ -22,9 +22,6 @@ export const authOptions: AuthOptions = {
   session: {
     strategy: "database" as SessionStrategy,
   },
-  pages: {
-    signIn: "/auth/signin",
-  },
   callbacks: {
     async signIn({ user }) {
       if (user.email && user.email.endsWith("@vitstudent.ac.in")) {

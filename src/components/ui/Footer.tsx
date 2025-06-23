@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { CCButton, ZButton } from "./Buttons";
 import AlertModal from "./AlertModal";
+import { useSession } from "next-auth/react";
 
 export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
+  const { data: session } = useSession();
   const [email, setEmail] = useState("");
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [alertState, setAlertState] = useState({
@@ -13,6 +15,12 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
     message: "",
     color: "",
   });
+
+  useEffect(() => {
+    if (session && session.user?.email) {
+      setEmail(session.user.email);
+    }
+  }, [session]);
 
   const handleSubscribe = async () => {
     if (!email || isSubscribing) return;
@@ -33,7 +41,7 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
           message: "Thanks for subscribing!",
           color: "green",
         });
-        setEmail("");
+        setEmail(session?.user?.email || "");
       } else {
         setAlertState({
           open: true,
@@ -125,7 +133,13 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
                 alt: "Instagram",
               },
             ].map(({ href, src, alt }) => (
-              <a href={href} key={src} target="_blank" rel="noopener">
+              <a
+                href={href}
+                key={src}
+                target="_blank"
+                rel="noopener"
+                title={`Follow us on ${alt}`}
+              >
                 <Image
                   src={src}
                   alt={alt}
@@ -213,7 +227,7 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
                 className="text-sm bg-transparent outline-none placeholder:text-black/50 w-full"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && handleSubscribe()}
+                onKeyDown={(e) => e.key === "Enter" && handleSubscribe()}
               />
             </div>
 

@@ -5,7 +5,6 @@ import Timetable from "@/models/timetable";
 export async function GET(req: NextRequest) {
   await dbConnect();
 
-  
   const shareId = req.nextUrl.pathname.split("/").pop();
 
   if (!shareId) {

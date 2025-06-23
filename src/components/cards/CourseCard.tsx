@@ -15,8 +15,11 @@ type CourseCardProps = {
   onUpdate: (updatedCourses: fullCourseData[]) => void;
 };
 
-
-export default function CourseCard({ selectedCourses, onDelete, onUpdate }: CourseCardProps) {
+export default function CourseCard({
+  selectedCourses,
+  onDelete,
+  onUpdate,
+}: CourseCardProps) {
   const { setTimetableData } = useTimetable();
 
   const draggedItemIndex = useRef<number | null>(null);
@@ -25,7 +28,9 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [deletePopupOpen, setDeletePopupOpen] = useState(false);
-  const [courseToDelete, setCourseToDelete] = useState<fullCourseData | null>(null);
+  const [courseToDelete, setCourseToDelete] = useState<fullCourseData | null>(
+    null
+  );
 
   const [alert, setAlert] = useState({
     open: false,
@@ -179,7 +184,9 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
                   <div className={"flex flex-col px-4 gap-1"}>
                     <p key={course.courseCode}>{course.courseCode}</p>
                     {course.courseType === "both" && (
-                      <p key={course.courseCodeLab+"_lab"}>{course.courseCodeLab}</p>
+                      <p key={course.courseCodeLab + "_lab"}>
+                        {course.courseCodeLab}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -188,12 +195,15 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
               {/* Course namee */}
               <div className="flex w-[480px] text-sm text-black font-normal">
                 <div className="flex flex-col gap-1 break-words max-w-full">
-                  <p key={course.courseName} className="break-words leading-snug">
+                  <p
+                    key={course.courseName}
+                    className="break-words leading-snug"
+                  >
                     {course.courseName}
                   </p>
                   {course.courseType === "both" && (
                     <p
-                      key={course.courseNameLab+"_lab"}
+                      key={course.courseNameLab + "_lab"}
                       className="break-words leading-snug"
                     >
                       {course.courseNameLab}
@@ -316,7 +326,10 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
         </div>
 
         {error && (
-          <div className="mt-6 text-center text-[#CC3312] font-semibold" role="alert">
+          <div
+            className="mt-6 text-center text-[#CC3312] font-semibold"
+            role="alert"
+          >
             {error}
           </div>
         )}

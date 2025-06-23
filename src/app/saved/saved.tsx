@@ -12,7 +12,9 @@ import AlertModal from "@/components/ui/AlertModal";
 import axios from "axios";
 
 async function fetchTimetablesByOwner(owner: string) {
-  const res = await axios.get(`/api/timetables?owner=${encodeURIComponent(owner)}`);
+  const res = await axios.get(
+    `/api/timetables?owner=${encodeURIComponent(owner)}`
+  );
   return res.data;
 }
 
@@ -43,7 +45,9 @@ export default function Saved() {
   const [timetables, setTimetables] = useState<TimetableEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
-  const [popupType, setPopupType] = useState<"view_tt" | "delete_tt" | "rename_tt" | null>(null);
+  const [popupType, setPopupType] = useState<
+    "view_tt" | "delete_tt" | "rename_tt" | null
+  >(null);
   const [popupSlots, setPopupSlots] = useState<PopupSlot[]>([]);
   const [popupTitle, setPopupTitle] = useState("");
   const [selectedTT, setSelectedTT] = useState<TimetableEntry | null>(null);
@@ -62,7 +66,11 @@ export default function Saved() {
   }, [userEmail]);
 
   function convertSlots(slots: TimetableEntry["slots"]): PopupSlot[] {
-    return slots.map((s) => ({ code: s.courseCode, slot: s.slot, name: s.facultyName }));
+    return slots.map((s) => ({
+      code: s.courseCode,
+      slot: s.slot,
+      name: s.facultyName,
+    }));
   }
 
   async function handleDelete() {
@@ -74,9 +82,13 @@ export default function Saved() {
 
   async function handleRename() {
     if (!selectedTT) return;
-    await axios.patch(`/api/timetables/${selectedTT._id}`, { title: renameValue });
+    await axios.patch(`/api/timetables/${selectedTT._id}`, {
+      title: renameValue,
+    });
     setTimetables((prev) =>
-      prev.map((t) => (t._id === selectedTT._id ? { ...t, title: renameValue } : t))
+      prev.map((t) =>
+        t._id === selectedTT._id ? { ...t, title: renameValue } : t
+      )
     );
     closePopup("Timetable has been renamed.");
   }
@@ -94,11 +106,15 @@ export default function Saved() {
     if (!selectedTT) return;
     // ensure shareId exists
     if (!selectedTT.isPublic) {
-      await axios.patch(`/api/timetables/${selectedTT._id}`, { isPublic: true });
+      await axios.patch(`/api/timetables/${selectedTT._id}`, {
+        isPublic: true,
+      });
       selectedTT.isPublic = true;
       setPublicToggle(true);
       setTimetables((prev) =>
-        prev.map((t) => (t._id === selectedTT._id ? { ...t, isPublic: true } : t))
+        prev.map((t) =>
+          t._id === selectedTT._id ? { ...t, isPublic: true } : t
+        )
       );
     }
     const { data } = await axios.get(`/api/timetables/${selectedTT._id}`);
@@ -114,7 +130,9 @@ export default function Saved() {
     setPublicToggle(isPub);
     await axios.patch(`/api/timetables/${selectedTT._id}`, { isPublic: isPub });
     setTimetables((prev) =>
-      prev.map((t) => (t._id === selectedTT._id ? { ...t, isPublic: isPub } : t))
+      prev.map((t) =>
+        t._id === selectedTT._id ? { ...t, isPublic: isPub } : t
+      )
     );
   }
 
@@ -140,14 +158,22 @@ export default function Saved() {
       <div className="flex-1 flex flex-col items-center">
         <h1 className="text-6xl mt-48 mb-16 font-pangolin">Saved Timetables</h1>
         <div className="w-5/6 max-w-7xl rounded-[60px] border-4 border-black bg-[#A7D5D7] p-12 mb-24 shadow-[4px_4px_0_0_black]">
-          <h2 className="text-4xl mb-8 font-pangolin font-light">All Timetables</h2>
+          <h2 className="text-4xl mb-8 font-pangolin font-light">
+            All Timetables
+          </h2>
 
           {loading ? (
             <p className="text-3xl text-center">Loading...</p>
           ) : timetables.length === 0 ? (
             <div className="flex flex-col items-center">
               <p className="text-3xl mb-6">(No Timetables Found)</p>
-              <ZButton onClick={() => router.push("/")} type="large" text="Home" color="purple" image="/icons/home.svg" />
+              <ZButton
+                onClick={() => router.push("/")}
+                type="large"
+                text="Home"
+                color="purple"
+                image="/icons/home.svg"
+              />
             </div>
           ) : (
             <ul className="space-y-4 max-h-[60vh] overflow-y-auto pr-4">
@@ -156,20 +182,37 @@ export default function Saved() {
                   key={tt._id}
                   className="flex items-center justify-between bg-[#C9E5E6] p-5 rounded-4xl"
                 >
-                  <span className="text-xl">{i + 1}. {tt.title}</span>
+                  <span className="text-xl">
+                    {i + 1}. {tt.title}
+                  </span>
                   <div className="flex gap-2">
-                    <ZButton type="image" color="yellow" image="/icons/eye.svg" onClick={() => openView(tt)} />
-                    <ZButton type="image" color="blue" image="/icons/edit.svg" onClick={() => {
-                      setSelectedTT(tt);
-                      setRenameValue(tt.title);
-                      setPopupType("rename_tt");
-                      setShowPopup(true);
-                    }} />
-                    <ZButton type="image" color="red" image="/icons/trash.svg" onClick={() => {
-                      setSelectedTT(tt);
-                      setPopupType("delete_tt");
-                      setShowPopup(true);
-                    }} />
+                    <ZButton
+                      type="image"
+                      color="yellow"
+                      image="/icons/eye.svg"
+                      onClick={() => openView(tt)}
+                    />
+                    <ZButton
+                      type="image"
+                      color="blue"
+                      image="/icons/edit.svg"
+                      onClick={() => {
+                        setSelectedTT(tt);
+                        setRenameValue(tt.title);
+                        setPopupType("rename_tt");
+                        setShowPopup(true);
+                      }}
+                    />
+                    <ZButton
+                      type="image"
+                      color="red"
+                      image="/icons/trash.svg"
+                      onClick={() => {
+                        setSelectedTT(tt);
+                        setPopupType("delete_tt");
+                        setShowPopup(true);
+                      }}
+                    />
                   </div>
                 </li>
               ))}
@@ -208,7 +251,12 @@ export default function Saved() {
         />
       )}
 
-      <AlertModal open={alertOpen} message={alertMsg} onClose={() => setAlertOpen(false)} color="purple" />
+      <AlertModal
+        open={alertOpen}
+        message={alertMsg}
+        onClose={() => setAlertOpen(false)}
+        color="purple"
+      />
     </div>
   );
 }

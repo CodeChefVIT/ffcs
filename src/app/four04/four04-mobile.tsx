@@ -23,9 +23,7 @@ export default function NotFound() {
         />
       </div>
 
-
       <div className="flex-grow mt-16 flex flex-col items-center text-center relative">
-
         <div className="text-5xl mb-2 font-pangolin text-black">
           FFCS-inator
         </div>
@@ -39,7 +37,7 @@ export default function NotFound() {
           <span
             className="absolute left-1.5 top-1.5 select-none pointer-events-none font-poppins font-extrabold text-[96px] z-0 text-black"
             style={{
-              WebkitTextStroke: '8px black',
+              WebkitTextStroke: "8px black",
             }}
           >
             404
@@ -48,21 +46,20 @@ export default function NotFound() {
           <span
             className="absolute left-0 top-0 select-none pointer-events-none font-poppins font-extrabold text-[96px] z-10 text-transparent"
             style={{
-              WebkitTextStroke: '8px black',
+              WebkitTextStroke: "8px black",
             }}
           >
             404
           </span>
           {/* Fill layer */}
-          <span
-            className="relative select-none pointer-events-none font-poppins font-extrabold text-[96px] z-20 text-[#90BDFF]"
-          >
+          <span className="relative select-none pointer-events-none font-poppins font-extrabold text-[96px] z-20 text-[#90BDFF]">
             404
           </span>
         </div>
 
         <div className="text-xl mb-16 font-pangolin text-black">
-          OOPS! You have found this secret page!<br />
+          OOPS! You have found this secret page!
+          <br />
           We have nothing to show here...
         </div>
 
@@ -71,7 +68,7 @@ export default function NotFound() {
           text="Home"
           color="purple"
           image="/icons/home.svg"
-          onClick={() => router.push('/')}
+          onClick={() => router.push("/")}
         />
       </div>
 

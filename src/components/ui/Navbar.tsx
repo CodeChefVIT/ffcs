@@ -7,7 +7,14 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import Popup from "./Popup";
 
 type NavbarProps = {
-  page: "landing" | "404" | "slots" | "saved" | "shared" | "mobile" | "placeholder";
+  page:
+    | "landing"
+    | "404"
+    | "slots"
+    | "saved"
+    | "shared"
+    | "mobile"
+    | "placeholder";
 };
 
 export default function Navbar({ page }: NavbarProps) {
@@ -20,7 +27,9 @@ export default function Navbar({ page }: NavbarProps) {
 
   let userName = "User";
   if (loggedin) {
-    userName = (session?.user?.name ?? "").trim().split(" ").slice(0, -1).join(" ") || userName
+    userName =
+      (session?.user?.name ?? "").trim().split(" ").slice(0, -1).join(" ") ||
+      userName;
   }
 
   return (
@@ -36,7 +45,9 @@ export default function Navbar({ page }: NavbarProps) {
         <Popup
           type="login"
           closeLink={() => setShowLoginPopupSaved(false)}
-          action={() => signIn("google", { callbackUrl: "/saved", redirect: true })}
+          action={() =>
+            signIn("google", { callbackUrl: "/saved", redirect: true })
+          }
         />
       )}
       {showLogoutPopup && (
@@ -56,10 +67,8 @@ export default function Navbar({ page }: NavbarProps) {
             padding: "1rem",
           }}
         >
-
           {/* Left Buttons */}
-          <div style={{ display: "flex", gap: "1rem", alignItems: "center", }}>
-
+          <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
             {(page == "landing" || page == "404" || page == "placeholder") && (
               <>
                 <CCButton />
@@ -84,39 +93,48 @@ export default function Navbar({ page }: NavbarProps) {
               </>
             )}
 
-            {(page == "mobile") &&
-              (<div
+            {page == "mobile" && (
+              <div
                 className="text-3xl font-[pangolin] cursor-pointer"
                 onClick={() => router.push("/")}
               >
                 FFCS-inator
-              </div>)
-            }
-
+              </div>
+            )}
           </div>
 
           {/* Right Buttons */}
-          <div style={{ display: "flex", gap: "1rem", alignItems: "center", }}>
-
-            {(page === "landing" || page === "404" || page == "shared" || page === "slots") &&
-               (<ZButton
+          <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+            {(page === "landing" ||
+              page === "404" ||
+              page == "shared" ||
+              page === "slots") && (
+              <ZButton
                 type="long"
                 text="Saved Timetables"
                 color="blue"
-                onClick={loggedin ? () => router.push("/saved") : () => setShowLoginPopupSaved(true)}
-              />)
-            }
-            {(page === "saved") &&
-              (<ZButton
+                onClick={
+                  loggedin
+                    ? () => router.push("/saved")
+                    : () => setShowLoginPopupSaved(true)
+                }
+              />
+            )}
+            {page === "saved" && (
+              <ZButton
                 type="long"
                 text="Slot View"
                 color="yellow"
                 onClick={() => router.push("/slots")}
-              />)
-            }
+              />
+            )}
 
-            {(page === "landing" || page === "404" || page == "shared" || page == "saved" || page === "slots") &&
-              (((!loggedin) && (
+            {(page === "landing" ||
+              page === "404" ||
+              page == "shared" ||
+              page == "saved" ||
+              page === "slots") &&
+              ((!loggedin && (
                 <ZButton
                   type="long"
                   text="Log In"
@@ -131,10 +149,9 @@ export default function Navbar({ page }: NavbarProps) {
                     color="purple"
                     onClick={() => setShowLogoutPopup(true)}
                   />
-                )))
-            }
+                )))}
 
-            {(page == "mobile") &&
+            {page == "mobile" &&
               // ((!loggedin) && (
               //   <ZButton
               //     type="long"
@@ -143,16 +160,14 @@ export default function Navbar({ page }: NavbarProps) {
               //     onClick={() => setShowLoginPopup(true)}
               //   />
               // )) ||
-              (loggedin && (
+              loggedin && (
                 <ZButton
                   type="regular"
                   text="Log Out"
                   color="purple"
                   onClick={() => signOut({ callbackUrl: "/" })}
                 />
-              ))
-            }
-
+              )}
           </div>
         </div>
       </div>

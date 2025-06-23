@@ -59,6 +59,7 @@ function SelectField({
       <button
         onClick={() => setIsOpen(!isOpen)}
         title={selectedLabel}
+        aria-label={`Select ${label}`}
         className={`
          w-full h-10 pl-3 pr-12 text-left bg-white rounded-xl border-3 border-black
          cursor-pointer relative
@@ -176,16 +177,12 @@ function generateCourseSlotsLabOnly({
   labShift: "morning" | "evening";
 }) {
   const isMorningSlot = (slot: string) => {
-    const parts = slot
-      .split("+")
-      .map((s) => parseInt(s.replace("L", ""), 10));
+    const parts = slot.split("+").map((s) => parseInt(s.replace("L", ""), 10));
     return parts.every((num) => num <= 30); // Define morning range
   };
 
   const isEveningSlot = (slot: string) => {
-    const parts = slot
-      .split("+")
-      .map((s) => parseInt(s.replace("L", ""), 10));
+    const parts = slot.split("+").map((s) => parseInt(s.replace("L", ""), 10));
     return parts.every((num) => num > 30); // Define evening range
   };
 
@@ -208,15 +205,13 @@ function generateCourseSlotsLabOnly({
     slotFaculties: subjectData
       .filter(
         (entry) =>
-          entry.slot === slotName &&
-          selectedFaculties.includes(entry.faculty)
+          entry.slot === slotName && selectedFaculties.includes(entry.faculty)
       )
       .map((entry) => ({
         facultyName: entry.faculty,
       })),
   }));
 }
-
 
 function generateCourseSlotsBoth({
   data,
@@ -396,10 +391,10 @@ export default function FacultySelector({
       labSubject.length == 1 || courseCodeType === "E"
         ? "both"
         : courseCodeType === "P" && !courseCode.startsWith("BSTS")
-          ? "lab"
-          : courseCodeType === "L" || courseCode.startsWith("BSTS")
-            ? "th"
-            : "th";
+        ? "lab"
+        : courseCodeType === "L" || courseCode.startsWith("BSTS")
+        ? "th"
+        : "th";
 
     const courseName = selectedSubject.split(" - ")[1];
 
@@ -419,7 +414,7 @@ export default function FacultySelector({
       courseSlots = generateCourseSlotsLabOnly({
         subjectData: data[selectedSchool][selectedDomain][selectedSubject],
         selectedFaculties: priorityList,
-        labShift: selectedLabShift
+        labShift: selectedLabShift,
       });
     } else {
       if (courseType == "both") {
@@ -469,8 +464,8 @@ export default function FacultySelector({
         const exists = savedCourses.some((c) => c.id === id);
         const newCourses = exists
           ? savedCourses.map((course) =>
-            course.id === id ? courseData : course
-          )
+              course.id === id ? courseData : course
+            )
           : [...savedCourses, courseData];
 
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newCourses));
@@ -718,8 +713,9 @@ export default function FacultySelector({
               <button
                 key={school}
                 onClick={() => handleSchoolChange(school)}
-                className={`px-3 py-1 rounded-full text-sm font-bold border-2 shadow-[2px_2px_0_0_black] border-black cursor-pointer transition duration-100 active:shadow-[1px_1px_0_0_black] active:translate-x-[1px] active:translate-y-[1px] ${selectedSchool === school ? "bg-[#FFEA79]" : "bg-white"
-                  }`}
+                className={`px-3 py-1 rounded-full text-sm font-bold border-2 shadow-[2px_2px_0_0_black] border-black cursor-pointer transition duration-100 active:shadow-[1px_1px_0_0_black] active:translate-x-[1px] active:translate-y-[1px] ${
+                  selectedSchool === school ? "bg-[#FFEA79]" : "bg-white"
+                }`}
               >
                 {school}
               </button>
@@ -741,7 +737,7 @@ export default function FacultySelector({
               onChange={handleSubjectChange}
             />
             {selectedSubject.split(" - ")[0].endsWith("P") &&
-              !selectedSubject.split(" - ")[0].startsWith("BSTS") ? (
+            !selectedSubject.split(" - ")[0].startsWith("BSTS") ? (
               <SelectField
                 label="Slot"
                 value={selectedLabShift}
@@ -765,8 +761,10 @@ export default function FacultySelector({
               <SelectField
                 label="Slot"
                 value={selectedSlot}
-                options={slots}
+                options={[...slots].sort((a, b) => a.localeCompare(b))}
                 onChange={handleSlotChange}
+                renderOption={(option) => option}
+                aria-label="Select slot"
               />
             )}
           </div>
@@ -789,6 +787,8 @@ export default function FacultySelector({
                           checked={selectedFaculties.includes(faculty)}
                           onChange={() => toggleFaculty(faculty)}
                           className="peer hidden"
+                          aria-label={`Select faculty ${faculty}`}
+                          title={`Select faculty ${faculty}`}
                         />
                         <div className="w-7 h-7 rounded-md border-3 border-black flex items-center justify-center peer-checked:bg-[#C1FF83]">
                           <Image
@@ -797,7 +797,11 @@ export default function FacultySelector({
                                 ? "/icons/check.svg"
                                 : "/icons/blank.svg"
                             }
-                            alt="check"
+                            alt={
+                              selectedFaculties.includes(faculty)
+                                ? `Selected ${faculty}`
+                                : `Not selected ${faculty}`
+                            }
                             className="w-7 h-7"
                             width={32}
                             height={32}
@@ -855,6 +859,8 @@ export default function FacultySelector({
                           <button
                             onClick={() => moveUp(index)}
                             className="text-sm text-black cursor-pointer"
+                            aria-label={`Move ${faculty} up in priority`}
+                            title={`Move ${faculty} up in priority`}
                           >
                             <Image
                               src={
@@ -874,6 +880,8 @@ export default function FacultySelector({
                           <button
                             onClick={() => moveDown(index)}
                             className="text-sm text-black cursor-pointer"
+                            aria-label={`Move ${faculty} down in priority`}
+                            title={`Move ${faculty} down in priority`}
                           >
                             <Image
                               width={120}
@@ -905,7 +913,6 @@ export default function FacultySelector({
               </div>
 
               <div className="flex flex-row justify-center gap-4">
-
                 <ZButton
                   type="long"
                   text="Reset"
