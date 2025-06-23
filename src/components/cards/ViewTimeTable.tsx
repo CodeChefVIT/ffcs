@@ -330,10 +330,10 @@ export default function ViewTimeTable() {
       className="w-screen mt-12 bg-[#A7D5D7] font-poppins flex items-center justify-center flex-col border-black border-3"
     >
       <div className="flex flex-col h-full p-12 overflow-hidden">
-        <div className="flex flex-row items-end mb-4 ml-2 justify-between w-full">
-          <div className="flex flex-row items-end">
+        <div className="flex flex-row mb-4 justify-between w-full px-4">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:gap-8 gap-4">
             <div className="text-5xl font-pangolin">Your Timetables</div>
-            <div className="text-xl ml-8 font-poppins pb-1">
+            <div className="text-xl font-poppins pb-1">
               {timetableCount == 0
                 ? "(Empty List)"
                 : timetableCount == 1
@@ -341,7 +341,7 @@ export default function ViewTimeTable() {
                   : `(${timetableCount} timetables were generated)`}
             </div>
           </div>
-          <div className="mr-4" style={{ width: 400 }}>
+          <div className="w-[400px]">
             <ComboBox
               label="Filter by Faculty"
               value={filterFaculty}
