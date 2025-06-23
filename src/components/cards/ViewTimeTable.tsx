@@ -79,7 +79,7 @@ export default function ViewTimeTable() {
       arr.push(record);
       localStorage.setItem(key, JSON.stringify(arr));
     } catch {
-      // ignore storage errors
+      
     }
   }
 
@@ -133,7 +133,7 @@ export default function ViewTimeTable() {
         facultyName: item.facultyName || "Unknown",
       })
     );
-    // Check local storage for existing saved timetables
+    // local check 
     const savedKey = 'savedTimetables';
     const savedList = getSavedTimetables(savedKey);
     for (const rec of savedList) {
@@ -155,9 +155,9 @@ export default function ViewTimeTable() {
       if (res.data.success) {
         const returnedId = res.data.timetable?.shareId;
         if (returnedId) {
-          // Store locally
+          
           saveTimetableToLocal(savedKey, { slots, shareId: returnedId });
-          // Also save individual courses
+        
           slots.forEach(s => {
             saveCourseToLocal({ courseCode: s.courseCode, courseName: s.courseName });
           });
@@ -174,59 +174,58 @@ export default function ViewTimeTable() {
   }
 
   async function handleShare() {
-    if (!selectedData || selectedData.length === 0) {
-      showAlert("No timetable to share.");
+  if (!selectedData || selectedData.length === 0) {
+    showAlert("No timetable to share.");
+    return;
+  }
+
+  const slots = selectedData.map((item) => ({
+    slot: item.slotName || "NIL",
+    courseCode: item.courseCode || "00000000",
+    courseName: item.courseName || "Unknown",
+    facultyName: item.facultyName || "Unknown",
+  }));
+
+  // Check local storage for existing shared timetables
+  const sharedKey = 'sharedTimetables';
+  const sharedList = getSavedTimetables(sharedKey);
+  
+  for (const rec of sharedList) {
+    if (slotsMatch(rec.slots, slots)) {
+      const existingId = rec.shareId || 'N/A';
+     // showAlert(`You have already shared this timetable with ID: ${existingId}`);
+      setShareLink(`${window.location.origin}/share/${existingId}`);
+      setShowSharePopup(true);
       return;
     }
-    const slots = selectedData.map(
-      (item: {
-        slotName?: string;
-        courseCode?: string;
-        courseName?: string;
-        facultyName?: string;
-      }) => ({
-        slot: item.slotName || "NIL",
-        courseCode: item.courseCode || "00000000",
-        courseName: item.courseName || "Unknown",
-        facultyName: item.facultyName || "Unknown",
-      })
-    );
-    // Check local storage for existing shared timetables
-    const sharedKey = 'sharedTimetables';
-    const sharedList = getSavedTimetables(sharedKey);
-    for (const rec of sharedList) {
-      if (slotsMatch(rec.slots, slots)) {
-        const existingId = rec.shareId || 'N/A';
-        showAlert(`You have already shared this timetable with ID: ${existingId}`);
-        return;
-      }
-    }
-
-    try {
-      const res = await axios.post("/api/save-timetable", {
-        title: saveTTName || getCurrentDateTime(),
-        slots,
-        owner: owner,
-        isPublic: sharePublic,
-      });
-
-      const newShareId = res?.data?.timetable?.shareId;
-      if (newShareId) {
-        // Store locally
-        saveTimetableToLocal(sharedKey, { slots, shareId: newShareId });
-        // Also save individual courses when sharing
-        slots.forEach(s => {
-          saveCourseToLocal({ courseCode: s.courseCode, courseName: s.courseName });
-        });
-        setShareLink(`${window.location.origin}/share/${newShareId}`);
-        setShowSharePopup(true);
-      } else {
-        showAlert("Failed to generate share link.");
-      }
-    } catch {
-      showAlert("Error sharing timetable.");
-    }
   }
+
+  try {
+    const res = await axios.post("/api/save-timetable", {
+      title: saveTTName || getCurrentDateTime(),
+      slots,
+      owner: owner,
+      isPublic: sharePublic,
+    });
+
+    const newShareId = res?.data?.timetable?.shareId;
+    if (newShareId) {
+      
+      saveTimetableToLocal(sharedKey, { slots, shareId: newShareId });
+      
+      slots.forEach(s => {
+        saveCourseToLocal({ courseCode: s.courseCode, courseName: s.courseName });
+      });
+      setShareLink(`${window.location.origin}/share/${newShareId}`);
+      setShowSharePopup(true);
+    } else {
+      showAlert("Failed to generate share link.");
+    }
+  } catch {
+    showAlert("Error sharing timetable.");
+  }
+}
+
 
   function withLoginCheck(action: () => void, skipCheck = false) {
     return () => {
