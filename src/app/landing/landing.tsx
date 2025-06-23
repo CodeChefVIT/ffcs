@@ -37,25 +37,24 @@ export default function View() {
       if (existingIndex !== -1) {
         const existingCourse = prevCourses[existingIndex];
 
-        // Replace faculty lists for matching slotNames, and add new ones if not already present
         const updatedSlots = newCourse.courseSlots.map((newSlot) => {
           const existingSlot = existingCourse.courseSlots.find(
             (slot) => slot.slotName === newSlot.slotName
           );
 
           if (existingSlot) {
-            // Replace the faculty list
+          
             return {
               ...existingSlot,
               slotFaculties: newSlot.slotFaculties,
             };
           } else {
-            // New slot, just add it
+           
             return newSlot;
           }
         });
 
-        // Merge any slots from existingCourse that are not in newCourse
+        
         const preservedOldSlots = existingCourse.courseSlots.filter(
           (oldSlot) =>
             !newCourse.courseSlots.some(
@@ -75,7 +74,7 @@ export default function View() {
 
         return updatedCourses;
       } else {
-        // New course, add directly
+        
         return [...prevCourses, newCourse];
       }
     });
