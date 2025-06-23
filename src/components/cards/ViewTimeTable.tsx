@@ -11,7 +11,7 @@ import Image from "next/image";
 import Popup from "@/components/ui/Popup";
 import AlertModal from "@/components/ui/AlertModal";
 import LoadingPopup from "@/components/ui/LoadingPopup";
-import { exportToExcel, getCurrentDateTime } from "@/lib/utils";
+import { exportToPDF, getCurrentDateTime } from "@/lib/utils";
 
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
@@ -160,7 +160,7 @@ export default function ViewTimeTable() {
           showAlert("No Timetables generated");
           return;
         }
-        exportToExcel();
+        exportToPDF();
       },
     },
     {

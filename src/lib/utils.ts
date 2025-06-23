@@ -1,8 +1,10 @@
 import { getGlobalCourses } from "./globalCourses";
 import { clashMap } from "./slots";
 import { fullCourseData, timetableDisplayData } from "./type";
-import ExcelJS from "exceljs";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
+// Generate all valid timetable combinations from course data
 export function generateTT(
   courseData: fullCourseData[],
   discardClashCombinations: boolean = true
@@ -182,54 +184,36 @@ export function getCurrentDateTime() {
   )} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
 }
 
-export const exportToExcel = async () => {
+// --- PDF Export Function ---
+export const exportToPDF = async () => {
   const courses: fullCourseData[] = getGlobalCourses();
 
   if (!courses || courses.length === 0) {
     throw new Error("No course data available to export.");
   }
 
-  const workbook = new ExcelJS.Workbook();
-  const sheet = workbook.addWorksheet("Faculty Slots");
+  const doc = new jsPDF({ orientation: "landscape" });
+  const now = new Date();
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  const dateTime = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(
+    now.getDate()
+  )} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
 
-  const header = [
-    "Course Name",
-    "",
-    "Faculty",
-    "",
-    "Theory Slot",
-    "Lab Slot",
-    "",
-    "Clashes with",
-    "",
-    "",
-  ];
-  const headerRow = sheet.addRow(header);
-  headerRow.font = { bold: true, size: 14 };
-  headerRow.fill = {
-    type: "pattern",
-    pattern: "solid",
-    fgColor: { argb: "FFF0F0F0" },
-  };
-  headerRow.eachCell((cell) => {
-    cell.border = {
-      bottom: { style: "thick", color: { argb: "FF000000" } },
-    };
-  });
-  sheet.addRow([]); // Add an empty row for spacing
-  sheet.addRow([]); // Add an empty row for spacing
+  doc.setFontSize(18);
+  doc.text("Faculty Slot Allocation", 14, 16);
+  doc.setFontSize(11);
+  doc.text(`Exported on: ${dateTime}`, 14, 24);
 
-  courses.forEach((course) => {
+  const tableBody: string[][] = [];
+
+  for (const course of courses) {
     const courseLabel =
       course.courseType === "both"
         ? `${course.courseName} & Lab`
         : course.courseName;
 
-    course.courseSlots.forEach((slot, idx1) => {
-      const isFirstSubjectRow = idx1 === 0;
-      slot.slotFaculties.forEach((faculty, idx2) => {
-        const isFirstFacultyRow = idx2 === 0;
-
+    for (const slot of course.courseSlots) {
+      for (const faculty of slot.slotFaculties) {
         const theorySlot =
           course.courseType === "th" || course.courseType === "both"
             ? slot.slotName
@@ -239,113 +223,83 @@ export const exportToExcel = async () => {
             ? slot.slotName
             : faculty.facultyLabSlot ?? "";
 
-        labSlot.split(", ").forEach((lab, idx3) => {
+        const labSlots = labSlot.split(", ");
+        for (const lab of labSlots) {
           const notes: string[] = [];
-          const currentTheorySlot = theorySlot;
-          const currentLabSlot = lab;
 
-          const clashKey = [
-            ...currentTheorySlot.split("+"),
-            ...currentLabSlot.split("+"),
-          ];
+          const clashKey = [...theorySlot.split("+"), ...lab.split("+")];
 
-          const previousRows = sheet.getRows(2, sheet.rowCount - 1);
-          if (previousRows) {
-            previousRows.forEach((row) => {
-              const rowTheorySlot = row.getCell(5).value?.toString() || "";
-              const rowLabSlot = row.getCell(6).value?.toString() || "";
-              const clashCheck = [
-                ...rowTheorySlot.split("+"),
-                ...rowLabSlot.split("+"),
-              ];
+          for (const row of tableBody) {
+            const rowTheory = row[2] || "";
+            const rowLab = row[3] || "";
+            const existingSlots = [
+              ...rowTheory.split("+"),
+              ...rowLab.split("+"),
+            ];
 
-              const occupiedSlots: string[] = [];
-              clashCheck.forEach((slot) => {
-                if (clashMap[slot]) {
-                  occupiedSlots.push(...clashMap[slot]);
-                }
-              });
-
-              if (
-                clashKey.some((slot) => occupiedSlots.includes(slot)) ||
-                (clashKey.some((slot) => clashCheck.includes(slot)) &&
-                  row.getCell(1).value?.toString() !== courseLabel)
-              ) {
-                const rowFaculty = row.getCell(3).value?.toString() || "";
-                notes.push(rowFaculty);
+            const occupiedSlots: string[] = [];
+            for (const s of existingSlots) {
+              if (clashMap[s]) {
+                occupiedSlots.push(...clashMap[s]);
               }
-            });
+            }
+
+            if (
+              clashKey.some((slot) => occupiedSlots.includes(slot)) ||
+              clashKey.some((slot) => existingSlots.includes(slot))
+            ) {
+              notes.push(row[1] || "");
+            }
           }
 
-          const notesStr = notes.join(", ");
-
-          const isFirst = isFirstSubjectRow && isFirstFacultyRow && idx3 === 0;
-          const courseLabelValue = courseLabel; // Always put the subject name
-
-          const newRow = sheet.addRow([
-            courseLabelValue,
-            "",
+          tableBody.push([
+            courseLabel,
             faculty.facultyName,
-            "",
             theorySlot,
             lab,
-            "",
-            notesStr,
+            notes.join(", "),
           ]);
-
-          if (isFirst)
-            newRow.getCell(1).font = {
-              color: { argb: "FF000000" },
-              bold: true,
-            };
-          else newRow.getCell(1).font = { color: { argb: "FFFFFFFF" } };
-
-          newRow.getCell(8).font = { color: { argb: "FFFF0000" }, bold: true };
-        });
-      });
-    });
-    sheet.addRow([]);
-    sheet.addRow([]);
-  });
-
-  sheet.columns.forEach((col, idx) => {
-    let max = 2;
-    col.eachCell?.((cell) => {
-      const len = cell.value?.toString().length ?? 0;
-      max = Math.max(max, len + 5);
-    });
-    col.width = max;
-    if (idx === 0) {
-      col.border = {
-        right: { style: "thick", color: { argb: "FF000000" } },
-      };
-      // Set border for the first cell in the column if it exists and is a cell object
-      const firstCellObj = sheet.getCell(1, idx + 1);
-      firstCellObj.border = {
-        right: { style: "thick", color: { argb: "FF000000" } },
-        bottom: { style: "thick", color: { argb: "FF000000" } },
-      };
-      firstCellObj.font = { bold: true, size: 14 };
+        }
+      }
     }
+
+    tableBody.push(["", "", "", "", ""]); // spacing row
+  }
+
+  autoTable(doc, {
+    head: [
+      ["Course Name", "Faculty", "Theory Slot", "Lab Slot", "Clashes with"],
+    ],
+    body: tableBody,
+    styles: { fontSize: 8 },
+    headStyles: {
+      fillColor: [220, 220, 220],
+      textColor: 0,
+      fontStyle: "bold",
+    },
+    startY: 30,
+    theme: "striped",
+    columnStyles: {
+      0: { cellWidth: 60 },
+      1: { cellWidth: 40 },
+      2: { cellWidth: 30 },
+      3: { cellWidth: 30 },
+      4: { cellWidth: 60 },
+    },
+    didDrawPage: () => {
+      doc.setFontSize(10);
+      doc.text(
+        `Page ${(
+          doc as jsPDF & { internal: { getNumberOfPages: () => number } }
+        ).internal.getNumberOfPages()}`,
+        270,
+        200,
+        {
+          align: "right",
+        }
+      );
+    },
   });
 
-  const buffer = await workbook.xlsx.writeBuffer();
-  const blob = new Blob([buffer], {
-    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  });
-  const url = URL.createObjectURL(blob);
-
-  // Generate filename with current date and time
-  const now = new Date();
-  const pad = (n: number) => n.toString().padStart(2, "0");
-  const dateTime = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(
-    now.getDate()
-  )}_${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
-  const filename = `timetable_${dateTime}.xlsx`;
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
+  doc.save(`timetable_${dateTime.replace(/[: ]/g, "_")}.pdf`);
 };
