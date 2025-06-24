@@ -43,18 +43,15 @@ export default function View() {
           );
 
           if (existingSlot) {
-          
             return {
               ...existingSlot,
               slotFaculties: newSlot.slotFaculties,
             };
           } else {
-           
             return newSlot;
           }
         });
 
-        
         const preservedOldSlots = existingCourse.courseSlots.filter(
           (oldSlot) =>
             !newCourse.courseSlots.some(
@@ -74,7 +71,6 @@ export default function View() {
 
         return updatedCourses;
       } else {
-        
         return [...prevCourses, newCourse];
       }
     });
@@ -106,7 +102,7 @@ export default function View() {
       </div>
       <Navbar page="landing" />
 
-      <Hero page="normal" />
+      <Hero />
 
       <div className="w-4xl mx-4 pt-12" id="start">
         <FacultySelector onConfirm={facultySelectorOnConfirm} />

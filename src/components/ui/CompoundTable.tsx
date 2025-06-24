@@ -78,7 +78,10 @@ export default function CompoundTable({ data, large }: CompoundTableProps) {
             // } else {
             //   initials = displayName;
             // }
-            let initials = displayName.length > 12 ? displayName.slice(0, 12) + "..." : displayName;
+            const initials =
+              displayName.length > 12
+                ? displayName.slice(0, 12) + "..."
+                : displayName;
 
             console.log();
             return (
