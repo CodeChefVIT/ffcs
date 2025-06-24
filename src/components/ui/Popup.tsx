@@ -13,15 +13,15 @@ type dataProps = {
 
 type PopupProps = {
   type:
-    | "login"
-    | "rem_course"
-    | "rem_allcourse"
-    | "share_tt"
-    | "save_tt"
-    | "delete_tt"
-    | "view_tt"
-    | "logout"
-    | "rename_tt";
+  | "login"
+  | "rem_course"
+  | "rem_allcourse"
+  | "share_tt"
+  | "save_tt"
+  | "delete_tt"
+  | "view_tt"
+  | "logout"
+  | "rename_tt";
   dataTitle?: string;
   dataBody?: string;
   dataTT?: dataProps[];
@@ -55,7 +55,7 @@ const typeColorMap = {
 const typeTitleMap = {
   login: "Sign In",
   rem_course: "Remove Course",
-  rem_allcourse: "Delete All",
+  rem_allcourse: "Remove All",
   share_tt: "Share Timetable",
   save_tt: "Save Timetable",
   delete_tt: "Delete Timetable",
@@ -67,7 +67,7 @@ const typeTitleMap = {
 const typeTextMap = {
   login: "Please log-in to save and share your time-tables.",
   rem_course: "Are you sure you want to remove this course?",
-  rem_allcourse: "Are you sure you want to delete all courses?",
+  rem_allcourse: "Are you sure you want to remove all courses?",
   share_tt: "Share your timetable with anyone.",
   save_tt: "Save this timetable in your collection.",
   delete_tt: "Are you sure you want to delete this timetable?",
@@ -165,11 +165,12 @@ export default function Popup({
           {!(
             type == "delete_tt" ||
             type == "rem_course" ||
-            type == "logout"
+            type == "logout" ||
+            type == "rem_allcourse"
           ) && (
-            <div className="flex-1 text-right flex items-center justify-end">
-              <div
-                className={`
+              <div className="flex-1 text-right flex items-center justify-end">
+                <div
+                  className={`
                 w-12 h-12
                 bg-[#FF9A9A]
                 rounded-tr-3xl
@@ -179,20 +180,20 @@ export default function Popup({
                 outline-4 outline-black
                 pt-1 pr-1
               `}
-                onClick={() => closeLink()}
-              >
-                <Image
-                  src="/icons/cross.svg"
-                  alt="close"
-                  width={32}
-                  height={32}
-                  draggable={false}
-                  unselectable="on"
-                  priority
-                />
+                  onClick={() => closeLink()}
+                >
+                  <Image
+                    src="/icons/cross.svg"
+                    alt="close"
+                    width={32}
+                    height={32}
+                    draggable={false}
+                    unselectable="on"
+                    priority
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
 
         <div className="flex flex-col items-center justify-center text-lg font-poppins font-regular p-8">
@@ -305,7 +306,7 @@ export default function Popup({
             </div>
           )}
 
-           {type == "rem_allcourse" && (
+          {type == "rem_allcourse" && (
             <div>
               <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
                 {text}
@@ -445,7 +446,7 @@ export default function Popup({
                   <BasicToggleButton
                     key={shareEnabledDefault ? "on" : "off"}
                     defaultState={shareEnabledDefault ? "on" : "off"}
-                    onToggle={shareSwitchAction ?? (() => {})}
+                    onToggle={shareSwitchAction ?? (() => { })}
                   />
                 </div>
               </div>

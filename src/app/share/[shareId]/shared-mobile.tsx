@@ -147,10 +147,10 @@ export default function SharedTimetablePageMobile() {
       </div>
       {data && (
         <>
-          <div className="w-full max-w-7xl overflow-x-auto mb-8">
+          <div className="w-full max-w-7xl overflow-x-auto mb-4">
             <CompoundTable data={data} />
           </div>
-          <div className="mt-4 flex justify-center">
+          <div className="mt-2 mb-4 flex justify-center">
             <ZButton
               type="long"
               text="Save"
