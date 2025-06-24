@@ -1,28 +1,34 @@
 import mongoose from "mongoose";
 
 declare global {
-  var mongooseConnection: {
+  let mongooseConnection: {
     conn: typeof mongoose | null;
     promise: Promise<typeof mongoose> | null;
   };
 }
 
-global.mongooseConnection = global.mongooseConnection || {
-  conn: null,
-  promise: null,
+let globalWithMongoose = global as typeof globalThis & {
+  mongooseConnection: {
+    conn: typeof mongoose | null;
+    promise: Promise<typeof mongoose> | null;
+  };
 };
 
+if (!globalWithMongoose.mongooseConnection) {
+  globalWithMongoose.mongooseConnection = { conn: null, promise: null };
+}
+
 async function dbConnect() {
-  if (global.mongooseConnection.conn) {
-    return global.mongooseConnection.conn;
+  if (globalWithMongoose.mongooseConnection.conn) {
+    return globalWithMongoose.mongooseConnection.conn;
   }
 
-  if (!global.mongooseConnection.promise) {
-    global.mongooseConnection.promise = mongoose.connect(process.env.MONGODB_URI!);
+  if (!globalWithMongoose.mongooseConnection.promise) {
+    globalWithMongoose.mongooseConnection.promise = mongoose.connect(process.env.MONGODB_URI!);
   }
 
-  global.mongooseConnection.conn = await global.mongooseConnection.promise;
-  return global.mongooseConnection.conn;
+  globalWithMongoose.mongooseConnection.conn = await globalWithMongoose.mongooseConnection.promise;
+  return globalWithMongoose.mongooseConnection.conn;
 }
 
 export default dbConnect;
