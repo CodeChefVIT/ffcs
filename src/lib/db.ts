@@ -1,17 +1,34 @@
 import mongoose from "mongoose";
 
-const connection: { isConnected?: number } = {};
+declare global {
+  let mongooseConnection: {
+    conn: typeof mongoose | null;
+    promise: Promise<typeof mongoose> | null;
+  };
+}
+
+const globalWithMongoose = global as typeof globalThis & {
+  mongooseConnection: {
+    conn: typeof mongoose | null;
+    promise: Promise<typeof mongoose> | null;
+  };
+};
+
+if (!globalWithMongoose.mongooseConnection) {
+  globalWithMongoose.mongooseConnection = { conn: null, promise: null };
+}
 
 async function dbConnect() {
-  if (connection.isConnected) {
-    return mongoose;
+  if (globalWithMongoose.mongooseConnection.conn) {
+    return globalWithMongoose.mongooseConnection.conn;
   }
 
-  const db = await mongoose.connect(process.env.MONGODB_URI!);
+  if (!globalWithMongoose.mongooseConnection.promise) {
+    globalWithMongoose.mongooseConnection.promise = mongoose.connect(process.env.MONGODB_URI!);
+  }
 
-  connection.isConnected = db.connections[0].readyState;
-
-  return mongoose;
+  globalWithMongoose.mongooseConnection.conn = await globalWithMongoose.mongooseConnection.promise;
+  return globalWithMongoose.mongooseConnection.conn;
 }
 
 export default dbConnect;
