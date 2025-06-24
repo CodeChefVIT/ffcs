@@ -76,7 +76,7 @@ export const exportToPDF = async (): Promise<void> => {
         labSlots.forEach((lab) => {
           const notes: string[] = [];
 
-          var clashKey = [...theorySlot.split("+"), ...lab.split("+")];
+          let clashKey = [...theorySlot.split("+"), ...lab.split("+")];
           clashKey = clashKey.filter((slot) => slot.trim() !== "");
 
           for (const row of tableBody.slice(1)) {
@@ -84,7 +84,7 @@ export const exportToPDF = async (): Promise<void> => {
             const rowLab = row[4].text;
             const prevCourseLabel = row[1].text;
 
-            var existingSlots: string[] = [];
+            let existingSlots: string[] = [];
 
             if (courseLabel !== prevCourseLabel) {
               existingSlots = [
@@ -95,7 +95,7 @@ export const exportToPDF = async (): Promise<void> => {
 
             existingSlots = existingSlots.filter((slot) => slot.trim() !== "");
 
-            var occupiedSlots: string[] = [];
+            let occupiedSlots: string[] = [];
             for (const s of existingSlots) {
               if (clashMap[s]) occupiedSlots.push(...clashMap[s]);
             }
