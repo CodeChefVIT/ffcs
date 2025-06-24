@@ -846,7 +846,7 @@ export default function FacultySelector({
                   return (
                     <div key={index} className="relative">
                       <div
-                        className="flex items-center justify-between py-1 px-2 relative"
+                        className="flex items-center justify-between py-1 px-2 relative cursor-pointer"
                         tabIndex={labTooltip ? 0 : -1}
                         aria-label={labTooltip || undefined}
                         onMouseEnter={() =>
@@ -861,29 +861,26 @@ export default function FacultySelector({
                         onBlur={() =>
                           labTooltip && setTooltipFacultyIndex(null)
                         }
-                        style={{ cursor: labTooltip ? "pointer" : "default" }}
+                        onClick={() => toggleFaculty(faculty)}
                       >
                         {labTooltip && tooltipFacultyIndex === index && (
                           <div
-                            className="z-50 absolute right-0 -translate-y-1/2 px-3 py-2 shadow-lg border"
-
-                            style={{
-                              background: "var(--color-popover, #fff)",
-                              color: "var(--color-popover-foreground, #222)",
-                              borderColor: "var(--color-border, #ccc)",
-                              borderRadius: "var(--radius-md, 8px)",
-                              minWidth: "max-content",
-                              maxWidth: 240,
-                              whiteSpace: "pre-line",
-                              fontSize: '0.8rem',
-                              fontFamily:
-                                "var(--font-inter, Inter, sans-serif)",
-                              boxShadow: "0 4px 16px 0 rgba(0,0,0,0.10)",
-                              pointerEvents: "none",
-                            }}
-                            role="tooltip"
+                            className="z-50 absolute flex right-0 items-center pr-12"
+                            style={{ pointerEvents: "none" }}
                           >
-                            {labTooltip}
+                            <div
+                              className={`
+                              px-2 py-1
+                              shadow-lg border border-gray-300
+                              rounded-md min-w-max max-w-xs
+                              whitespace-pre-line text-xs
+                              font-inter bg-white
+                              text-gray-900 pointer-events-none
+                              `}
+                              role="tooltip"
+                            >
+                              {labTooltip}
+                            </div>
                           </div>
                         )}
                         <span className="text-[#000000] relative">
