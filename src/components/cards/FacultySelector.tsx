@@ -748,9 +748,6 @@ export default function FacultySelector({
                   } else {
                     setSelectedLabShift("");
                   }
-                  setFaculties([]);
-                  setSelectedFaculties([]);
-                  setPriorityList([]);
                 }}
                 options={["morning", "evening"].filter(
                   (shift) =>
@@ -781,6 +778,7 @@ export default function FacultySelector({
                 {faculties.map((faculty: string, index: number) => {
                   // Tooltip logic: check for lab association
                   let labTooltip = "";
+
                   if (
                     selectedDomain &&
                     selectedSubject &&
@@ -789,25 +787,59 @@ export default function FacultySelector({
                     const courseCode = selectedSubject.split(" - ")[0];
                     const baseCode = courseCode.slice(0, -1);
                     const domainData = data[selectedSchool][selectedDomain];
-                    // Find lab subject with same base code
-                    const labSubjectKey = Object.keys(domainData).find(
-                      (subject) => {
-                        const subjectCode = subject.split(" - ")[0];
-                        return (
-                          subjectCode.slice(0, -1) === baseCode &&
-                          (subjectCode.endsWith("P") ||
-                            subjectCode.endsWith("E"))
-                        );
-                      }
-                    );
+
+                    // Find corresponding lab subject
+                    const labSubjectKey = Object.keys(domainData).find((subject) => {
+                      const subjectCode = subject.split(" - ")[0];
+                      return (
+                        subjectCode.slice(0, -1) === baseCode &&
+                        (subjectCode.endsWith("P") || subjectCode.endsWith("E"))
+                      );
+                    });
+
                     if (labSubjectKey) {
                       const labEntries = domainData[labSubjectKey].filter(
                         (entry: SubjectEntry) => entry.faculty === faculty
                       );
-                      if (labEntries.length > 0) {
-                        labTooltip = `Lab Slots: ${labEntries
-                          .map((e) => e.slot)
-                          .join(", ")}`;
+                      let shiftSlots = [];
+                      if (selectedLabShift === "morning") {
+                        shiftSlots = labEntries
+                          .map((entry) => entry.slot)
+                          .filter((slot) =>
+                            slot
+                              .split("+")
+                              .every((s) => parseInt(s.replace("L", ""), 10) <= 30)
+                          );
+                      } else if (selectedLabShift === "evening") {
+                        shiftSlots = labEntries
+                          .map((entry) => entry.slot)
+                          .filter((slot) =>
+                            slot
+                              .split("+")
+                              .every((s) => parseInt(s.replace("L", ""), 10) >= 31)
+                          );
+                      } else {
+                        // Determine selected shift
+                        const isMorningSelected =
+                          selectedSlot.endsWith("1");
+                        const isEveningSelected =
+                          selectedSlot.endsWith("2");
+
+                        shiftSlots = labEntries
+                          .map((entry) => entry.slot)
+                          .filter((slot) => {
+                            const parts = slot.split("+");
+                            return parts.every((s) => {
+                              const num = parseInt(s.replace("L", ""), 10);
+                              return isMorningSelected ? num >= 31 : isEveningSelected ? num <= 30 : false;
+                            });
+                          });
+                      }
+
+
+                      if (shiftSlots.length > 0) {
+                        labTooltip = `${shiftSlots.join(", ")}`;
+                        //labTooltip = "L54+L51, L55+L56, L57+L58"
                       }
                     }
                   }
@@ -833,7 +865,8 @@ export default function FacultySelector({
                       >
                         {labTooltip && tooltipFacultyIndex === index && (
                           <div
-                            className="z-50 absolute left-1/2 -translate-x-1 translate-y-[-50%] px-3 py-2 text-sm shadow-lg border"
+                            className="z-50 absolute right-0 -translate-y-1/2 px-3 py-2 shadow-lg border"
+
                             style={{
                               background: "var(--color-popover, #fff)",
                               color: "var(--color-popover-foreground, #222)",
@@ -842,6 +875,7 @@ export default function FacultySelector({
                               minWidth: "max-content",
                               maxWidth: 240,
                               whiteSpace: "pre-line",
+                              fontSize: '0.8rem',
                               fontFamily:
                                 "var(--font-inter, Inter, sans-serif)",
                               boxShadow: "0 4px 16px 0 rgba(0,0,0,0.10)",
