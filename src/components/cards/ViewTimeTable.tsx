@@ -27,7 +27,7 @@ export default function ViewTimeTable() {
   const [saveTTName, setSaveTTName] = useState<string>("");
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMsg, setAlertMsg] = useState("");
-  const [sharePublic, setSharePublic] = useState(true);
+  
   const [isSaving, setIsSaving] = useState(false);
 
   const [filterFaculty, setFilterFaculty] = useState("");
@@ -73,7 +73,7 @@ export default function ViewTimeTable() {
   useEffect(() => {
     if (!timetableData || timetableData.length === 0) return;
 
-    timetableData.forEach((timetable, index) => {
+    timetableData.forEach((timetable,) => {
       if (!(timetable as any).shareId) {
         (timetable as any).shareId = generateShareId();
       }
