@@ -65,6 +65,22 @@ export default function CompoundTable({ data, large }: CompoundTableProps) {
         >
           {Object.entries(groupedData).map(([groupKey, entries], idx) => {
             const displayName = groupKey.split("__")[0];
+            //console.log(displayName)
+            // let initials = "";
+            // const parts = displayName.split(" ");
+
+            // if (displayName.length > 12) {
+            //   initials = parts[0];
+            //   if (parts.length > 1) {
+            //     initials += " " + parts[1].charAt(0);
+            //   }
+            //   initials += " " + parts[parts.length - 1].charAt(0);
+            // } else {
+            //   initials = displayName;
+            // }
+            let initials = displayName.length > 12 ? displayName.slice(0, 12) + "..." : displayName;
+
+            console.log();
             return (
               <div
                 key={idx}
@@ -80,7 +96,7 @@ export default function CompoundTable({ data, large }: CompoundTableProps) {
                         {entry.slot.replace(/\+/g, "+\u200B")}
                       </div>
                       <div className="w-[160px] shrink-0 break-words whitespace-normal text-right pr-4">
-                        {i === 0 ? displayName : ""}
+                        {i === 0 ? initials : ""}
                       </div>
                     </div>
                   ))}

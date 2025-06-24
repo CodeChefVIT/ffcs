@@ -102,7 +102,7 @@ export default function Popup({
 
   const shareEnabled =
     shareEnabledDefault !== undefined ? shareEnabledDefault : true;
-  const [shareState, setShareState] = useState<"on" | "off">(
+  const [shareState,] = useState<"on" | "off">(
     shareEnabled ? "on" : "off"
   );
 
