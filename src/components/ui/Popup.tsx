@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { BasicToggleButton, GoogleLoginButton, ZButton } from "./Buttons";
 import CompoundTable from "./CompoundTable";
+import LoadingPopup from "./LoadingPopup";
 
 type dataProps = {
   code: string;
@@ -13,15 +14,15 @@ type dataProps = {
 
 type PopupProps = {
   type:
-  | "login"
-  | "rem_course"
-  | "rem_allcourse"
-  | "share_tt"
-  | "save_tt"
-  | "delete_tt"
-  | "view_tt"
-  | "logout"
-  | "rename_tt";
+    | "login"
+    | "rem_course"
+    | "rem_allcourse"
+    | "share_tt"
+    | "save_tt"
+    | "delete_tt"
+    | "view_tt"
+    | "logout"
+    | "rename_tt";
   dataTitle?: string;
   dataBody?: string;
   dataTT?: dataProps[];
@@ -92,7 +93,8 @@ export default function Popup({
   shareEnabledDefault,
   shareSwitchAction,
   onInputChange,
-}: PopupProps) {
+  isLoading = false,
+}: PopupProps & { isLoading?: boolean }) {
   const theme = colorMap[typeColorMap[type] as keyof typeof colorMap] || [
     "#E4E9FC",
     "#94ACFF",
@@ -102,9 +104,7 @@ export default function Popup({
 
   const shareEnabled =
     shareEnabledDefault !== undefined ? shareEnabledDefault : true;
-  const [shareState,] = useState<"on" | "off">(
-    shareEnabled ? "on" : "off"
-  );
+  const [shareState] = useState<"on" | "off">(shareEnabled ? "on" : "off");
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -116,6 +116,8 @@ export default function Popup({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#425D5F]/75 backdrop-blur-xs z-50 select-none">
+      {/* Loader overlay for share_tt */}
+      {type === "share_tt" && isLoading && <LoadingPopup isLoading={true} />}
       <div
         style={{ backgroundColor: theme[0] }}
         className={`
@@ -168,9 +170,9 @@ export default function Popup({
             type == "logout" ||
             type == "rem_allcourse"
           ) && (
-              <div className="flex-1 text-right flex items-center justify-end">
-                <div
-                  className={`
+            <div className="flex-1 text-right flex items-center justify-end">
+              <div
+                className={`
                 w-12 h-12
                 bg-[#FF9A9A]
                 rounded-tr-3xl
@@ -180,20 +182,20 @@ export default function Popup({
                 outline-4 outline-black
                 pt-1 pr-1
               `}
-                  onClick={() => closeLink()}
-                >
-                  <Image
-                    src="/icons/cross.svg"
-                    alt="close"
-                    width={32}
-                    height={32}
-                    draggable={false}
-                    unselectable="on"
-                    priority
-                  />
-                </div>
+                onClick={() => closeLink()}
+              >
+                <Image
+                  src="/icons/cross.svg"
+                  alt="close"
+                  width={32}
+                  height={32}
+                  draggable={false}
+                  unselectable="on"
+                  priority
+                />
               </div>
-            )}
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col items-center justify-center text-lg font-poppins font-regular p-8">
@@ -446,7 +448,7 @@ export default function Popup({
                   <BasicToggleButton
                     key={shareEnabledDefault ? "on" : "off"}
                     defaultState={shareEnabledDefault ? "on" : "off"}
-                    onToggle={shareSwitchAction ?? (() => { })}
+                    onToggle={shareSwitchAction ?? (() => {})}
                   />
                 </div>
               </div>
