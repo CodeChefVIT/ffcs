@@ -1,0 +1,90 @@
+export const SenseOpenElective = {
+  "BHUM111L - Happiness and Well-being": [
+    { slot: "A2+TA2", venue: "SJT607", faculty: "POONAM SHARMA" },
+  ],
+  "BHUM201L - Mass Communication": [
+    { slot: "B2+TB2", venue: "SJT617", faculty: "RASHMI M" },
+    { slot: "G1+TG1", venue: "GDN122", faculty: "PRABAKAR S" },
+  ],
+  "BHUM202L - Rural Development": [
+    { slot: "B1+TB1", venue: "PRP238", faculty: "RASHMI M" },
+  ],
+  "BHUM203L - Introduction to Psychology": [
+    { slot: "F1+TF1", venue: "SMV214", faculty: "BHUVANESWARI M" },
+    { slot: "G1+TG1", venue: "PRP519", faculty: "MOHD OWAIS KHAN" },
+    { slot: "B1+TB1", venue: "PRP330", faculty: "POONAM SHARMA" },
+    { slot: "D2+TD2", venue: "PRP604", faculty: "TANU KUKREJA" },
+    { slot: "F2+TF2", venue: "TT413", faculty: "NAVIN KUMAR" },
+    { slot: "E1+TE1", venue: "SJT607", faculty: "TANU KUKREJA" },
+    { slot: "D2+TD2", venue: "SJT617", faculty: "POONAM SHARMA" },
+    { slot: "D2+TD2", venue: "TT201", faculty: "TONY P JOSE" },
+    { slot: "D2+TD2", venue: "SMV218", faculty: "MOHD OWAIS KHAN" },
+    { slot: "E2+TE2", venue: "TT201", faculty: "BHUVANESWARI M" },
+    { slot: "F1+TF1", venue: "SJT710", faculty: "TONY P JOSE" },
+  ],
+  "BHUM204L - Industrial Psychology": [
+    { slot: "A2+TA2", venue: "SJT626", faculty: "TANU KUKREJA" },
+  ],
+  "BHUM206L - International Economics": [
+    { slot: "G1+TG1", venue: "GDN123", faculty: "SUMEETHA M" },
+  ],
+  "BHUM209L - Game Theory": [
+    { slot: "B1+TB1", venue: "PRP250", faculty: "AQUIB PARVEZ" },
+  ],
+  "BHUM214L - Political Science": [
+    { slot: "F1+TF1", venue: "MB225", faculty: "MULUGU S NEELOTPAL" },
+  ],
+  "BHUM215L - International Relations": [
+    { slot: "F1+TF1", venue: "TT404", faculty: "BANGALORE MORARJI" },
+  ],
+  "BHUM216L - Indian Culture and Heritage": [
+    { slot: "F2+TF2", venue: "SMV220", faculty: "BANGALORE MORARJI" },
+  ],
+  "BHUM217L - Contemporary India": [
+    { slot: "F1+TF1", venue: "PRP329", faculty: "RIZWAN AHMAD" },
+  ],
+  "BHUM218L - Financial Management": [
+    { slot: "F1+TF1", venue: "TT313", faculty: "NIRAKAR BARIK" },
+    { slot: "F2+TF2", venue: "SJT424", faculty: "SRIRAM G" },
+  ],
+  "BHUM225L - Personal Finance": [
+    { slot: "D2+TD2", venue: "GDNG07", faculty: "ADIL AHMAD SHAH" },
+    { slot: "D1+TD1", venue: "PRP622", faculty: "SRIRAM G" },
+  ],
+  "BHUM226L - Corporate Finance": [
+    { slot: "D2+TD2", venue: "TT305", faculty: "FAISAL USMANI" },
+  ],
+  "BSTS301P - Advanced Competitive Coding - I": [
+    { slot: "F1+TF1", venue: "SMV217", faculty: "ETHNUS (APT)" },
+    { slot: "F1+TF1", venue: "CDMM103", faculty: "ETHNUS (APT)" },
+    { slot: "F2+TF2", venue: "SMV217", faculty: "FACE (APT)" },
+    { slot: "F2+TF2", venue: "CDMM103", faculty: "FACE (APT)" },
+    { slot: "F1+TF1", venue: "SJT224", faculty: "FACE (APT)" },
+    { slot: "F2+TF2", venue: "SJT223", faculty: "FACE (APT)" },
+    { slot: "F2+TF2", venue: "SJT222", faculty: "ETHNUS (APT)" },
+    { slot: "F1+TF1", venue: "SMV101", faculty: "FACE (APT)" },
+    { slot: "F1+TF1", venue: "SJT222", faculty: "FACE (APT)" },
+    { slot: "F1+TF1", venue: "SJT223", faculty: "ETHNUS (APT)" },
+    { slot: "F2+TF2", venue: "SMV101", faculty: "ETHNUS (APT)" },
+    { slot: "F2+TF2", venue: "SJT224", faculty: "ETHNUS (APT)" },
+    { slot: "F1+TF1", venue: "TT104", faculty: "ETHNUS (APT)" },
+    { slot: "F2+TF2", venue: "TT104", faculty: "FACE (APT)" },
+    { slot: "F1+TF1", venue: "TT201", faculty: "FACE (APT)" },
+    { slot: "F1+TF1", venue: "TT524", faculty: "ETHNUS (APT)" },
+    { slot: "F2+TF2", venue: "TT524", faculty: "FACE (APT)" },
+    { slot: "F1+TF1", venue: "TT504", faculty: "ETHNUS (APT)" },
+    { slot: "F2+TF2", venue: "TT504", faculty: "FACE (APT)" },
+    { slot: "F1+TF1", venue: "TT523", faculty: "FACE (APT)" },
+    { slot: "F2+TF2", venue: "TT523", faculty: "ETHNUS (APT)" },
+    { slot: "F1+TF1", venue: "TT530", faculty: "FACE (APT)" },
+    { slot: "F2+TF2", venue: "TT530", faculty: "ETHNUS (APT)" },
+    { slot: "F2+TF2", venue: "MB212", faculty: "ETHNUS (APT)" },
+    { slot: "F1+TF1", venue: "MB211", faculty: "ETHNUS (APT)" },
+    { slot: "F2+TF2", venue: "MB211", faculty: "FACE (APT)" },
+    { slot: "F1+TF1", venue: "MB212", faculty: "FACE (APT)" },
+    { slot: "F1+TF1", venue: "MB213", faculty: "ETHNUS (APT)" },
+    { slot: "F2+TF2", venue: "MB213", faculty: "FACE (APT)" },
+    { slot: "F1+TF1", venue: "MB214", faculty: "FACE (APT)" },
+    { slot: "F2+TF2", venue: "MB214", faculty: "ETHNUS (APT)" },
+  ],
+};

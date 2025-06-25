@@ -9,7 +9,7 @@ export const SBST_LIST = {
   FoundationCore: foundationCore,
   DisciplineCore: disciplineCore,
   DisciplineElective: disciplineElective,
-  DisciplineLinked: disciplineLinked,
+  DisciplineLinkedEngineeringSciences: disciplineLinked,
   OpenElective: openElective,
   MultidisciplinaryElective: multidisciplinaryElective
 };
