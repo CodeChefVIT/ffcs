@@ -649,7 +649,6 @@ export default function FacultySelector({
   const handleSubjectChange = (subject: string) => {
     setSelectedSubject(subject);
     setSelectedSlot("");
-    setSlots([]);
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
@@ -776,7 +775,7 @@ export default function FacultySelector({
               </div>
               <div className="pt-4 pb-4 px-6 overflow-y-auto space-y-2 scrollbar-thin h-86">
                 {faculties.map((faculty: string, index: number) => {
-                 
+
                   let labTooltip = "";
 
                   if (
@@ -788,7 +787,7 @@ export default function FacultySelector({
                     const baseCode = courseCode.slice(0, -1);
                     const domainData = data[selectedSchool][selectedDomain];
 
-                  
+
                     const labSubjectKey = Object.keys(domainData).find((subject) => {
                       const subjectCode = subject.split(" - ")[0];
                       return (
@@ -819,7 +818,7 @@ export default function FacultySelector({
                               .every((s) => parseInt(s.replace("L", ""), 10) >= 31)
                           );
                       } else {
-                        
+
                         const isMorningSelected =
                           selectedSlot.endsWith("1");
                         const isEveningSelected =
@@ -839,7 +838,7 @@ export default function FacultySelector({
 
                       if (shiftSlots.length > 0) {
                         labTooltip = `${shiftSlots.join(", ")}`;
-                       
+
                       }
                     }
                   }
