@@ -1,4 +1,4 @@
-export const ScopeDisclipineCore = {
+export const ScopeDisciplineCore = {
   "BCSE203E - Web Programming": [
     { slot: "TG2", venue: "SJT323", faculty: "JUSTIN GOPINATH A" },
     { slot: "L23+L24+L25+L26", venue: "SJT516", faculty: "JUSTIN GOPINATH A" },
