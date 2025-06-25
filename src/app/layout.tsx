@@ -2,6 +2,7 @@ import { Pangolin, Poppins, Inter } from "next/font/google";
 import "./globals.css";
 import SessionProviderWrapper from "./SessionProvider";
 import ServiceWorkerRegister from "../components/ServiceWorkerRegister/ServiceWorkerRegister";
+import Script from "next/script";
 
 const pangolin = Pangolin({
   weight: "400",
@@ -63,6 +64,19 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-ZC8LE59L8H"
+        ></Script>
+        <Script  id="google-analytics">
+          {`window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZC8LE59L8H');`}
+        </Script>
+      </head>
       <body
         className={`${pangolin.variable} ${poppins.variable} ${inter.variable} antialiased bg-[#CEE4E5] select-none`}
       >
