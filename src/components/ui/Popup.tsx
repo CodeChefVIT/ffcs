@@ -1,5 +1,4 @@
 "use client";
-
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { BasicToggleButton, GoogleLoginButton, ZButton } from "./Buttons";
@@ -83,10 +82,28 @@ function copy(text: string) {
   }
 }
 
+const forbiddenWords = [
+  "vishvanathan",
+  "vishwanathan",
+  "viswanathan",
+  "vishva",
+  "viswa",
+  "vit",
+  "vellore institute of technology",
+  "vitstudent",
+  "vit.ac.in",
+  "vit vellore",
+  "vit chennai",
+  "vit bhopal",
+  "vit ap",
+  "vit university",
+  "vtop",
+];
+
 export default function Popup({
   type,
   dataTitle,
-  dataBody,
+  dataBody = "",
   dataTT,
   closeLink,
   action,
@@ -106,13 +123,15 @@ export default function Popup({
     shareEnabledDefault !== undefined ? shareEnabledDefault : true;
   const [shareState] = useState<"on" | "off">(shareEnabled ? "on" : "off");
 
+  const [isInvalid, setIsInvalid] = useState(false);
+
   useEffect(() => {
     document.body.style.overflow = "hidden";
-
     return () => {
       document.body.style.overflow = "";
     };
   }, []);
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#425D5F]/75 backdrop-blur-xs z-50 select-none">
@@ -365,62 +384,135 @@ export default function Popup({
           )}
 
           {type == "save_tt" && (
-            <div>
-              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
-                {text}
-              </div>
-              <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
-                <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-black font-semibold">
-                  <input
-                    type="text"
-                    className="bg-transparent outline-none w-full text-center font-semibold"
-                    placeholder="Enter timetable name"
-                    value={dataBody}
-                    onChange={(e) =>
-                      onInputChange && onInputChange(e.target.value)
-                    }
-                  />
-                </div>
-                <ZButton
-                  type="regular"
-                  text="Save"
-                  color="green"
-                  forceColor={theme[1]}
-                  onClick={action}
-                />
-              </div>
-            </div>
-          )}
+  <div>
+    <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
+      {text}
+    </div>
+    <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
+      <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-black font-semibold">
+        <input
+          type="text"
+          className={`bg-transparent outline-none w-full text-center font-semibold border-2 rounded-lg py-1 px-3 ${
+            isInvalid ? "border-red-500" : "border-white"
+          }`}
+          placeholder="Enter timetable name"
+          value={dataBody}
+          onChange={(e) => {
+            const inputValue = e.target.value;
+            const normalized = inputValue.toLowerCase().replace(/\s+/g, "");
+             const forbiddenWords = [
+              "vishvanathan",
+              "vishvnathan",
+              "vishwanathan",
+              "viswanathan",
+              "vishva",
+              "viswa",
+              "vit",
+              "vellore institute of technology",
+              "vitstudent",
+              "vit.ac.in",
+              "vit vellore",
+              "vit chennai",
+              "vit bhopal",
+              "vit ap",
+              "vit university",
+              "vtop",
+            ];
+
+            
+
+            const containsForbidden = forbiddenWords.some((word) =>
+              normalized.includes(word.replace(/\s+/g, ""))
+            );
+            
+
+            setIsInvalid(containsForbidden);
+            if (!containsForbidden) {
+              onInputChange?.(inputValue);
+            }
+          }}
+        />
+      </div>
+      <ZButton
+        type="regular"
+        text="Save"
+        color="green"
+        forceColor={theme[1]}
+        onClick={action}
+      />
+    </div>
+    {isInvalid && (
+      <div className="text-red-500 text-sm mt-1 text-center">
+        This name contains restricted words.
+      </div>
+    )}
+  </div>
+)}
 
           {type == "rename_tt" && (
-            <div>
-              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
-                {text}
-              </div>
-              <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
-                <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-black font-semibold">
-                  <input
-                    type="text"
-                    className="bg-transparent outline-none w-full text-center font-semibold"
-                    placeholder="Enter timetable name"
-                    value={dataBody}
-                    onChange={(e) =>
-                      onInputChange && onInputChange(e.target.value)
-                    }
-                    autoFocus
-                  />
-                </div>
-                <ZButton
-                  type="regular"
-                  text="Save"
-                  color="green"
-                  forceColor={theme[1]}
-                  onClick={action}
-                />
-              </div>
-            </div>
-          )}
+  <div>
+    <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
+      {text}
+    </div>
+    <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
+      <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-black font-semibold">
+        <input
+          type="text"
+          className={`bg-transparent outline-none w-full text-center font-semibold border-2 rounded-lg py-1 px-3 ${
+            isInvalid ? "border-red-500" : "border-white"
+          }`}
+          placeholder="Enter timetable name"
+          value={dataBody}
+          onChange={(e) => {
+            const inputValue = e.target.value;
+            const normalized = inputValue.toLowerCase().replace(/\s+/g, "");
 
+            const forbiddenWords = [
+              "vishvanathan",
+              "vishvnathan",
+              "vishwanathan",
+              "viswanathan",
+              "vishva",
+              "viswa",
+              "vit",
+              "vellore institute of technology",
+              "vitstudent",
+              "vit.ac.in",
+              "vit vellore",
+              "vit chennai",
+              "vit bhopal",
+              "vit ap",
+              "vit university",
+              "vtop",
+            ];
+
+            const containsForbidden = forbiddenWords.some((word) =>
+              normalized.includes(word.replace(/\s+/g, ""))
+            );
+
+            setIsInvalid(containsForbidden);
+            if (!containsForbidden) {
+              onInputChange?.(inputValue);
+            }
+          }}
+          autoFocus
+        />
+      </div>
+      <ZButton
+        type="regular"
+        text="Save"
+        color="green"
+        forceColor={theme[1]}
+        onClick={action}
+      />
+    </div>
+    {isInvalid && (
+      <div className="text-red-500 text-sm mt-1 text-center">
+        This name contains restricted words.
+      </div>
+    )}
+  </div>
+)}
           {type == "view_tt" && (
             <div className="flex flex-col w-full max-h-[90vh] overflow-hidden">
               
