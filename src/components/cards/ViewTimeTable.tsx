@@ -103,17 +103,55 @@ export default function ViewTimeTable() {
       }
     });
   }, [timetableData]);
+  useEffect(() => {
+  if (!owner) return;
+
+  const savedKey = "savedTimetables";
+  const localSaved = getSavedTimetables(savedKey);
+
+  axios
+    .get(`/api/timetables?owner=${encodeURIComponent(owner)}`)
+    .then((res) => {
+      const dbTimetables = res.data;
+      if (!Array.isArray(dbTimetables)) return;
+
+      dbTimetables.forEach((dbTT) => {
+        const newRecord = {
+          slots: dbTT.slots || [],
+          shareId: dbTT.shareId || "unknown",
+          isShared: dbTT.isPublic || false,
+        };
+
+        const alreadyExists = localSaved.some((localTT) => {
+          return (
+            localTT.shareId === newRecord.shareId ||
+            slotsMatch(localTT.slots, newRecord.slots)
+          );
+        });
+
+        if (!alreadyExists) {
+          localSaved.push(newRecord);
+        }
+      });
+
+      localStorage.setItem(savedKey, JSON.stringify(localSaved));
+    })
+    .catch((err) => {
+      console.error("Failed to fetch saved timetables from DB:", err);
+    });
+}, [owner]);
 
   function getSavedTimetables(key: string): SavedTimetable[] {
-    if (typeof window === "undefined") return [];
-    try {
-      const str = localStorage.getItem(key);
-      return str ? (JSON.parse(str) as SavedTimetable[]) : [];
-    } catch {
-      return [];
-    }
+  if (typeof window === "undefined") return [];
+  try {
+    const str = localStorage.getItem(key);
+    return str && Array.isArray(JSON.parse(str))
+      ? (JSON.parse(str) as SavedTimetable[])
+      : [];
+  } catch {
+    return [];
   }
-
+}
   function saveTimetableToLocal(key: string, record: SavedTimetable) {
     if (typeof window === "undefined") return;
     try {
