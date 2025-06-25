@@ -1,136 +1,121 @@
 export const SelectDisciplineCore = {
-    "BEEE204L - Signals and Systems": [
-      { slot: "D2+TD2", venue: "TT434", faculty: "MAHALAKSHMI P" }
-    ],
-    "BEEE205L - Electronic Devices and Circuits": [
-      { slot: "A2", venue: "TT404", faculty: "SANKARDOSS V" }
-    ],
-    "BEEE205P - Electronic Devices and Circuits Lab": [
-      { slot: "L29+L30", venue: "TT128", faculty: "SANKARDOSS V" }
-    ],
-    "BEEE206L - Digital Electronics": [
-      { slot: "B1+TB1", venue: "TT423", faculty: "BALAMURUGAN S" },
-      { slot: "B2+TB2", venue: "TT416", faculty: "SANTHAKUMAR R" },
-      { slot: "B1+TB1", venue: "TT201", faculty: "KARTHIKEYAN A" }
-    ],
-    "BEEE206P - Digital Electronics Lab": [
-      { slot: "L13+L14", venue: "TT128", faculty: "SANTHAKUMAR R" },
-      { slot: "L31+L32", venue: "TT128", faculty: "BALAMURUGAN S" },
-      { slot: "L51+L52", venue: "TT128", faculty: "BALAMURUGAN S" },
-      { slot: "L23+L24", venue: "TT128", faculty: "SANTHAKUMAR R" },
-      { slot: "L55+L56", venue: "TT128", faculty: "KARTHIKEYAN A" },
-      { slot: "L47+L48", venue: "TT128", faculty: "KARTHIKEYAN A" }
-    ],
-    "BEEE208L - Analog Electronics": [
-      { slot: "A1+TA1", venue: "TT413", faculty: "VIDHYA SAGAR G" },
-      { slot: "A1+TA1", venue: "TT423", faculty: "ARUNKUMAR G" },
-      { slot: "A2+TA2", venue: "TT413", faculty: "VIDHYA SAGAR G" }
-    ],
-    "BEEE208P - Analog Electronics Lab": [
-      { slot: "L39+L40", venue: "TT128", faculty: "VIDHYA SAGAR G" },
-      { slot: "L19+L20", venue: "TT128", faculty: "VIDHYA SAGAR G" },
-      { slot: "L45+L46", venue: "TT128", faculty: "ARUNKUMAR G" },
-      { slot: "L49+L50", venue: "TT128", faculty: "VIDHYA SAGAR G" },
-      { slot: "L53+L54", venue: "TT128", faculty: "ARUNKUMAR G" },
-      { slot: "L9+L10", venue: "TT128", faculty: "VIDHYA SAGAR G" }
-    ],
-    "BEEE215L - DC Machines and Transformers": [
-      { slot: "B2", venue: "TT413", faculty: "RAJU J" },
-      { slot: "B1", venue: "TT413", faculty: "BELWIN EDWARD J" }
-    ],
-    "BEEE215P - DC Machines and Transformers Lab": [
-      { slot: "L49+L50", venue: "TT035", faculty: "BELWIN EDWARD J" },
-      { slot: "L27+L28", venue: "TT035", faculty: "RAJU J" },
-      { slot: "L3+L4", venue: "TT035", faculty: "RAJU J" },
-      { slot: "L33+L34", venue: "TT035", faculty: "BELWIN EDWARD J" }
-    ],
-    "BEEE301L - Power Electronics": [
-      { slot: "D2+TD2", venue: "TT413", faculty: "CHITRA A" },
-      { slot: "D1+TD1", venue: "TT413", faculty: "VIJAYA PRIYA P" }
-    ],
-    "BEEE302L - Digital Signal Processing": [
-      { slot: "A2+TA2", venue: "TT104", faculty: "GEETHANJALI P" },
-      { slot: "D1+TD1", venue: "TT531A", faculty: "RUBAN N" }
-    ],
-    "BEEE302P - Digital Signal Processing Lab": [
-      { slot: "L27+L28", venue: "TT515", faculty: "GEETHANJALI P" },
-      { slot: "L5+L6", venue: "TT515", faculty: "GEETHANJALI P" },
-      { slot: "L55+L56", venue: "TT515", faculty: "RUBAN N" },
-      { slot: "L53+L54", venue: "TT515", faculty: "RUBAN N" }
-    ],
-    "BEEE303L - Control Systems": [
-      { slot: "C2+TC2", venue: "TT201", faculty: "SATYAJIT DAS" }
-    ],
-    "BEEE303P - Control Systems Lab": [
-      { slot: "L19+L20", venue: "TT045", faculty: "SATYAJIT DAS" },
-      { slot: "L11+L12", venue: "TT045", faculty: "SATYAJIT DAS" }
-    ],
-    "BEEE304L - Power Systems Engineering": [
-      { slot: "C1+TC1+TCC1", venue: "TT413", faculty: "MEIKANDASIVAM S" },
-      { slot: "C2+TC2+TCC2", venue: "TT413", faculty: "JACOB RAGLEND I" }
-    ],
-    "BEEE305L - Measurements and Instrumentation": [
-      { slot: "B2", venue: "TT104", faculty: "RAJESH KUMAR LENKA" }
-    ],
-    "BEEE305P - Measurements and Instrumentation Lab": [
-      { slot: "L15+L16", venue: "TT514", faculty: "RAJESH KUMAR LENKA" },
-      { slot: "L5+L6", venue: "TT514", faculty: "RAJESH KUMAR LENKA" }
-    ],
-    "BEEE306L - Power Systems Analysis": [
-      { slot: "B1+TB1", venue: "TT434", faculty: "SARAVANAN B" },
-      { slot: "B2+TB2", venue: "TT434", faculty: "ARUN S L" },
-      { slot: "B1+TB1", venue: "TT424", faculty: "ARUN S L" },
-      { slot: "B2+TB2", venue: "TT424", faculty: "VIJAYAKUMAR D" }
-    ],
-    "BEEE306P - Power Systems Analysis Lab": [
-      { slot: "L9+L10", venue: "TT433", faculty: "ARUN S L" },
-      { slot: "L3+L4", venue: "TT433", faculty: "VIJAYAKUMAR D" },
-      { slot: "L33+L34", venue: "TT433", faculty: "SARAVANAN B" },
-      { slot: "L23+L24", venue: "TT433", faculty: "ARUN S L" },
-      { slot: "L51+L52", venue: "TT433", faculty: "SARAVANAN B" },
-      { slot: "L31+L32", venue: "TT433", faculty: "ARUN S L" },
-      { slot: "L21+L22", venue: "TT433", faculty: "VIJAYAKUMAR D" },
-      { slot: "L55+L56", venue: "TT433", faculty: "ARUN S L" }
-    ],
-    "BEEE307L - Electric Drives": [
-      { slot: "A1+TA1", venue: "TT424", faculty: "SUBRAMANIAN K" },
-      { slot: "A2+TA2", venue: "TT434", faculty: "YEDDULA PEDDA OBULESU" },
-      { slot: "A2+TA2", venue: "TT424", faculty: "RAZIA SULTANA W" },
-      { slot: "A1+TA1", venue: "TT434A", faculty: "RAZIA SULTANA W" },
-      { slot: "A1+TA1", venue: "TT434", faculty: "ARUN N" }
-    ],
-    "BEEE307P - Power Electronics and Drives Lab": [
-      { slot: "L29+L30", venue: "TT044", faculty: "YEDDULA PEDDA OBULESU" },
-      { slot: "L45+L46", venue: "TT044", faculty: "SUBRAMANIAN K" },
-      { slot: "L31+L32", venue: "TT044", faculty: "SUBRAMANIAN K" },
-      { slot: "L57+L58", venue: "TT044", faculty: "ARUN N" },
-      { slot: "L55+L56", venue: "TT044", faculty: "RAZIA SULTANA W" },
-      { slot: "L15+L16", venue: "TT044", faculty: "RAZIA SULTANA W" },
-      { slot: "L3+L4", venue: "TT044", faculty: "YEDDULA PEDDA OBULESU" },
-      { slot: "L11+L12", venue: "TT044", faculty: "RAZIA SULTANA W" },
-      { slot: "L53+L54", venue: "TT044", faculty: "RAZIA SULTANA W" },
-      { slot: "L43+L44", venue: "TT044", faculty: "ARUN N" }
-    ],
-    "BEEE308L - Communication Systems": [
-      { slot: "G1+TG1", venue: "TT434", faculty: "AMUTHA PRABHA N" },
-      { slot: "G2+TG2", venue: "TT423", faculty: "BALAJI S" },
-      { slot: "G1+TG1", venue: "TT423", faculty: "SANTHAKUMAR R" },
-      { slot: "G1+TG1", venue: "TT424", faculty: "JITENDRA KUMAR GOYAL" },
-      { slot: "G2+TG2", venue: "TT424", faculty: "JITENDRA KUMAR GOYAL" }
-    ],
-    "BEEE309L - Microprocessors and Microcontrollers": [
-      { slot: "C2+TC2", venue: "TT423", faculty: "RAMA PRABHA D" }
-    ],
-    "BEEE309P - Microprocessors and Microcontrollers Lab": [
-      { slot: "L29+L30", venue: "TT515", faculty: "RAMA PRABHA D" },
-      { slot: "L9+L10", venue: "TT515", faculty: "RAMA PRABHA D" }
-    ],
-    "BEEE312L - AC Machines": [
-      { slot: "C1", venue: "SJT101", faculty: "MAGESHVARAN R" }
-    ],
-    "BEEE312P - AC Machines Lab": [
-      { slot: "L57+L58", venue: "TT035", faculty: "MAGESHVARAN R" },
-      { slot: "L31+L32", venue: "TT035", faculty: "MAGESHVARAN R" }
-    ]
-  };
-  
+  "BEEE204L - Signals and Systems": [
+    { slot: "B1+TB1", venue: "TT423", faculty: "AMUTHA PRABHA N" },
+    { slot: "B2+TB2", venue: "TT423", faculty: "MADDELA CHINNA OBAIAH" },
+    { slot: "B1+TB1", venue: "TT424", faculty: "MATHEW M. NOEL" },
+    { slot: "B1+TB1", venue: "TT434", faculty: "YUVAPRIYA T" },
+    { slot: "B2+TB2", venue: "TT424", faculty: "MATHEW M. NOEL" },
+  ],
+  "BEEE205L - Electronic Devices and Circuits": [
+    { slot: "C2", venue: "TT423", faculty: "SUDHAKAR N" },
+    { slot: "C2", venue: "TT424", faculty: "ARUNKUMAR G" },
+    { slot: "D1", venue: "TT434", faculty: "UMA SATHYAKAM P" },
+    { slot: "D1", venue: "TT423", faculty: "SANKARDOSS V" },
+    { slot: "D1", venue: "TT424", faculty: "CHILUKURI VENKATA MAHENDRA" },
+  ],
+  "BEEE205P - Electronic Devices and Circuits Lab": [
+    { slot: "L41+L42", venue: "SJT520", faculty: "UMA SATHYAKAM P" },
+    { slot: "L37+L38", venue: "SJT520", faculty: "UMA SATHYAKAM P" },
+    { slot: "L33+L34", venue: "SJT520", faculty: "SANKARDOSS V" },
+    { slot: "L25+L26", venue: "SJT520", faculty: "ARUNKUMAR G" },
+    { slot: "L49+L50", venue: "SJT520", faculty: "SANKARDOSS V" },
+    { slot: "L11+L12", venue: "SJT520", faculty: "SUDHAKAR N" },
+    { slot: "L27+L28", venue: "SJT520", faculty: "SUDHAKAR N" },
+    { slot: "L39+L40", venue: "SJT520", faculty: "CHILUKURI VENKATA MAHENDRA" },
+    { slot: "L47+L48", venue: "SJT520", faculty: "CHILUKURI VENKATA MAHENDRA" },
+    { slot: "L9+L10", venue: "SJT520", faculty: "ARUNKUMAR G" },
+  ],
+  "BEEE206L - Digital Electronics": [
+    { slot: "F2+TF2", venue: "TT423", faculty: "RAJESH KUMAR LENKA" },
+    { slot: "F1+TF1", venue: "TT423", faculty: "SHARMILA A" },
+    { slot: "F1+TF1", venue: "TT424", faculty: "BALAJI S" },
+    { slot: "F2+TF2", venue: "TT424", faculty: "DHANAMJAYULU C" },
+  ],
+  "BEEE206P - Digital Electronics Lab": [
+    { slot: "L31+L32", venue: "SJT520", faculty: "SHARMILA A" },
+    { slot: "L57+L58", venue: "SJT520", faculty: "SHARMILA A" },
+    { slot: "L3+L4", venue: "SJT520", faculty: "DHANAMJAYULU C" },
+    { slot: "L29+L30", venue: "SJT520", faculty: "DHANAMJAYULU C" },
+    { slot: "L51+L52", venue: "SJT520", faculty: "BALAJI S" },
+    { slot: "L55+L56", venue: "SJT520", faculty: "BALAJI S" },
+    { slot: "L5+L6", venue: "SJT520", faculty: "RAJESH KUMAR LENKA" },
+    { slot: "L15+L16", venue: "SJT520", faculty: "RAJESH KUMAR LENKA" },
+  ],
+  "BEEE215L - DC Machines and Transformers": [
+    { slot: "G1", venue: "TT434", faculty: "GOKULAKRISHNAN G" },
+    { slot: "G2", venue: "TT434", faculty: "INDRAGANDHI V" },
+  ],
+  "BEEE215P - DC Machines and Transformers Lab": [
+    { slot: "L31+L32", venue: "TT035", faculty: "GOKULAKRISHNAN G" },
+    { slot: "L35+L36", venue: "TT035", faculty: "GOKULAKRISHNAN G" },
+    { slot: "L9+L10", venue: "TT035", faculty: "INDRAGANDHI V" },
+    { slot: "L23+L24", venue: "TT035", faculty: "INDRAGANDHI V" },
+  ],
+  "BEEE302L - Digital Signal Processing": [
+    { slot: "B2+TB2", venue: "TT204", faculty: "GEETHANJALI P" },
+  ],
+  "BEEE302P - Digital Signal Processing Lab": [
+    { slot: "L5+L6", venue: "TT515", faculty: "GEETHANJALI P" },
+    { slot: "L21+L22", venue: "TT515", faculty: "GEETHANJALI P" },
+  ],
+  "BEEE303L - Control Systems": [
+    { slot: "C2+TC2", venue: "TT201", faculty: "BAGYAVEERESWARAN V" },
+  ],
+  "BEEE303P - Control Systems Lab": [
+    { slot: "L11+L12", venue: "TT045", faculty: "BAGYAVEERESWARAN V" },
+    { slot: "L27+L28", venue: "TT045", faculty: "BAGYAVEERESWARAN V" },
+  ],
+  "BEEE304L - Power Systems Engineering": [
+    { slot: "C1+TC1+TCC1", venue: "TT434", faculty: "HIMADRI LALA" },
+  ],
+  "BEEE306L - Power Systems Analysis": [
+    { slot: "C2+TC2", venue: "TT404", faculty: "MEIKANDASIVAM S" },
+    { slot: "C1+TC1", venue: "TT404", faculty: "PRABHAKAR KARTHIKEYAN S" },
+  ],
+  "BEEE306P - Power Systems Analysis Lab": [
+    { slot: "L11+L12", venue: "TT247", faculty: "MEIKANDASIVAM S" },
+    { slot: "L39+L40", venue: "TT247", faculty: "PRABHAKAR KARTHIKEYAN S" },
+    { slot: "L15+L16", venue: "TT247", faculty: "MEIKANDASIVAM S" },
+    { slot: "L43+L44", venue: "TT247", faculty: "PRABHAKAR KARTHIKEYAN S" },
+  ],
+  "BEEE307L - Electric Drives": [
+    { slot: "E2+TE2", venue: "TT104", faculty: "RAJA SINGH R" },
+    { slot: "E1+TE1", venue: "TT104", faculty: "SUBRAMANIAN K" },
+  ],
+  "BEEE307P - Power Electronics and Drives Lab": [
+    { slot: "L11+L12", venue: "TT044", faculty: "RAJA SINGH R" },
+    { slot: "L27+L28", venue: "TT044", faculty: "RAJA SINGH R" },
+    { slot: "L37+L38", venue: "TT044", faculty: "SUBRAMANIAN K" },
+    { slot: "L51+L52", venue: "TT044", faculty: "SUBRAMANIAN K" },
+  ],
+  "BEEE308L - Communication Systems": [
+    { slot: "G1+TG1", venue: "TT413", faculty: "JITENDRA KUMAR GOYAL" },
+    { slot: "G2+TG2", venue: "TT413", faculty: "VENKATARAMAN M.N" },
+  ],
+  "BEEE309L - Microprocessors and Microcontrollers": [
+    { slot: "A2+TA2", venue: "TT404", faculty: "RAMA PRABHA D" },
+    { slot: "A2+TA2", venue: "TT413", faculty: "SELVAKUMAR K" },
+    { slot: "A1+TA1", venue: "TT404", faculty: "JAKEER HUSSAIN" },
+  ],
+  "BEEE309P - Microprocessors and Microcontrollers Lab": [
+    { slot: "L29+L30", venue: "TT515", faculty: "RAMA PRABHA D" },
+    { slot: "L11+L12", venue: "TT515", faculty: "SELVAKUMAR K" },
+    { slot: "L31+L32", venue: "TT515", faculty: "JAKEER HUSSAIN" },
+    { slot: "L45+L46", venue: "TT515", faculty: "JAKEER HUSSAIN" },
+    { slot: "L3+L4", venue: "TT515", faculty: "RAMA PRABHA D" },
+    { slot: "L23+L24", venue: "TT515", faculty: "SELVAKUMAR K" },
+  ],
+  "BEEE312L - AC Machines": [
+    { slot: "B2", venue: "TT404", faculty: "ANBARASAN P" },
+    { slot: "B1", venue: "TT404", faculty: "MAGESHVARAN R" },
+    { slot: "B1", venue: "TT413", faculty: "ARUN S L" },
+  ],
+  "BEEE312P - AC Machines Lab": [
+    { slot: "L5+L6", venue: "TT035", faculty: "ANBARASAN P" },
+    { slot: "L21+L22", venue: "TT035", faculty: "ANBARASAN P" },
+    { slot: "L49+L50", venue: "TT035", faculty: "MAGESHVARAN R" },
+    { slot: "L39+L40", venue: "TT035", faculty: "MAGESHVARAN R" },
+    { slot: "L55+L56", venue: "TT035", faculty: "ARUN S L" },
+    { slot: "L43+L44", venue: "TT035", faculty: "ARUN S L" },
+  ],
+};

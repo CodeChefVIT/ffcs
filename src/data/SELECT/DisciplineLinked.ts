@@ -1,19 +1,10 @@
 export const SelectDisciplineLinked = {
-  "BEEE201L - Electronic Materials": [
-    { slot: "C1+TC1", venue: "TT414", faculty: "MALLIKARJUNA GOLLA" },
-    { slot: "C1+TC1", venue: "TT416", faculty: "SARIGAMALA KARTHIK KIRAN" },
-    { slot: "C2+TC2", venue: "TT415", faculty: "UMA SATHYAKAM P" },
-    { slot: "C1+TC1", venue: "TT415", faculty: "UMA SATHYAKAM P" },
-    { slot: "C2+TC2", venue: "TT414", faculty: "MALLIKARJUNA GOLLA" },
-  ],
-  "BEEE202L - Electromagnetic Theory": [
-    { slot: "B1+TB1", venue: "TT415", faculty: "INDRAGANDHI V" },
-    { slot: "B1+TB1", venue: "TT414", faculty: "RANI C" },
-    { slot: "B2+TB2", venue: "TT414", faculty: "RANI C" },
-    { slot: "B2+TB2", venue: "TT415", faculty: "HIMADRI LALA" },
-    { slot: "B1+TB1", venue: "TT416", faculty: "ANUSUYA BHATACHARYYA" },
-  ],
   "BEEE203L - Circuit Theory": [
-    { slot: "C1+TC1+TCC1", venue: "TT104", faculty: "DHANAMJAYULU C" },
+    { slot: "A1+TA1+TAA1", venue: "TT424", faculty: "VIJAYA PRIYA P" },
+    { slot: "A1+TA1+TAA1", venue: "TT434", faculty: "PALANISAMY K" },
+    { slot: "A2+TA2+TAA2", venue: "TT434", faculty: "BELWIN EDWARD J" },
+    { slot: "A2+TA2+TAA2", venue: "TT424", faculty: "VIJAYAKUMAR D" },
+    { slot: "A2+TA2+TAA2", venue: "TT423", faculty: "JANAKI M" },
+    { slot: "A1+TA1+TAA1", venue: "TT413", faculty: "VANISHREE J" },
   ],
 };
