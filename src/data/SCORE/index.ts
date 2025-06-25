@@ -6,7 +6,7 @@ import { ScoreOpenElective } from './OpenElective';
 
 export const SCORE_LIST = {
   FoundationCore: FoundationCore,
-  DisciplineLinked: ScoreDisciplineLinked,
+  DisciplineLinkedEngineeringSciences: ScoreDisciplineLinked,
   DisciplineCore: ScoreDisciplineCore,
   DisciplineElective: ScoreDisciplinedElective,
   OpenElective: ScoreOpenElective,

@@ -8,6 +8,6 @@ export const SCHEME_LIST = {
   FoundationCore: SchemeFoundationCore,
   DisciplineCore: SchemeDisciplineCore,
   DisciplineElective: SchemeDisciplineElective,
-  DisciplineLinked: SchemeDisciplineLinked,
+  DisciplineLinkedEngineeringSciences: SchemeDisciplineLinked,
   OpenElective: SchemeOpenElective
 };
