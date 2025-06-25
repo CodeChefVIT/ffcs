@@ -108,8 +108,6 @@ export const exportToPDF = async (): Promise<void> => {
             ) {
               notes.push(row[2].text);
             }
-            console.log("existingSlots", existingSlots);
-            console.log("clashKey", clashKey);
           }
 
 

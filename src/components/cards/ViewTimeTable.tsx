@@ -43,7 +43,7 @@ export default function ViewTimeTable() {
   const [alertMsg, setAlertMsg] = useState("");
 
   const [isSaving, setIsSaving] = useState(false);
-  const [isSharing, setIsSharing] = useState(false); // Add isSharing state
+  const [isSharing, setIsSharing] = useState(false); 
 
   const { data: session } = useSession();
   const owner = session?.user?.email || null;
@@ -186,7 +186,7 @@ export default function ViewTimeTable() {
         localStorage.setItem("savedCourses", JSON.stringify(arr));
       }
     } catch {
-      // ignore
+     
     }
   }
 
@@ -281,7 +281,7 @@ export default function ViewTimeTable() {
       showAlert("No timetable to share.");
       return;
     }
-    setIsSharing(true); // Start loader
+    setIsSharing(true); 
     const slots = selectedData.map((item) => ({
       slot: item.slotName || "NIL",
       courseCode: item.courseCode || "00000000",
@@ -305,7 +305,7 @@ export default function ViewTimeTable() {
             );
           })
           .finally(() => {
-            setIsSharing(false); // Stop loader
+            setIsSharing(false); 
           });
         setShareLink(`${window.location.origin}/share/${existingId}`);
         setShowSharePopup(true);
@@ -344,7 +344,7 @@ export default function ViewTimeTable() {
     } catch {
       showAlert("Error sharing timetable.");
     } finally {
-      setIsSharing(false); // Stop loader
+      setIsSharing(false); 
     }
   }
 

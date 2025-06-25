@@ -116,7 +116,7 @@ export default function Popup({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#425D5F]/75 backdrop-blur-xs z-50 select-none">
-      {/* Loader overlay for share_tt */}
+     
       {type === "share_tt" && isLoading && <LoadingPopup isLoading={true} />}
       <div
         style={{ backgroundColor: theme[0] }}
@@ -146,7 +146,7 @@ export default function Popup({
           h-12
         `}
         >
-          {/* 3 circles */}
+          
           <div className="flex-1 text-left flex items-center justify-start pl-4">
             <div className="flex gap-2">
               {[...Array(3)].map((_, i) => (
@@ -158,12 +158,12 @@ export default function Popup({
             </div>
           </div>
 
-          {/* popup title */}
+          
           <div className="absolute left-1/2 -translate-x-1/2 text-center flex items-center justify-center font-poppins font-bold text-2xl">
             {title}
           </div>
 
-          {/* close button */}
+          
           {!(
             type == "delete_tt" ||
             type == "rem_course" ||
@@ -423,14 +423,14 @@ export default function Popup({
 
           {type == "view_tt" && (
             <div className="flex flex-col w-full max-h-[90vh] overflow-hidden">
-              {/* Scrollable area only if needed */}
+              
               <div className="overflow-auto w-full max-h-[calc(70vh-80px)]">
                 <div className="min-w-[768px] text-center p-4">
                   <CompoundTable data={dataTT || []} />
                 </div>
               </div>
 
-              {/* Bottom controls - always visible */}
+             
               <div className="flex flex-row flex-wrap items-center justify-center gap-16 px-4 py-3">
                 <div className="flex flex-row items-center gap-3">
                   <ZButton

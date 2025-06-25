@@ -19,7 +19,7 @@ const colorMap: Record<string, string[]> = {
 };
 
 function parseMessage(message: string) {
-  // Split by newlines
+  
   return message.split('\n').map((line, i) => (
     <span key={i}>
       {line.split(/(\*\*.*?\*\*)/).map((part, j) =>
@@ -54,12 +54,12 @@ export default function AlertModal({ open, message, onClose, color, }: AlertModa
         className="rounded-3xl shadow-[10px_10px_0_0_black] outline-4 outline-black
                    flex flex-col items-stretch w-full max-w-screen-sm max-h-[85vh] overflow-hidden"
       >
-        {/* Fixed Height Header */}
+        {/*Header*/}
         <div
           style={{ backgroundColor: theme[1] }}
           className="h-14 min-h-14 flex items-center  border-b-4 border-black justify-between relative px-4 rounded-t-3xl"
         >
-          {/* Left control dots */}
+         
           <div className="flex gap-2">
             {[...Array(3)].map((_, i) => (
               <div
@@ -69,18 +69,18 @@ export default function AlertModal({ open, message, onClose, color, }: AlertModa
             ))}
           </div>
 
-          {/* Title centered */}
+          {/* Title */}
           <div className="absolute left-1/2 -translate-x-1/2 text-2xl font-bold font-poppins">
             Alert
           </div>
         </div>
 
-        {/* Scrollable content */}
+        {/* Content */}
         <div className="p-6 text-center text-base sm:text-lg font-poppins font-medium leading-relaxed text-black whitespace-pre-wrap overflow-auto flex-1">
           {typeof message === "string" ? parseMessage(message) : message}
         </div>
 
-        {/* Footer with button */}
+        {/* Footer */}
         <div className="flex justify-center items-center pb-6">
           <ZButton
             type="long"

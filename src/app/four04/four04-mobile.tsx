@@ -33,7 +33,7 @@ export default function NotFound() {
         </div>
 
         <div className="relative w-fit h-fit mb-4">
-          {/* 45° Shadow layer */}
+          {/*Shadow*/}
           <span
             className="absolute left-1.5 top-1.5 select-none pointer-events-none font-poppins font-extrabold text-[96px] z-0 text-black"
             style={{
@@ -42,7 +42,7 @@ export default function NotFound() {
           >
             404
           </span>
-          {/* Stroke layer */}
+          {/*Stroke*/}
           <span
             className="absolute left-0 top-0 select-none pointer-events-none font-poppins font-extrabold text-[96px] z-10 text-transparent"
             style={{
@@ -51,7 +51,7 @@ export default function NotFound() {
           >
             404
           </span>
-          {/* Fill layer */}
+          {/*Fill*/}
           <span className="relative select-none pointer-events-none font-poppins font-extrabold text-[96px] z-20 text-[#90BDFF]">
             404
           </span>
