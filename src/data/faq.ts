@@ -1,33 +1,39 @@
 const faqList = [
   {
-    question: "What is the purpose of this website?",
+    question:
+      "What is the purpose of FFCS-inator?",
     answer:
-      "This platform helps VIT students visualize and manage their FFCS timetables more efficiently. It simplifies the course selection process and offers tools to compare and plan schedules.",
+      "This platform is designed for VIT students to easily visualize, plan, and manage their FFCS timetables. It simplifies course selection, faculty preferences, and slot comparison, making the scheduling process efficient and hassle-free. It simplifies the course selection process and offers tools to compare and plan schedules.",
   },
   {
-    question: "Can we share timetables?",
+    question:
+      "Can I share my timetable with others?",
     answer:
-      "Yes, after generating a timetable, you can share it using a unique link. This makes it easy to collaborate with friends.",
+      "Yes, you can generate and share your timetable using a unique link. This feature allows you to collaborate and plan schedules with friends seamlessly.",
   },
   {
-    question: "How do I use the website?",
+    question:
+      "How do I use this platform?",
     answer:
-      "Start by selecting your preferences such as course, faculty, and slot. The platform will generate all possible timetables for you. You can filter, view, and share any of them with ease.",
+      "Start by selecting your preferences such as course, faculty, and slot. The platform will generate all possible timetables for you. You can filter, view, and share your preferred timetable effortlessly.",
   },
   {
-    question: "Do I need to log in to use the platform?",
+    question:
+      "Do I need to log in to use FFCS-inator?",
     answer:
-      "No login is required. You can use all features anonymously, you only need to login in order to save your timetable.",
+      "No login is required to use the platform's features. However, logging in is necessary if you want to save and share your timetables.",
   },
   {
-    question: "Is this affiliated with VIT University?",
+    question:
+      "Is this affiliated with VIT University?",
     answer:
-      "No, this is an independent student-made tool created by the CodeChef-VIT to assist students during FFCS.",
+      "No, this is an independent tool created by CodeChef-VIT to assist VIT students during the FFCS process. It is not officially affiliated with VIT University.",
   },
   {
-    question: "Will this work for all campuses?",
+    question:
+      "Does this FFCS-inator work for all VIT campuses?",
     answer:
-      "Currently, the tool is optimized for VIT Vellore. Compatibility for other campuses may be added in future versions.",
+      "Currently, it is optimized for VIT Vellore campus. Support for other campuses may be added in future updates.",
   },
 ];
 

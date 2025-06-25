@@ -43,6 +43,7 @@ export default function ViewTimeTable() {
   const [alertMsg, setAlertMsg] = useState("");
 
   const [isSaving, setIsSaving] = useState(false);
+  const [isSharing, setIsSharing] = useState(false); // Add isSharing state
 
   const { data: session } = useSession();
   const owner = session?.user?.email || null;
@@ -280,7 +281,7 @@ export default function ViewTimeTable() {
       showAlert("No timetable to share.");
       return;
     }
-
+    setIsSharing(true); // Start loader
     const slots = selectedData.map((item) => ({
       slot: item.slotName || "NIL",
       courseCode: item.courseCode || "00000000",
@@ -294,13 +295,18 @@ export default function ViewTimeTable() {
     for (const rec of savedList) {
       if (slotsMatch(rec.slots, slots)) {
         const existingId = rec.shareId || "N/A";
-        axios.get(`/api/shared-timetable/${existingId}`).then((res) => {
-          const json = res.data;
-          const title = json?.timetable?.title || "Didn't get from backend";
-          showAlert(
-            `You have already saved this timetable with Name:- ${title} . Please check visibility settings on Saved Timetables page after copying link`
-          );
-        });
+        axios
+          .get(`/api/shared-timetable/${existingId}`)
+          .then((res) => {
+            const json = res.data;
+            const title = json?.timetable?.title || "Didn't get from backend";
+            showAlert(
+              `You have already saved this timetable with Name:- ${title} . Please check visibility settings on Saved Timetables page after copying link`
+            );
+          })
+          .finally(() => {
+            setIsSharing(false); // Stop loader
+          });
         setShareLink(`${window.location.origin}/share/${existingId}`);
         setShowSharePopup(true);
         return;
@@ -337,6 +343,8 @@ export default function ViewTimeTable() {
       }
     } catch {
       showAlert("Error sharing timetable.");
+    } finally {
+      setIsSharing(false); // Stop loader
     }
   }
 
@@ -538,6 +546,7 @@ export default function ViewTimeTable() {
           type="share_tt"
           dataBody={shareLink}
           closeLink={() => setShowSharePopup(false)}
+          isLoading={isSharing}
         />
       )}
 
