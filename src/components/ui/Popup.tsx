@@ -82,23 +82,7 @@ function copy(text: string) {
   }
 }
 
-const forbiddenWords = [
-  "vishvanathan",
-  "vishwanathan",
-  "viswanathan",
-  "vishva",
-  "viswa",
-  "vit",
-  "vellore institute of technology",
-  "vitstudent",
-  "vit.ac.in",
-  "vit vellore",
-  "vit chennai",
-  "vit bhopal",
-  "vit ap",
-  "vit university",
-  "vtop",
-];
+
 
 export default function Popup({
   type,
