@@ -8,6 +8,7 @@ import { SE_Blockchain } from './SE_Blockchain';
 import { SE_DS } from './SE_DS';
 import { SE_IOT } from './SE_IOT';
 import { SE_IS } from './SE_IS';
+import { SE_BCB } from './SE_BCB';
 
 export const SCOPE_LIST = {
   FoundationCore: ScopeFoundationCore,
@@ -19,5 +20,6 @@ export const SCOPE_LIST = {
   'SpecializationElective - BAI': SE_AIML,
   'SpecializationElective - BDS': SE_DS,
   'SpecializationElective - BCT': SE_IOT,
- 'SpecializationElective - BKT': SE_Blockchain,
+  'SpecializationElective - BKT': SE_Blockchain,
+  'SpecializationElective - BCB': SE_BCB,
 };
