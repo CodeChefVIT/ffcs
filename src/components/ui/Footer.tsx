@@ -63,7 +63,7 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
   if (type === "mobile") {
     return (
       <footer className="w-full bg-[#CEE4E5] text-center mt-auto relative overflow-hidden">
-        {/* Foreground Content */}
+        {/* Foreground */}
         <div className="relative z-10 flex flex-col items-center justify-center pt-12 pb-4 px-4">
           <div className="mb-4">
             <CCButton />
@@ -73,7 +73,7 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
           </p>
         </div>
 
-        {/* Full-width Wave Background */}
+        {/* Background */}
         <div className="absolute bottom-0 left-0 right-0 z-0">
           <Image
             src="/art/footer_mobile.svg"
@@ -87,7 +87,6 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
           />
         </div>
 
-        {/* Alert Modal */}
         <AlertModal
           open={alertState.open}
           onClose={() => setAlertState({ ...alertState, open: false })}
@@ -246,7 +245,7 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
         Made with <span className="font-[inter]">❤</span> by CodeChef–VIT
       </div>
 
-      {/* Alert Modal */}
+      
       <AlertModal
         open={alertState.open}
         onClose={() => setAlertState({ ...alertState, open: false })}

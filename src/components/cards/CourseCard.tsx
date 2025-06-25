@@ -233,7 +233,7 @@ export default function CourseCard({
                 </div>
               </div>
 
-              {/* Course namee */}
+              {/* Course name */}
               <div className="flex w-[480px] text-sm text-black font-normal">
                 <div className="flex flex-col gap-1 break-words max-w-full">
                   <p
@@ -356,7 +356,7 @@ export default function CourseCard({
         </div>
 
         {isLargeScreen ? (
-          // ---- Desktop View (original code) ----
+          
           <div className="flex justify-between items-center mt-8 mb-4 relative w-full">
             {/* Toggle */}
             <div className="mr-auto flex items-center gap-2">
@@ -382,7 +382,7 @@ export default function CourseCard({
               </span>
             </div>
 
-            {/* Centered Generate */}
+            {/* Generate */}
             <div className="absolute left-1/2 -translate-x-1/2">
               <ZButton
                 type="large"
@@ -406,9 +406,11 @@ export default function CourseCard({
             </div>
           </div>
         ) : (
-          // ---- Mobile / Tablet View ----
+          
+          // Mobile / Tablet View
+
           <div className="mt-8 mb-4 w-full flex flex-col gap-4">
-            {/* Top Row: Toggle + Delete All */}
+            {/* Top Row */}
             <div className="w-full flex justify-between items-center">
               <div className="flex items-center gap-2">
                 <div className="mr-2">
@@ -444,7 +446,7 @@ export default function CourseCard({
               </div>
             </div>
 
-            {/* Bottom Row: Centered Generate */}
+            {/* Bottom Row*/}
             <div className="flex justify-center w-full py-4">
               <ZButton
                 type="large"

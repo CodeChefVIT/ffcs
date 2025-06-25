@@ -28,7 +28,7 @@ const ReplaceSlot = () => {
           Replace
         </span>
 
-        {/* From Slot */}
+        
         <div className="relative w-[45%] sm:w-[25%] lg:w-auto min-w-[100px]">
           <label htmlFor="fromSlot" className="sr-only">
             From Slot
@@ -53,7 +53,7 @@ const ReplaceSlot = () => {
           with
         </span>
 
-        {/* To Slot */}
+        
         <div className="relative w-[45%] sm:w-[25%] lg:w-auto min-w-[100px]">
           <label htmlFor="toSlot" className="sr-only">
             To Slot
@@ -78,7 +78,7 @@ const ReplaceSlot = () => {
           Faculty:
         </span>
 
-        {/* Faculty */}
+        
         <div className="relative w-full sm:w-[30%] lg:w-auto min-w-[120px]">
           <label htmlFor="faculty" className="sr-only">
             Faculty
@@ -99,7 +99,7 @@ const ReplaceSlot = () => {
           {arrow}
         </div>
 
-        {/* Button */}
+        
         <button
           onClick={handleModify}
           className="w-full sm:w-auto px-5 py-2 bg-[#90BDFF] text-black font-semibold rounded-xl border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:brightness-95 transition-all flex items-center justify-center gap-1 text-[1.1rem] lg:text-[1.2rem]"

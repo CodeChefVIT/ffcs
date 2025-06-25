@@ -24,7 +24,7 @@ const sortData = (data: dataProps[]): dataProps[] => {
 
 const getGroupedData = (data: dataProps[]): groupedDataProps => {
   return sortData(data).reduce((acc, { code, slot, name }) => {
-    // Use code prefix (all except last char) + name as the grouping key
+    
     const codePrefix = code.slice(0, -1);
     const groupKey = `${name}__${codePrefix}`;
     (acc[groupKey] ||= []).push({ code, slot });
@@ -82,8 +82,6 @@ export default function CompoundTable({ data, large }: CompoundTableProps) {
               displayName.length > 12
                 ? displayName.slice(0, 12) + "..."
                 : displayName;
-
-            console.log();
             return (
               <div
                 key={idx}
