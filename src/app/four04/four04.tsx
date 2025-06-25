@@ -28,7 +28,7 @@ export default function NotFound() {
 
       <div className="flex-grow mt-24 flex flex-col items-center text-center relative">
         <div className="relative w-fit h-fit mb-4">
-          {/* 45° Shadow layer */}
+          {/* Shadow */}
           <span
             className="absolute left-2 top-2 select-none pointer-events-none font-poppins font-extrabold text-[160px] z-0 text-black"
             style={{
@@ -37,7 +37,7 @@ export default function NotFound() {
           >
             404
           </span>
-          {/* Stroke layer */}
+          {/* Stroke */}
           <span
             className="absolute left-0 top-0 select-none pointer-events-none font-poppins font-extrabold text-[160px] z-10 text-transparent"
             style={{
@@ -46,7 +46,7 @@ export default function NotFound() {
           >
             404
           </span>
-          {/* Fill layer */}
+          {/* Fill */}
           <span className="relative select-none pointer-events-none font-poppins font-extrabold text-[160px] z-20 text-[#90BDFF]">
             404
           </span>

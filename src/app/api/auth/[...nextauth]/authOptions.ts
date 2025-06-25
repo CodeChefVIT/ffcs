@@ -30,9 +30,9 @@ export const authOptions: AuthOptions = {
       return false;
     },
     async redirect({ url, baseUrl }) {
-      // Allow relative URLs
+      
       if (url.startsWith("/")) return `${baseUrl}${url}`;
-      // Allow only same-origin external URLs
+      
       if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },
