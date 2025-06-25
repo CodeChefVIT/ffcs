@@ -1,10 +1,14 @@
 export const SchemeDisciplineLinked = {
-  "BCHE204L - Transport Phenomena": [
-    { slot: "C1+TC1+TCC1", venue: "SMV102", faculty: "MAHESH GANESAPILLAI" },
-    { slot: "C2+TC2+TCC2", venue: "SMV102", faculty: "SHISHIR KUMAR BEHERA" },
+  "BCHE201L - Computational Methods in Chemical Engineering": [
+    { slot: "D1+TD1", venue: "SMV102", faculty: "MONASH P" },
+    { slot: "D1+TD1", venue: "SMV104", faculty: "ANAND VEERABADRA PRASAD GURUMOORTHY" },
+    { slot: "C2+TC2", venue: "SMV104", faculty: "MONASH P" },
+    { slot: "C2+TC2", venue: "SMV102", faculty: "ANAND VEERABADRA PRASAD GURUMOORTHY" },
   ],
-  "BCHE206L - Materials Science and Engineering": [
-    { slot: "B2+TB2", venue: "SMV102", faculty: "THOMAS THEODORE" },
-    { slot: "B1+TB1", venue: "SMV102", faculty: "SHANKAR RAMAN DHANUSHKODI" },
+  "BCHE201P - Computational Methods in Chemical Engineering Lab": [
+    { slot: "L37+L38", venue: "SMVG17", faculty: "MONASH P" },
+    { slot: "L9+L10", venue: "SMVG17", faculty: "ANAND VEERABADRA PRASAD GURUMOORTHY" },
+    { slot: "L49+L50", venue: "SMVG17", faculty: "ANAND VEERABADRA PRASAD GURUMOORTHY" },
+    { slot: "L21+L22", venue: "SMVG17", faculty: "MONASH P" },
   ],
 };

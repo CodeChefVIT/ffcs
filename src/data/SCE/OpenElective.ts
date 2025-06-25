@@ -1,4 +1,4 @@
-export const openElective = {
+export const CivilOpenElective = {
   "BHUM201L - Mass Communication": [
     { slot: "B2+TB2", venue: "SJT617", faculty: "RASHMI M" },
     { slot: "G1+TG1", venue: "GDN122", faculty: "PRABAKAR S" },
@@ -51,19 +51,27 @@ export const openElective = {
   "BHUM226L - Corporate Finance": [
     { slot: "D2+TD2", venue: "TT305", faculty: "FAISAL USMANI" },
   ],
-  "BMAT102L - Differential Equations and Transforms": [
-    { slot: "A1+TA1+TAA1", venue: "PRP773", faculty: "INDHIRA K" },
-    { slot: "C2+TC2+TCC2", venue: "TT204", faculty: "INDHIRA K" },
-  ],
-  "BMEE102P - Engineering Design Visualisation Lab": [
-    { slot: "L13+L14+L21+L22", venue: "MB111", faculty: "NAIJU C D" },
-  ],
-  "BMEE201L - Engineering Mechanics": [
-    { slot: "A1+TA1", venue: "GDN129", faculty: "NISHANT TIWARI" },
-    { slot: "G1+TG1", venue: "SMV102", faculty: "NAGA SAMRAT MARUVADA V V" },
-    { slot: "G1+TG1", venue: "SMV104", faculty: "SHANKAR RAMAN DHANUSHKODI" },
-    { slot: "G2+TG2", venue: "SMV102", faculty: "GANESH MOORTHY I" },
-    { slot: "G2+TG2", venue: "SMV104", faculty: "MADAMBAKAM MIDHUN KUMAR" },
+  "BMEE355E - Cloud Computing": [
+    { slot: "TG1", venue: "MB224", faculty: "SOUMEN PAL" },
+    { slot: "TG1", venue: "MB226", faculty: "RAJAMURUGAN G" },
+    { slot: "TG2", venue: "MB227", faculty: "DEVENDRA KUMAR PATEL" },
+    { slot: "TG2", venue: "MB225", faculty: "RENOLD ELSEN S" },
+    { slot: "TG2", venue: "GDN120", faculty: "RAVITEJA BUDDALA" },
+    { slot: "L51+L52+L55+L56", venue: "MB111", faculty: "BIKASH ROUTH" },
+    { slot: "L33+L34+L37+L38", venue: "MB111", faculty: "SOUMEN PAL" },
+    { slot: "TG1", venue: "MB229", faculty: "BIKASH ROUTH" },
+    { slot: "L39+L40+L43+L44", venue: "MB111", faculty: "SREETHUL DAS" },
+    { slot: "TG1", venue: "MB225", faculty: "SREETHUL DAS" },
+    { slot: "L5+L6+L9+L10", venue: "MB111", faculty: "DEVENDRA KUMAR PATEL" },
+    { slot: "L19+L20+L29+L30", venue: "MB111", faculty: "BIBHUTI BHUSAN SAHOO" },
+    { slot: "L51+L52+L55+L56", venue: "GDN153", faculty: "RAJAMURUGAN G" },
+    { slot: "TCC1", venue: "MB211", faculty: "RAJAMURUGAN G" },
+    { slot: "TG2", venue: "MB226", faculty: "BIBHUTI BHUSAN SAHOO" },
+    { slot: "L31+L32+L57+L58", venue: "MB111", faculty: "RENOLD ELSEN S" },
+    { slot: "TG1", venue: "MB227", faculty: "RENOLD ELSEN S" },
+    { slot: "L23+L24+L27+L28", venue: "MB111", faculty: "RENOLD ELSEN S" },
+    { slot: "L3+L4+L11+L12", venue: "MB111", faculty: "RAVITEJA BUDDALA" },
+    { slot: "L45+L46+L49+L50", venue: "MB111", faculty: "RAJAMURUGAN G" },
   ],
   "BMGT109L - Introduction to Intellectual Property": [
     { slot: "F1+TF1", venue: "TT305", faculty: "USHA S" },
