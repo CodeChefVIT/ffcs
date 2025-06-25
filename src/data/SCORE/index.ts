@@ -1,4 +1,4 @@
-import { FoundationCore } from '../FoundationCore';
+import { FoundationCore } from './FoundationCore';
 import { ScoreDisciplineLinked } from './DiscipledLinked';
 import { ScoreDisciplineCore } from './DisciplineCore';
 import { ScoreDisciplinedElective } from './DisciplineElective';

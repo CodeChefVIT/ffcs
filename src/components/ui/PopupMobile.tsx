@@ -45,12 +45,21 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
         </div>
 
         <div className="w-full p-2">
-          <ZButton type="regular" text="Go Back" color="red" onClick={closeLink} />
+          <ZButton
+            type="regular"
+            text="Go Back"
+            color="red"
+            onClick={closeLink}
+          />
         </div>
 
         <div className="flex-grow mt-4 flex flex-col items-center text-center relative">
-          <div className="text-5xl mb-2 font-pangolin text-black">FFCS-inator</div>
-          <div className="text-2xl mb-8 font-pangolin text-black">By CodeChef-VIT</div>
+          <div className="text-5xl mb-2 font-pangolin text-black">
+            FFCS-inator
+          </div>
+          <div className="text-2xl mb-8 font-pangolin text-black">
+            By CodeChef-VIT
+          </div>
 
           <div className="mb-8">
             <Image
@@ -65,7 +74,8 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
           </div>
 
           <div className="text-2xl mb-8 font-poppins text-black">
-            Please log-in to save and<br />
+            Please log-in to save and
+            <br />
             share your timetables
           </div>
 
@@ -156,10 +166,17 @@ export function PopupViewTT({
         </div>
 
         <div className="w-full p-2">
-          <ZButton type="regular" text="Go Back" color="red" onClick={closeLink} />
+          <ZButton
+            type="regular"
+            text="Go Back"
+            color="red"
+            onClick={closeLink}
+          />
         </div>
 
-        <div className="text-2xl mt-4 mb-2 text-black font-semibold font-poppins">{TTName}</div>
+        <div className="text-2xl mt-4 mb-2 text-black font-semibold font-poppins">
+          {TTName}
+        </div>
 
         <div className="text-center text-sm mb-2 text-gray-700 px-4 break-words">
           Shareable Link: <span className="underline">{shareLink}</span>

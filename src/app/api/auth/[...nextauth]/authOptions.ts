@@ -22,9 +22,6 @@ export const authOptions: AuthOptions = {
   session: {
     strategy: "database" as SessionStrategy,
   },
-  pages: {
-    signIn: "/auth/signin",
-  },
   callbacks: {
     async signIn({ user }) {
       if (user.email && user.email.endsWith("@vitstudent.ac.in")) {
@@ -33,9 +30,9 @@ export const authOptions: AuthOptions = {
       return false;
     },
     async redirect({ url, baseUrl }) {
-      // Allow relative URLs
+      
       if (url.startsWith("/")) return `${baseUrl}${url}`;
-      // Allow only same-origin external URLs
+      
       if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },

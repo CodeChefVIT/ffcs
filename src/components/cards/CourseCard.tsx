@@ -1,8 +1,8 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useTimetable } from "../../lib/TimeTableContext";
 import Popup from "../ui/Popup";
-import { ZButton } from "../ui/Buttons";
+import { BasicToggleButton, ZButton } from "../ui/Buttons";
 import Image from "next/image";
 import { generateTT } from "@/lib/utils";
 import { fullCourseData } from "@/lib/type";
@@ -15,8 +15,11 @@ type CourseCardProps = {
   onUpdate: (updatedCourses: fullCourseData[]) => void;
 };
 
-
-export default function CourseCard({ selectedCourses, onDelete, onUpdate }: CourseCardProps) {
+export default function CourseCard({
+  selectedCourses,
+  onDelete,
+  onUpdate,
+}: CourseCardProps) {
   const { setTimetableData } = useTimetable();
 
   const draggedItemIndex = useRef<number | null>(null);
@@ -27,11 +30,36 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
   const [deletePopupOpen, setDeletePopupOpen] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState<fullCourseData | null>(null);
 
+  const [allSubjectsMode, setAllSubjectsMode] = useState<"on" | "off">("on");
+
+  const [showInfo, setShowInfo] = useState(false);
+  const [deleteAllPopupOpen, setDeleteAllPopupOpen] = useState(false);
+  const [isLargeScreen, setIsLargeScreen] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+
+
+
   const [alert, setAlert] = useState({
     open: false,
     message: "",
     color: "red",
   });
+
+  const handleDeleteAllCourses = () => {
+    onUpdate([]);
+    setGlobalCourses([]);
+  };
 
   const resetDragRefs = () => {
     draggedItemIndex.current = null;
@@ -47,8 +75,8 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
       onUpdate(updatedCourses);
 
       setGlobalCourses(updatedCourses);
-      const { result } = generateTT(updatedCourses);
-      setTimetableData(result);
+      //const { result } = generateTT(updatedCourses);
+      // setTimetableData(result);
     }
 
     setDeletePopupOpen(false);
@@ -114,20 +142,29 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
     setError(null);
 
     try {
-      const { result } = generateTT(selectedCourses);
-      setGlobalCourses(selectedCourses);
-      setTimetableData(result);
+      const { result } = generateTT(selectedCourses, allSubjectsMode === "on");
 
-      setAlert({
-        open: false,
-        message: "",
-        color: "red",
-      });
+      if (!result || result.length === 0) {
+        setTimetableData([]);
+        setAlert({
+          open: true,
+          message: "No timetables were generated because there were clashes in all possible timetables. Please adjust your courses or mode.",
+          color: "red",
+        });
+      } else {
+        setTimetableData(result);
+        setGlobalCourses(selectedCourses);
+        setAlert({
+          open: false,
+          message: "",
+          color: "red",
+        });
 
-      setTimeout(() => {
-        const el = document.getElementById("timetable-view");
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      }, 100);
+        setTimeout(() => {
+          const el = document.getElementById("timetable-view");
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+      }
     } catch {
       setError("Failed to generate timetable. Please try again.");
     } finally {
@@ -143,6 +180,15 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
         color={alert.color}
         onClose={() => setAlert({ ...alert, open: false })}
       />
+
+      <AlertModal
+        open={showInfo}
+        message={
+          "**All Subjects Mode - ON**\nGenerated timetables strictly include all of the selected subjects.\n\n**All Subjects Mode - OFF**\nSubjects are prioritized based on their order. If a clash is detected then the subject with lower priority is excluded."
+        } color="yellow"
+        onClose={() => setShowInfo(false)}
+      />
+
       <div
         id="course-card"
         className="bg-[#A7D5D7] mt-4 font-poppins rounded-4xl border-[3px] border-black p-6 shadow-[4px_4px_0_0_black] text-black font-medium px-12 mb-16"
@@ -178,22 +224,27 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
                   </div>
                   <div className={"flex flex-col px-4 gap-1"}>
                     <p key={course.courseCode}>{course.courseCode}</p>
-                    {course.courseType === "both" && (
-                      <p key={course.courseCodeLab+"_lab"}>{course.courseCodeLab}</p>
+                    {course.courseType === "both" && !course.courseCode.endsWith("E") && (
+                      <p key={course.courseCodeLab + "_lab"}>
+                        {course.courseCodeLab}
+                      </p>
                     )}
                   </div>
                 </div>
               </div>
 
-              {/* Course namee */}
+              {/* Course name */}
               <div className="flex w-[480px] text-sm text-black font-normal">
                 <div className="flex flex-col gap-1 break-words max-w-full">
-                  <p key={course.courseName} className="break-words leading-snug">
+                  <p
+                    key={course.courseName}
+                    className="break-words leading-snug"
+                  >
                     {course.courseName}
                   </p>
-                  {course.courseType === "both" && (
+                  {course.courseType === "both" && !course.courseCode.endsWith("E") && (
                     <p
-                      key={course.courseNameLab+"_lab"}
+                      key={course.courseNameLab + "_lab"}
                       className="break-words leading-snug"
                     >
                       {course.courseNameLab}
@@ -304,19 +355,118 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
           ))}
         </div>
 
-        <div className="flex text-center justify-center mt-8 mb-4">
-          <ZButton
-            type="large"
-            text={loading ? "Generating..." : "Generate"}
-            image="/icons/thunder.svg"
-            color="blue"
-            disabled={loading}
-            onClick={handleGenerate}
-          />
-        </div>
+        {isLargeScreen ? (
+          
+          <div className="flex justify-between items-center mt-8 mb-4 relative w-full">
+            {/* Toggle */}
+            <div className="mr-auto flex items-center gap-2">
+              <div className="mr-2">
+                <ZButton
+                  image="/icons/qmark.svg"
+                  color="yellow"
+                  type="small"
+                  onClick={() => setShowInfo(true)}
+                />
+              </div>
+              <span className="text-md text-black font-semibold mr-0">
+                All Subjects Mode
+              </span>
+              <BasicToggleButton
+                defaultState={allSubjectsMode}
+                onToggle={() =>
+                  setAllSubjectsMode((prev) => (prev === "on" ? "off" : "on"))
+                }
+              />
+              <span className="text-md text-black font-semibold ml-2">
+                {allSubjectsMode === "on" ? "ON" : "OFF"}
+              </span>
+            </div>
+
+            {/* Generate */}
+            <div className="absolute left-1/2 -translate-x-1/2">
+              <ZButton
+                type="large"
+                text={loading ? "Generating..." : "Generate"}
+                image="/icons/thunder.svg"
+                color="blue"
+                disabled={loading}
+                onClick={handleGenerate}
+              />
+            </div>
+
+            {/* Delete All Button */}
+            <div className="ml-auto flex items-center">
+              <ZButton
+                type="regular"
+                text="Remove all"
+                image="/icons/trash.svg"
+                color="red"
+                onClick={() => setDeleteAllPopupOpen(true)}
+              />
+            </div>
+          </div>
+        ) : (
+          
+          // Mobile / Tablet View
+
+          <div className="mt-8 mb-4 w-full flex flex-col gap-4">
+            {/* Top Row */}
+            <div className="w-full flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <div className="mr-2">
+                  <ZButton
+                    image="/icons/qmark.svg"
+                    color="yellow"
+                    type="small"
+                    onClick={() => setShowInfo(true)}
+                  />
+                </div>
+                <span className="text-md text-black font-semibold mr-2">
+                  All Subjects Mode
+                </span>
+                <BasicToggleButton
+                  defaultState={allSubjectsMode}
+                  onToggle={() =>
+                    setAllSubjectsMode((prev) => (prev === "on" ? "off" : "on"))
+                  }
+                />
+                <span className="text-md text-black font-semibold ml-4">
+                  {allSubjectsMode === "on" ? "ON" : "OFF"}
+                </span>
+              </div>
+
+              <div className="flex items-center">
+                <ZButton
+                  type="regular"
+                  text="Remove all"
+                  image="/icons/trash.svg"
+                  color="red"
+                  onClick={() => setDeleteAllPopupOpen(true)}
+                />
+              </div>
+            </div>
+
+            {/* Bottom Row*/}
+            <div className="flex justify-center w-full py-4">
+              <ZButton
+                type="large"
+                text={loading ? "Generating..." : "Generate"}
+                image="/icons/thunder.svg"
+                color="blue"
+                disabled={loading}
+                onClick={handleGenerate}
+              />
+            </div>
+          </div>
+        )}
+
+
 
         {error && (
-          <div className="mt-6 text-center text-[#CC3312] font-semibold" role="alert">
+          <div
+            className="mt-6 text-center text-[#CC3312] font-semibold"
+            role="alert"
+          >
             {error}
           </div>
         )}
@@ -338,6 +488,19 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
           }}
         />
       )}
+
+      {deleteAllPopupOpen && (
+        <Popup
+          type="rem_allcourse"
+          dataBody=""
+          action={() => {
+            handleDeleteAllCourses();
+            setDeleteAllPopupOpen(false);
+          }}
+          closeLink={() => setDeleteAllPopupOpen(false)}
+        />
+      )}
+
     </div>
   );
 }

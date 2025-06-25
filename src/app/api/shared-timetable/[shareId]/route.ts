@@ -5,7 +5,6 @@ import Timetable from "@/models/timetable";
 export async function GET(req: NextRequest) {
   await dbConnect();
 
-  
   const shareId = req.nextUrl.pathname.split("/").pop();
 
   if (!shareId) {
@@ -15,8 +14,18 @@ export async function GET(req: NextRequest) {
   try {
     const timetable = await Timetable.findOne({ shareId });
 
-    if (!timetable || !timetable.isPublic) {
+    if (!timetable) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    if (!timetable.isPublic) {
+      return NextResponse.json({
+        success: false,
+        message: "Timetable is private",
+        timetable: {
+          title: timetable.title,
+        },
+      });
     }
 
     return NextResponse.json({

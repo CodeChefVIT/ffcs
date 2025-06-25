@@ -32,7 +32,7 @@ export const metadata = {
   icons: {
     icon: "/logo_ffcs.svg",
   },
-  manifest: "/manifest.json",
+  manifest: "/manifest.webmanifest",
 
   openGraph: {
     title: "FFCS-inator",

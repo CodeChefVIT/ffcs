@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { CCButton, ZButton } from "./Buttons";
 import AlertModal from "./AlertModal";
+import { useSession } from "next-auth/react";
 
 export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
+  const { data: session } = useSession();
   const [email, setEmail] = useState("");
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [alertState, setAlertState] = useState({
@@ -13,6 +15,12 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
     message: "",
     color: "",
   });
+
+  useEffect(() => {
+    if (session && session.user?.email) {
+      setEmail(session.user.email);
+    }
+  }, [session]);
 
   const handleSubscribe = async () => {
     if (!email || isSubscribing) return;
@@ -33,7 +41,7 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
           message: "Thanks for subscribing!",
           color: "green",
         });
-        setEmail("");
+        setEmail(session?.user?.email || "");
       } else {
         setAlertState({
           open: true,
@@ -55,7 +63,7 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
   if (type === "mobile") {
     return (
       <footer className="w-full bg-[#CEE4E5] text-center mt-auto relative overflow-hidden">
-        {/* Foreground Content */}
+        {/* Foreground */}
         <div className="relative z-10 flex flex-col items-center justify-center pt-12 pb-4 px-4">
           <div className="mb-4">
             <CCButton />
@@ -65,7 +73,7 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
           </p>
         </div>
 
-        {/* Full-width Wave Background */}
+        {/* Background */}
         <div className="absolute bottom-0 left-0 right-0 z-0">
           <Image
             src="/art/footer_mobile.svg"
@@ -79,7 +87,6 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
           />
         </div>
 
-        {/* Alert Modal */}
         <AlertModal
           open={alertState.open}
           onClose={() => setAlertState({ ...alertState, open: false })}
@@ -125,7 +132,13 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
                 alt: "Instagram",
               },
             ].map(({ href, src, alt }) => (
-              <a href={href} key={src} target="_blank" rel="noopener">
+              <a
+                href={href}
+                key={src}
+                target="_blank"
+                rel="noopener"
+                title={`Follow us on ${alt}`}
+              >
                 <Image
                   src={src}
                   alt={alt}
@@ -191,15 +204,6 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
             </li>
             <li>
               <a
-                href="https://ffcs.codechefvit.com/"
-                target="_blank"
-                rel="noopener"
-              >
-                FFCS-inator
-              </a>
-            </li>
-            <li>
-              <a
                 href="https://papers.codechefvit.com/"
                 target="_blank"
                 rel="noopener"
@@ -222,7 +226,7 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
                 className="text-sm bg-transparent outline-none placeholder:text-black/50 w-full"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && handleSubscribe()}
+                onKeyDown={(e) => e.key === "Enter" && handleSubscribe()}
               />
             </div>
 
@@ -241,7 +245,7 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
         Made with <span className="font-[inter]">❤</span> by CodeChef–VIT
       </div>
 
-      {/* Alert Modal */}
+      
       <AlertModal
         open={alertState.open}
         onClose={() => setAlertState({ ...alertState, open: false })}

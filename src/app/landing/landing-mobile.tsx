@@ -1,19 +1,19 @@
 "use client";
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import Footer from '@/components/ui/Footer';
-import Accordion from '@/components/ui/Accordion';
+import React, { useState } from "react";
+import Image from "next/image";
+import Footer from "@/components/ui/Footer";
+import Accordion from "@/components/ui/Accordion";
 
-// import { ZButton } from '@/components/ui/Buttons';
-// import { useRouter } from "next/navigation";
-import { signIn } from 'next-auth/react';
-import { PopupLogin } from '@/components/ui/PopupMobile';
+import { ZButton } from "@/components/ui/Buttons";
+import { useRouter } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
+import { PopupLogin } from "@/components/ui/PopupMobile";
 
 export default function View() {
-  // const router = useRouter();
-  // const { data: session } = useSession();
-  // const loggedin = !!session;
+  const router = useRouter();
+  const { data: session } = useSession();
+  const loggedin = !!session;
   const [showLoginPopupSaved, setShowLoginPopupSaved] = useState(false);
 
   return (
@@ -21,7 +21,9 @@ export default function View() {
       {showLoginPopupSaved && (
         <PopupLogin
           closeLink={() => setShowLoginPopupSaved(false)}
-          onLoginClick={() => signIn("google", { callbackUrl: "/saved", redirect: true })}
+          onLoginClick={() =>
+            signIn("google", { callbackUrl: "/saved", redirect: true })
+          }
         />
       )}
 
@@ -40,9 +42,12 @@ export default function View() {
         </div>
 
         <div className="flex-grow mt-16 flex flex-col items-center text-center relative">
-
-          <div className="text-5xl mb-2 font-pangolin text-black">FFCS-inator</div>
-          <div className="text-2xl mb-8 font-pangolin text-black">By CodeChef-VIT</div>
+          <div className="text-5xl mb-2 font-pangolin text-black">
+            FFCS-inator
+          </div>
+          <div className="text-2xl mb-8 font-pangolin text-black">
+            By CodeChef-VIT
+          </div>
 
           <div className="mb-8">
             <Image
@@ -58,29 +63,28 @@ export default function View() {
           </div>
 
           <div className="text-4xl mb-8 font-pangolin text-black">
-            Create Your<br />
+            Create Your
+            <br />
             Ideal Timetable!
           </div>
 
           <div className="text-xl mb-8 font-poppins text-black">
             Use PC or Tablet For All Features
           </div>
-
-          <div className="text-lg sm:text-xl font-poppins font-semibold text-black mb-6">
-            We&apos;re almost ready!
-            <br />
-            The website will be up as soon as the coming semester&apos;s faculty list is available.
-          </div>
-          {/* <ZButton
+          <ZButton
             type="regular"
             text="Saved Timetables"
             color="green"
-            onClick={loggedin ? () => router.push("/saved") : () => setShowLoginPopupSaved(true)}
-          /> */}
+            onClick={
+              loggedin
+                ? () => router.push("/saved")
+                : () => setShowLoginPopupSaved(true)
+            }
+          />
         </div>
 
         <div className="h-6" />
-        
+
         <Accordion />
 
         <Footer type="mobile" />

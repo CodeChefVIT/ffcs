@@ -7,9 +7,12 @@ import Footer from "@/components/ui/Footer";
 import Image from "next/image";
 import axios from "axios";
 import { PopupViewTT } from "@/components/ui/PopupMobile";
+import Loader from "@/components/ui/Loader";
 
 async function fetchTimetablesByOwner(owner: string) {
-  const res = await axios.get(`/api/timetables?owner=${encodeURIComponent(owner)}`);
+  const res = await axios.get(
+    `/api/timetables?owner=${encodeURIComponent(owner)}`
+  );
   return res.data;
 }
 
@@ -39,7 +42,9 @@ export default function SavedMobile() {
   const [timetables, setTimetables] = useState<TimetableEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
-  const [popupType, setPopupType] = useState<"view_tt" | "delete_tt" | "rename_tt" | null>(null);
+  const [popupType, setPopupType] = useState<
+    "view_tt" | "delete_tt" | "rename_tt" | null
+  >(null);
   const [popupSlots, setPopupSlots] = useState<PopupSlot[]>([]);
   const [popupTitle, setPopupTitle] = useState<string>("");
   const [selectedTT, setSelectedTT] = useState<TimetableEntry | null>(null);
@@ -73,7 +78,9 @@ export default function SavedMobile() {
 
   async function handleCopyLink(tt: TimetableEntry) {
     try {
-      await axios.patch(`/api/timetables/${tt._id}`, { isPublic: publicToggle });
+      await axios.patch(`/api/timetables/${tt._id}`, {
+        isPublic: publicToggle,
+      });
       const res = await axios.get(`/api/timetables/${tt._id}`);
       const updated = res.data;
       if (!updated.shareId) throw new Error("No shareId found");
@@ -112,7 +119,9 @@ export default function SavedMobile() {
 
       <Navbar page="mobile" />
 
-      <div className="text-4xl mb-8 mt-28 text-black font-pangolin">Saved Timetables</div>
+      <div className="text-4xl mb-8 mt-28 text-black font-pangolin">
+        Saved Timetables
+      </div>
 
       <ul className="w-full space-y-4 px-6">
         {timetables.map((tt, index) => (
@@ -138,9 +147,7 @@ export default function SavedMobile() {
       </div>
 
       {loading ? (
-        <div className="mx-auto my-auto text-center text-sm font-poppins font-semibold text-black/70">
-          Loading...
-        </div>
+        <Loader />
       ) : timetables.length === 0 ? (
         <div className="mx-auto my-auto text-center text-sm font-poppins font-semibold text-black/70">
           No saved timetables found.
@@ -161,7 +168,9 @@ export default function SavedMobile() {
           shareSwitchAction={handleTogglePublic}
           shareLink={
             selectedTT.shareId
-              ? `${typeof window !== "undefined" ? window.location.origin : ""}/share/${selectedTT.shareId}`
+              ? `${
+                  typeof window !== "undefined" ? window.location.origin : ""
+                }/share/${selectedTT.shareId}`
               : ""
           }
         />

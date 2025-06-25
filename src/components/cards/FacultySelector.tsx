@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ZButton } from "../ui/Buttons";
 
@@ -59,6 +59,7 @@ function SelectField({
       <button
         onClick={() => setIsOpen(!isOpen)}
         title={selectedLabel}
+        aria-label={`Select ${label}`}
         className={`
          w-full h-10 pl-3 pr-12 text-left bg-white rounded-xl border-3 border-black
          cursor-pointer relative
@@ -176,16 +177,12 @@ function generateCourseSlotsLabOnly({
   labShift: "morning" | "evening";
 }) {
   const isMorningSlot = (slot: string) => {
-    const parts = slot
-      .split("+")
-      .map((s) => parseInt(s.replace("L", ""), 10));
+    const parts = slot.split("+").map((s) => parseInt(s.replace("L", ""), 10));
     return parts.every((num) => num <= 30); // Define morning range
   };
 
   const isEveningSlot = (slot: string) => {
-    const parts = slot
-      .split("+")
-      .map((s) => parseInt(s.replace("L", ""), 10));
+    const parts = slot.split("+").map((s) => parseInt(s.replace("L", ""), 10));
     return parts.every((num) => num > 30); // Define evening range
   };
 
@@ -208,15 +205,13 @@ function generateCourseSlotsLabOnly({
     slotFaculties: subjectData
       .filter(
         (entry) =>
-          entry.slot === slotName &&
-          selectedFaculties.includes(entry.faculty)
+          entry.slot === slotName && selectedFaculties.includes(entry.faculty)
       )
       .map((entry) => ({
         facultyName: entry.faculty,
       })),
   }));
 }
-
 
 function generateCourseSlotsBoth({
   data,
@@ -419,7 +414,7 @@ export default function FacultySelector({
       courseSlots = generateCourseSlotsLabOnly({
         subjectData: data[selectedSchool][selectedDomain][selectedSubject],
         selectedFaculties: priorityList,
-        labShift: selectedLabShift
+        labShift: selectedLabShift,
       });
     } else {
       if (courseType == "both") {
@@ -478,10 +473,7 @@ export default function FacultySelector({
     } catch (error) {
       console.warn("Failed to update localStorage for selectedCourses", error);
     }
-
     onConfirm(courseData);
-    setSelectedFaculties([]);
-    setPriorityList([]);
   };
 
   const toggleFaculty = (name: string) => {
@@ -618,8 +610,6 @@ export default function FacultySelector({
       .filter((entry) => labSlots.includes(entry.slot))
       .map((entry) => entry.faculty);
 
-    setSelectedFaculties([]);
-    setPriorityList([]);
     setFaculties([...new Set(facultiesInSelectedShift)]);
   }, [
     selectedLabShift,
@@ -659,7 +649,6 @@ export default function FacultySelector({
   const handleSubjectChange = (subject: string) => {
     setSelectedSubject(subject);
     setSelectedSlot("");
-    setSlots([]);
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
@@ -669,12 +658,51 @@ export default function FacultySelector({
 
   const handleSlotChange = (slot: string) => {
     setSelectedSlot(slot);
-    setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
     setSelectedLabShift("");
     setLabShiftOptions({ morning: [], evening: [] });
   };
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!selectedSubject || (!selectedSlot && !selectedLabShift)) return;
+
+    try {
+      const savedCoursesJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
+      const savedCourses: fullCourseData[] = savedCoursesJSON
+        ? JSON.parse(savedCoursesJSON)
+        : [];
+
+      const course = savedCourses.find((c) => c.id === selectedSubject);
+
+      if (!course) return;
+
+      const matchingSlots = course.courseSlots.filter((slot) => {
+        if (selectedLabShift) {
+          const shiftSlots = labShiftOptions[selectedLabShift] || [];
+          return shiftSlots.includes(slot.slotName);
+        }
+        return slot.slotName === selectedSlot;
+      });
+      if (matchingSlots.length > 0) {
+        const allFaculties = matchingSlots.flatMap((slot) =>
+          slot.slotFaculties.map((f) => f.facultyName)
+        );
+
+        const uniqueFaculties = Array.from(new Set(allFaculties));
+
+        setSelectedFaculties(uniqueFaculties);
+        setPriorityList(uniqueFaculties);
+      }
+    } catch (err) {
+      console.error("Error restoring faculties from localStorage", err);
+    }
+  }, [selectedSubject, selectedSlot, selectedLabShift, labShiftOptions]);
+
+  const [tooltipFacultyIndex, setTooltipFacultyIndex] = React.useState<
+    number | null
+  >(null);
 
   return (
     <div>
@@ -719,9 +747,6 @@ export default function FacultySelector({
                   } else {
                     setSelectedLabShift("");
                   }
-                  setFaculties([]);
-                  setSelectedFaculties([]);
-                  setPriorityList([]);
                 }}
                 options={["morning", "evening"].filter(
                   (shift) =>
@@ -733,8 +758,10 @@ export default function FacultySelector({
               <SelectField
                 label="Slot"
                 value={selectedSlot}
-                options={slots}
+                options={[...slots].sort((a, b) => a.localeCompare(b))}
                 onChange={handleSlotChange}
+                renderOption={(option) => option}
+                aria-label="Select slot"
               />
             )}
           </div>
@@ -747,41 +774,155 @@ export default function FacultySelector({
                 Select Faculties
               </div>
               <div className="pt-4 pb-4 px-6 overflow-y-auto space-y-2 scrollbar-thin h-86">
-                {faculties.map((faculty: string, index: number) => (
-                  <div key={index}>
-                    <div className="flex items-center justify-between py-1 px-2">
-                      <span className="text-[#000000]">{faculty}</span>
-                      <label className="inline-flex items-center gap-1 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={selectedFaculties.includes(faculty)}
-                          onChange={() => toggleFaculty(faculty)}
-                          className="peer hidden"
-                        />
-                        <div className="w-7 h-7 rounded-md border-3 border-black flex items-center justify-center peer-checked:bg-[#C1FF83]">
-                          <Image
-                            src={
-                              selectedFaculties.includes(faculty)
-                                ? "/icons/check.svg"
-                                : "/icons/blank.svg"
-                            }
-                            alt="check"
-                            className="w-7 h-7"
-                            width={32}
-                            height={32}
-                            unselectable="on"
-                            draggable={false}
-                            priority
+                {faculties.map((faculty: string, index: number) => {
+
+                  let labTooltip = "";
+
+                  if (
+                    selectedDomain &&
+                    selectedSubject &&
+                    data[selectedSchool]?.[selectedDomain]
+                  ) {
+                    const courseCode = selectedSubject.split(" - ")[0];
+                    const baseCode = courseCode.slice(0, -1);
+                    const domainData = data[selectedSchool][selectedDomain];
+
+
+                    const labSubjectKey = Object.keys(domainData).find((subject) => {
+                      const subjectCode = subject.split(" - ")[0];
+                      return (
+                        subjectCode.slice(0, -1) === baseCode &&
+                        (subjectCode.endsWith("P") || subjectCode.endsWith("E"))
+                      );
+                    });
+
+                    if (labSubjectKey) {
+                      const labEntries = domainData[labSubjectKey].filter(
+                        (entry: SubjectEntry) => entry.faculty === faculty
+                      );
+                      let shiftSlots = [];
+                      if (selectedLabShift === "morning") {
+                        shiftSlots = labEntries
+                          .map((entry) => entry.slot)
+                          .filter((slot) =>
+                            slot
+                              .split("+")
+                              .every((s) => parseInt(s.replace("L", ""), 10) <= 30)
+                          );
+                      } else if (selectedLabShift === "evening") {
+                        shiftSlots = labEntries
+                          .map((entry) => entry.slot)
+                          .filter((slot) =>
+                            slot
+                              .split("+")
+                              .every((s) => parseInt(s.replace("L", ""), 10) >= 31)
+                          );
+                      } else {
+
+                        const isMorningSelected =
+                          selectedSlot.endsWith("1");
+                        const isEveningSelected =
+                          selectedSlot.endsWith("2");
+
+                        shiftSlots = labEntries
+                          .map((entry) => entry.slot)
+                          .filter((slot) => {
+                            const parts = slot.split("+");
+                            return parts.every((s) => {
+                              const num = parseInt(s.replace("L", ""), 10);
+                              return isMorningSelected ? num >= 31 : isEveningSelected ? num <= 30 : false;
+                            });
+                          });
+                      }
+
+
+                      if (shiftSlots.length > 0) {
+                        labTooltip = `${shiftSlots.join(", ")}`;
+
+                      }
+                    }
+                  }
+                  return (
+                    <div key={index} className="relative">
+                      <div
+                        className="flex items-center justify-between py-1 px-2 relative cursor-pointer"
+                        tabIndex={labTooltip ? 0 : -1}
+                        aria-label={labTooltip || undefined}
+                        onMouseEnter={() =>
+                          labTooltip && setTooltipFacultyIndex(index)
+                        }
+                        onMouseLeave={() =>
+                          labTooltip && setTooltipFacultyIndex(null)
+                        }
+                        onFocus={() =>
+                          labTooltip && setTooltipFacultyIndex(index)
+                        }
+                        onBlur={() =>
+                          labTooltip && setTooltipFacultyIndex(null)
+                        }
+                        onClick={() => toggleFaculty(faculty)}
+                      >
+                        {labTooltip && tooltipFacultyIndex === index && (
+                          <div
+                            className="z-50 absolute flex right-0 items-center pr-12"
+                            style={{ pointerEvents: "none" }}
+                          >
+                            <div
+                              className={`
+                              px-2 py-1
+                              shadow-lg border border-gray-300
+                              rounded-md min-w-max max-w-xs
+                              whitespace-pre-line text-xs
+                              font-inter bg-white
+                              text-gray-900 pointer-events-none
+                              `}
+                              role="tooltip"
+                            >
+                              {labTooltip}
+                            </div>
+                          </div>
+                        )}
+                        <span className="text-[#000000] relative">
+                          {faculty}
+                        </span>
+                        <label className="inline-flex items-center gap-1 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={selectedFaculties.includes(faculty)}
+                            onChange={() => toggleFaculty(faculty)}
+                            className="peer hidden"
+                            aria-label={`Select faculty ${faculty}`}
+                            title={`Select faculty ${faculty}`}
                           />
-                        </div>
-                      </label>
+                          <div className="w-7 h-7 rounded-md border-3 border-black flex items-center justify-center peer-checked:bg-[#C1FF83]">
+                            <Image
+                              src={
+                                selectedFaculties.includes(faculty)
+                                  ? "/icons/check.svg"
+                                  : "/icons/blank.svg"
+                              }
+                              alt={
+                                selectedFaculties.includes(faculty)
+                                  ? `Selected ${faculty}`
+                                  : `Not selected ${faculty}`
+                              }
+                              className="w-7 h-7"
+                              width={32}
+                              height={32}
+                              unselectable="on"
+                              draggable={false}
+                              priority
+                            />
+                          </div>
+                        </label>
+                      </div>
+                      <div
+                        className="w-full mt-1 bg-black"
+                        style={{ height: `${1 / window.devicePixelRatio}px` }}
+                      />
                     </div>
-                    <div
-                      className="w-full mt-1 bg-black"
-                      style={{ height: `${1 / window.devicePixelRatio}px` }}
-                    />
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
@@ -823,6 +964,8 @@ export default function FacultySelector({
                           <button
                             onClick={() => moveUp(index)}
                             className="text-sm text-black cursor-pointer"
+                            aria-label={`Move ${faculty} up in priority`}
+                            title={`Move ${faculty} up in priority`}
                           >
                             <Image
                               src={
@@ -842,6 +985,8 @@ export default function FacultySelector({
                           <button
                             onClick={() => moveDown(index)}
                             className="text-sm text-black cursor-pointer"
+                            aria-label={`Move ${faculty} down in priority`}
+                            title={`Move ${faculty} down in priority`}
                           >
                             <Image
                               width={120}
@@ -873,7 +1018,6 @@ export default function FacultySelector({
               </div>
 
               <div className="flex flex-row justify-center gap-4">
-
                 <ZButton
                   type="long"
                   text="Reset"
