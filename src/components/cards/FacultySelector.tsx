@@ -17,6 +17,7 @@ const schools = [
   "SCHEME",
   "SENSE",
   "SCE",
+  "MID_5YEAR",
 ];
 
 type SelectFieldProps = {
