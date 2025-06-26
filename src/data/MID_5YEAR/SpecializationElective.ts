@@ -1,6 +1,5 @@
 export const SPE = {
-  "CSE2010 - Advanced C Programming": [
-    { slot: "L23+L24", venue: "PRP234", faculty: "KAUSER AHMED P" },
+  "CSE2010L - Advanced C Programming": [
     { slot: "C2", venue: "PRP267", faculty: "SUKUMART" },
     { slot: "C2", venue: "PRP268", faculty: "KAUSER AHMED P" },
     { slot: "C2", venue: "PRP274", faculty: "KALAIVANI K" },
@@ -8,6 +7,9 @@ export const SPE = {
     { slot: "C1", venue: "PRP268", faculty: "KAUSER AHMED P" },
     { slot: "C1", venue: "PRP274", faculty: "KALAIVANI K" },
     { slot: "C1", venue: "PRP275", faculty: "ROHINI S" },
+  ],
+  "CSE2010P - Advanced C Programming": [
+    { slot: "L23+L24", venue: "PRP234", faculty: "KAUSER AHMED P" },
     { slot: "L35+L36", venue: "PRP234", faculty: "SUKUMART" },
     { slot: "L7+L8", venue: "PRP234", faculty: "SUKUMART" },
     { slot: "L35+L36", venue: "SJT417", faculty: "KAUSER AHMED P" },
@@ -15,13 +17,7 @@ export const SPE = {
     { slot: "L23+L24", venue: "SJT316", faculty: "KALAIVANI K" },
     { slot: "L37+L38", venue: "SJT417", faculty: "ROHINI S" },
   ],
-  "CSI3010 - Data Warehousing and Data Mining": [
-    { slot: "L39+L40", venue: "SJT517", faculty: "ANBARASI M" },
-    { slot: "L15+L16", venue: "SJT517", faculty: "ANBARASI M" },
-    { slot: "L45+L46", venue: "SJT319", faculty: "BALAMURUGAN R" },
-    { slot: "L25+L26", venue: "SJT316", faculty: "BALAMURUGAN R" },
-    { slot: "L55+L56", venue: "SJT316", faculty: "SUBRAMANIYASWAMY V" },
-    { slot: "L25+L26", venue: "SJT318", faculty: "SUBRAMANIYASWAMY V" },
+  "CSI3010L - Data Warehousing and Data Mining": [
     { slot: "G1+TG1", venue: "SJT710", faculty: "BALAMURUGAN R" },
     { slot: "G2+TG2", venue: "SJT619", faculty: "SUBRAMANIYASWAMY V" },
     { slot: "G2+TG2", venue: "SJT617", faculty: "BALAMURUGAN R" },
@@ -31,11 +27,19 @@ export const SPE = {
     { slot: "G1+TG1", venue: "SJT607", faculty: "KASPAR S" },
     { slot: "G2+TG2", venue: "SJT604", faculty: "ANBARASI M" },
     { slot: "G1+TG1", venue: "SJT602A", faculty: "PRABAKARAN N" },
+  ],
+  "CSI3010P - Data Warehousing and Data Mining": [
+    { slot: "L39+L40", venue: "SJT517", faculty: "ANBARASI M" },
+    { slot: "L15+L16", venue: "SJT517", faculty: "ANBARASI M" },
+    { slot: "L45+L46", venue: "SJT319", faculty: "BALAMURUGAN R" },
+    { slot: "L25+L26", venue: "SJT316", faculty: "BALAMURUGAN R" },
+    { slot: "L55+L56", venue: "SJT316", faculty: "SUBRAMANIYASWAMY V" },
+    { slot: "L25+L26", venue: "SJT318", faculty: "SUBRAMANIYASWAMY V" },
     { slot: "L27+L28", venue: "SJT517", faculty: "PRABAKARAN N" },
     { slot: "L33+L34", venue: "SJT517", faculty: "KASPAR S" },
     { slot: "L55+L56", venue: "SJT516", faculty: "PRABAKARAN N" },
   ],
-  "CSI3017 - Business Intelligence": [
+  "CSI3017L - Business Intelligence": [
     { slot: "A1+TA1+TAA1", venue: "SJT715", faculty: "SIVAPRAKASH S" },
     { slot: "A1+TA1+TAA1", venue: "SJT619", faculty: "PEREPI RAJARAJESWARI" },
     { slot: "A1+TA1+TAA1", venue: "SJT626", faculty: "MURUGAN K" },
@@ -43,14 +47,7 @@ export const SPE = {
     { slot: "B2+TB2+TBB2", venue: "SJT602A", faculty: "KRISHNARAJ N" },
     { slot: "B2+TB2+TBB2", venue: "SJT604", faculty: "MADHAN E S" },
   ],
-  "MDI3003 - Advanced Predictive Analytics": [
-    { slot: "L43+L44", venue: "SJT317", faculty: "BALAJI G N" },
-    { slot: "L27+L28", venue: "SJT418", faculty: "BALAJI G N" },
-    { slot: "L43+L44", venue: "SJT417", faculty: "ARCHANA T" },
-    { slot: "L29+L30", venue: "SJT319", faculty: "ARCHANA T" },
-    { slot: "L7+L8", venue: "SJT319", faculty: "SAYAN SIKDER" },
-    { slot: "L55+L56", venue: "SJT621", faculty: "PEREPI RAJARAJESWARI" },
-    { slot: "L23+L24", venue: "SJT419", faculty: "PEREPI RAJARAJESWARI" },
+  "MDI3003L - Advanced Predictive Analytics": [
     { slot: "B2+TB2", venue: "SJT627", faculty: "PEREPI RAJARAJESWARI" },
     { slot: "B1+TB1", venue: "SJT707", faculty: "BALAJI G N" },
     { slot: "B2+TB2", venue: "SJT707", faculty: "BALAJI G N" },
@@ -59,4 +56,13 @@ export const SPE = {
     { slot: "B2+TB2", venue: "SJT709", faculty: "ARCHANA T" },
     { slot: "B1+TB1", venue: "SJT627", faculty: "PEREPI RAJARAJESWARI" },
   ],
+  "MDI3003P - Advanced Predictive Analytics": [
+    { slot: "L43+L44", venue: "SJT317", faculty: "BALAJI G N" },
+    { slot: "L27+L28", venue: "SJT418", faculty: "BALAJI G N" },
+    { slot: "L43+L44", venue: "SJT417", faculty: "ARCHANA T" },
+    { slot: "L29+L30", venue: "SJT319", faculty: "ARCHANA T" },
+    { slot: "L7+L8", venue: "SJT319", faculty: "SAYAN SIKDER" },
+    { slot: "L55+L56", venue: "SJT621", faculty: "PEREPI RAJARAJESWARI" },
+    { slot: "L23+L24", venue: "SJT419", faculty: "PEREPI RAJARAJESWARI" },
+  ]
 };

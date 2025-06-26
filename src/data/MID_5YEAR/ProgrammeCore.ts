@@ -1,6 +1,5 @@
 export const PC = {
-  "CSI1001 - Principles of Database Systems": [
-    { slot: "L39+L40", venue: "PRP137", faculty: "SUDHAKAR P" },
+  "CSI1001L - Principles of Database Systems": [
     { slot: "B1", venue: "PRP267", faculty: "HARINI N" },
     { slot: "B2", venue: "PRP267", faculty: "HARINI N" },
     { slot: "B1", venue: "PRP268", faculty: "SUDHAKAR P" },
@@ -8,15 +7,17 @@ export const PC = {
     { slot: "B2", venue: "PRP274", faculty: "DIVIYA M" },
     { slot: "B1", venue: "PRP274", faculty: "DIVIYA M" },
     { slot: "B1", venue: "PRP275", faculty: "NAGESHWAR RAO RAGI" },
+  ],
+  "CSI1001P - Principles of Database Systems": [
     { slot: "L39+L40", venue: "PRP136", faculty: "HARINI N" },
     { slot: "L13+L14", venue: "PRP234", faculty: "HARINI N" },
     { slot: "L5+L6", venue: "PRP234", faculty: "SUDHAKAR P" },
     { slot: "L5+L6", venue: "SJT417", faculty: "DIVIYA M" },
     { slot: "L35+L36", venue: "SJT516", faculty: "NAGESHWAR RAO RAGI" },
     { slot: "L55+L56", venue: "PRP137", faculty: "DIVIYA M" },
+    { slot: "L39+L40", venue: "PRP137", faculty: "SUDHAKAR P" },
   ],
-  "CSI1002 - Operating System Principles": [
-    { slot: "L53+L54", venue: "SJT219", faculty: "MANIKANDAN G" },
+  "CSI1002L - Operating System Principles": [
     { slot: "E1", venue: "PRP275", faculty: "VIJAYARAJAN V" },
     { slot: "E1", venue: "PRP267", faculty: "VIJAYASHERLY V" },
     { slot: "E1", venue: "PRP268", faculty: "SIVAKUMAR. N" },
@@ -24,14 +25,17 @@ export const PC = {
     { slot: "E1", venue: "PRP274", faculty: "MANIKANDAN G" },
     { slot: "E2", venue: "PRP274", faculty: "MANIKANDAN G" },
     { slot: "E2", venue: "PRP267", faculty: "VIJAYASHERLY V" },
+  ],
+  "CSI1002P - Operating System Principles": [
     { slot: "L21+L22", venue: "SJT417", faculty: "VIJAYASHERLY V" },
     { slot: "L43+L44", venue: "SJT121", faculty: "VIJAYASHERLY V" },
     { slot: "L35+L36", venue: "SJT319", faculty: "SIVAKUMAR. N" },
     { slot: "L51+L52", venue: "PRP234", faculty: "VIJAYARAJAN V" },
     { slot: "L21+L22", venue: "PRP234", faculty: "SIVAKUMAR. N" },
     { slot: "L13+L14", venue: "SJT318", faculty: "MANIKANDAN G" },
+    { slot: "L53+L54", venue: "SJT219", faculty: "MANIKANDAN G" },
   ],
-  "CSI1003 - Formal Languages and Automata Theory": [
+  "CSI1003L - Formal Languages and Automata Theory": [
     { slot: "D2+TD2", venue: "PRP275", faculty: "RAJARAJAN G" },
     { slot: "D2+TD2", venue: "PRP267", faculty: "VIJAYARAJAN V" },
     { slot: "D2+TD2", venue: "PRP268", faculty: "KANNADASAN R" },
@@ -40,7 +44,7 @@ export const PC = {
     { slot: "D1+TD1", venue: "PRP267", faculty: "BOOMINATHAN P" },
     { slot: "D1+TD1", venue: "PRP274", faculty: "SHALINI L" },
   ],
-  "CSI1004 - Computer Organization and Architecture": [
+  "CSI1004L - Computer Organization and Architecture": [
     { slot: "A2+TA2", venue: "PRP274", faculty: "BRISILLA R M" },
     { slot: "A2+TA2", venue: "PRP267", faculty: "MANIKANDAN K" },
     { slot: "A1+TA1", venue: "PRP267", faculty: "VIJAYA KUMAR K" },
@@ -49,9 +53,7 @@ export const PC = {
     { slot: "A1+TA1", venue: "PRP274", faculty: "BERLIN M A" },
     { slot: "A2+TA2", venue: "PRP275", faculty: "KRISHNAMOORTHY A" },
   ],
-  "CSI2003 - Advanced Algorithms": [
-    { slot: "L25+L26", venue: "SJT417", faculty: "LAKSHMANAN K" },
-    { slot: "L23+L24", venue: "SJT319", faculty: "SUNIJA A P" },
+  "CSI2003L - Advanced Algorithms": [
     { slot: "F2", venue: "PRP268", faculty: "RISHIN HALDAR" },
     { slot: "F1", venue: "PRP274", faculty: "SUNIJA A P" },
     { slot: "F1", venue: "PRP267", faculty: "ADALINE SUJI R" },
@@ -59,13 +61,17 @@ export const PC = {
     { slot: "F1", venue: "PRP268", faculty: "RISHIN HALDAR" },
     { slot: "F2", venue: "PRP372", faculty: "LAKSHMANAN K" },
     { slot: "F2", venue: "PRP274", faculty: "SUNIJA A P" },
+  ],
+  "CSI2003P - Advanced Algorithms": [
+    { slot: "L25+L26", venue: "SJT417", faculty: "LAKSHMANAN K" },
+    { slot: "L23+L24", venue: "SJT319", faculty: "SUNIJA A P" },
     { slot: "L43+L44", venue: "PRP234", faculty: "ADALINE SUJI R" },
     { slot: "L11+L12", venue: "SJT417", faculty: "RISHIN HALDAR" },
     { slot: "L51+L52", venue: "SJT417", faculty: "RISHIN HALDAR" },
     { slot: "L39+L40", venue: "PRP234", faculty: "SUNIJA A P" },
     { slot: "L11+L12", venue: "PRP234", faculty: "ADALINE SUJI R" },
   ],
-  "CSI2008 - Programming in Java": [
+  "CSI2008L - Programming in Java": [
     { slot: "D1+TD1", venue: "PRP238", faculty: "SIVAKUMAR V" },
     { slot: "D2+TD2", venue: "PRP134", faculty: "LOKESH KUMAR R" },
     { slot: "D1+TD1", venue: "PRP230", faculty: "RAMESH C" },
@@ -73,6 +79,8 @@ export const PC = {
     { slot: "D2+TD2", venue: "PRP238", faculty: "SIVAKUMAR V" },
     { slot: "D1+TD1", venue: "PRP134", faculty: "LOKESH KUMAR R" },
     { slot: "D1+TD1", venue: "PRP275", faculty: "DEBARATI DUTTA" },
+  ],
+  "CSI2008P - Programming in Java": [
     { slot: "L41+L42", venue: "PRP234", faculty: "SIVAKUMAR V" },
     { slot: "L41+L42", venue: "SJT417", faculty: "LOKESH KUMAR R" },
     { slot: "L9+L10", venue: "PRP234", faculty: "SIVAKUMAR V" },
@@ -81,13 +89,7 @@ export const PC = {
     { slot: "L9+L10", venue: "SJT121", faculty: "RAMESH C" },
     { slot: "L41+L42", venue: "PRP232", faculty: "DEBARATI DUTTA" },
   ],
-  "CSI3001 - Cloud Computing Methodologies": [
-    { slot: "L19+L20", venue: "SJT515", faculty: "PUSHPA GOTHWAL" },
-    { slot: "L19+L20", venue: "SJT417", faculty: "DHIVYAA C R" },
-    { slot: "L51+L52", venue: "SJT418", faculty: "PUSHPA GOTHWAL" },
-    { slot: "L51+L52", venue: "SJT622", faculty: "RANJITHKUMAR S" },
-    { slot: "L19+L20", venue: "SJT622", faculty: "RANJITHKUMAR S" },
-    { slot: "L31+L32", venue: "SJT621", faculty: "DHIVYAA C R" },
+  "CSI3001L - Cloud Computing Methodologies": [
     { slot: "C1+TC1", venue: "SJT421", faculty: "DEVIPRIYA A" },
     { slot: "C2+TC2", venue: "SJT421", faculty: "DEVIPRIYA A" },
     { slot: "C1+TC1", venue: "SJT422", faculty: "PUSHPA GOTHWAL" },
@@ -97,17 +99,19 @@ export const PC = {
     { slot: "C2+TC2", venue: "SJT423", faculty: "RANJITHKUMAR S" },
     { slot: "C1+TC1", venue: "SJT424", faculty: "DHIVYAA C R" },
     { slot: "C2+TC2", venue: "SJT424", faculty: "DHIVYAA C R" },
+  ],
+  "CSI3001P - Cloud Computing Methodologies": [
     { slot: "L5+L6", venue: "SJT516", faculty: "DEVIPRIYA A" },
     { slot: "L51+L52", venue: "SJT516", faculty: "DEVIPRIYA A" },
     { slot: "L51+L52", venue: "SJT515", faculty: "PRIYANKA N" },
+    { slot: "L19+L20", venue: "SJT515", faculty: "PUSHPA GOTHWAL" },
+    { slot: "L19+L20", venue: "SJT417", faculty: "DHIVYAA C R" },
+    { slot: "L51+L52", venue: "SJT418", faculty: "PUSHPA GOTHWAL" },
+    { slot: "L51+L52", venue: "SJT622", faculty: "RANJITHKUMAR S" },
+    { slot: "L19+L20", venue: "SJT622", faculty: "RANJITHKUMAR S" },
+    { slot: "L31+L32", venue: "SJT621", faculty: "DHIVYAA C R" },
   ],
-  "CSI3002 - Applied Cryptography and Network Security": [
-    { slot: "L55+L56", venue: "SJT318", faculty: "MURUGAN K" },
-    { slot: "L3+L4", venue: "SJT318", faculty: "MURUGAN K" },
-    { slot: "L43+L44", venue: "SJT516", faculty: "THAMIZHARASAN S" },
-    { slot: "L15+L16", venue: "SJT515", faculty: "THAMIZHARASAN S" },
-    { slot: "L45+L46", venue: "SJT316", faculty: "SWETHA N G" },
-    { slot: "L3+L4", venue: "SJT621", faculty: "SWETHA N G" },
+  "CSI3002L - Applied Cryptography and Network Security": [
     { slot: "B1", venue: "SJT424", faculty: "MARY MEKALA A" },
     { slot: "B2", venue: "SJT424", faculty: "MARY MEKALA A" },
     { slot: "B1", venue: "SJT422", faculty: "MURUGAN K" },
@@ -117,11 +121,19 @@ export const PC = {
     { slot: "B2", venue: "SJT422", faculty: "MURUGAN K" },
     { slot: "B1", venue: "SJT407", faculty: "SWETHA N G" },
     { slot: "B1", venue: "SJT408", faculty: "DINESH P" },
+  ],
+  "CSI3002P - Applied Cryptography and Network Security": [
+    { slot: "L55+L56", venue: "SJT318", faculty: "MURUGAN K" },
+    { slot: "L3+L4", venue: "SJT318", faculty: "MURUGAN K" },
+    { slot: "L43+L44", venue: "SJT516", faculty: "THAMIZHARASAN S" },
+    { slot: "L15+L16", venue: "SJT515", faculty: "THAMIZHARASAN S" },
+    { slot: "L45+L46", venue: "SJT316", faculty: "SWETHA N G" },
+    { slot: "L3+L4", venue: "SJT621", faculty: "SWETHA N G" },
     { slot: "L45+L46", venue: "SJT318", faculty: "MARY MEKALA A" },
     { slot: "L15+L16", venue: "SJT318", faculty: "MARY MEKALA A" },
     { slot: "L41+L42", venue: "SJT318", faculty: "DINESH P" },
   ],
-  "CSI3003 - Artificial Intelligence and Expert Systems": [
+  "CSI3003L - Artificial Intelligence and Expert Systems": [
     { slot: "A1+TA1", venue: "SJT421", faculty: "NATARAJAN P" },
     { slot: "A2+TA2", venue: "SJT421", faculty: "ANANDA KUMAR S" },
     { slot: "A1+TA1", venue: "SJT422", faculty: "THANUJA R" },
@@ -132,15 +144,7 @@ export const PC = {
     { slot: "A1+TA1", venue: "SJT424", faculty: "SATHYA K" },
     { slot: "A2+TA2", venue: "SJT424", faculty: "SAURABH AGRAWAL" },
   ],
-  "CSI3004 - Data Science Programming": [
-    { slot: "L23+L24", venue: "SJT516", faculty: "DIVYA MEENA S" },
-    { slot: "L45+L46", venue: "SJT419", faculty: "DIVYA MEENA S" },
-    { slot: "L53+L54", venue: "SJT621", faculty: "YUVARAJ N" },
-    { slot: "L5+L6", venue: "SJT517", faculty: "YUVARAJ N" },
-    { slot: "L45+L46", venue: "SJT622", faculty: "LAKSHMI S" },
-    { slot: "L3+L4", venue: "SJT516", faculty: "LAKSHMI S" },
-    { slot: "L53+L54", venue: "SJT417", faculty: "RAJAN SHRIVASTAVA" },
-    { slot: "L5+L6", venue: "SJT622", faculty: "RAJAN SHRIVASTAVA" },
+  "CSI3004L - Data Science Programming": [
     { slot: "E2", venue: "SJT421", faculty: "YUVARAJ N" },
     { slot: "E2", venue: "SJT422", faculty: "LAKSHMI S" },
     { slot: "E1", venue: "SJT423", faculty: "RAJAN SHRIVASTAVA" },
@@ -150,13 +154,25 @@ export const PC = {
     { slot: "E1", venue: "SJT422", faculty: "LAKSHMI S" },
     { slot: "E2", venue: "SJT423", faculty: "RAJAN SHRIVASTAVA" },
   ],
-  "CSI3005 - Advanced Data Visualization Techniques": [
-    { slot: "L3+L4", venue: "SJT416", faculty: "MARGRET ANOUNCIA S" },
-    { slot: "L55+L56", venue: "SJT319", faculty: "RAJKUMAR R" },
+  "CSI3004P - Data Science Programming": [
+    { slot: "L23+L24", venue: "SJT516", faculty: "DIVYA MEENA S" },
+    { slot: "L45+L46", venue: "SJT419", faculty: "DIVYA MEENA S" },
+    { slot: "L53+L54", venue: "SJT621", faculty: "YUVARAJ N" },
+    { slot: "L5+L6", venue: "SJT517", faculty: "YUVARAJ N" },
+    { slot: "L45+L46", venue: "SJT622", faculty: "LAKSHMI S" },
+    { slot: "L3+L4", venue: "SJT516", faculty: "LAKSHMI S" },
+    { slot: "L53+L54", venue: "SJT417", faculty: "RAJAN SHRIVASTAVA" },
+    { slot: "L5+L6", venue: "SJT622", faculty: "RAJAN SHRIVASTAVA" },
+  ],
+  "CSI3005L - Advanced Data Visualization Techniques": [
     { slot: "F2+TF2", venue: "SJT626", faculty: "MARGRET ANOUNCIA S" },
     { slot: "F1+TF1", venue: "SJT626", faculty: "RAJKUMAR R" },
   ],
-  "MAT1022 - Linear Algebra": [
+  "CSI3005P - Advanced Data Visualization Techniques": [
+    { slot: "L3+L4", venue: "SJT416", faculty: "MARGRET ANOUNCIA S" },
+    { slot: "L55+L56", venue: "SJT319", faculty: "RAJKUMAR R" },
+  ],
+  "MAT1022L - Linear Algebra": [
     { slot: "F2+TF2", venue: "SJT823", faculty: "MADHU V" },
     { slot: "F1+TF1", venue: "PRP330", faculty: "NIYAZ AHMED L" },
     { slot: "F1+TF1", venue: "PRP332", faculty: "GURUSAMY A" },
@@ -165,7 +181,7 @@ export const PC = {
     { slot: "F2+TF2", venue: "PRP332", faculty: "NITHIYA K S" },
     { slot: "F1+TF1", venue: "PRP734", faculty: "MOHAMMED SALMAN M" },
   ],
-  "MDI3002 - Foundations of Data Science": [
+  "MDI3002L - Foundations of Data Science": [
     { slot: "G2+TG2", venue: "SJT710", faculty: "MANOOV R" },
     { slot: "G1+TG1", venue: "SJT626", faculty: "KALAIVANI K" },
     { slot: "G1+TG1", venue: "SJT424", faculty: "BAIJU B V" },

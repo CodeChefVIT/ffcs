@@ -1,13 +1,5 @@
 export const PE = {
-  "CSI3007 - Advanced Python Programming": [
-    { slot: "L7+L8+L27+L28", venue: "SJT318", faculty: "SHARMILA BANU K" },
-    { slot: "L9+L10+L29+L30", venue: "SJT316", faculty: "SIVARANJANI A" },
-    { slot: "L39+L40+L57+L58", venue: "SJT316", faculty: "SIVARANJANI A" },
-    { slot: "L5+L6+L25+L26", venue: "SJT319", faculty: "SIVAKUMAR T" },
-    { slot: "L35+L36+L45+L46", venue: "SJT418", faculty: "SIVAKUMAR T" },
-    { slot: "L39+L40+L57+L58", venue: "SJT516", faculty: "MADHAN E S" },
-    { slot: "L19+L20+L29+L30", venue: "SJT416", faculty: "MADHAN E S" },
-    { slot: "L33+L34+L49+L50", venue: "SJT621", faculty: "MANAS GAUTAM" },
+  "CSI3007L - Advanced Python Programming": [
     { slot: "A1", venue: "SJT627", faculty: "MANAS GAUTAM" },
     { slot: "A2", venue: "SJT617", faculty: "SHARMILA BANU K" },
     { slot: "A1", venue: "SJT707", faculty: "MADHAN E S" },
@@ -17,27 +9,28 @@ export const PE = {
     { slot: "A2", venue: "SJT627", faculty: "SIVAKUMAR T" },
     { slot: "A1", venue: "SJT617", faculty: "SIVAKUMAR T" },
   ],
-  "CSI3013 - Blockchain Technologies": [
+  "CSI3007P - Advanced Python Programming" : [
+    { slot: "L7+L8+L27+L28", venue: "SJT318", faculty: "SHARMILA BANU K" },
+    { slot: "L9+L10+L29+L30", venue: "SJT316", faculty: "SIVARANJANI A" },
+    { slot: "L39+L40+L57+L58", venue: "SJT316", faculty: "SIVARANJANI A" },
+    { slot: "L5+L6+L25+L26", venue: "SJT319", faculty: "SIVAKUMAR T" },
+    { slot: "L35+L36+L45+L46", venue: "SJT418", faculty: "SIVAKUMAR T" },
+    { slot: "L39+L40+L57+L58", venue: "SJT516", faculty: "MADHAN E S" },
+    { slot: "L19+L20+L29+L30", venue: "SJT416", faculty: "MADHAN E S" },
+    { slot: "L33+L34+L49+L50", venue: "SJT621", faculty: "MANAS GAUTAM" },
+  ],
+  "CSI3013L - Blockchain Technologies": [
     { slot: "F1+TF1", venue: "SJT422", faculty: "DEEPIKAA S" },
-    { slot: "F1+TF1", venue: "NIL", faculty: "DEEPIKAA S" },
-    { slot: "F2+TF2", venue: "NIL", faculty: "RAPARTHI YASWANTH" },
     { slot: "F1+TF1", venue: "SJT424", faculty: "SUDHAKAR K" },
-    { slot: "F1+TF1", venue: "NIL", faculty: "SUDHAKAR K" },
     { slot: "F2+TF2", venue: "SJT422", faculty: "S M FAROOQ" },
-    { slot: "F1+TF1", venue: "NIL", faculty: "EZHIL ARASI V" },
     { slot: "F1+TF1", venue: "SJT423", faculty: "EZHIL ARASI V" },
-    { slot: "F2+TF2", venue: "NIL", faculty: "RANJITHKUMAR S" },
-    { slot: "F1+TF1", venue: "NIL", faculty: "YUVARAJ N" },
     { slot: "F1+TF1", venue: "SJT421", faculty: "YUVARAJ N" },
     { slot: "F2+TF2", venue: "SJT421", faculty: "RAPARTHI YASWANTH" },
     { slot: "F2+TF2", venue: "SJT423", faculty: "RANJITHKUMAR S" },
-    { slot: "F1+TF1", venue: "NIL", faculty: "NIVITHA K" },
-    { slot: "F2+TF2", venue: "NIL", faculty: "S M FAROOQ" },
     { slot: "F1+TF1", venue: "SJT407", faculty: "NIVITHA K" },
-    { slot: "F2+TF2", venue: "NIL", faculty: "PRIYADHARSINI M" },
     { slot: "F2+TF2", venue: "SJT407", faculty: "PRIYADHARSINI M" },
   ],
-  "CSI3019 - Advanced Data Compression Techniques": [
+  "CSI3019L - Advanced Data Compression Techniques": [
     { slot: "E1+TE1", venue: "SJT709", faculty: "BALAJI N" },
     { slot: "E2+TE2", venue: "SJT709", faculty: "BALAJI N" },
     { slot: "E1+TE1", venue: "SJT710", faculty: "ARUMUGA ARUN R" },
@@ -45,15 +38,7 @@ export const PE = {
     { slot: "E2+TE2", venue: "SJT707", faculty: "MALINI S" },
     { slot: "E2+TE2", venue: "SJT710", faculty: "ARUMUGA ARUN R" },
   ],
-  "CSI3022 - Cyber Security and Application Security": [
-    { slot: "L5+L6", venue: "SJT316", faculty: "PARTHIBAN K" },
-    { slot: "L31+L32", venue: "SJT622", faculty: "SARANYA P" },
-    { slot: "L35+L36", venue: "SJT316", faculty: "KOVENDAN A.K.P" },
-    { slot: "L19+L20", venue: "SJT319", faculty: "KOVENDAN A.K.P" },
-    { slot: "L5+L6", venue: "SJT418", faculty: "SARANYA P" },
-    { slot: "L35+L36", venue: "SJT318", faculty: "PARTHIBAN K" },
-    { slot: "L3+L4", venue: "SJT622", faculty: "SIVA SHANMUGAM G" },
-    { slot: "L57+L58", venue: "SJT622", faculty: "SIVA SHANMUGAM G" },
+  "CSI3022L - Cyber Security and Application Security": [
     { slot: "C1+TC1", venue: "SJT710", faculty: "SARANYA P" },
     { slot: "C1+TC1", venue: "SJT627", faculty: "SIVA SHANMUGAM G" },
     { slot: "C2+TC2", venue: "SJT627", faculty: "SIVA SHANMUGAM G" },
@@ -63,7 +48,17 @@ export const PE = {
     { slot: "C2+TC2", venue: "SJT709", faculty: "KOVENDAN A.K.P" },
     { slot: "C2+TC2", venue: "SJT710", faculty: "SARANYA P" },
   ],
-  "CSI4005 - Augmented Reality and Virtual Reality": [
+  "CSI3022P - Cyber Security and Application Security": [
+    { slot: "L5+L6", venue: "SJT316", faculty: "PARTHIBAN K" },
+    { slot: "L31+L32", venue: "SJT622", faculty: "SARANYA P" },
+    { slot: "L35+L36", venue: "SJT316", faculty: "KOVENDAN A.K.P" },
+    { slot: "L19+L20", venue: "SJT319", faculty: "KOVENDAN A.K.P" },
+    { slot: "L5+L6", venue: "SJT418", faculty: "SARANYA P" },
+    { slot: "L35+L36", venue: "SJT318", faculty: "PARTHIBAN K" },
+    { slot: "L3+L4", venue: "SJT622", faculty: "SIVA SHANMUGAM G" },
+    { slot: "L57+L58", venue: "SJT622", faculty: "SIVA SHANMUGAM G" },
+  ],
+  "CSI4005L - Augmented Reality and Virtual Reality": [
     { slot: "G2+TG2", venue: "SJT627", faculty: "NIHA K" },
     { slot: "G2+TG2", venue: "NIL", faculty: "NIHA K" },
     { slot: "G1+TG1", venue: "NIL", faculty: "NIHA K" },
@@ -73,7 +68,7 @@ export const PE = {
     { slot: "G1+TG1", venue: "NIL", faculty: "ARPAN GARAI" },
     { slot: "G1+TG1", venue: "SJT707", faculty: "ARPAN GARAI" },
   ],
-  "CSI4007 - GPU Programming": [
+  "CSI4007L - GPU Programming": [
     { slot: "F2+TF2", venue: "SJT627", faculty: "NARESH K" },
     { slot: "F1+TF1", venue: "SJT707", faculty: "KEYUR BHANUPRASAD JOSHI" },
     { slot: "F2+TF2", venue: "SJT707", faculty: "KEYUR BHANUPRASAD JOSHI" },

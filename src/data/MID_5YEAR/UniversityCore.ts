@@ -1,28 +1,24 @@
 export const UC = {
-  "CSI4901 - Capstone Project": [
-    { slot: "NIL", venue: "NIL", faculty: "ACADEMICS" },
-    { slot: "NIL", venue: "NIL", faculty: "PLACEMENT AND TRAINING" },
-  ],
-  "ESP1001 - ESPANOL FUNDAMENTAL": [
+  "ESP1001L - ESPANOL FUNDAMENTAL": [
     { slot: "G1", venue: "SJT205", faculty: "ATUL KUMAR" },
     { slot: "G2", venue: "SJT112", faculty: "NUPUR MANASI" },
     { slot: "A2", venue: "PRP238", faculty: "BAISHALI CHOUDHURI" },
     { slot: "E2", venue: "SJT619", faculty: "GAURAV SUSHANT" },
     { slot: "A2", venue: "PRP425", faculty: "SHILPI GUPTA" },
   ],
-  "FRE1001 - Francais quotidien": [
+  "FRE1001L - Francais quotidien": [
     { slot: "G1", venue: "SJT204", faculty: "COUMARAN G" },
   ],
-  "GER1001 - Grundstufe Deutsch": [
+  "GER1001L - Grundstufe Deutsch": [
     { slot: "E2", venue: "SJT715", faculty: "ARATI KUMARI" },
     { slot: "F1", venue: "PRP619", faculty: "DHANANJAY KUMAR" },
     { slot: "G1", venue: "PRP330", faculty: "ARATI KUMARI" },
   ],
-  "JAP1001 - Japanese for Beginners": [
+  "JAP1001L - Japanese for Beginners": [
     { slot: "G1", venue: "SJT223", faculty: "KHANJAN" },
     { slot: "G2", venue: "SMV101", faculty: "HIYA MUKHERJEE" },
   ],
-  "MGT1022 - Lean Start-up Management": [
+  "MGT1022L - Lean Start-up Management": [
     { slot: "TCC1", venue: "SJT404", faculty: "KAMATCHI R" },
     { slot: "TCC1", venue: "NIL", faculty: "KAMATCHI R" },
     { slot: "TCC1", venue: "NIL", faculty: "PRABU K" },
@@ -36,15 +32,17 @@ export const UC = {
     { slot: "TCC1", venue: "NIL", faculty: "YAGNA S MUKKAMALA" },
     { slot: "TCC1", venue: "SJT401", faculty: "YAGNA S MUKKAMALA" },
   ],
-  "PHY1701 - Engineering Physics": [
+  "PHY1701L - Engineering Physics": [
     { slot: "C2+TC2", venue: "PRP134", faculty: "GOPAL" },
+  ],
+  "PHY1701P - Engineering Physics": [
     { slot: "L29+L30", venue: "PRPG17", faculty: "GOPAL" },
   ],
-  "PHY1901 - Introduction to Innovative Projects": [
+  "PHY1901L - Introduction to Innovative Projects": [
     { slot: "TG1", venue: "PRP238", faculty: "KURAGANTI VASU" },
     { slot: "TG1", venue: "PRP329", faculty: "SOUMYA CHAKRABARTI" },
   ],
-  "STS2021 - Fundamentals of Aptitude": [
+  "STS2021L - Fundamentals of Aptitude": [
     { slot: "G1+TG1", venue: "PRP267", faculty: "ETHNUS (APT)" },
     { slot: "G2+TG2", venue: "PRP267", faculty: "ETHNUS (APT)" },
     { slot: "G1+TG1", venue: "PRP268", faculty: "FACE (APT)" },
@@ -56,7 +54,7 @@ export const UC = {
     { slot: "G1+TG1", venue: "PRP274", faculty: "SIXPHRASE (APT)" },
     { slot: "G1+TG1", venue: "PRP275", faculty: "SIXPHRASE (APT)" },
   ],
-  "STS3021 - Getting Started to Skill Enhancement": [
+  "STS3021L - Getting Started to Skill Enhancement": [
     { slot: "D2+TD2", venue: "SJT422", faculty: "FACE (APT)" },
     { slot: "D1+TD1", venue: "SJT421", faculty: "ETHNUS (APT)" },
     { slot: "D2+TD2", venue: "SJT421", faculty: "ETHNUS (APT)" },
@@ -69,7 +67,7 @@ export const UC = {
     { slot: "D1+TD1", venue: "SJT424", faculty: "FACE (APT)" },
     { slot: "D2+TD2", venue: "SJT424", faculty: "FACE (APT)" },
   ],
-  "STS4021 - Introduction to Programming Skills": [
+  "STS4021L - Introduction to Programming Skills": [
     { slot: "D2+TD2", venue: "SJT707", faculty: "FACE (APT)" },
     { slot: "D2+TD2", venue: "SJT627", faculty: "ETHNUS (APT)" },
     { slot: "D1+TD1", venue: "SJT707", faculty: "FACE (APT)" },
