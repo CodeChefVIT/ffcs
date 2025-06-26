@@ -718,7 +718,7 @@ export default function FacultySelector({
                 className={`px-3 py-1 rounded-full text-sm font-bold border-2 shadow-[2px_2px_0_0_black] border-black cursor-pointer transition duration-100 active:shadow-[1px_1px_0_0_black] active:translate-x-[1px] active:translate-y-[1px] ${selectedSchool === school ? "bg-[#FFEA79]" : "bg-white"
                   }`}
               >
-                {school}
+                {school=="MID_5YEAR" ? "SCOPE(MID)": school}
               </button>
             ))}
           </div>
