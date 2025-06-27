@@ -169,7 +169,7 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
             </li>
             <li>
               <a
-                href="https://www.codechefvit.com/board"
+                href="https://www.codechefvit.com/ffcs-inator"
                 target="_blank"
                 rel="noopener"
               >
