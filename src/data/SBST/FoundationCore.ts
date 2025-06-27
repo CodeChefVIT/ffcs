@@ -90,15 +90,15 @@ export const foundationCore = {
     { slot: "L33+L34", venue: "TT116", faculty: "RAJU R.L.N" },
   ],
   "BESP101L - Spanish I": [
+    { slot: "F1", venue: "CDMM403", faculty: "SHILPI GUPTA" },
     { slot: "B2", venue: "SMV109", faculty: "SABYASACHI MISHRA" },
     { slot: "A2", venue: "CDMM404", faculty: "SABYASACHI MISHRA" },
     { slot: "F1", venue: "TT434", faculty: "SABYASACHI MISHRA" },
     { slot: "E2", venue: "SMV101", faculty: "SABYASACHI MISHRA" },
-    { slot: "F1", venue: "PRP605", faculty: "GAURAV SUSHANT" },
-    { slot: "F1", venue: "PRP622", faculty: "SHILPI GUPTA" },
+    { slot: "F1", venue: "MB229", faculty: "GAURAV SUSHANT" },
     { slot: "C1", venue: "PRP238", faculty: "ATUL KUMAR" },
     { slot: "E2", venue: "SJT604", faculty: "BAISHALI CHOUDHURI" },
-    { slot: "F1", venue: "PRP623", faculty: "ATUL KUMAR" },
+    { slot: "F1", venue: "CDMM405", faculty: "ATUL KUMAR" },
   ],
   "BFRE101L - French I": [
     { slot: "C2", venue: "SMV116", faculty: "MALATHY O" },
@@ -136,11 +136,11 @@ export const foundationCore = {
     { slot: "D2+TD2", venue: "SJT602", faculty: "NILAVATHY K" },
     { slot: "E2+TE2", venue: "TT305", faculty: "ADIL AHMAD SHAH" },
     { slot: "B2+TB2", venue: "MB211", faculty: "SALMAN HAIDER" },
-    { slot: "D1+TD1", venue: "PRP619", faculty: "SAVITHA N" },
+    { slot: "D1+TD1", venue: "PRP238A", faculty: "SAVITHA N" },
     { slot: "F2+TF2", venue: "TT434", faculty: "SIVAKUMAR S" },
   ],
   "BHUM105L - Public Policy and Administration": [
-    { slot: "F2+TF2", venue: "PRP519", faculty: "RUPAK KUMAR" },
+    { slot: "F2+TF2", venue: "PRP471", faculty: "RUPAK KUMAR" },
   ],
   "BHUM106L - Principles of Sociology": [
     { slot: "E2+TE2", venue: "PRP250", faculty: "ABHIJIT DASGUPTA" },
@@ -152,7 +152,7 @@ export const foundationCore = {
     { slot: "F2+TF2", venue: "SJT617", faculty: "ABHIJIT DASGUPTA" },
   ],
   "BHUM107L - Sustainability and Society": [
-    { slot: "F2+TF2", venue: "PRP604", faculty: "RAHUL SHUKLA" },
+    { slot: "F2+TF2", venue: "PRP735", faculty: "RAHUL SHUKLA" },
     { slot: "C1+TC1", venue: "SJT607", faculty: "SREYA SEN" },
   ],
   "BHUM108L - Urban Community Development": [
@@ -160,7 +160,7 @@ export const foundationCore = {
     { slot: "F2+TF2", venue: "SJT215", faculty: "SREYA SEN" },
   ],
   "BHUM109L - Social Work and Sustainability": [
-    { slot: "G1+TG1", venue: "SJTG01", faculty: "DOMINIC SAVIO" },
+    { slot: "G1+TG1", venue: "CDMM403", faculty: "DOMINIC SAVIO" },
   ],
   "BHUM110L - Cognitive Psychology": [
     { slot: "E1+TE1", venue: "TT305", faculty: "BHUVANESWARI M" },
@@ -175,6 +175,14 @@ export const foundationCore = {
     { slot: "G1", venue: "SJT712", faculty: "HIYA MUKHERJEE" },
     { slot: "C1", venue: "SJT715", faculty: "HIYA MUKHERJEE" },
     { slot: "D2", venue: "SMV128", faculty: "HIYA MUKHERJEE" },
+  ],
+  "BMAT202L - Probability and Statistics": [
+    { slot: "B1+TB1", venue: "SJT114", faculty: "SUJATHA V" },
+    { slot: "B2+TB2", venue: "TT301", faculty: "SUJATHA V" },
+  ],
+  "BMAT202P - Probability and Statistics Lab": [
+    { slot: "L41+L42", venue: "SJT119", faculty: "SUJATHA V" },
+    { slot: "L13+L14", venue: "SJT119", faculty: "SUJATHA V" },
   ],
   "BMAT203L - Linear Algebra and Differential Equations": [
     { slot: "A1+TA1+TAA1", venue: "SMV219", faculty: "VIJAYA KUMAR A.G" },
@@ -226,7 +234,7 @@ export const foundationCore = {
     { slot: "E1+TE1", venue: "SMV102", faculty: "SIXPHRASE (APT)" },
     { slot: "E2+TE2", venue: "SMV102", faculty: "SIXPHRASE (APT)" },
     { slot: "E1+TE1", venue: "SMV104", faculty: "ETHNUS (APT)" },
-    { slot: "E2+TE2", venue: "CDMM104", faculty: "ETHNUS (APT)" },
+    { slot: "E2+TE2", venue: "CDMM104", faculty: "SIXPHRASE (APT)" },
     { slot: "E1+TE1", venue: "CDMM105", faculty: "FACE (APT)" },
     { slot: "E2+TE2", venue: "CDMM105", faculty: "FACE (APT)" },
     { slot: "E1+TE1", venue: "SJT208", faculty: "SIXPHRASE (APT)" },

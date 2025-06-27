@@ -10,7 +10,7 @@ export const openElective = {
     { slot: "F1+TF1", venue: "SMV214", faculty: "BHUVANESWARI M" },
     { slot: "G1+TG1", venue: "PRP519", faculty: "MOHD OWAIS KHAN" },
     { slot: "B1+TB1", venue: "PRP330", faculty: "POONAM SHARMA" },
-    { slot: "D2+TD2", venue: "PRP604", faculty: "TANU KUKREJA" },
+    { slot: "D2+TD2", venue: "SJT311A", faculty: "TANU KUKREJA" },
     { slot: "F2+TF2", venue: "TT413", faculty: "NAVIN KUMAR" },
     { slot: "E1+TE1", venue: "SJT607", faculty: "TANU KUKREJA" },
     { slot: "D2+TD2", venue: "SJT617", faculty: "POONAM SHARMA" },
