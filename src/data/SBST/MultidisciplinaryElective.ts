@@ -13,14 +13,39 @@ export const multidisciplinaryElective = {
     { slot: "L49+L50", venue: "PRP232", faculty: "NALLIAH M" },
     { slot: "L7+L8", venue: "PRP231", faculty: "PRAVEEN KUMAR G" },
   ],
+  "BCSE209L - Machine Learning": [
+    { slot: "A2+TA2", venue: "SJT602", faculty: "SUDHAKARA PANDIAN R" },
+  ],
+  "BCSE209P - Machine Learning Lab": [
+    { slot: "L23+L24", venue: "SJT622", faculty: "SUDHAKARA PANDIAN R" },
+  ],
+  "BCSE303L - Operating Systems": [
+    { slot: "C1+TC1", venue: "SJT712", faculty: "MOHANKUMAR B" },
+    { slot: "C2+TC2", venue: "SJT712", faculty: "MOHANKUMAR B" },
+  ],
+  "BCSE303P - Operating Systems Lab": [
+    { slot: "L15+L16", venue: "SJT621", faculty: "MOHANKUMAR B" },
+    { slot: "L33+L34", venue: "SJT316", faculty: "MOHANKUMAR B" },
+  ],
   "BCSE306L - Artificial Intelligence": [
     { slot: "G2+TG2", venue: "SJT424", faculty: "MADHURI W" },
+    { slot: "D2+TD2", venue: "SJT302", faculty: "MOHAN KUMAR P" },
   ],
   "BCSE308L - Computer Networks": [
     { slot: "F2+TF2", venue: "SJT311", faculty: "MARIAPPAN R" },
+    { slot: "F2+TF2", venue: "SJT415", faculty: "DILIPKUMAR S" },
+    { slot: "F1+TF1", venue: "SJT415", faculty: "DILIPKUMAR S" },
   ],
   "BCSE308P - Computer Networks Lab": [
     { slot: "L15+L16", venue: "SJT316", faculty: "MARIAPPAN R" },
+    { slot: "L41+L42", venue: "SJT516", faculty: "DILIPKUMAR S" },
+    { slot: "L19+L20", venue: "SJT516", faculty: "DILIPKUMAR S" },
+  ],
+  "BCSE332L - Deep Learning": [
+    { slot: "D2+TD2", venue: "SJT504", faculty: "JYOTISMITA CHAKI" },
+  ],
+  "BCSE332P - Deep Learning Lab": [
+    { slot: "L9+L10", venue: "SJT622", faculty: "JYOTISMITA CHAKI" },
   ],
   "BMAT205L - Discrete Mathematics and Graph Theory": [
     { slot: "A1+TA1+TAA1", venue: "SJT201", faculty: "SELVAKUMAR R" },

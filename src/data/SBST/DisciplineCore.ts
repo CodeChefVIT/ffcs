@@ -1,9 +1,9 @@
 export const disciplineCore = {
   "BBIT202L - Biochemistry": [
-    { slot: "A1+TA1", venue: "SMV302", faculty: "SABINA E.P" },
-    { slot: "A2+TA2", venue: "SMV116", faculty: "SHANTHI C" },
-    { slot: "A2+TA2", venue: "SMV121", faculty: "KALAIVANI T" },
-    { slot: "A1+TA1", venue: "SMV121", faculty: "KALAIVANI T" },
+    { slot: "C1+TC1", venue: "MB212", faculty: "SABINA E.P" },
+    { slot: "C2+TC2", venue: "MB212", faculty: "SHANTHI C" },
+    { slot: "C2+TC2", venue: "TT314", faculty: "KALAIVANI T" },
+    { slot: "G1+TG1", venue: "MB211", faculty: "KALAIVANI T" },
   ],
   "BBIT202P - Biochemistry Lab": [
     { slot: "L37+L38", venue: "SMV212", faculty: "FARAZ AHMAD" },
