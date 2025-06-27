@@ -44,12 +44,15 @@ export const SelectDisciplineCore = {
   "BEEE215L - DC Machines and Transformers": [
     { slot: "G1", venue: "TT434", faculty: "GOKULAKRISHNAN G" },
     { slot: "G2", venue: "TT434", faculty: "INDRAGANDHI V" },
+    { slot: "G2", venue: "TT201", faculty: "MAGESHVARAN R" },
   ],
   "BEEE215P - DC Machines and Transformers Lab": [
     { slot: "L31+L32", venue: "TT035", faculty: "GOKULAKRISHNAN G" },
     { slot: "L35+L36", venue: "TT035", faculty: "GOKULAKRISHNAN G" },
     { slot: "L9+L10", venue: "TT035", faculty: "INDRAGANDHI V" },
     { slot: "L23+L24", venue: "TT035", faculty: "INDRAGANDHI V" },
+    { slot: "L15+L16", venue: "TT035", faculty: "MAGESHVARAN R" },
+    { slot: "L3+L4", venue: "TT035", faculty: "MAGESHVARAN R" },
   ],
   "BEEE302L - Digital Signal Processing": [
     { slot: "B2+TB2", venue: "TT204", faculty: "GEETHANJALI P" },
