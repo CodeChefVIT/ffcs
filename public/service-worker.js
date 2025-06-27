@@ -1,6 +1,7 @@
 /// <reference lib="webworker" />
 
-const CACHE_NAME = "FFCS-CodeChefVIT_v1";
+const CACHE_NAME = "FFCS-CodeChefVIT_v1.1.1"; // Increment this on each deploy
+
 const CORE_ASSETS = [
   "/",
   "/offline",
@@ -39,27 +40,35 @@ const limitCacheSize = (name, maxItems) => {
 };
 
 self.addEventListener("install", (event) => {
+  console.log("Service Worker: Installing...");
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(CORE_ASSETS);
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS))
   );
   self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
+  console.log("Service Worker: Activating...");
   event.waitUntil(
-    caches
-      .keys()
-      .then((keys) =>
-        Promise.all(
-          keys
-            .filter((key) => key !== CACHE_NAME)
-            .map((key) => caches.delete(key))
-        )
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            console.log("Service Worker: Removing old cache", key);
+            return caches.delete(key);
+          }
+        })
       )
+    )
   );
   self.clients.claim();
+});
+
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    console.log("Service Worker: SKIP_WAITING message received");
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener("fetch", (event) => {
@@ -74,28 +83,36 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  if (request.headers.get("accept")?.includes("text/html")) {
+    event.respondWith(
+      fetch(request)
+        .then((res) => {
+          const resClone = res.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(request, resClone);
+          });
+          return res;
+        })
+        .catch(() => caches.match(request).then((res) => res || caches.match("/offline")))
+    );
+    return;
+  }
+
   event.respondWith(
-    caches.match(request).then((cacheRes) => {
+    caches.match(request).then((res) => {
       return (
-        cacheRes ||
+        res ||
         fetch(request)
           .then((fetchRes) => {
             return caches.open(CACHE_NAME).then((cache) => {
-              if (
-                request.url.startsWith(self.location.origin) &&
-                !request.url.includes("/api")
-              ) {
-                cache.put(request.url, fetchRes.clone());
-                limitCacheSize(CACHE_NAME, 50);
+              if (request.url.startsWith(self.location.origin)) {
+                cache.put(request, fetchRes.clone());
+                limitCacheSize(CACHE_NAME, 100);
               }
               return fetchRes;
             });
           })
-          .catch(() => {
-            if (request.headers.get("accept")?.includes("text/html")) {
-              return caches.match("/offline");
-            }
-          })
+          .catch(() => {})
       );
     })
   );
