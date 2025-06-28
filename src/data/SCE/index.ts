@@ -8,6 +8,6 @@ export const SCE_LIST = {
   FoundationCore: CivilFoundationCore,
   DisciplineCore: CivilDisciplineCore,
   DisciplineElective: CivilDisciplineElective,
-  DisciplineLinked: CivilDisciplineLinked,
+  DisciplineLinkedEngineeringSciences: CivilDisciplineLinked,
   OpenElective: CivilOpenElective
 };

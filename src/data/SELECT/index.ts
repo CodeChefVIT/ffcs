@@ -6,7 +6,7 @@ import { SelectOpenElective } from './OpenElective';
 
 export const SELECT_LIST = {
   FoundationCore: SelectFoundatioCore,
-  DisciplineLinked: SelectDisciplineLinked,
+  DisciplineLinkedEngineeringSciences: SelectDisciplineLinked,
   DisciplineCore: SelectDisciplineCore,
   DisciplineElective: SelectDisciplineElective,
   OpenElective: SelectOpenElective,

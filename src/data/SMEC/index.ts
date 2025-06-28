@@ -8,6 +8,6 @@ export const SMEC_LIST = {
   FoundationCore: SmecFoundationCore,
   DisciplineCore: SmecDiscplineCore,
   DisciplineElective: SmecDisciplineElective,
-  DisciplineLinked: SmecDisciplineLinked,
+  DisciplineLinkedEngineeringSciences: SmecDisciplineLinked,
   OpenElective: SmecOpenElective,
 };
