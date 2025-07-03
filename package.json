@@ -21,7 +21,7 @@
     "lucide-react": "^0.510.0",
     "mongodb": "^6.17.0",
     "mongoose": "^8.14.2",
-    "next": "15.3.2",
+    "next": "15.3.3",
     "next-auth": "^4.24.11",
     "pdfmake": "^0.2.20",
     "react": "^19.0.0",
