@@ -40,7 +40,7 @@ export default function CompoundTable({ data, large }: CompoundTableProps) {
   });
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 m-2 text-black text-sm font-inter select-none lg:overflow-x-auto">
+    <div className="flex flex-col lg:flex-row gap-4 m-2 text-black text-sm font-inter lg:overflow-x-auto">
       <div className="overflow-x-auto lg:overflow-x-visible">
         <div
           className={`

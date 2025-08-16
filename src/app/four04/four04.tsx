@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 export default function NotFound() {
   const router = useRouter();
   return (
-    <div className="flex flex-col min-h-screen relative select-none">
+    <div className="flex flex-col min-h-screen relative">
       <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
         <Image
           src="/art/bg_dots.svg"
@@ -30,7 +30,7 @@ export default function NotFound() {
         <div className="relative w-fit h-fit mb-4">
           {/* Shadow */}
           <span
-            className="absolute left-2 top-2 select-none pointer-events-none font-poppins font-extrabold text-[160px] z-0 text-black"
+            className="absolute left-2 top-2 pointer-events-none font-poppins font-extrabold text-[160px] z-0 text-black"
             style={{
               WebkitTextStroke: "16px black",
             }}
@@ -39,7 +39,7 @@ export default function NotFound() {
           </span>
           {/* Stroke */}
           <span
-            className="absolute left-0 top-0 select-none pointer-events-none font-poppins font-extrabold text-[160px] z-10 text-transparent"
+            className="absolute left-0 top-0 pointer-events-none font-poppins font-extrabold text-[160px] z-10 text-transparent"
             style={{
               WebkitTextStroke: "16px black",
             }}
@@ -47,7 +47,7 @@ export default function NotFound() {
             404
           </span>
           {/* Fill */}
-          <span className="relative select-none pointer-events-none font-poppins font-extrabold text-[160px] z-20 text-[#90BDFF]">
+          <span className="relative pointer-events-none font-poppins font-extrabold text-[160px] z-20 text-[#90BDFF]">
             404
           </span>
         </div>

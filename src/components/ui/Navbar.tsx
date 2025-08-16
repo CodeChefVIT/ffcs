@@ -48,7 +48,7 @@ export default function Navbar({ page }: NavbarProps) {
         />
       )}
 
-      <div className="absolute top-0 left-0 w-full z-10 select-none">
+      <div className="absolute top-0 left-0 w-full z-10">
         <div className="flex justify-between items-center p-4">
           <div className="flex gap-4 items-center">
             {(page === "landing" || page === "404" || page === "placeholder") && (

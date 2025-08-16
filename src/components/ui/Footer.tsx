@@ -98,7 +98,7 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
   }
 
   return (
-    <footer className="w-full bg-[#CEE4E5] font-[poppins] text-black relative overflow-hidden flex items-center flex-col select-none">
+    <footer className="w-full bg-[#CEE4E5] font-[poppins] text-black relative overflow-hidden flex items-center flex-col">
       <div className="px-8 py-8 sm:py-6 xs:py-4 flex flex-col md:flex-row items-start justify-between relative z-10 w-full bg-[#A7D5D7] border-t-2 border-black gap-y-6">
         <div>
           <h2 className="text-6xl font-normal mb-4 font-[pangolin] md:text-4xl lg:text-6xl">
