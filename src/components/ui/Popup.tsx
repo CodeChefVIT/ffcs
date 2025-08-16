@@ -118,7 +118,7 @@ export default function Popup({
 
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-[#425D5F]/75 backdrop-blur-xs z-50 select-none">
+    <div className="fixed inset-0 flex items-center justify-center bg-[#425D5F]/75 backdrop-blur-xs z-50">
      
       {type === "share_tt" && isLoading && <LoadingPopup isLoading={true} />}
       <div
@@ -210,7 +210,6 @@ export default function Popup({
                   alt="artwork1"
                   width={32}
                   height={32}
-                  className="select-none"
                   unselectable="on"
                   draggable={false}
                   priority
@@ -222,7 +221,6 @@ export default function Popup({
                   alt="artwork2"
                   width={36}
                   height={36}
-                  className="select-none"
                   unselectable="on"
                   draggable={false}
                   priority
@@ -234,7 +232,6 @@ export default function Popup({
                   alt="artwork3"
                   width={72}
                   height={72}
-                  className="select-none"
                   unselectable="on"
                   draggable={false}
                   priority
@@ -246,7 +243,6 @@ export default function Popup({
                   alt="artwork4"
                   width={60}
                   height={60}
-                  className="select-none"
                   unselectable="on"
                   draggable={false}
                   priority

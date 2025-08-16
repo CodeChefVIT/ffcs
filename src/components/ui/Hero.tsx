@@ -11,7 +11,7 @@ export default function Hero() {
         alt=""
         width={96}
         height={96}
-        className="mx-auto w-24 h-24 md:w-32 md:h-32 mb-6 select-none"
+        className="mx-auto w-24 h-24 md:w-32 md:h-32 mb-6"
         unselectable="on"
         draggable={false}
         priority
@@ -42,7 +42,6 @@ export default function Hero() {
         src="/art/art_rice.svg"
         alt="graphic element"
         fill
-        className="select-none"
         unselectable="on"
         draggable={false}
         priority
@@ -54,7 +53,6 @@ export default function Hero() {
         src="/art/art_boom.svg"
         alt="graphic element"
         fill
-        className="select-none"
         unselectable="on"
         draggable={false}
         priority
@@ -66,7 +64,6 @@ export default function Hero() {
         src="/art/art_paper.svg"
         alt="graphic element"
         fill
-        className="select-none"
         unselectable="on"
         draggable={false}
         priority
@@ -78,7 +75,6 @@ export default function Hero() {
         src="/art/art_plane.svg"
         alt="graphic element"
         fill
-        className="select-none"
         unselectable="on"
         draggable={false}
         priority
@@ -90,7 +86,6 @@ export default function Hero() {
         src="/art/letter_c.svg"
         alt="graphic element"
         fill
-        className="select-none"
         unselectable="on"
         draggable={false}
         priority
@@ -102,7 +97,6 @@ export default function Hero() {
         src="/art/letter_h.svg"
         alt="graphic element"
         fill
-        className="select-none"
         unselectable="on"
         draggable={false}
         priority
@@ -114,7 +108,6 @@ export default function Hero() {
         src="/art/letter_e.svg"
         alt="graphic element"
         fill
-        className="select-none"
         unselectable="on"
         draggable={false}
         priority
@@ -126,7 +119,6 @@ export default function Hero() {
         src="/art/letter_f.svg"
         alt="graphic element"
         fill
-        className="select-none"
         unselectable="on"
         draggable={false}
         priority
@@ -138,7 +130,6 @@ export default function Hero() {
         src="/art/letter_i.svg"
         alt="graphic element"
         fill
-        className="select-none"
         unselectable="on"
         draggable={false}
         priority
@@ -150,7 +141,6 @@ export default function Hero() {
         src="/art/letter_m.svg"
         alt="graphic element"
         fill
-        className="select-none"
         unselectable="on"
         draggable={false}
         priority
@@ -162,7 +152,6 @@ export default function Hero() {
         src="/art/letter_k.svg"
         alt="graphic element"
         fill
-        className="select-none"
         unselectable="on"
         draggable={false}
         priority

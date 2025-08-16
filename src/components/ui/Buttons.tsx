@@ -132,7 +132,7 @@ export function CCButton() {
         alt="CC Button"
         width={80}
         height={80}
-        className="cursor-pointer select-none"
+        className="cursor-pointer"
         unselectable="on"
         draggable={false}
         priority
@@ -149,7 +149,7 @@ export function FFCSButton() {
       alt="FFCS Button"
       width={80}
       height={80}
-      className="cursor-pointer select-none"
+      className="cursor-pointer"
       onClick={() => router.push("/")}
       unselectable="on"
       draggable={false}
@@ -281,7 +281,7 @@ export function BasicToggleButton({
         w-[60px]
         h-[36px]
         rounded-[12px]
-        select-none
+       
         cursor-pointer
         font-poppins
         active:shadow-[2px_2px_0_0_black]

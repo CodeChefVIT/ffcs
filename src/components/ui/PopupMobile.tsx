@@ -30,7 +30,7 @@ type PopupLoginProps = {
 export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-white">
-      <div className="flex flex-col min-h-screen relative select-none">
+      <div className="flex flex-col min-h-screen relative">
         <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
           <Image
             src="/art/bg_dots.svg"
@@ -86,7 +86,6 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
                 alt="artwork1"
                 width={32}
                 height={32}
-                className="select-none"
                 unselectable="on"
                 draggable={false}
                 priority
@@ -98,7 +97,6 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
                 alt="artwork2"
                 width={36}
                 height={36}
-                className="select-none"
                 unselectable="on"
                 draggable={false}
                 priority
@@ -110,7 +108,6 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
                 alt="artwork3"
                 width={72}
                 height={72}
-                className="select-none"
                 unselectable="on"
                 draggable={false}
                 priority
@@ -122,7 +119,6 @@ export function PopupLogin({ closeLink, onLoginClick }: PopupLoginProps) {
                 alt="artwork4"
                 width={60}
                 height={60}
-                className="select-none"
                 unselectable="on"
                 draggable={false}
                 priority

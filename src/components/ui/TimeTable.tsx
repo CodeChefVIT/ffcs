@@ -127,7 +127,7 @@ export default function TimeTable({
 
   return (
     <div
-      className="grid bg-black relative w-full h-full p-[1px] select-none font-inter"
+      className="grid bg-black relative w-full h-full p-[1px] font-inter"
       style={{ gridTemplateColumns, gridTemplateRows }}
     >
       {cells}
@@ -140,7 +140,7 @@ export default function TimeTable({
           alt="logo of FFCS Platform by CodeChef-VIT"
           width={120}
           height={80}
-          className="w-auto h-2/3 block opacity-90 select-none pointer-events-none"
+          className="w-auto h-2/3 block opacity-90 pointer-events-none"
           draggable={false}
           unselectable="on"
           priority
