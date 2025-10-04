@@ -1,13 +1,13 @@
-"use client";
-import React, { useState, useRef, useEffect } from "react";
-import { useTimetable } from "../../lib/TimeTableContext";
-import Popup from "../ui/Popup";
-import { BasicToggleButton, ZButton } from "../ui/Buttons";
-import Image from "next/image";
-import { generateTT } from "@/lib/utils";
-import { fullCourseData } from "@/lib/type";
-import { setGlobalCourses } from "@/lib/globalCourses";
-import AlertModal from "../ui/AlertModal";
+'use client';
+import React, { useState, useRef, useEffect } from 'react';
+import { useTimetable } from '../../lib/TimeTableContext';
+import Popup from '../ui/Popup';
+import { BasicToggleButton, ZButton } from '../ui/Buttons';
+import Image from 'next/image';
+import { generateTT } from '@/lib/utils';
+import { fullCourseData } from '@/lib/type';
+import { setGlobalCourses } from '@/lib/globalCourses';
+import AlertModal from '../ui/AlertModal';
 
 type CourseCardProps = {
   selectedCourses: fullCourseData[];
@@ -15,11 +15,7 @@ type CourseCardProps = {
   onUpdate: (updatedCourses: fullCourseData[]) => void;
 };
 
-export default function CourseCard({
-  selectedCourses,
-  onDelete,
-  onUpdate,
-}: CourseCardProps) {
+export default function CourseCard({ selectedCourses, onDelete, onUpdate }: CourseCardProps) {
   const { setTimetableData } = useTimetable();
 
   const draggedItemIndex = useRef<number | null>(null);
@@ -30,7 +26,7 @@ export default function CourseCard({
   const [deletePopupOpen, setDeletePopupOpen] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState<fullCourseData | null>(null);
 
-  const [allSubjectsMode, setAllSubjectsMode] = useState<"on" | "off">("on");
+  const [allSubjectsMode, setAllSubjectsMode] = useState<'on' | 'off'>('on');
 
   const [showInfo, setShowInfo] = useState(false);
   const [deleteAllPopupOpen, setDeleteAllPopupOpen] = useState(false);
@@ -42,18 +38,15 @@ export default function CourseCard({
     };
 
     handleResize(); // Initial check
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
-    return () => window.removeEventListener("resize", handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-
-
 
   const [alert, setAlert] = useState({
     open: false,
-    message: "",
-    color: "red",
+    message: '',
+    color: 'red',
   });
 
   const handleDeleteAllCourses = () => {
@@ -68,9 +61,7 @@ export default function CourseCard({
 
   const confirmDeleteCourse = () => {
     if (courseToDelete) {
-      const updatedCourses = selectedCourses.filter(
-        (c) => c.id !== courseToDelete.id
-      );
+      const updatedCourses = selectedCourses.filter(c => c.id !== courseToDelete.id);
       onDelete(courseToDelete.id);
       onUpdate(updatedCourses);
 
@@ -85,7 +76,7 @@ export default function CourseCard({
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
     draggedItemIndex.current = index;
-    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.effectAllowed = 'move';
   };
 
   const handleDragEnter = (index: number) => {
@@ -96,11 +87,7 @@ export default function CourseCard({
     const draggedIdx = draggedItemIndex.current;
     const dragOverIdx = dragOverItemIndex.current;
 
-    if (
-      draggedIdx === null ||
-      dragOverIdx === null ||
-      draggedIdx === dragOverIdx
-    ) {
+    if (draggedIdx === null || dragOverIdx === null || draggedIdx === dragOverIdx) {
       resetDragRefs();
       return;
     }
@@ -134,7 +121,7 @@ export default function CourseCard({
 
   const handleGenerate = async () => {
     if (selectedCourses.length === 0) {
-      setError("Please add at least one course to generate a timetable.");
+      setError('Please add at least one course to generate a timetable.');
       return;
     }
 
@@ -142,31 +129,32 @@ export default function CourseCard({
     setError(null);
 
     try {
-      const { result } = generateTT(selectedCourses, allSubjectsMode === "on");
+      const { result } = generateTT(selectedCourses, allSubjectsMode === 'on');
 
       if (!result || result.length === 0) {
         setTimetableData([]);
         setAlert({
           open: true,
-          message: "No timetables were generated because there were clashes in all possible timetables. Please adjust your courses or mode.",
-          color: "red",
+          message:
+            'No timetables were generated because there were clashes in all possible timetables. Please adjust your courses or mode.',
+          color: 'red',
         });
       } else {
         setTimetableData(result);
         setGlobalCourses(selectedCourses);
         setAlert({
           open: false,
-          message: "",
-          color: "red",
+          message: '',
+          color: 'red',
         });
 
         setTimeout(() => {
-          const el = document.getElementById("timetable-view");
-          if (el) el.scrollIntoView({ behavior: "smooth" });
+          const el = document.getElementById('timetable-view');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
         }, 100);
       }
     } catch {
-      setError("Failed to generate timetable. Please try again.");
+      setError('Failed to generate timetable. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -184,8 +172,9 @@ export default function CourseCard({
       <AlertModal
         open={showInfo}
         message={
-          "**All Subjects Mode - ON**\nGenerated timetables strictly include all of the selected subjects.\n\n**All Subjects Mode - OFF**\nSubjects are prioritized based on their order. If a clash is detected then the subject with lower priority is excluded."
-        } color="yellow"
+          '**All Subjects Mode - ON**\nGenerated timetables strictly include all of the selected subjects.\n\n**All Subjects Mode - OFF**\nSubjects are prioritized based on their order. If a clash is detected then the subject with lower priority is excluded.'
+        }
+        color="yellow"
         onClose={() => setShowInfo(false)}
       />
 
@@ -211,23 +200,19 @@ export default function CourseCard({
               key={`${course.id}-${index}`}
               className="course-row bg-[#ffffff]/40 rounded-3xl px-6 py-4 flex flex-row items-center justify-between gap-2 sm:space-x-4 w-full cursor-grab active:cursor-grabbing"
               draggable
-              onDragStart={(e) => handleDragStart(e, index)}
+              onDragStart={e => handleDragStart(e, index)}
               onDragEnter={() => handleDragEnter(index)}
               onDragEnd={handleDragEnd}
-              onDragOver={(e) => e.preventDefault()}
+              onDragOver={e => e.preventDefault()}
             >
               {/* Course Codes */}
               <div className="flex items-center w-[120px] text-sm text-black font-normal">
                 <div className="flex items-start">
-                  <div className="w-6 text-right mr-4 text-sm font-inter">
-                    {index + 1}.
-                  </div>
-                  <div className={"flex flex-col px-4 gap-1"}>
+                  <div className="w-6 text-right mr-4 text-sm font-inter">{index + 1}.</div>
+                  <div className={'flex flex-col px-4 gap-1'}>
                     <p key={course.courseCode}>{course.courseCode}</p>
-                    {course.courseType === "both" && !course.courseCode.endsWith("E") && (
-                      <p key={course.courseCodeLab + "_lab"}>
-                        {course.courseCodeLab}
-                      </p>
+                    {course.courseType === 'both' && !course.courseCode.endsWith('E') && (
+                      <p key={course.courseCodeLab + '_lab'}>{course.courseCodeLab}</p>
                     )}
                   </div>
                 </div>
@@ -236,17 +221,11 @@ export default function CourseCard({
               {/* Course name */}
               <div className="flex w-[480px] text-sm text-black font-normal">
                 <div className="flex flex-col gap-1 break-words max-w-full">
-                  <p
-                    key={course.courseName}
-                    className="break-words leading-snug"
-                  >
+                  <p key={course.courseName} className="break-words leading-snug">
                     {course.courseName}
                   </p>
-                  {course.courseType === "both" && !course.courseCode.endsWith("E") && (
-                    <p
-                      key={course.courseNameLab + "_lab"}
-                      className="break-words leading-snug"
-                    >
+                  {course.courseType === 'both' && !course.courseCode.endsWith('E') && (
+                    <p key={course.courseNameLab + '_lab'} className="break-words leading-snug">
                       {course.courseNameLab}
                     </p>
                   )}
@@ -256,22 +235,14 @@ export default function CourseCard({
               {/* Slots */}
               <div className="flex items-center w-[120px] text-sm text-left text-black font-normal">
                 <div className="flex flex-col gap-1">
-                  {course.courseType == "lab" && (
-                    <p
-                      key={course.courseName + "slot"}
-                      className="break-words leading-snug"
-                    >
+                  {course.courseType == 'lab' && (
+                    <p key={course.courseName + 'slot'} className="break-words leading-snug">
                       (Lab)
                     </p>
                   )}
-                  {course.courseType != "lab" && (
-                    <p
-                      key={course.courseName + "slot"}
-                      className="break-words leading-snug"
-                    >
-                      {course.courseSlots
-                        .map((slot) => slot.slotName)
-                        .join(", ")}
+                  {course.courseType != 'lab' && (
+                    <p key={course.courseName + 'slot'} className="break-words leading-snug">
+                      {course.courseSlots.map(slot => slot.slotName).join(', ')}
                     </p>
                   )}
                 </div>
@@ -290,7 +261,7 @@ export default function CourseCard({
                   title="Delete Course"
                 >
                   <Image
-                    src={"/icons/trash.svg"}
+                    src={'/icons/trash.svg'}
                     width={1}
                     height={1}
                     alt="delete"
@@ -311,11 +282,7 @@ export default function CourseCard({
                     disabled={index === 0}
                   >
                     <Image
-                      src={
-                        index === 0
-                          ? "/icons/chevron_up_gray.svg"
-                          : "/icons/chevron_up.svg"
-                      }
+                      src={index === 0 ? '/icons/chevron_up_gray.svg' : '/icons/chevron_up.svg'}
                       width={1}
                       height={1}
                       alt="up"
@@ -337,8 +304,8 @@ export default function CourseCard({
                     <Image
                       src={
                         index === selectedCourses.length - 1
-                          ? "/icons/chevron_down_gray.svg"
-                          : "/icons/chevron_down.svg"
+                          ? '/icons/chevron_down_gray.svg'
+                          : '/icons/chevron_down.svg'
                       }
                       width={1}
                       height={1}
@@ -356,7 +323,6 @@ export default function CourseCard({
         </div>
 
         {isLargeScreen ? (
-          
           <div className="flex justify-between items-center mt-8 mb-4 relative w-full">
             {/* Toggle */}
             <div className="mr-auto flex items-center gap-2">
@@ -368,17 +334,13 @@ export default function CourseCard({
                   onClick={() => setShowInfo(true)}
                 />
               </div>
-              <span className="text-md text-black font-semibold mr-0">
-                All Subjects Mode
-              </span>
+              <span className="text-md text-black font-semibold mr-0">All Subjects Mode</span>
               <BasicToggleButton
                 defaultState={allSubjectsMode}
-                onToggle={() =>
-                  setAllSubjectsMode((prev) => (prev === "on" ? "off" : "on"))
-                }
+                onToggle={() => setAllSubjectsMode(prev => (prev === 'on' ? 'off' : 'on'))}
               />
               <span className="text-md text-black font-semibold ml-2">
-                {allSubjectsMode === "on" ? "ON" : "OFF"}
+                {allSubjectsMode === 'on' ? 'ON' : 'OFF'}
               </span>
             </div>
 
@@ -386,7 +348,7 @@ export default function CourseCard({
             <div className="absolute left-1/2 -translate-x-1/2">
               <ZButton
                 type="large"
-                text={loading ? "Generating..." : "Generate"}
+                text={loading ? 'Generating...' : 'Generate'}
                 image="/icons/thunder.svg"
                 color="blue"
                 disabled={loading}
@@ -406,7 +368,6 @@ export default function CourseCard({
             </div>
           </div>
         ) : (
-          
           // Mobile / Tablet View
 
           <div className="mt-8 mb-4 w-full flex flex-col gap-4">
@@ -421,17 +382,13 @@ export default function CourseCard({
                     onClick={() => setShowInfo(true)}
                   />
                 </div>
-                <span className="text-md text-black font-semibold mr-2">
-                  All Subjects Mode
-                </span>
+                <span className="text-md text-black font-semibold mr-2">All Subjects Mode</span>
                 <BasicToggleButton
                   defaultState={allSubjectsMode}
-                  onToggle={() =>
-                    setAllSubjectsMode((prev) => (prev === "on" ? "off" : "on"))
-                  }
+                  onToggle={() => setAllSubjectsMode(prev => (prev === 'on' ? 'off' : 'on'))}
                 />
                 <span className="text-md text-black font-semibold ml-4">
-                  {allSubjectsMode === "on" ? "ON" : "OFF"}
+                  {allSubjectsMode === 'on' ? 'ON' : 'OFF'}
                 </span>
               </div>
 
@@ -450,7 +407,7 @@ export default function CourseCard({
             <div className="flex justify-center w-full py-4">
               <ZButton
                 type="large"
-                text={loading ? "Generating..." : "Generate"}
+                text={loading ? 'Generating...' : 'Generate'}
                 image="/icons/thunder.svg"
                 color="blue"
                 disabled={loading}
@@ -460,13 +417,8 @@ export default function CourseCard({
           </div>
         )}
 
-
-
         {error && (
-          <div
-            className="mt-6 text-center text-[#CC3312] font-semibold"
-            role="alert"
-          >
+          <div className="mt-6 text-center text-[#CC3312] font-semibold" role="alert">
             {error}
           </div>
         )}
@@ -477,9 +429,7 @@ export default function CourseCard({
           type="rem_course"
           dataBody={
             courseToDelete.courseName +
-            (courseToDelete.courseType === "both"
-              ? ` & ${courseToDelete.courseNameLab}`
-              : "")
+            (courseToDelete.courseType === 'both' ? ` & ${courseToDelete.courseNameLab}` : '')
           }
           action={confirmDeleteCourse}
           closeLink={() => {
@@ -500,7 +450,6 @@ export default function CourseCard({
           closeLink={() => setDeleteAllPopupOpen(false)}
         />
       )}
-
     </div>
   );
 }

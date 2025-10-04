@@ -9,5 +9,5 @@ export const SCHEME_LIST = {
   DisciplineCore: SchemeDisciplineCore,
   DisciplineElective: SchemeDisciplineElective,
   DisciplineLinkedEngineeringSciences: SchemeDisciplineLinked,
-  OpenElective: SchemeOpenElective
+  OpenElective: SchemeOpenElective,
 };

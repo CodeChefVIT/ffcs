@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { ZButton } from "@/components/ui/Buttons";
-import Footer from "@/components/ui/Footer";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { ZButton } from '@/components/ui/Buttons';
+import Footer from '@/components/ui/Footer';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function NotFound() {
   const router = useRouter();
@@ -24,20 +24,16 @@ export default function NotFound() {
       </div>
 
       <div className="flex-grow mt-16 flex flex-col items-center text-center relative">
-        <div className="text-5xl mb-2 font-pangolin text-black">
-          FFCS-inator
-        </div>
+        <div className="text-5xl mb-2 font-pangolin text-black">FFCS-inator</div>
 
-        <div className="text-2xl mb-8 font-pangolin text-black">
-          By CodeChef-VIT
-        </div>
+        <div className="text-2xl mb-8 font-pangolin text-black">By CodeChef-VIT</div>
 
         <div className="relative w-fit h-fit mb-4">
           {/*Shadow*/}
           <span
             className="absolute left-1.5 top-1.5 select-none pointer-events-none font-poppins font-extrabold text-[96px] z-0 text-black"
             style={{
-              WebkitTextStroke: "8px black",
+              WebkitTextStroke: '8px black',
             }}
           >
             404
@@ -46,7 +42,7 @@ export default function NotFound() {
           <span
             className="absolute left-0 top-0 select-none pointer-events-none font-poppins font-extrabold text-[96px] z-10 text-transparent"
             style={{
-              WebkitTextStroke: "8px black",
+              WebkitTextStroke: '8px black',
             }}
           >
             404
@@ -68,7 +64,7 @@ export default function NotFound() {
           text="Home"
           color="purple"
           image="/icons/home.svg"
-          onClick={() => router.push("/")}
+          onClick={() => router.push('/')}
         />
       </div>
 

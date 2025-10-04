@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import FAQ from "./FAQ";
-import faqList from "@/data/faq";
-import React, { useState } from "react";
+import FAQ from './FAQ';
+import faqList from '@/data/faq';
+import React, { useState } from 'react';
 
 export default function Accordion() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -27,4 +27,4 @@ export default function Accordion() {
       ))}
     </div>
   );
-};
+}

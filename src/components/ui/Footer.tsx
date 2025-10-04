@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import { CCButton, ZButton } from "./Buttons";
-import AlertModal from "./AlertModal";
-import { useSession } from "next-auth/react";
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { CCButton, ZButton } from './Buttons';
+import AlertModal from './AlertModal';
+import { useSession } from 'next-auth/react';
 
-export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
+export default function Footer({ type }: { type?: 'desktop' | 'mobile' }) {
   const { data: session } = useSession();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [alertState, setAlertState] = useState({
     open: false,
-    message: "",
-    color: "",
+    message: '',
+    color: '',
   });
 
   useEffect(() => {
@@ -27,10 +27,10 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
 
     try {
       setIsSubscribing(true);
-      const response = await fetch("/api/collect-email", {
-        method: "POST",
+      const response = await fetch('/api/collect-email', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email }),
       });
@@ -38,29 +38,29 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
       if (response.ok) {
         setAlertState({
           open: true,
-          message: "Thanks for subscribing!",
-          color: "green",
+          message: 'Thanks for subscribing!',
+          color: 'green',
         });
-        setEmail(session?.user?.email || "");
+        setEmail(session?.user?.email || '');
       } else {
         setAlertState({
           open: true,
-          message: "Failed to subscribe. Please try again.",
-          color: "red",
+          message: 'Failed to subscribe. Please try again.',
+          color: 'red',
         });
       }
     } catch {
       setAlertState({
         open: true,
-        message: "Something went wrong. Please try again.",
-        color: "red",
+        message: 'Something went wrong. Please try again.',
+        color: 'red',
       });
     } finally {
       setIsSubscribing(false);
     }
   };
 
-  if (type === "mobile") {
+  if (type === 'mobile') {
     return (
       <footer className="w-full bg-[#CEE4E5] text-center mt-auto relative overflow-hidden">
         {/* Foreground */}
@@ -107,38 +107,32 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
           <div className="flex gap-5">
             {[
               {
-                href: "https://www.facebook.com/codechefvit/",
-                src: "/social/meta.svg",
-                alt: "Facebook",
+                href: 'https://www.facebook.com/codechefvit/',
+                src: '/social/meta.svg',
+                alt: 'Facebook',
               },
               {
-                href: "https://x.com/codechefvit",
-                src: "/social/twitter.svg",
-                alt: "Twitter",
+                href: 'https://x.com/codechefvit',
+                src: '/social/twitter.svg',
+                alt: 'Twitter',
               },
               {
-                href: "https://github.com/CodeChefVIT",
-                src: "/social/github.svg",
-                alt: "Github",
+                href: 'https://github.com/CodeChefVIT',
+                src: '/social/github.svg',
+                alt: 'Github',
               },
               {
-                href: "https://www.linkedin.com/company/codechefvit/mycompany/",
-                src: "/social/linkedin.svg",
-                alt: "LinkedIn",
+                href: 'https://www.linkedin.com/company/codechefvit/mycompany/',
+                src: '/social/linkedin.svg',
+                alt: 'LinkedIn',
               },
               {
-                href: "https://www.instagram.com/codechefvit/",
-                src: "/social/instagram.svg",
-                alt: "Instagram",
+                href: 'https://www.instagram.com/codechefvit/',
+                src: '/social/instagram.svg',
+                alt: 'Instagram',
               },
             ].map(({ href, src, alt }) => (
-              <a
-                href={href}
-                key={src}
-                target="_blank"
-                rel="noopener"
-                title={`Follow us on ${alt}`}
-              >
+              <a href={href} key={src} target="_blank" rel="noopener" title={`Follow us on ${alt}`}>
                 <Image
                   src={src}
                   alt={alt}
@@ -159,29 +153,17 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
           </h3>
           <ul className="space-y-1">
             <li>
-              <a
-                href="https://www.codechefvit.com/"
-                target="_blank"
-                rel="noopener"
-              >
+              <a href="https://www.codechefvit.com/" target="_blank" rel="noopener">
                 CodeChef-VIT
               </a>
             </li>
             <li>
-              <a
-                href="https://www.codechefvit.com/ffcs-inator"
-                target="_blank"
-                rel="noopener"
-              >
+              <a href="https://www.codechefvit.com/ffcs-inator" target="_blank" rel="noopener">
                 Meet The Team
               </a>
             </li>
             <li>
-              <a
-                href="https://www.codechefvit.com/blog"
-                target="_blank"
-                rel="noopener"
-              >
+              <a href="https://www.codechefvit.com/blog" target="_blank" rel="noopener">
                 Blogs
               </a>
             </li>
@@ -194,20 +176,12 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
           </h3>
           <ul className="space-y-1">
             <li>
-              <a
-                href="https://contactify.codechefvit.com/"
-                target="_blank"
-                rel="noopener"
-              >
+              <a href="https://contactify.codechefvit.com/" target="_blank" rel="noopener">
                 Contactify
               </a>
             </li>
             <li>
-              <a
-                href="https://papers.codechefvit.com/"
-                target="_blank"
-                rel="noopener"
-              >
+              <a href="https://papers.codechefvit.com/" target="_blank" rel="noopener">
                 Papers
               </a>
             </li>
@@ -215,9 +189,7 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
         </div>
 
         <div>
-          <h3 className="font-semibold mb-2 text-2xl md:text-xl lg:text-2xl">
-            Get Updates :)
-          </h3>
+          <h3 className="font-semibold mb-2 text-2xl md:text-xl lg:text-2xl">Get Updates :)</h3>
           <div className="flex items-center gap-2">
             <div className="bg-white border-[3px] border-black rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] px-4 py-3">
               <input
@@ -225,8 +197,8 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
                 placeholder="Your email address"
                 className="text-sm bg-transparent outline-none placeholder:text-black/50 w-full"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSubscribe()}
+                onChange={e => setEmail(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleSubscribe()}
               />
             </div>
 
@@ -245,7 +217,6 @@ export default function Footer({ type }: { type?: "desktop" | "mobile" }) {
         Made with <span className="font-[inter]">❤</span> by CodeChef–VIT
       </div>
 
-      
       <AlertModal
         open={alertState.open}
         onClose={() => setAlertState({ ...alertState, open: false })}

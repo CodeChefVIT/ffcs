@@ -16,16 +16,16 @@ export type timetableDisplayData = {
 
 export type fullCourseData = {
   id: string;
-  courseType: "th" | "lab" | "both";
-  courseCode: string;     
-  courseName: string;     
-  courseCodeLab?: string;      
-  courseNameLab?: string;      
+  courseType: 'th' | 'lab' | 'both';
+  courseCode: string;
+  courseName: string;
+  courseCodeLab?: string;
+  courseNameLab?: string;
   courseSlots: {
     slotName: string;
     slotFaculties: {
       facultyName: string;
-      facultyLabSlot?: string; 
+      facultyLabSlot?: string;
     }[];
   }[];
-}
+};

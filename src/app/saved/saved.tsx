@@ -1,21 +1,19 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import Navbar from "@/components/ui/Navbar";
-import { ZButton } from "@/components/ui/Buttons";
-import Footer from "@/components/ui/Footer";
-import Popup from "@/components/ui/Popup";
-import Image from "next/image";
-import AlertModal from "@/components/ui/AlertModal";
-import axios from "axios";
-import Loader from "@/components/ui/Loader";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import Navbar from '@/components/ui/Navbar';
+import { ZButton } from '@/components/ui/Buttons';
+import Footer from '@/components/ui/Footer';
+import Popup from '@/components/ui/Popup';
+import Image from 'next/image';
+import AlertModal from '@/components/ui/AlertModal';
+import axios from 'axios';
+import Loader from '@/components/ui/Loader';
 
 async function fetchTimetablesByOwner(owner: string) {
-  const res = await axios.get(
-    `/api/timetables?owner=${encodeURIComponent(owner)}`
-  );
+  const res = await axios.get(`/api/timetables?owner=${encodeURIComponent(owner)}`);
   return res.data;
 }
 
@@ -38,7 +36,6 @@ type PopupSlot = {
   name: string;
 };
 
-
 export default function Saved() {
   const router = useRouter();
   const { data: session } = useSession();
@@ -47,15 +44,13 @@ export default function Saved() {
   const [timetables, setTimetables] = useState<TimetableEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
-  const [popupType, setPopupType] = useState<
-    "view_tt" | "delete_tt" | "rename_tt" | null
-  >(null);
+  const [popupType, setPopupType] = useState<'view_tt' | 'delete_tt' | 'rename_tt' | null>(null);
   const [popupSlots, setPopupSlots] = useState<PopupSlot[]>([]);
-  const [popupTitle, setPopupTitle] = useState("");
+  const [popupTitle, setPopupTitle] = useState('');
   const [selectedTT, setSelectedTT] = useState<TimetableEntry | null>(null);
-  const [renameValue, setRenameValue] = useState("");
+  const [renameValue, setRenameValue] = useState('');
   const [alertOpen, setAlertOpen] = useState(false);
-  const [alertMsg, setAlertMsg] = useState("");
+  const [alertMsg, setAlertMsg] = useState('');
   const [publicToggle, setPublicToggle] = useState(false);
 
   useEffect(() => {
@@ -67,8 +62,8 @@ export default function Saved() {
       .finally(() => setLoading(false));
   }, [userEmail]);
 
-  function convertSlots(slots: TimetableEntry["slots"]): PopupSlot[] {
-    return slots.map((s) => ({
+  function convertSlots(slots: TimetableEntry['slots']): PopupSlot[] {
+    return slots.map(s => ({
       code: s.courseCode,
       slot: s.slot,
       name: s.facultyName,
@@ -78,12 +73,16 @@ export default function Saved() {
   async function handleDelete() {
     if (!selectedTT) return;
     await axios.delete(`/api/timetables/${selectedTT._id}`);
-    setTimetables((prev) => prev.filter((t) => t._id !== selectedTT._id));
-    const savedTimetables = JSON.parse(localStorage.getItem('savedTimetables') || '[]') as { shareId: string }[];
-  const updatedTimetables = savedTimetables.filter((tt: { shareId: string }) => tt.shareId !== selectedTT.shareId);
-  localStorage.setItem('savedTimetables', JSON.stringify(updatedTimetables));
+    setTimetables(prev => prev.filter(t => t._id !== selectedTT._id));
+    const savedTimetables = JSON.parse(localStorage.getItem('savedTimetables') || '[]') as {
+      shareId: string;
+    }[];
+    const updatedTimetables = savedTimetables.filter(
+      (tt: { shareId: string }) => tt.shareId !== selectedTT.shareId
+    );
+    localStorage.setItem('savedTimetables', JSON.stringify(updatedTimetables));
 
-  closePopup("Timetable has been deleted.");
+    closePopup('Timetable has been deleted.');
   }
 
   async function handleRename() {
@@ -91,12 +90,10 @@ export default function Saved() {
     await axios.patch(`/api/timetables/${selectedTT._id}`, {
       title: renameValue,
     });
-    setTimetables((prev) =>
-      prev.map((t) =>
-        t._id === selectedTT._id ? { ...t, title: renameValue } : t
-      )
+    setTimetables(prev =>
+      prev.map(t => (t._id === selectedTT._id ? { ...t, title: renameValue } : t))
     );
-    closePopup("Timetable has been renamed.");
+    closePopup('Timetable has been renamed.');
   }
 
   function openView(tt: TimetableEntry) {
@@ -104,7 +101,7 @@ export default function Saved() {
     setPopupTitle(tt.title);
     setSelectedTT(tt);
     setPublicToggle(tt.isPublic);
-    setPopupType("view_tt");
+    setPopupType('view_tt');
     setShowPopup(true);
   }
 
@@ -117,28 +114,24 @@ export default function Saved() {
       });
       selectedTT.isPublic = true;
       setPublicToggle(true);
-      setTimetables((prev) =>
-        prev.map((t) =>
-          t._id === selectedTT._id ? { ...t, isPublic: true } : t
-        )
+      setTimetables(prev =>
+        prev.map(t => (t._id === selectedTT._id ? { ...t, isPublic: true } : t))
       );
     }
     const { data } = await axios.get(`/api/timetables/${selectedTT._id}`);
     const url = `${window.location.origin}/share/${data.shareId}`;
     await navigator.clipboard.writeText(url);
-    setAlertMsg("Link copied!");
+    setAlertMsg('Link copied!');
     setAlertOpen(true);
   }
 
-  async function handleTogglePublic(state: "on" | "off") {
+  async function handleTogglePublic(state: 'on' | 'off') {
     if (!selectedTT) return;
-    const isPub = state === "on";
+    const isPub = state === 'on';
     setPublicToggle(isPub);
     await axios.patch(`/api/timetables/${selectedTT._id}`, { isPublic: isPub });
-    setTimetables((prev) =>
-      prev.map((t) =>
-        t._id === selectedTT._id ? { ...t, isPublic: isPub } : t
-      )
+    setTimetables(prev =>
+      prev.map(t => (t._id === selectedTT._id ? { ...t, isPublic: isPub } : t))
     );
   }
 
@@ -164,9 +157,7 @@ export default function Saved() {
       <div className="flex-1 flex flex-col items-center">
         <h1 className="text-6xl mt-48 mb-16 font-pangolin">Saved Timetables</h1>
         <div className="w-5/6 max-w-7xl rounded-[60px] border-4 border-black bg-[#A7D5D7] p-12 mb-24 shadow-[4px_4px_0_0_black]">
-          <h2 className="text-4xl mb-8 font-pangolin font-light">
-            All Timetables
-          </h2>
+          <h2 className="text-4xl mb-8 font-pangolin font-light">All Timetables</h2>
 
           {loading ? (
             <Loader />
@@ -174,7 +165,7 @@ export default function Saved() {
             <div className="flex flex-col items-center">
               <p className="text-3xl mb-6">(No Timetables Found)</p>
               <ZButton
-                onClick={() => router.push("/")}
+                onClick={() => router.push('/')}
                 type="large"
                 text="Home"
                 color="purple"
@@ -205,7 +196,7 @@ export default function Saved() {
                       onClick={() => {
                         setSelectedTT(tt);
                         setRenameValue(tt.title);
-                        setPopupType("rename_tt");
+                        setPopupType('rename_tt');
                         setShowPopup(true);
                       }}
                     />
@@ -215,7 +206,7 @@ export default function Saved() {
                       image="/icons/trash.svg"
                       onClick={() => {
                         setSelectedTT(tt);
-                        setPopupType("delete_tt");
+                        setPopupType('delete_tt');
                         setShowPopup(true);
                       }}
                     />
@@ -228,7 +219,7 @@ export default function Saved() {
       </div>
       <Footer />
 
-      {showPopup && selectedTT && popupType === "view_tt" && (
+      {showPopup && selectedTT && popupType === 'view_tt' && (
         <Popup
           type="view_tt"
           dataTitle={popupTitle}
@@ -239,7 +230,7 @@ export default function Saved() {
           shareSwitchAction={handleTogglePublic}
         />
       )}
-      {showPopup && selectedTT && popupType === "delete_tt" && (
+      {showPopup && selectedTT && popupType === 'delete_tt' && (
         <Popup
           type="delete_tt"
           dataBody={selectedTT.title}
@@ -247,7 +238,7 @@ export default function Saved() {
           action={handleDelete}
         />
       )}
-      {showPopup && selectedTT && popupType === "rename_tt" && (
+      {showPopup && selectedTT && popupType === 'rename_tt' && (
         <Popup
           type="rename_tt"
           dataBody={renameValue}

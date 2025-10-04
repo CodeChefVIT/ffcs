@@ -1,4 +1,4 @@
-import { fullCourseData } from "./type";
+import { fullCourseData } from './type';
 
 let globalCourses: fullCourseData[] = [];
 

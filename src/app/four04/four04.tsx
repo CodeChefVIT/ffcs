@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import Image from "next/image";
+import Image from 'next/image';
 
-import Navbar from "@/components/ui/Navbar";
-import { ZButton } from "@/components/ui/Buttons";
-import Footer from "@/components/ui/Footer";
-import { useRouter } from "next/navigation";
+import Navbar from '@/components/ui/Navbar';
+import { ZButton } from '@/components/ui/Buttons';
+import Footer from '@/components/ui/Footer';
+import { useRouter } from 'next/navigation';
 
 export default function NotFound() {
   const router = useRouter();
@@ -32,7 +32,7 @@ export default function NotFound() {
           <span
             className="absolute left-2 top-2 select-none pointer-events-none font-poppins font-extrabold text-[160px] z-0 text-black"
             style={{
-              WebkitTextStroke: "16px black",
+              WebkitTextStroke: '16px black',
             }}
           >
             404
@@ -41,7 +41,7 @@ export default function NotFound() {
           <span
             className="absolute left-0 top-0 select-none pointer-events-none font-poppins font-extrabold text-[160px] z-10 text-transparent"
             style={{
-              WebkitTextStroke: "16px black",
+              WebkitTextStroke: '16px black',
             }}
           >
             404
@@ -63,7 +63,7 @@ export default function NotFound() {
           text="Home"
           color="purple"
           image="/icons/home.svg"
-          onClick={() => router.push("/")}
+          onClick={() => router.push('/')}
         />
       </div>
 

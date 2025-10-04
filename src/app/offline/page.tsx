@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import Footer from "@/components/ui/Footer";
+import Image from 'next/image';
+import Footer from '@/components/ui/Footer';
 
 export default function OfflinePage() {
   return (
@@ -20,12 +20,8 @@ export default function OfflinePage() {
       </div>
 
       <div className="flex-grow mt-16 flex flex-col items-center text-center relative">
-        <div className="text-5xl mb-2 font-pangolin text-black">
-          FFCS-inator
-        </div>
-        <div className="text-2xl mb-8 font-pangolin text-black">
-          By CodeChef-VIT
-        </div>
+        <div className="text-5xl mb-2 font-pangolin text-black">FFCS-inator</div>
+        <div className="text-2xl mb-8 font-pangolin text-black">By CodeChef-VIT</div>
         <div className="mb-8">
           <Image
             src="/logo_ffcs.svg"
@@ -37,9 +33,7 @@ export default function OfflinePage() {
             priority
           />
         </div>
-        <div className="text-3xl mb-8 font-pangolin text-black">
-          You are offline
-        </div>
+        <div className="text-3xl mb-8 font-pangolin text-black">You are offline</div>
         <div className="text-xl mb-8 font-poppins text-black">
           Please check your internet connection and try again.
         </div>

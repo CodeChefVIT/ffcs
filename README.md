@@ -8,9 +8,9 @@
   FFCS-inator
 </h2>
 
-## FFCS-inator  - CodeChef VIT 
-Generate priority-based timetables in seconds with FFCS-inator. The smartest way to plan your VIT FFCS. Pick your favorite faculties, set your subject and faculty priorities, and let FFCS-inator create the perfect clash-free timetable for you. Save your timetables for later, and easily share them with friends. No hassle. No stress. Just your ideal schedule, tailored to you.
+## FFCS-inator - CodeChef VIT
 
+Generate priority-based timetables in seconds with FFCS-inator. The smartest way to plan your VIT FFCS. Pick your favorite faculties, set your subject and faculty priorities, and let FFCS-inator create the perfect clash-free timetable for you. Save your timetables for later, and easily share them with friends. No hassle. No stress. Just your ideal schedule, tailored to you.
 
 ## Tech Stack
 
@@ -23,35 +23,39 @@ Generate priority-based timetables in seconds with FFCS-inator. The smartest way
 
 ## Features
 
-**Faculty Listings by Domain, School, Subject, and Slot**  
+**Faculty Listings by Domain, School, Subject, and Slot**
+
 - Search and explore a complete list of faculties, organized by school, domain, subject, and slot.
 
-**Automatic Timetable Generation**  
+**Automatic Timetable Generation**
+
 - Generate all possible clash-free timetables automatically using a smart 2D priority algorithm that considers your faculty and subject preferences.
 
-**Download Detailed Reports**  
+**Download Detailed Reports**
+
 - Export a comprehensive PDF report showing:
   - All faculties possible for each subject
   - Detailed clash information between selected slots and faculties
 
-**Save Timetables**  
+**Save Timetables**
+
 - Save your generated timetables for future access and comparison.
 
-**Share Timetables Securely**  
+**Share Timetables Securely**
+
 - Share your timetable with others via a unique shareable link.
 - Control privacy settings to make your timetable public or private as needed.
 
 **Interactive Slot View & Clash Detection**
+
 - Quickly visualize all available slots on a timetable grid.
 - Once a slot is selected, conflicting slots are automatically blocked to prevent clashes and simplify your choices.
-
-
 
 ## Get Started
 
 The repository has two branches, 'prod' and 'staging'.
 
-prod (Production Branch) represents the live, user-facing version of the project where bug-free, well-tested code resides. 
+prod (Production Branch) represents the live, user-facing version of the project where bug-free, well-tested code resides.
 
 staging (Staging Branch) serves as a pre-production environment, where features and fixes are tested before they go live.
 
@@ -62,6 +66,7 @@ Clone the 'prod' branch (production)
 ```bash
 git clone -b prod https://github.com/CodeChefVIT/ffcs.git
 ```
+
 OR
 
 Clone the 'staging' branch (staging)
@@ -91,6 +96,7 @@ Before getting started, please ensure that the .env file is properly configured.
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
 
 ## Meet the Team
+
 [![Meet the Team](https://img.shields.io/badge/Meet%20the%20Team-Click%20Here-ff69b4?style=for-the-badge)](https://www.codechefvit.com/ffcs-inator)
 
 <p align="center">

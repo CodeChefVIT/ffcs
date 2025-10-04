@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const courseScheme = new mongoose.Schema({
   courseId: { type: String, required: true },
@@ -8,6 +8,6 @@ const courseScheme = new mongoose.Schema({
   Venue: String,
 });
 
-const Course = mongoose.model("Course", courseScheme);
+const Course = mongoose.model('Course', courseScheme);
 
 export default Course;
