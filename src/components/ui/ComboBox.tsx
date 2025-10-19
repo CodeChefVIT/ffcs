@@ -1,7 +1,6 @@
-
-"use client";
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+'use client';
+import Image from 'next/image';
+import { useEffect, useRef, useState } from 'react';
 
 type ComboBoxProps = {
   label: string;
@@ -12,7 +11,7 @@ type ComboBoxProps = {
 
 export default function ComboBox({ label, value, options, onChange }: ComboBoxProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,11 +20,11 @@ export default function ComboBox({ label, value, options, onChange }: ComboBoxPr
         setIsOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const filteredOptions = options.filter((option) =>
+  const filteredOptions = options.filter(option =>
     option.toLowerCase().includes(inputValue.toLowerCase())
   );
 
@@ -47,7 +46,7 @@ export default function ComboBox({ label, value, options, onChange }: ComboBoxPr
           value={inputValue}
           placeholder={label}
           onClick={() => setIsOpen(true)}
-          onChange={(e) => {
+          onChange={e => {
             setInputValue(e.target.value);
             setIsOpen(true);
           }}
@@ -62,8 +61,8 @@ export default function ComboBox({ label, value, options, onChange }: ComboBoxPr
             type="button"
             aria-label="Clear"
             onClick={() => {
-              setInputValue("");
-              onChange("");
+              setInputValue('');
+              onChange('');
             }}
             className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
             tabIndex={-1}
@@ -80,8 +79,6 @@ export default function ComboBox({ label, value, options, onChange }: ComboBoxPr
             />
           </button>
         )}
-
-
       </div>
 
       {isOpen && (
@@ -92,7 +89,7 @@ export default function ComboBox({ label, value, options, onChange }: ComboBoxPr
               onClick={() => handleSelect(option)}
               className={`
                 px-4 py-2 cursor-pointer hover:bg-[#FFEA79]
-                ${value === option ? "bg-[#C1FF83] font-bold" : ""}
+                ${value === option ? 'bg-[#C1FF83] font-bold' : ''}
               `}
             >
               {option}

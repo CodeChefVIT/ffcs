@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import TimeTable from "./TimeTable";
-import React from "react";
+import TimeTable from './TimeTable';
+import React from 'react';
 
 type dataProps = {
   code: string;
@@ -24,7 +24,6 @@ const sortData = (data: dataProps[]): dataProps[] => {
 
 const getGroupedData = (data: dataProps[]): groupedDataProps => {
   return sortData(data).reduce((acc, { code, slot, name }) => {
-    
     const codePrefix = code.slice(0, -1);
     const groupKey = `${name}__${codePrefix}`;
     (acc[groupKey] ||= []).push({ code, slot });
@@ -35,7 +34,7 @@ const getGroupedData = (data: dataProps[]): groupedDataProps => {
 export default function CompoundTable({ data, large }: CompoundTableProps) {
   const groupedData = getGroupedData(data);
 
-  const tfs = data.map((d) => {
+  const tfs = data.map(d => {
     return { slotName: d.slot, showName: true };
   });
 
@@ -44,7 +43,7 @@ export default function CompoundTable({ data, large }: CompoundTableProps) {
       <div className="overflow-x-auto lg:overflow-x-visible">
         <div
           className={`
-        ${large ? "w-[1000px] h-[480px]" : "w-[830px] h-[400px]"}
+        ${large ? 'w-[1000px] h-[480px]' : 'w-[830px] h-[400px]'}
       `}
         >
           <TimeTable slotNames={tfs} />
@@ -55,7 +54,7 @@ export default function CompoundTable({ data, large }: CompoundTableProps) {
         <div
           className={`
         w-full min-w-[400px]
-        ${large ? "h-[360px] lg:h-[480px]" : "h-[320px] lg:h-[400px]"}
+        ${large ? 'h-[360px] lg:h-[480px]' : 'h-[320px] lg:h-[400px]'}
 
         bg-[#ffffff]/60 p-4
         border-3 border-black
@@ -64,7 +63,7 @@ export default function CompoundTable({ data, large }: CompoundTableProps) {
       `}
         >
           {Object.entries(groupedData).map(([groupKey, entries], idx) => {
-            const displayName = groupKey.split("__")[0];
+            const displayName = groupKey.split('__')[0];
             //console.log(displayName)
             // let initials = "";
             // const parts = displayName.split(" ");
@@ -79,14 +78,9 @@ export default function CompoundTable({ data, large }: CompoundTableProps) {
             //   initials = displayName;
             // }
             const initials =
-              displayName.length > 12
-                ? displayName.slice(0, 12) + "..."
-                : displayName;
+              displayName.length > 12 ? displayName.slice(0, 12) + '...' : displayName;
             return (
-              <div
-                key={idx}
-                className="border-b-1 border-black last:border-b-0 pb-2"
-              >
+              <div key={idx} className="border-b-1 border-black last:border-b-0 pb-2">
                 <div className="space-y-1">
                   {entries.map((entry, i) => (
                     <div key={i} className="flex px-2 min-w-0 justify-between">
@@ -94,10 +88,10 @@ export default function CompoundTable({ data, large }: CompoundTableProps) {
                         {entry.code}
                       </div>
                       <div className="w-[80px] shrink-0 ml-4 mr-4 break-words whitespace-normal text-left">
-                        {entry.slot.replace(/\+/g, "+\u200B")}
+                        {entry.slot.replace(/\+/g, '+\u200B')}
                       </div>
                       <div className="w-[160px] shrink-0 break-words whitespace-normal text-right pr-4">
-                        {i === 0 ? initials : ""}
+                        {i === 0 ? initials : ''}
                       </div>
                     </div>
                   ))}

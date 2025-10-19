@@ -1,180 +1,176 @@
 export const ScopeDisciplineElective = {
-  "BCSE206L - Foundations of Data Science": [
-    { slot: "G2+TG2", venue: "SJT402", faculty: "PRAKASH M" },
-    { slot: "G2+TG2", venue: "SJT711", faculty: "DEEPA.K" },
-    { slot: "G1+TG1", venue: "SJT401", faculty: "KALYANARAMAN P" },
-    { slot: "G1+TG1", venue: "SJT402", faculty: "MYTHILI T" },
-    { slot: "G1+TG1", venue: "SJT403", faculty: "SARAVANAKUMAR K" },
-    { slot: "G1+TG1", venue: "SJT505", faculty: "NALINI N" },
-    { slot: "G2+TG2", venue: "SJT504", faculty: "NALINI N" },
-    { slot: "G2+TG2", venue: "SJT403", faculty: "KUMAR K" },
-    { slot: "G1+TG1", venue: "SJT601", faculty: "LAKSHMI S" },
+  'BCSE206L - Foundations of Data Science': [
+    { slot: 'G2+TG2', venue: 'SJT402', faculty: 'PRAKASH M' },
+    { slot: 'G2+TG2', venue: 'SJT711', faculty: 'DEEPA.K' },
+    { slot: 'G1+TG1', venue: 'SJT401', faculty: 'KALYANARAMAN P' },
+    { slot: 'G1+TG1', venue: 'SJT402', faculty: 'MYTHILI T' },
+    { slot: 'G1+TG1', venue: 'SJT403', faculty: 'SARAVANAKUMAR K' },
+    { slot: 'G1+TG1', venue: 'SJT505', faculty: 'NALINI N' },
+    { slot: 'G2+TG2', venue: 'SJT504', faculty: 'NALINI N' },
+    { slot: 'G2+TG2', venue: 'SJT403', faculty: 'KUMAR K' },
+    { slot: 'G1+TG1', venue: 'SJT601', faculty: 'LAKSHMI S' },
   ],
-  "BCSE207L - Programming for Data Science": [
-    { slot: "E1", venue: "SJT504", faculty: "SARAVANAGURU RA.K" },
+  'BCSE207L - Programming for Data Science': [
+    { slot: 'E1', venue: 'SJT504', faculty: 'SARAVANAGURU RA.K' },
   ],
-  "BCSE207P - Programming for Data Science Lab": [
-    { slot: "L55+L56", venue: "SJT622", faculty: "SARAVANAGURU RA.K" },
+  'BCSE207P - Programming for Data Science Lab': [
+    { slot: 'L55+L56', venue: 'SJT622', faculty: 'SARAVANAGURU RA.K' },
   ],
-  "BCSE208L - Data Mining": [
-    { slot: "B1", venue: "SJT711", faculty: "DHEEBA J" },
+  'BCSE208L - Data Mining': [{ slot: 'B1', venue: 'SJT711', faculty: 'DHEEBA J' }],
+  'BCSE208P - Data Mining Lab': [{ slot: 'L43+L44', venue: 'SJT517', faculty: 'DHEEBA J' }],
+  'BCSE209L - Machine Learning': [
+    { slot: 'A2+TA2', venue: 'SJT522', faculty: 'VISWANATHAN P' },
+    { slot: 'A2+TA2', venue: 'SJT602', faculty: 'SUDHAKARA PANDIAN R' },
+    { slot: 'A2+TA2', venue: 'SJT521', faculty: 'SUDHA.S' },
   ],
-  "BCSE208P - Data Mining Lab": [
-    { slot: "L43+L44", venue: "SJT517", faculty: "DHEEBA J" },
+  'BCSE209P - Machine Learning Lab': [
+    { slot: 'L23+L24', venue: 'SJT622', faculty: 'SUDHAKARA PANDIAN R' },
+    { slot: 'L15+L16', venue: 'SJT516', faculty: 'VISWANATHAN P' },
+    { slot: 'L25+L26', venue: 'SJT516', faculty: 'SUDHA.S' },
   ],
-  "BCSE209L - Machine Learning": [
-    { slot: "A2+TA2", venue: "SJT522", faculty: "VISWANATHAN P" },
-    { slot: "A2+TA2", venue: "SJT602", faculty: "SUDHAKARA PANDIAN R" },
-    { slot: "A2+TA2", venue: "SJT521", faculty: "SUDHA.S" },
+  'BCSE310L - IoT Architectures and Protocols': [
+    { slot: 'G2+TG2', venue: 'SJT408', faculty: 'SRIMATHI C' },
   ],
-  "BCSE209P - Machine Learning Lab": [
-    { slot: "L23+L24", venue: "SJT622", faculty: "SUDHAKARA PANDIAN R" },
-    { slot: "L15+L16", venue: "SJT516", faculty: "VISWANATHAN P" },
-    { slot: "L25+L26", venue: "SJT516", faculty: "SUDHA.S" },
+  'BCSE316L - Design of Smart Cities': [
+    { slot: 'D1+TD1', venue: 'SJT619', faculty: 'SARWESH P' },
+    { slot: 'D2+TD2', venue: 'SJT602A', faculty: 'SWARNALATHA P' },
   ],
-  "BCSE310L - IoT Architectures and Protocols": [
-    { slot: "G2+TG2", venue: "SJT408", faculty: "SRIMATHI C" },
+  'BCSE317L - Information Security': [
+    { slot: 'G2+TG2', venue: 'SJT601', faculty: 'SELVI M' },
+    { slot: 'G1+TG1', venue: 'SJT508', faculty: 'MANJULA R' },
+    { slot: 'G1+TG1', venue: 'SJT521', faculty: 'CHANDRA MOHAN B' },
+    { slot: 'G2+TG2', venue: 'SJT602', faculty: 'SANTHI H' },
   ],
-  "BCSE316L - Design of Smart Cities": [
-    { slot: "D1+TD1", venue: "SJT619", faculty: "SARWESH P" },
-    { slot: "D2+TD2", venue: "SJT602A", faculty: "SWARNALATHA P" },
+  'BCSE318L - Data Privacy': [
+    { slot: 'E1+TE1', venue: 'SJT513', faculty: 'SENTHIL KUMAR K' },
+    { slot: 'E1+TE1', venue: 'SJT521', faculty: 'GEETHA MARY A' },
+    { slot: 'E2+TE2', venue: 'SJT521', faculty: 'ADALINE SUJI R' },
+    { slot: 'E1+TE1', venue: 'SJT522', faculty: 'DEVIPRIYA A' },
+    { slot: 'E2+TE2', venue: 'SJT522', faculty: 'GLADYS GNANA KIRUBA B' },
+    { slot: 'E2+TE2', venue: 'SJT513', faculty: 'RAJASEKHARA BABU M' },
   ],
-  "BCSE317L - Information Security": [
-    { slot: "G2+TG2", venue: "SJT601", faculty: "SELVI M" },
-    { slot: "G1+TG1", venue: "SJT508", faculty: "MANJULA R" },
-    { slot: "G1+TG1", venue: "SJT521", faculty: "CHANDRA MOHAN B" },
-    { slot: "G2+TG2", venue: "SJT602", faculty: "SANTHI H" },
+  'BCSE319L - Penetration Testing and Vulnerability Analysis': [
+    { slot: 'A1', venue: 'SJT501', faculty: 'PRAKASH G' },
   ],
-  "BCSE318L - Data Privacy": [
-    { slot: "E1+TE1", venue: "SJT513", faculty: "SENTHIL KUMAR K" },
-    { slot: "E1+TE1", venue: "SJT521", faculty: "GEETHA MARY A" },
-    { slot: "E2+TE2", venue: "SJT521", faculty: "ADALINE SUJI R" },
-    { slot: "E1+TE1", venue: "SJT522", faculty: "DEVIPRIYA A" },
-    { slot: "E2+TE2", venue: "SJT522", faculty: "GLADYS GNANA KIRUBA B" },
-    { slot: "E2+TE2", venue: "SJT513", faculty: "RAJASEKHARA BABU M" },
+  'BCSE319P - Penetration Testing and Vulnerability Analysis Lab': [
+    { slot: 'L53+L54', venue: 'SJT318', faculty: 'PRAKASH G' },
   ],
-  "BCSE319L - Penetration Testing and Vulnerability Analysis": [
-    { slot: "A1", venue: "SJT501", faculty: "PRAKASH G" },
+  'BCSE320L - Web Application Security': [
+    { slot: 'B1+TB1', venue: 'SJT501', faculty: 'BHULAKSHMI BONTHU' },
+    { slot: 'A2+TA2', venue: 'SJT501', faculty: 'PRABIN S M' },
   ],
-  "BCSE319P - Penetration Testing and Vulnerability Analysis Lab": [
-    { slot: "L53+L54", venue: "SJT318", faculty: "PRAKASH G" },
+  'BCSE324L - Foundations of Blockchain Technology': [
+    { slot: 'G1+TG1', venue: 'SJT501', faculty: 'RAMESH BABU K' },
+    { slot: 'G2+TG2', venue: 'SJT502', faculty: 'ANURADHA  D' },
+    { slot: 'G1+TG1', venue: 'SJT503', faculty: 'BASKARAN P' },
+    { slot: 'G2+TG2', venue: 'SJT503', faculty: 'SRIDEVI S' },
+    { slot: 'G1+TG1', venue: 'SJT502', faculty: 'GOVINDA K' },
   ],
-  "BCSE320L - Web Application Security": [
-    { slot: "B1+TB1", venue: "SJT501", faculty: "BHULAKSHMI BONTHU" },
-    { slot: "A2+TA2", venue: "SJT501", faculty: "PRABIN S M" },
+  'BCSE325L - Introduction to Bitcoin': [
+    { slot: 'E2+TE2', venue: 'SJT501', faculty: 'MEHFOOZA' },
+    { slot: 'E1+TE1', venue: 'SJT503', faculty: 'GOPINATH M' },
+    { slot: 'E1+TE1', venue: 'SJT502', faculty: 'SOMASUNDARAM S K' },
   ],
-  "BCSE324L - Foundations of Blockchain Technology": [
-    { slot: "G1+TG1", venue: "SJT501", faculty: "RAMESH BABU K" },
-    { slot: "G2+TG2", venue: "SJT502", faculty: "ANURADHA  D" },
-    { slot: "G1+TG1", venue: "SJT503", faculty: "BASKARAN P" },
-    { slot: "G2+TG2", venue: "SJT503", faculty: "SRIDEVI S" },
-    { slot: "G1+TG1", venue: "SJT502", faculty: "GOVINDA K" },
+  'BCSE328L - Cryptocurrency Technologies': [
+    { slot: 'B1+TB1', venue: 'SJT602A', faculty: 'GOPICHAND G' },
   ],
-  "BCSE325L - Introduction to Bitcoin": [
-    { slot: "E2+TE2", venue: "SJT501", faculty: "MEHFOOZA" },
-    { slot: "E1+TE1", venue: "SJT503", faculty: "GOPINATH M" },
-    { slot: "E1+TE1", venue: "SJT502", faculty: "SOMASUNDARAM S K" },
+  'BCSE332L - Deep Learning': [
+    { slot: 'D2+TD2', venue: 'SJT504', faculty: 'JYOTISMITA CHAKI' },
+    { slot: 'D1+TD1', venue: 'SJT604', faculty: 'KUMAR K' },
   ],
-  "BCSE328L - Cryptocurrency Technologies": [
-    { slot: "B1+TB1", venue: "SJT602A", faculty: "GOPICHAND G" },
+  'BCSE332P - Deep Learning Lab': [
+    { slot: 'L45+L46', venue: 'SJT517', faculty: 'KUMAR K' },
+    { slot: 'L9+L10', venue: 'SJT622', faculty: 'JYOTISMITA CHAKI' },
   ],
-  "BCSE332L - Deep Learning": [
-    { slot: "D2+TD2", venue: "SJT504", faculty: "JYOTISMITA CHAKI" },
-    { slot: "D1+TD1", venue: "SJT604", faculty: "KUMAR K" },
+  'BCSE334L - Predictive Analytics': [
+    { slot: 'F2+TF2', venue: 'SJT311A', faculty: 'PADMAVATHY T' },
+    { slot: 'F2+TF2', venue: 'SJT521', faculty: 'ANBARASI M' },
+    { slot: 'F2+TF2', venue: 'SJT522', faculty: 'SAYAN SIKDER' },
+    { slot: 'F1+TF1', venue: 'SJT514', faculty: 'SAYAN SIKDER' },
+    { slot: 'F1+TF1', venue: 'SJT522', faculty: 'THIRUNAVUKKARASAN M' },
+    { slot: 'F2+TF2', venue: 'SJT501', faculty: 'THANGARAMYA K' },
+    { slot: 'F1+TF1', venue: 'SJT501', faculty: 'UMA PRIYA D' },
   ],
-  "BCSE332P - Deep Learning Lab": [
-    { slot: "L45+L46", venue: "SJT517", faculty: "KUMAR K" },
-    { slot: "L9+L10", venue: "SJT622", faculty: "JYOTISMITA CHAKI" },
+  'BCSE335L - Healthcare Data Analytics': [
+    { slot: 'F1+TF1', venue: 'SJT504', faculty: 'RAJAN SHRIVASTAVA' },
+    { slot: 'F2+TF2', venue: 'SJT504', faculty: 'RADHAKRISHNAN DELHIBABU' },
   ],
-  "BCSE334L - Predictive Analytics": [
-    { slot: "F2+TF2", venue: "SJT311A", faculty: "PADMAVATHY T" },
-    { slot: "F2+TF2", venue: "SJT521", faculty: "ANBARASI M" },
-    { slot: "F2+TF2", venue: "SJT522", faculty: "SAYAN SIKDER" },
-    { slot: "F1+TF1", venue: "SJT514", faculty: "SAYAN SIKDER" },
-    { slot: "F1+TF1", venue: "SJT522", faculty: "THIRUNAVUKKARASAN M" },
-    { slot: "F2+TF2", venue: "SJT501", faculty: "THANGARAMYA K" },
-    { slot: "F1+TF1", venue: "SJT501", faculty: "UMA PRIYA D" },
+  'BCSE336L - Financial Data Analytics': [
+    { slot: 'F1', venue: 'SJT505', faculty: 'MEHFOOZA' },
+    { slot: 'F2', venue: 'SJT505', faculty: 'MEHFOOZA' },
   ],
-  "BCSE335L - Healthcare Data Analytics": [
-    { slot: "F1+TF1", venue: "SJT504", faculty: "RAJAN SHRIVASTAVA" },
-    { slot: "F2+TF2", venue: "SJT504", faculty: "RADHAKRISHNAN DELHIBABU" },
+  'BCSE336P - Financial Data Analytics Lab': [
+    { slot: 'L9+L10', venue: 'SJT319', faculty: 'MEHFOOZA' },
+    { slot: 'L49+L50', venue: 'SJT318', faculty: 'MEHFOOZA' },
   ],
-  "BCSE336L - Financial Data Analytics": [
-    { slot: "F1", venue: "SJT505", faculty: "MEHFOOZA" },
-    { slot: "F2", venue: "SJT505", faculty: "MEHFOOZA" },
+  'BCSE401L - Internet of Things': [
+    { slot: 'A1+TA1', venue: 'SJT503', faculty: 'ABDUL GAFFAR H' },
+    { slot: 'A2+TA2', venue: 'SJT503', faculty: 'SENTHILNATHAN  P' },
+    { slot: 'A1+TA1', venue: 'SJT504', faculty: 'RUBY D' },
+    { slot: 'A2+TA2', venue: 'SJT504', faculty: 'USHUS ELIZEBETH ZACHARIAH' },
   ],
-  "BCSE336P - Financial Data Analytics Lab": [
-    { slot: "L9+L10", venue: "SJT319", faculty: "MEHFOOZA" },
-    { slot: "L49+L50", venue: "SJT318", faculty: "MEHFOOZA" },
+  'BCSE402L - Big Data Analytics': [
+    { slot: 'F1+TF1', venue: 'SJT502', faculty: 'LAVANYA K' },
+    { slot: 'F1+TF1', venue: 'SJT503', faculty: 'LOKESH KUMAR R' },
+    { slot: 'F2+TF2', venue: 'SJT503', faculty: 'PARTHASARATHY G' },
+    { slot: 'F1+TF1', venue: 'SJT601', faculty: 'DEEPIKA J' },
+    { slot: 'F2+TF2', venue: 'SJT502', faculty: 'NAGARAJA RAO A' },
+    { slot: 'F2+TF2', venue: 'SJT601', faculty: 'SUGANTHINI C' },
   ],
-  "BCSE401L - Internet of Things": [
-    { slot: "A1+TA1", venue: "SJT503", faculty: "ABDUL GAFFAR H" },
-    { slot: "A2+TA2", venue: "SJT503", faculty: "SENTHILNATHAN  P" },
-    { slot: "A1+TA1", venue: "SJT504", faculty: "RUBY D" },
-    { slot: "A2+TA2", venue: "SJT504", faculty: "USHUS ELIZEBETH ZACHARIAH" },
+  'BCSE404L - Internet and Web Programming': [
+    { slot: 'E2+TE2', venue: 'SJT408', faculty: 'MARY MEKALA A' },
+    { slot: 'E1+TE1', venue: 'SJT408', faculty: 'ARUN KUMAR G' },
   ],
-  "BCSE402L - Big Data Analytics": [
-    { slot: "F1+TF1", venue: "SJT502", faculty: "LAVANYA K" },
-    { slot: "F1+TF1", venue: "SJT503", faculty: "LOKESH KUMAR R" },
-    { slot: "F2+TF2", venue: "SJT503", faculty: "PARTHASARATHY G" },
-    { slot: "F1+TF1", venue: "SJT601", faculty: "DEEPIKA J" },
-    { slot: "F2+TF2", venue: "SJT502", faculty: "NAGARAJA RAO A" },
-    { slot: "F2+TF2", venue: "SJT601", faculty: "SUGANTHINI C" },
+  'BCSE405L - Advanced Java Programming': [
+    { slot: 'C1+TC1', venue: 'SJT408', faculty: 'SINTHUJA M' },
+    { slot: 'G2+TG2', venue: 'SJT522', faculty: 'KANAGARAJ R' },
   ],
-  "BCSE404L - Internet and Web Programming": [
-    { slot: "E2+TE2", venue: "SJT408", faculty: "MARY MEKALA A" },
-    { slot: "E1+TE1", venue: "SJT408", faculty: "ARUN KUMAR G" },
+  'BCSE406L - NoSQL Databases': [
+    { slot: 'A1+TA1', venue: 'SJT505', faculty: 'JOSHVA DEVADAS T' },
+    { slot: 'A2+TA2', venue: 'SJT502', faculty: 'NAGA RAJA G' },
+    { slot: 'A1+TA1', venue: 'SJT508', faculty: 'NAVEENKUMAR J' },
+    { slot: 'A2+TA2', venue: 'SJT508', faculty: 'ANANDITA IYER A' },
   ],
-  "BCSE405L - Advanced Java Programming": [
-    { slot: "C1+TC1", venue: "SJT408", faculty: "SINTHUJA M" },
-    { slot: "G2+TG2", venue: "SJT522", faculty: "KANAGARAJ R" },
+  'BCSE407L - Computer Vision': [
+    { slot: 'D2+TD2', venue: 'SJT401', faculty: 'DHEEBA J' },
+    { slot: 'D2+TD2', venue: 'SJT402', faculty: 'ANISHA M. LAL' },
+    { slot: 'D1+TD1', venue: 'SJT409', faculty: 'BALAJI G N' },
+    { slot: 'D1+TD1', venue: 'SJT408', faculty: 'ANINDITA KUNDU' },
   ],
-  "BCSE406L - NoSQL Databases": [
-    { slot: "A1+TA1", venue: "SJT505", faculty: "JOSHVA DEVADAS T" },
-    { slot: "A2+TA2", venue: "SJT502", faculty: "NAGA RAJA G" },
-    { slot: "A1+TA1", venue: "SJT508", faculty: "NAVEENKUMAR J" },
-    { slot: "A2+TA2", venue: "SJT508", faculty: "ANANDITA IYER A" },
+  'BCSE408L - Cloud Computing': [
+    { slot: 'B1+TB1', venue: 'SJT521', faculty: 'RAMESH C' },
+    { slot: 'B2+TB2', venue: 'SJT522', faculty: 'PADMA PRIYA R' },
+    { slot: 'B1+TB1', venue: 'SJT505', faculty: 'SENDHIL KUMAR K.S' },
+    { slot: 'B2+TB2', venue: 'SJT505', faculty: 'ANIL KUMAR K' },
+    { slot: 'B1+TB1', venue: 'SJT508', faculty: 'NARAYANAN PRASANTH' },
+    { slot: 'B2+TB2', venue: 'SJT508', faculty: 'SIVA SHANMUGAM G' },
+    { slot: 'B1+TB1', venue: 'SJT513', faculty: 'KEERTHIKA P' },
+    { slot: 'B2+TB2', venue: 'SJT521', faculty: 'KANAGARAJ K' },
+    { slot: 'B2+TB2', venue: 'SJT513', faculty: 'SURESH P' },
+    { slot: 'B1+TB1', venue: 'SJT522', faculty: 'VENNIRA SELVI G' },
   ],
-  "BCSE407L - Computer Vision": [
-    { slot: "D2+TD2", venue: "SJT401", faculty: "DHEEBA J" },
-    { slot: "D2+TD2", venue: "SJT402", faculty: "ANISHA M. LAL" },
-    { slot: "D1+TD1", venue: "SJT409", faculty: "BALAJI G N" },
-    { slot: "D1+TD1", venue: "SJT408", faculty: "ANINDITA KUNDU" },
+  'BCSE409L - Natural Language Processing': [
+    { slot: 'D1+TD1', venue: 'SJT502', faculty: 'RAJESHKANNAN R' },
+    { slot: 'D2+TD2', venue: 'SJT505', faculty: 'SATHYARAJ R' },
+    { slot: 'D1+TD1', venue: 'SJT602', faculty: 'PRIYA G' },
+    { slot: 'D1+TD1', venue: 'SJT521', faculty: 'HITESHWAR KUMAR AZAD' },
+    { slot: 'D1+TD1', venue: 'SJT505', faculty: 'ARIVOLI A' },
+    { slot: 'D2+TD2', venue: 'SJT508', faculty: 'BIJI C L' },
+    { slot: 'D2+TD2', venue: 'SJT513', faculty: 'JABANJALIN HILDA J' },
+    { slot: 'D1+TD1', venue: 'SJT513', faculty: 'LYDIA JANE G' },
+    { slot: 'D2+TD2', venue: 'SJT521', faculty: 'VETRISELVI T' },
+    { slot: 'D2+TD2', venue: 'SJT408', faculty: 'SARAVANAGURU RA.K' },
   ],
-  "BCSE408L - Cloud Computing": [
-    { slot: "B1+TB1", venue: "SJT521", faculty: "RAMESH C" },
-    { slot: "B2+TB2", venue: "SJT522", faculty: "PADMA PRIYA R" },
-    { slot: "B1+TB1", venue: "SJT505", faculty: "SENDHIL KUMAR K.S" },
-    { slot: "B2+TB2", venue: "SJT505", faculty: "ANIL KUMAR K" },
-    { slot: "B1+TB1", venue: "SJT508", faculty: "NARAYANAN PRASANTH" },
-    { slot: "B2+TB2", venue: "SJT508", faculty: "SIVA SHANMUGAM G" },
-    { slot: "B1+TB1", venue: "SJT513", faculty: "KEERTHIKA P" },
-    { slot: "B2+TB2", venue: "SJT521", faculty: "KANAGARAJ K" },
-    { slot: "B2+TB2", venue: "SJT513", faculty: "SURESH P" },
-    { slot: "B1+TB1", venue: "SJT522", faculty: "VENNIRA SELVI G" },
-  ],
-  "BCSE409L - Natural Language Processing": [
-    { slot: "D1+TD1", venue: "SJT502", faculty: "RAJESHKANNAN R" },
-    { slot: "D2+TD2", venue: "SJT505", faculty: "SATHYARAJ R" },
-    { slot: "D1+TD1", venue: "SJT602", faculty: "PRIYA G" },
-    { slot: "D1+TD1", venue: "SJT521", faculty: "HITESHWAR KUMAR AZAD" },
-    { slot: "D1+TD1", venue: "SJT505", faculty: "ARIVOLI A" },
-    { slot: "D2+TD2", venue: "SJT508", faculty: "BIJI C L" },
-    { slot: "D2+TD2", venue: "SJT513", faculty: "JABANJALIN HILDA J" },
-    { slot: "D1+TD1", venue: "SJT513", faculty: "LYDIA JANE G" },
-    { slot: "D2+TD2", venue: "SJT521", faculty: "VETRISELVI T" },
-    { slot: "D2+TD2", venue: "SJT408", faculty: "SARAVANAGURU RA.K" },
-  ],
-  "BCSE410L - Cyber Security": [
-    { slot: "C2+TC2", venue: "SJT508", faculty: "JAYAKUMAR K" },
-    { slot: "C1+TC1", venue: "SJT513", faculty: "PRAKASH G" },
-    { slot: "C1+TC1", venue: "SJT508", faculty: "SAIRABANU J" },
-    { slot: "C2+TC2", venue: "SJT602", faculty: "SATISH C.J" },
-    { slot: "C1+TC1", venue: "SJT522", faculty: "SURESH A" },
-    { slot: "C2+TC2", venue: "SJT521", faculty: "MEENAKSHI S P" },
-    { slot: "C1+TC1", venue: "SJT601", faculty: "SATISH C.J" },
-    { slot: "C2+TC2", venue: "SJT513", faculty: "PRAKASH G" },
-    { slot: "C1+TC1", venue: "SJT521", faculty: "NITHYA N S" },
-    { slot: "C2+TC2", venue: "SJT522", faculty: "ILAYARAJA V" },
+  'BCSE410L - Cyber Security': [
+    { slot: 'C2+TC2', venue: 'SJT508', faculty: 'JAYAKUMAR K' },
+    { slot: 'C1+TC1', venue: 'SJT513', faculty: 'PRAKASH G' },
+    { slot: 'C1+TC1', venue: 'SJT508', faculty: 'SAIRABANU J' },
+    { slot: 'C2+TC2', venue: 'SJT602', faculty: 'SATISH C.J' },
+    { slot: 'C1+TC1', venue: 'SJT522', faculty: 'SURESH A' },
+    { slot: 'C2+TC2', venue: 'SJT521', faculty: 'MEENAKSHI S P' },
+    { slot: 'C1+TC1', venue: 'SJT601', faculty: 'SATISH C.J' },
+    { slot: 'C2+TC2', venue: 'SJT513', faculty: 'PRAKASH G' },
+    { slot: 'C1+TC1', venue: 'SJT521', faculty: 'NITHYA N S' },
+    { slot: 'C2+TC2', venue: 'SJT522', faculty: 'ILAYARAJA V' },
   ],
 };

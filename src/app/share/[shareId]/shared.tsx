@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import Image from "next/image";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import Image from 'next/image';
+import axios from 'axios';
 
-import CompoundTable from "@/components/ui/CompoundTable";
-import Navbar from "@/components/ui/Navbar";
-import Footer from "@/components/ui/Footer";
-import { useSession, signIn } from "next-auth/react";
-import { ZButton } from "@/components/ui/Buttons";
-import Popup from "@/components/ui/Popup";
-import AlertModal from "@/components/ui/AlertModal";
-import LoadingPopup from "@/components/ui/LoadingPopup";
+import CompoundTable from '@/components/ui/CompoundTable';
+import Navbar from '@/components/ui/Navbar';
+import Footer from '@/components/ui/Footer';
+import { useSession, signIn } from 'next-auth/react';
+import { ZButton } from '@/components/ui/Buttons';
+import Popup from '@/components/ui/Popup';
+import AlertModal from '@/components/ui/AlertModal';
+import LoadingPopup from '@/components/ui/LoadingPopup';
 
 type dataProps = {
   code: string;
@@ -27,37 +27,33 @@ export default function SharedTimetablePage() {
   const loggedIn = !!session?.user?.email;
   const userEmail = session?.user?.email;
   const shareId =
-    typeof params.shareId === "string"
+    typeof params.shareId === 'string'
       ? params.shareId
       : Array.isArray(params.shareId)
-      ? params.shareId[0]
-      : undefined;
+        ? params.shareId[0]
+        : undefined;
 
   const [data, setData] = useState<dataProps[] | null>(null);
-  const [title, setTitle] = useState<string>("");
+  const [title, setTitle] = useState<string>('');
   const [notFound, setNotFound] = useState(false);
   const [showSavePopup, setShowSavePopup] = useState(false);
-  const [saveTTName, setSaveTTName] = useState<string>("");
+  const [saveTTName, setSaveTTName] = useState<string>('');
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
-  const [alertMsg, setAlertMsg] = useState("");
+  const [alertMsg, setAlertMsg] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (!shareId) return;
     axios
       .get(`/api/shared-timetable/${shareId}`)
-      .then((res) => {
+      .then(res => {
         const json = res.data;
         if (json && json.timetable && Array.isArray(json.timetable.slots)) {
-          setTitle(json.timetable.title || "");
+          setTitle(json.timetable.title || '');
           setData(
             json.timetable.slots.map(
-              (item: {
-                courseCode: string;
-                slot: string;
-                facultyName: string;
-              }): dataProps => ({
+              (item: { courseCode: string; slot: string; facultyName: string }): dataProps => ({
                 code: item.courseCode,
                 slot: item.slot,
                 name: item.facultyName,
@@ -72,7 +68,7 @@ export default function SharedTimetablePage() {
   }, [shareId]);
 
   if (notFound) {
-    router.push("/404");
+    router.push('/404');
   }
 
   function showAlert(msg: string) {
@@ -82,7 +78,7 @@ export default function SharedTimetablePage() {
 
   async function handleSave() {
     if (!data || data.length === 0) {
-      showAlert("No timetable to save.");
+      showAlert('No timetable to save.');
       return;
     }
     if (!userEmail) {
@@ -91,24 +87,24 @@ export default function SharedTimetablePage() {
     }
     setIsSaving(true);
     try {
-      const slots = data.map((item) => ({
+      const slots = data.map(item => ({
         slot: item.slot,
         courseCode: item.code,
         courseName: item.code,
         facultyName: item.name,
       }));
-      const res = await axios.post("/api/save-timetable", {
-        title: saveTTName || title || "Saved Timetable",
+      const res = await axios.post('/api/save-timetable', {
+        title: saveTTName || title || 'Saved Timetable',
         slots,
         owner: userEmail,
       });
       if (res.data.success) {
-        showAlert("Timetable saved!");
+        showAlert('Timetable saved!');
       } else {
-        showAlert("Failed to save timetable.");
+        showAlert('Failed to save timetable.');
       }
     } catch {
-      showAlert("Error saving timetable.");
+      showAlert('Error saving timetable.');
     } finally {
       setIsSaving(false);
       setShowSavePopup(false);
@@ -134,7 +130,7 @@ export default function SharedTimetablePage() {
 
       <div className="flex-1 flex flex-col items-center mb-16">
         <div className="text-5xl mt-48 mb-8 font-pangolin text-black">
-          {title ? title : "Shared Timetable"}
+          {title ? title : 'Shared Timetable'}
         </div>
         {data && (
           <>
@@ -151,7 +147,7 @@ export default function SharedTimetablePage() {
                   if (!loggedIn) {
                     setShowLoginPopup(true);
                   } else {
-                    setSaveTTName(title || "Shared Timetable");
+                    setSaveTTName(title || 'Shared Timetable');
                     setShowSavePopup(true);
                   }
                 }}
@@ -177,7 +173,7 @@ export default function SharedTimetablePage() {
         <Popup
           type="login"
           closeLink={() => setShowLoginPopup(false)}
-          action={() => signIn("google", { callbackUrl: "/", redirect: true })}
+          action={() => signIn('google', { callbackUrl: '/', redirect: true })}
         />
       )}
       <AlertModal

@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/db";
-import Timetable from "@/models/timetable";
-import { generateShareId } from "@/lib/shareIDgenerate";
+import { NextRequest, NextResponse } from 'next/server';
+import dbConnect from '@/lib/db';
+import Timetable from '@/models/timetable';
+import { generateShareId } from '@/lib/shareIDgenerate';
 
 export async function POST(req: NextRequest) {
   await dbConnect();
@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   const { title, slots, owner, isPublic } = body;
 
   if (!title || !slots || !owner) {
-    return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+    return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
   }
 
   try {
@@ -30,9 +30,6 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json({ success: true, timetable });
   } catch {
-    return NextResponse.json(
-      { error: "Failed to save timetable" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to save timetable' }, { status: 500 });
   }
 }

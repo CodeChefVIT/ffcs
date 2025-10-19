@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Image from "next/image";
+import React, { useState } from 'react';
+import Image from 'next/image';
 
 const ReplaceSlot = () => {
-  const [fromSlot, setFromSlot] = useState("");
-  const [toSlot, setToSlot] = useState("");
-  const [faculty, setFaculty] = useState("");
+  const [fromSlot, setFromSlot] = useState('');
+  const [toSlot, setToSlot] = useState('');
+  const [faculty, setFaculty] = useState('');
 
-  const slotOptions = ["A1", "B1", "C1", "D1"];
-  const facultyOptions = ["Dr. Smith", "Prof. Mehta", "Ms. Rao"];
+  const slotOptions = ['A1', 'B1', 'C1', 'D1'];
+  const facultyOptions = ['Dr. Smith', 'Prof. Mehta', 'Ms. Rao'];
 
   const handleModify = () => {
-    console.log("Replacing", fromSlot, "with", toSlot, "for", faculty);
+    console.log('Replacing', fromSlot, 'with', toSlot, 'for', faculty);
   };
 
   const arrow = (
@@ -28,7 +28,6 @@ const ReplaceSlot = () => {
           Replace
         </span>
 
-        
         <div className="relative w-[45%] sm:w-[25%] lg:w-auto min-w-[100px]">
           <label htmlFor="fromSlot" className="sr-only">
             From Slot
@@ -36,11 +35,11 @@ const ReplaceSlot = () => {
           <select
             id="fromSlot"
             value={fromSlot}
-            onChange={(e) => setFromSlot(e.target.value)}
+            onChange={e => setFromSlot(e.target.value)}
             className="w-full rounded-lg border-2 border-black px-6 py-2 pr-10 bg-white focus:outline-none text-[1.1rem] lg:text-[1.2rem] appearance-none"
           >
             <option value="">Select Slot:</option>
-            {slotOptions.map((slot) => (
+            {slotOptions.map(slot => (
               <option key={slot} value={slot}>
                 {slot}
               </option>
@@ -53,7 +52,6 @@ const ReplaceSlot = () => {
           with
         </span>
 
-        
         <div className="relative w-[45%] sm:w-[25%] lg:w-auto min-w-[100px]">
           <label htmlFor="toSlot" className="sr-only">
             To Slot
@@ -61,11 +59,11 @@ const ReplaceSlot = () => {
           <select
             id="toSlot"
             value={toSlot}
-            onChange={(e) => setToSlot(e.target.value)}
+            onChange={e => setToSlot(e.target.value)}
             className="w-full rounded-lg border-2 border-black px-6 py-2 pr-10 bg-white focus:outline-none text-[1.1rem] lg:text-[1.2rem] appearance-none"
           >
             <option value="">Select Slot:</option>
-            {slotOptions.map((slot) => (
+            {slotOptions.map(slot => (
               <option key={slot} value={slot}>
                 {slot}
               </option>
@@ -78,7 +76,6 @@ const ReplaceSlot = () => {
           Faculty:
         </span>
 
-        
         <div className="relative w-full sm:w-[30%] lg:w-auto min-w-[120px]">
           <label htmlFor="faculty" className="sr-only">
             Faculty
@@ -86,11 +83,11 @@ const ReplaceSlot = () => {
           <select
             id="faculty"
             value={faculty}
-            onChange={(e) => setFaculty(e.target.value)}
+            onChange={e => setFaculty(e.target.value)}
             className="w-full rounded-lg border-2 border-black px-6 py-2 pr-10 bg-white focus:outline-none text-[1.1rem] lg:text-[1.2rem] appearance-none"
           >
             <option value="">Select Faculty:</option>
-            {facultyOptions.map((name) => (
+            {facultyOptions.map(name => (
               <option key={name} value={name}>
                 {name}
               </option>
@@ -99,7 +96,6 @@ const ReplaceSlot = () => {
           {arrow}
         </div>
 
-        
         <button
           onClick={handleModify}
           className="w-full sm:w-auto px-5 py-2 bg-[#90BDFF] text-black font-semibold rounded-xl border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:brightness-95 transition-all flex items-center justify-center gap-1 text-[1.1rem] lg:text-[1.2rem]"

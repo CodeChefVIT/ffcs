@@ -1,12 +1,12 @@
-import { SBST_LIST } from "./SBST";
-import { SCHEME_LIST } from "./SCHEME";
-import { SCOPE_LIST } from "./SCOPE";
-import { SCORE_LIST } from "./SCORE";
-import { SELECT_LIST } from "./SELECT";
-import { SENSE_LIST } from "./SENSE";
-import { SMEC_LIST } from "./SMEC";
-import { SCE_LIST } from "./SCE";
-import { MID_5YEAR } from "./MID_5YEAR";
+import { SBST_LIST } from './SBST';
+import { SCHEME_LIST } from './SCHEME';
+import { SCOPE_LIST } from './SCOPE';
+import { SCORE_LIST } from './SCORE';
+import { SELECT_LIST } from './SELECT';
+import { SENSE_LIST } from './SENSE';
+import { SMEC_LIST } from './SMEC';
+import { SCE_LIST } from './SCE';
+import { MID_5YEAR } from './MID_5YEAR';
 
 type FacultyEntry = {
   slot: string;

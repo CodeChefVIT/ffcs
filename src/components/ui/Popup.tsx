@@ -1,9 +1,9 @@
-"use client";
-import Image from "next/image";
-import React, { useState, useEffect } from "react";
-import { BasicToggleButton, GoogleLoginButton, ZButton } from "./Buttons";
-import CompoundTable from "./CompoundTable";
-import LoadingPopup from "./LoadingPopup";
+'use client';
+import Image from 'next/image';
+import React, { useState, useEffect } from 'react';
+import { BasicToggleButton, GoogleLoginButton, ZButton } from './Buttons';
+import CompoundTable from './CompoundTable';
+import LoadingPopup from './LoadingPopup';
 
 type dataProps = {
   code: string;
@@ -13,81 +13,79 @@ type dataProps = {
 
 type PopupProps = {
   type:
-    | "login"
-    | "rem_course"
-    | "rem_allcourse"
-    | "share_tt"
-    | "save_tt"
-    | "delete_tt"
-    | "view_tt"
-    | "logout"
-    | "rename_tt";
+    | 'login'
+    | 'rem_course'
+    | 'rem_allcourse'
+    | 'share_tt'
+    | 'save_tt'
+    | 'delete_tt'
+    | 'view_tt'
+    | 'logout'
+    | 'rename_tt';
   dataTitle?: string;
   dataBody?: string;
   dataTT?: dataProps[];
   closeLink: () => void;
   action?: () => void;
   shareEnabledDefault?: boolean;
-  shareSwitchAction?: (state: "on" | "off") => void;
+  shareSwitchAction?: (state: 'on' | 'off') => void;
   onInputChange?: (val: string) => void;
 };
 
 const colorMap = {
-  red: ["#FFD3D3", "#FF8C8C"],
-  yellow: ["#FFF8D1", "#FFEA79"],
-  green: ["#E5FFDE", "#ABDE9F"],
-  blue: ["#E2F2F9", "#8BD5FF"],
-  purple: ["#E4E9FC", "#94ACFF"],
+  red: ['#FFD3D3', '#FF8C8C'],
+  yellow: ['#FFF8D1', '#FFEA79'],
+  green: ['#E5FFDE', '#ABDE9F'],
+  blue: ['#E2F2F9', '#8BD5FF'],
+  purple: ['#E4E9FC', '#94ACFF'],
 };
 
 const typeColorMap = {
-  login: "yellow",
-  rem_course: "red",
-  rem_allcourse: "red",
-  share_tt: "blue",
-  save_tt: "green",
-  delete_tt: "red",
-  view_tt: "blue",
-  logout: "red",
-  rename_tt: "purple",
+  login: 'yellow',
+  rem_course: 'red',
+  rem_allcourse: 'red',
+  share_tt: 'blue',
+  save_tt: 'green',
+  delete_tt: 'red',
+  view_tt: 'blue',
+  logout: 'red',
+  rename_tt: 'purple',
 };
 
 const typeTitleMap = {
-  login: "Sign In",
-  rem_course: "Remove Course",
-  rem_allcourse: "Remove All",
-  share_tt: "Share Timetable",
-  save_tt: "Save Timetable",
-  delete_tt: "Delete Timetable",
-  view_tt: "",
-  logout: "Log Out",
-  rename_tt: "Rename Timetable",
+  login: 'Sign In',
+  rem_course: 'Remove Course',
+  rem_allcourse: 'Remove All',
+  share_tt: 'Share Timetable',
+  save_tt: 'Save Timetable',
+  delete_tt: 'Delete Timetable',
+  view_tt: '',
+  logout: 'Log Out',
+  rename_tt: 'Rename Timetable',
 };
 
 const typeTextMap = {
-  login: "Please log-in to save and share your time-tables.",
-  rem_course: "Are you sure you want to remove this course?",
-  rem_allcourse: "Are you sure you want to remove all courses?",
-  share_tt: "Share your timetable with anyone.",
-  save_tt: "Save this timetable in your collection.",
-  delete_tt: "Are you sure you want to delete this timetable?",
-  view_tt: "",
-  logout: "Are you sure you want to log out?",
-  rename_tt: "Enter a new name for your timetable.",
+  login: 'Please log-in to save and share your time-tables.',
+  rem_course: 'Are you sure you want to remove this course?',
+  rem_allcourse: 'Are you sure you want to remove all courses?',
+  share_tt: 'Share your timetable with anyone.',
+  save_tt: 'Save this timetable in your collection.',
+  delete_tt: 'Are you sure you want to delete this timetable?',
+  view_tt: '',
+  logout: 'Are you sure you want to log out?',
+  rename_tt: 'Enter a new name for your timetable.',
 };
 
 function copy(text: string) {
-  if (typeof navigator !== "undefined" && navigator.clipboard) {
+  if (typeof navigator !== 'undefined' && navigator.clipboard) {
     navigator.clipboard.writeText(String(text));
   }
 }
 
-
-
 export default function Popup({
   type,
   dataTitle,
-  dataBody = "",
+  dataBody = '',
   dataTT,
   closeLink,
   action,
@@ -96,31 +94,25 @@ export default function Popup({
   onInputChange,
   isLoading = false,
 }: PopupProps & { isLoading?: boolean }) {
-  const theme = colorMap[typeColorMap[type] as keyof typeof colorMap] || [
-    "#E4E9FC",
-    "#94ACFF",
-  ];
-  const title = typeTitleMap[type] || dataTitle || "";
-  const text = typeTextMap[type] || "";
+  const theme = colorMap[typeColorMap[type] as keyof typeof colorMap] || ['#E4E9FC', '#94ACFF'];
+  const title = typeTitleMap[type] || dataTitle || '';
+  const text = typeTextMap[type] || '';
 
-  const shareEnabled =
-    shareEnabledDefault !== undefined ? shareEnabledDefault : true;
-  const [shareState] = useState<"on" | "off">(shareEnabled ? "on" : "off");
+  const shareEnabled = shareEnabledDefault !== undefined ? shareEnabledDefault : true;
+  const [shareState] = useState<'on' | 'off'>(shareEnabled ? 'on' : 'off');
 
   const [isInvalid, setIsInvalid] = useState(false);
 
   useEffect(() => {
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
     };
   }, []);
 
-
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#425D5F]/75 backdrop-blur-xs z-50 select-none">
-     
-      {type === "share_tt" && isLoading && <LoadingPopup isLoading={true} />}
+      {type === 'share_tt' && isLoading && <LoadingPopup isLoading={true} />}
       <div
         style={{ backgroundColor: theme[0] }}
         className={`
@@ -149,29 +141,23 @@ export default function Popup({
           h-12
         `}
         >
-          
           <div className="flex-1 text-left flex items-center justify-start pl-4">
             <div className="flex gap-2">
               {[...Array(3)].map((_, i) => (
-                <div
-                  key={i}
-                  className="w-4 h-4 rounded-full bg-black opacity-50"
-                />
+                <div key={i} className="w-4 h-4 rounded-full bg-black opacity-50" />
               ))}
             </div>
           </div>
 
-          
           <div className="absolute left-1/2 -translate-x-1/2 text-center flex items-center justify-center font-poppins font-bold text-2xl">
             {title}
           </div>
 
-          
           {!(
-            type == "delete_tt" ||
-            type == "rem_course" ||
-            type == "logout" ||
-            type == "rem_allcourse"
+            type == 'delete_tt' ||
+            type == 'rem_course' ||
+            type == 'logout' ||
+            type == 'rem_allcourse'
           ) && (
             <div className="flex-1 text-right flex items-center justify-end">
               <div
@@ -202,7 +188,7 @@ export default function Popup({
         </div>
 
         <div className="flex flex-col items-center justify-center text-lg font-poppins font-regular p-8">
-          {type == "login" && (
+          {type == 'login' && (
             <div className="flex flex-col items-center justify-center relative">
               <div className="absolute -top-0 -left-12 -rotate-[5deg] z-[1]">
                 <Image
@@ -252,21 +238,17 @@ export default function Popup({
                   priority
                 />
               </div>
-              <div className="break-words max-w-xs w-full text-center mt-4 mb-8 z-10">
-                {text}
-              </div>
+              <div className="break-words max-w-xs w-full text-center mt-4 mb-8 z-10">{text}</div>
               <GoogleLoginButton onClick={action} />
               <div className="mt-8" />
             </div>
           )}
 
-          {type == "share_tt" && (
+          {type == 'share_tt' && (
             <div className="flex flex-col items-center justify-center">
-              <div className="break-words w-full text-center mt-2 mb-4">
-                {text}
-              </div>
+              <div className="break-words w-full text-center mt-2 mb-4">{text}</div>
 
-              {shareState === "on" && (
+              {shareState === 'on' && (
                 <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
                   <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-[#606060] font-semibold">
                     {dataBody}
@@ -276,21 +258,19 @@ export default function Popup({
                     text="Copy"
                     color="blue"
                     forceColor={theme[1]}
-                    onClick={() => copy(dataBody || "")}
+                    onClick={() => copy(dataBody || '')}
                   />
                 </div>
               )}
             </div>
           )}
 
-          {type == "rem_course" && (
+          {type == 'rem_course' && (
             <div>
               <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
                 {text}
                 <br />
-                {dataBody && (
-                  <span className="font-semibold">&quot;{dataBody}&quot;</span>
-                )}
+                {dataBody && <span className="font-semibold">&quot;{dataBody}&quot;</span>}
               </div>
               <div className="flex flex-row items-center justify-center gap-4 mb-4">
                 <ZButton
@@ -311,14 +291,12 @@ export default function Popup({
             </div>
           )}
 
-          {type == "rem_allcourse" && (
+          {type == 'rem_allcourse' && (
             <div>
               <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
                 {text}
                 <br />
-                {dataBody && (
-                  <span className="font-semibold">&quot;{dataBody}&quot;</span>
-                )}
+                {dataBody && <span className="font-semibold">&quot;{dataBody}&quot;</span>}
               </div>
               <div className="flex flex-row items-center justify-center gap-4 mb-4">
                 <ZButton
@@ -339,14 +317,12 @@ export default function Popup({
             </div>
           )}
 
-          {type == "delete_tt" && (
+          {type == 'delete_tt' && (
             <div>
               <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
                 {text}
                 <br />
-                {dataBody && (
-                  <span className="font-semibold">&quot;{dataBody}&quot;</span>
-                )}
+                {dataBody && <span className="font-semibold">&quot;{dataBody}&quot;</span>}
               </div>
               <div className="flex flex-row items-center justify-center gap-4 mb-4">
                 <ZButton
@@ -367,146 +343,137 @@ export default function Popup({
             </div>
           )}
 
-          {type == "save_tt" && (
-  <div>
-    <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
-      {text}
-    </div>
-    <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
-      <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-black font-semibold">
-        <input
-          type="text"
-          className={`bg-transparent outline-none w-full text-center font-semibold border-2 rounded-lg py-1 px-3 ${
-            isInvalid ? "border-red-500" : "border-white"
-          }`}
-          placeholder="Enter timetable name"
-          value={dataBody}
-          onChange={(e) => {
-            const inputValue = e.target.value;
-            const normalized = inputValue.toLowerCase().replace(/\s+/g, "");
-             const forbiddenWords = [
-              "vishvanathan",
-              "vishvnathan",
-              "vishwanathan",
-              "viswanathan",
-              "vishva",
-              "viswa",
-              "vit",
-              "vellore institute of technology",
-              "vitstudent",
-              "vit.ac.in",
-              "vit vellore",
-              "vit chennai",
-              "vit bhopal",
-              "vit ap",
-              "vit university",
-              "vtop",
-            ];
+          {type == 'save_tt' && (
+            <div>
+              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">{text}</div>
+              <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
+                <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-black font-semibold">
+                  <input
+                    type="text"
+                    className={`bg-transparent outline-none w-full text-center font-semibold border-2 rounded-lg py-1 px-3 ${
+                      isInvalid ? 'border-red-500' : 'border-white'
+                    }`}
+                    placeholder="Enter timetable name"
+                    value={dataBody}
+                    onChange={e => {
+                      const inputValue = e.target.value;
+                      const normalized = inputValue.toLowerCase().replace(/\s+/g, '');
+                      const forbiddenWords = [
+                        'vishvanathan',
+                        'vishvnathan',
+                        'vishwanathan',
+                        'viswanathan',
+                        'vishva',
+                        'viswa',
+                        'vit',
+                        'vellore institute of technology',
+                        'vitstudent',
+                        'vit.ac.in',
+                        'vit vellore',
+                        'vit chennai',
+                        'vit bhopal',
+                        'vit ap',
+                        'vit university',
+                        'vtop',
+                      ];
 
-            
+                      const containsForbidden = forbiddenWords.some(word =>
+                        normalized.includes(word.replace(/\s+/g, ''))
+                      );
 
-            const containsForbidden = forbiddenWords.some((word) =>
-              normalized.includes(word.replace(/\s+/g, ""))
-            );
-            
+                      setIsInvalid(containsForbidden);
+                      if (!containsForbidden) {
+                        onInputChange?.(inputValue);
+                      }
+                    }}
+                  />
+                </div>
+                <ZButton
+                  type="regular"
+                  text="Save"
+                  color="green"
+                  forceColor={theme[1]}
+                  onClick={action}
+                />
+              </div>
+              {isInvalid && (
+                <div className="text-red-500 text-sm mt-1 text-center">
+                  This name contains restricted words.
+                </div>
+              )}
+            </div>
+          )}
 
-            setIsInvalid(containsForbidden);
-            if (!containsForbidden) {
-              onInputChange?.(inputValue);
-            }
-          }}
-        />
-      </div>
-      <ZButton
-        type="regular"
-        text="Save"
-        color="green"
-        forceColor={theme[1]}
-        onClick={action}
-      />
-    </div>
-    {isInvalid && (
-      <div className="text-red-500 text-sm mt-1 text-center">
-        This name contains restricted words.
-      </div>
-    )}
-  </div>
-)}
+          {type == 'rename_tt' && (
+            <div>
+              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">{text}</div>
+              <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
+                <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-black font-semibold">
+                  <input
+                    type="text"
+                    className={`bg-transparent outline-none w-full text-center font-semibold border-2 rounded-lg py-1 px-3 ${
+                      isInvalid ? 'border-red-500' : 'border-white'
+                    }`}
+                    placeholder="Enter timetable name"
+                    value={dataBody}
+                    onChange={e => {
+                      const inputValue = e.target.value;
+                      const normalized = inputValue.toLowerCase().replace(/\s+/g, '');
 
-          {type == "rename_tt" && (
-  <div>
-    <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
-      {text}
-    </div>
-    <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
-      <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-black font-semibold">
-        <input
-          type="text"
-          className={`bg-transparent outline-none w-full text-center font-semibold border-2 rounded-lg py-1 px-3 ${
-            isInvalid ? "border-red-500" : "border-white"
-          }`}
-          placeholder="Enter timetable name"
-          value={dataBody}
-          onChange={(e) => {
-            const inputValue = e.target.value;
-            const normalized = inputValue.toLowerCase().replace(/\s+/g, "");
+                      const forbiddenWords = [
+                        'vishvanathan',
+                        'vishvnathan',
+                        'vishwanathan',
+                        'viswanathan',
+                        'vishva',
+                        'viswa',
+                        'vit',
+                        'vellore institute of technology',
+                        'vitstudent',
+                        'vit.ac.in',
+                        'vit vellore',
+                        'vit chennai',
+                        'vit bhopal',
+                        'vit ap',
+                        'vit university',
+                        'vtop',
+                      ];
 
-            const forbiddenWords = [
-              "vishvanathan",
-              "vishvnathan",
-              "vishwanathan",
-              "viswanathan",
-              "vishva",
-              "viswa",
-              "vit",
-              "vellore institute of technology",
-              "vitstudent",
-              "vit.ac.in",
-              "vit vellore",
-              "vit chennai",
-              "vit bhopal",
-              "vit ap",
-              "vit university",
-              "vtop",
-            ];
+                      const containsForbidden = forbiddenWords.some(word =>
+                        normalized.includes(word.replace(/\s+/g, ''))
+                      );
 
-            const containsForbidden = forbiddenWords.some((word) =>
-              normalized.includes(word.replace(/\s+/g, ""))
-            );
-
-            setIsInvalid(containsForbidden);
-            if (!containsForbidden) {
-              onInputChange?.(inputValue);
-            }
-          }}
-          autoFocus
-        />
-      </div>
-      <ZButton
-        type="regular"
-        text="Save"
-        color="green"
-        forceColor={theme[1]}
-        onClick={action}
-      />
-    </div>
-    {isInvalid && (
-      <div className="text-red-500 text-sm mt-1 text-center">
-        This name contains restricted words.
-      </div>
-    )}
-  </div>
-)}
-          {type == "view_tt" && (
+                      setIsInvalid(containsForbidden);
+                      if (!containsForbidden) {
+                        onInputChange?.(inputValue);
+                      }
+                    }}
+                    autoFocus
+                  />
+                </div>
+                <ZButton
+                  type="regular"
+                  text="Save"
+                  color="green"
+                  forceColor={theme[1]}
+                  onClick={action}
+                />
+              </div>
+              {isInvalid && (
+                <div className="text-red-500 text-sm mt-1 text-center">
+                  This name contains restricted words.
+                </div>
+              )}
+            </div>
+          )}
+          {type == 'view_tt' && (
             <div className="flex flex-col w-full max-h-[90vh] overflow-hidden">
-              
               <div className="overflow-auto w-full max-h-[calc(70vh-80px)]">
                 <div className="min-w-[768px] text-center p-4">
                   <CompoundTable data={dataTT || []} />
                 </div>
               </div>
 
-             
               <div className="flex flex-row flex-wrap items-center justify-center gap-16 px-4 py-3">
                 <div className="flex flex-row items-center gap-3">
                   <ZButton
@@ -522,8 +489,8 @@ export default function Popup({
                 <div className="flex flex-row items-center gap-4">
                   <span className="font-semibold text-lg">Public Sharing</span>
                   <BasicToggleButton
-                    key={shareEnabledDefault ? "on" : "off"}
-                    defaultState={shareEnabledDefault ? "on" : "off"}
+                    key={shareEnabledDefault ? 'on' : 'off'}
+                    defaultState={shareEnabledDefault ? 'on' : 'off'}
                     onToggle={shareSwitchAction ?? (() => {})}
                   />
                 </div>
@@ -531,11 +498,9 @@ export default function Popup({
             </div>
           )}
 
-          {type === "logout" && (
+          {type === 'logout' && (
             <div>
-              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">
-                {text}
-              </div>
+              <div className="break-words max-w-lg w-full text-center mt-2 mb-8">{text}</div>
               <div className="flex flex-row items-center justify-center gap-4 mb-4">
                 <ZButton
                   type="regular"

@@ -1,24 +1,14 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import { ZButton } from "../ui/Buttons";
+import React, { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import { ZButton } from '../ui/Buttons';
 
-import { data } from "@/data/faculty";
-import { fullCourseData } from "@/lib/type";
-import AlertModal from "../ui/AlertModal";
+import { data } from '@/data/faculty';
+import { fullCourseData } from '@/lib/type';
+import AlertModal from '../ui/AlertModal';
 
-const schools = [
-  "SCOPE",
-  "SELECT",
-  "SCORE",
-  "SMEC",
-  "SBST",
-  "SCHEME",
-  "SENSE",
-  "SCE",
-  "MID_5YEAR",
-];
+const schools = ['SCOPE', 'SELECT', 'SCORE', 'SMEC', 'SBST', 'SCHEME', 'SENSE', 'SCE', 'MID_5YEAR'];
 
 type SelectFieldProps = {
   label: string;
@@ -28,13 +18,7 @@ type SelectFieldProps = {
   renderOption?: (option: string) => string;
 };
 
-function SelectField({
-  label,
-  value,
-  options,
-  onChange,
-  renderOption,
-}: SelectFieldProps) {
+function SelectField({ label, value, options, onChange, renderOption }: SelectFieldProps) {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -45,15 +29,11 @@ function SelectField({
         setIsOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const selectedLabel = value
-    ? renderOption
-      ? renderOption(value)
-      : value
-    : `Select ${label}`;
+  const selectedLabel = value ? (renderOption ? renderOption(value) : value) : `Select ${label}`;
 
   return (
     <div ref={ref} className="relative w-full font-semibold text-[#000000B2]">
@@ -64,7 +44,7 @@ function SelectField({
         className={`
          w-full h-10 pl-3 pr-12 text-left bg-white rounded-xl border-3 border-black
          cursor-pointer relative
-         ${!value ? "text-[#00000080]" : "text-black"}
+         ${!value ? 'text-[#00000080]' : 'text-black'}
          truncate whitespace-nowrap overflow-hidden
        `}
       >
@@ -95,7 +75,7 @@ function SelectField({
               }}
               className={`
                px-4 py-2 cursor-pointer hover:bg-[#FFEA79]
-               ${value === option ? "bg-[#C1FF83] font-bold" : ""}
+               ${value === option ? 'bg-[#C1FF83] font-bold' : ''}
              `}
             >
               {renderOption ? renderOption(option) : option}
@@ -121,30 +101,28 @@ function generateCourseSlotsSingle({
   subjectData: SubjectEntry[];
   selectedFaculties: string[];
   selectedSlot: string;
-  courseType: "th" | "lab";
+  courseType: 'th' | 'lab';
 }) {
-  if (courseType === "th") {
+  if (courseType === 'th') {
     return [
       {
         slotName: selectedSlot,
-        slotFaculties: selectedFaculties.map((facultyName) => ({
+        slotFaculties: selectedFaculties.map(facultyName => ({
           facultyName,
         })),
       },
     ];
   }
-  if (courseType === "lab") {
+  if (courseType === 'lab') {
     const labSlots = [
       ...new Set(
         subjectData
-          .filter((entry: SubjectEntry) =>
-            selectedFaculties.includes(entry.faculty)
-          )
+          .filter((entry: SubjectEntry) => selectedFaculties.includes(entry.faculty))
           .map((entry: SubjectEntry) => entry.slot)
       ),
     ];
 
-    return labSlots.map((slotName) => ({
+    return labSlots.map(slotName => ({
       slotName,
       slotFaculties: subjectData
         .filter(
@@ -175,40 +153,33 @@ function generateCourseSlotsLabOnly({
 }: {
   subjectData: SubjectEntry[];
   selectedFaculties: string[];
-  labShift: "morning" | "evening";
+  labShift: 'morning' | 'evening';
 }) {
   const isMorningSlot = (slot: string) => {
-    const parts = slot.split("+").map((s) => parseInt(s.replace("L", ""), 10));
-    return parts.every((num) => num <= 30); // Define morning range
+    const parts = slot.split('+').map(s => parseInt(s.replace('L', ''), 10));
+    return parts.every(num => num <= 30); // Define morning range
   };
 
   const isEveningSlot = (slot: string) => {
-    const parts = slot.split("+").map((s) => parseInt(s.replace("L", ""), 10));
-    return parts.every((num) => num > 30); // Define evening range
+    const parts = slot.split('+').map(s => parseInt(s.replace('L', ''), 10));
+    return parts.every(num => num > 30); // Define evening range
   };
 
-  const isSlotInShift = labShift === "morning" ? isMorningSlot : isEveningSlot;
+  const isSlotInShift = labShift === 'morning' ? isMorningSlot : isEveningSlot;
 
   const labSlots = [
     ...new Set(
       subjectData
-        .filter(
-          (entry) =>
-            selectedFaculties.includes(entry.faculty) &&
-            isSlotInShift(entry.slot)
-        )
-        .map((entry) => entry.slot)
+        .filter(entry => selectedFaculties.includes(entry.faculty) && isSlotInShift(entry.slot))
+        .map(entry => entry.slot)
     ),
   ];
 
-  return labSlots.map((slotName) => ({
+  return labSlots.map(slotName => ({
     slotName,
     slotFaculties: subjectData
-      .filter(
-        (entry) =>
-          entry.slot === slotName && selectedFaculties.includes(entry.faculty)
-      )
-      .map((entry) => ({
+      .filter(entry => entry.slot === slotName && selectedFaculties.includes(entry.faculty))
+      .map(entry => ({
         facultyName: entry.faculty,
       })),
   }));
@@ -229,32 +200,27 @@ function generateCourseSlotsBoth({
   selectedSlot: string;
   selectedFaculties: string[];
 }) {
-  const [courseCode] = selectedSubject.split(" - ");
+  const [courseCode] = selectedSubject.split(' - ');
   const baseCode = courseCode.slice(0, -1);
 
-  const labEntryKey = Object.keys(data[selectedSchool][selectedDomain]).find(
-    (key) => {
-      const code = key.split(" - ")[0];
-      return (
-        code.slice(0, -1) === baseCode &&
-        (code.endsWith("P") || code.endsWith("E"))
-      );
-    }
-  );
+  const labEntryKey = Object.keys(data[selectedSchool][selectedDomain]).find(key => {
+    const code = key.split(' - ')[0];
+    return code.slice(0, -1) === baseCode && (code.endsWith('P') || code.endsWith('E'));
+  });
 
   const labData: SubjectEntry[] = labEntryKey
     ? data[selectedSchool][selectedDomain][labEntryKey]
     : [];
 
-  const isMorningTheory = selectedSlot.includes("1");
-  const isEveningTheory = selectedSlot.includes("2");
+  const isMorningTheory = selectedSlot.includes('1');
+  const isEveningTheory = selectedSlot.includes('2');
 
   const isValidLabSlot = (slot: string): boolean => {
-    const parts = slot.split("+").map((s) => parseInt(s.replace("L", ""), 10));
+    const parts = slot.split('+').map(s => parseInt(s.replace('L', ''), 10));
     if (parts.some(isNaN)) return false;
 
-    const allMorning = parts.every((num) => num <= 30);
-    const allEvening = parts.every((num) => num >= 31);
+    const allMorning = parts.every(num => num <= 30);
+    const allEvening = parts.every(num => num >= 31);
 
     if (isMorningTheory) return allEvening;
     if (isEveningTheory) return allMorning;
@@ -262,19 +228,17 @@ function generateCourseSlotsBoth({
     return false;
   };
 
-  const slotFaculties = selectedFaculties.map((facultyName) => {
+  const slotFaculties = selectedFaculties.map(facultyName => {
     const labSlots = labData
       .filter(
-        (entry) =>
-          entry.faculty === facultyName &&
-          entry.slot.startsWith("L") &&
-          isValidLabSlot(entry.slot)
+        entry =>
+          entry.faculty === facultyName && entry.slot.startsWith('L') && isValidLabSlot(entry.slot)
       )
-      .map((entry) => entry.slot);
+      .map(entry => entry.slot);
 
     return {
       facultyName,
-      ...(labSlots.length > 0 && { facultyLabSlot: labSlots.join(", ") }),
+      ...(labSlots.length > 0 && { facultyLabSlot: labSlots.join(', ') }),
     };
   });
 
@@ -288,128 +252,122 @@ function generateCourseSlotsBoth({
 
 const prettifyDomain = (domain: string) => {
   return domain
-    .replace(/([a-z])([A-Z])/g, "$1 $2")
-    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2")
-    .replace(/([a-zA-Z])([0-9])/g, "$1 $2")
-    .replace(/([0-9])([a-zA-Z])/g, "$1 $2")
-    .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2")
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
+    .replace(/([a-zA-Z])([0-9])/g, '$1 $2')
+    .replace(/([0-9])([a-zA-Z])/g, '$1 $2')
+    .replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')
     .trim();
 };
-type ShiftKey = "morning" | "evening";
+type ShiftKey = 'morning' | 'evening';
 export default function FacultySelector({
   onConfirm,
 }: {
   onConfirm: (course: fullCourseData) => void;
 }) {
-  const [selectedLabShift, setSelectedLabShift] = useState<"" | ShiftKey>("");
-  const [labShiftOptions, setLabShiftOptions] = useState<
-    Record<ShiftKey, string[]>
-  >({
+  const [selectedLabShift, setSelectedLabShift] = useState<'' | ShiftKey>('');
+  const [labShiftOptions, setLabShiftOptions] = useState<Record<ShiftKey, string[]>>({
     morning: [],
     evening: [],
   });
-  const [selectedSchool, setSelectedSchool] = useState("SCOPE");
+  const [selectedSchool, setSelectedSchool] = useState('SCOPE');
   const [selectedFaculties, setSelectedFaculties] = useState<string[]>([]);
   const [priorityList, setPriorityList] = useState<string[]>([]);
-  const [selectedDomain, setSelectedDomain] = useState("");
-  const [selectedSubject, setSelectedSubject] = useState("");
-  const [selectedSlot, setSelectedSlot] = useState("");
+  const [selectedDomain, setSelectedDomain] = useState('');
+  const [selectedSubject, setSelectedSubject] = useState('');
+  const [selectedSlot, setSelectedSlot] = useState('');
   const [domains, setDomains] = useState<string[]>([]);
   const [subjects, setSubjects] = useState<string[]>([]);
   const [slots, setSlots] = useState<string[]>([]);
   const [faculties, setFaculties] = useState<string[]>([]);
-  const [popup, setPopup] = useState({ showPopup: false, message: "" });
+  const [popup, setPopup] = useState({ showPopup: false, message: '' });
 
-  const LOCAL_STORAGE_KEY = "selectedCourses";
+  const LOCAL_STORAGE_KEY = 'selectedCourses';
 
   const handleReset = () => {
-    setSelectedDomain("");
-    setSelectedSubject("");
-    setSelectedSlot("");
+    setSelectedDomain('');
+    setSelectedSubject('');
+    setSelectedSlot('');
     setSubjects([]);
     setSlots([]);
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
-    setSelectedLabShift("");
+    setSelectedLabShift('');
     setLabShiftOptions({ morning: [], evening: [] });
   };
 
   const handleConfirm = () => {
     if (!selectedDomain) {
-      setPopup({ showPopup: true, message: "Please select a domain." });
+      setPopup({ showPopup: true, message: 'Please select a domain.' });
       return;
     }
 
     if (!selectedSubject) {
-      setPopup({ showPopup: true, message: "Please select a subject." });
+      setPopup({ showPopup: true, message: 'Please select a subject.' });
       return;
     }
     if (
       !selectedLabShift &&
-      selectedSubject.split(" - ")[0].endsWith("P") &&
-      !selectedSubject.split(" - ")[0].startsWith("BSTS")
+      selectedSubject.split(' - ')[0].endsWith('P') &&
+      !selectedSubject.split(' - ')[0].startsWith('BSTS')
     ) {
-      setPopup({ showPopup: true, message: "Please select a lab slot." });
+      setPopup({ showPopup: true, message: 'Please select a lab slot.' });
       return;
     }
     if (
       !selectedSlot &&
-      (!selectedSubject.split(" - ")[0].endsWith("P") ||
-        selectedSubject.split(" - ")[0].startsWith("BSTS"))
+      (!selectedSubject.split(' - ')[0].endsWith('P') ||
+        selectedSubject.split(' - ')[0].startsWith('BSTS'))
     ) {
-      setPopup({ showPopup: true, message: "Please select a theory slot." });
+      setPopup({ showPopup: true, message: 'Please select a theory slot.' });
       return;
     }
 
     if (priorityList.length === 0) {
       setPopup({
         showPopup: true,
-        message: "Please select at least one faculty.",
+        message: 'Please select at least one faculty.',
       });
       return;
     } else {
-      setPopup({ showPopup: true, message: "Successfully added course" });
+      setPopup({ showPopup: true, message: 'Successfully added course' });
     }
 
-    const courseCode = selectedSubject.split(" - ")[0];
+    const courseCode = selectedSubject.split(' - ')[0];
     const courseCodeType = courseCode.at(-1);
     const id = selectedSubject;
 
-    const labSubject = Object.keys(data[selectedSchool][selectedDomain]).filter(
-      (subject) => {
-        const subjectCode = subject.split(" - ")[0];
-        return (
-          subjectCode.slice(0, -1) === courseCode.slice(0, -1) &&
-          (subjectCode.at(-1) === "P" || subjectCode.at(-1) === "E") &&
-          subjectCode !== courseCode &&
-          !courseCode.startsWith("BSTS")
-        );
-      }
-    );
+    const labSubject = Object.keys(data[selectedSchool][selectedDomain]).filter(subject => {
+      const subjectCode = subject.split(' - ')[0];
+      return (
+        subjectCode.slice(0, -1) === courseCode.slice(0, -1) &&
+        (subjectCode.at(-1) === 'P' || subjectCode.at(-1) === 'E') &&
+        subjectCode !== courseCode &&
+        !courseCode.startsWith('BSTS')
+      );
+    });
 
-    const courseType: "both" | "th" | "lab" =
-      labSubject.length == 1 || courseCodeType === "E"
-        ? "both"
-        : courseCodeType === "P" && !courseCode.startsWith("BSTS")
-          ? "lab"
-          : courseCodeType === "L" || courseCode.startsWith("BSTS")
-            ? "th"
-            : "th";
+    const courseType: 'both' | 'th' | 'lab' =
+      labSubject.length == 1 || courseCodeType === 'E'
+        ? 'both'
+        : courseCodeType === 'P' && !courseCode.startsWith('BSTS')
+          ? 'lab'
+          : courseCodeType === 'L' || courseCode.startsWith('BSTS')
+            ? 'th'
+            : 'th';
 
-    const courseName = selectedSubject.split(" - ")[1];
+    const courseName = selectedSubject.split(' - ')[1];
 
     let courseCodeLab;
     let courseNameLab;
     let courseSlots;
-    if (courseCodeType == "E") {
+    if (courseCodeType == 'E') {
       courseCodeLab = courseCode;
       courseNameLab = courseName;
     } else {
-      courseCodeLab = courseCodeLab =
-        labSubject.length == 1 ? labSubject[0].split(" - ")[0] : "";
-      courseNameLab =
-        labSubject.length == 1 ? labSubject[0].split(" - ")[1] : "";
+      courseCodeLab = courseCodeLab = labSubject.length == 1 ? labSubject[0].split(' - ')[0] : '';
+      courseNameLab = labSubject.length == 1 ? labSubject[0].split(' - ')[1] : '';
     }
     if (selectedLabShift) {
       courseSlots = generateCourseSlotsLabOnly({
@@ -418,7 +376,7 @@ export default function FacultySelector({
         labShift: selectedLabShift,
       });
     } else {
-      if (courseType == "both") {
+      if (courseType == 'both') {
         courseSlots = generateCourseSlotsBoth({
           data,
           selectedSchool,
@@ -427,19 +385,19 @@ export default function FacultySelector({
           selectedSlot,
           selectedFaculties: priorityList,
         });
-      } else if (courseType == "th") {
+      } else if (courseType == 'th') {
         courseSlots = generateCourseSlotsSingle({
           subjectData: data[selectedSchool][selectedDomain][selectedSubject],
           selectedFaculties,
           selectedSlot,
-          courseType: "th",
+          courseType: 'th',
         });
       } else {
         courseSlots = generateCourseSlotsSingle({
           subjectData: data[selectedSchool][selectedDomain][selectedSubject],
           selectedFaculties,
           selectedSlot,
-          courseType: "lab",
+          courseType: 'lab',
         });
       }
     }
@@ -448,7 +406,7 @@ export default function FacultySelector({
       courseType,
       courseCode,
       courseName,
-      ...((labSubject.length == 1 || courseCodeType === "E") && {
+      ...((labSubject.length == 1 || courseCodeType === 'E') && {
         courseCodeLab,
         courseNameLab,
       }),
@@ -456,35 +414,29 @@ export default function FacultySelector({
     };
 
     try {
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         const savedCoursesJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
-        const savedCourses: fullCourseData[] = savedCoursesJSON
-          ? JSON.parse(savedCoursesJSON)
-          : [];
+        const savedCourses: fullCourseData[] = savedCoursesJSON ? JSON.parse(savedCoursesJSON) : [];
 
-        const exists = savedCourses.some((c) => c.id === id);
+        const exists = savedCourses.some(c => c.id === id);
         const newCourses = exists
-          ? savedCourses.map((course) =>
-            course.id === id ? courseData : course
-          )
+          ? savedCourses.map(course => (course.id === id ? courseData : course))
           : [...savedCourses, courseData];
 
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newCourses));
       }
     } catch (error) {
-      console.warn("Failed to update localStorage for selectedCourses", error);
+      console.warn('Failed to update localStorage for selectedCourses', error);
     }
     onConfirm(courseData);
   };
 
   const toggleFaculty = (name: string) => {
-    setSelectedFaculties((prev) => {
-      const updated = prev.includes(name)
-        ? prev.filter((f) => f !== name)
-        : [...prev, name];
+    setSelectedFaculties(prev => {
+      const updated = prev.includes(name) ? prev.filter(f => f !== name) : [...prev, name];
 
-      setPriorityList((prevPriority) => {
-        const updatedPriority = updated.map((faculty) =>
+      setPriorityList(prevPriority => {
+        const updatedPriority = updated.map(faculty =>
           prevPriority.includes(faculty) ? faculty : faculty
         );
         return updatedPriority;
@@ -518,11 +470,11 @@ export default function FacultySelector({
       const domainData = schoolData[selectedDomain];
       const allSubjects = Object.keys(domainData);
 
-      const filteredSubjects = allSubjects.filter((subject) => {
-        const code = subject.split(" - ")[0];
+      const filteredSubjects = allSubjects.filter(subject => {
+        const code = subject.split(' - ')[0];
         const base = code.slice(0, -1);
-        if (code.endsWith("P")) {
-          return !allSubjects.some((s) => s.startsWith(base + "L"));
+        if (code.endsWith('P')) {
+          return !allSubjects.some(s => s.startsWith(base + 'L'));
         }
         return true;
       });
@@ -531,25 +483,19 @@ export default function FacultySelector({
 
       if (selectedSubject) {
         const subjectData = domainData[selectedSubject];
-        const courseCode = selectedSubject.split(" - ")[0];
+        const courseCode = selectedSubject.split(' - ')[0];
 
-        if (courseCode.endsWith("P") && !courseCode.startsWith("BSTS")) {
-          const allLabSlots = [
-            ...new Set(subjectData.map((entry) => entry.slot)),
-          ];
+        if (courseCode.endsWith('P') && !courseCode.startsWith('BSTS')) {
+          const allLabSlots = [...new Set(subjectData.map(entry => entry.slot))];
 
-          const morningLabSlots = allLabSlots.filter((slot) => {
-            const parts = slot
-              .split("+")
-              .map((s) => parseInt(s.replace("L", ""), 10));
-            return parts.every((num) => num <= 30);
+          const morningLabSlots = allLabSlots.filter(slot => {
+            const parts = slot.split('+').map(s => parseInt(s.replace('L', ''), 10));
+            return parts.every(num => num <= 30);
           });
 
-          const eveningLabSlots = allLabSlots.filter((slot) => {
-            const parts = slot
-              .split("+")
-              .map((s) => parseInt(s.replace("L", ""), 10));
-            return parts.every((num) => num >= 31);
+          const eveningLabSlots = allLabSlots.filter(slot => {
+            const parts = slot.split('+').map(s => parseInt(s.replace('L', ''), 10));
+            return parts.every(num => num >= 31);
           });
           setLabShiftOptions({
             morning: morningLabSlots,
@@ -558,29 +504,23 @@ export default function FacultySelector({
 
           if (selectedLabShift) {
             const slotsForShift =
-              selectedLabShift === "morning"
-                ? morningLabSlots
-                : eveningLabSlots;
+              selectedLabShift === 'morning' ? morningLabSlots : eveningLabSlots;
             setSlots(slotsForShift);
           }
 
           return;
         } else {
-          const rawSlots = subjectData.map((entry) => entry.slot);
-          const filteredSlots = rawSlots.filter(
-            (slot) => !slot.startsWith("L")
-          );
+          const rawSlots = subjectData.map(entry => entry.slot);
+          const filteredSlots = rawSlots.filter(slot => !slot.startsWith('L'));
           const uniqueSlots = [...new Set(filteredSlots)];
           setSlots(uniqueSlots);
         }
 
         if (selectedSlot) {
           const facultiesForSlot = subjectData
-            .filter((entry) => entry.slot === selectedSlot)
-            .map((entry) =>
-              courseCode.startsWith("BSTS")
-                ? `${entry.faculty} (${entry.venue})`
-                : entry.faculty
+            .filter(entry => entry.slot === selectedSlot)
+            .map(entry =>
+              courseCode.startsWith('BSTS') ? `${entry.faculty} (${entry.venue})` : entry.faculty
             );
 
           setSelectedFaculties([]);
@@ -589,13 +529,7 @@ export default function FacultySelector({
         }
       }
     }
-  }, [
-    selectedSchool,
-    selectedDomain,
-    selectedSubject,
-    selectedSlot,
-    selectedLabShift,
-  ]);
+  }, [selectedSchool, selectedDomain, selectedSubject, selectedSlot, selectedLabShift]);
 
   useEffect(() => {
     if (!selectedSubject || !selectedLabShift) return;
@@ -603,57 +537,50 @@ export default function FacultySelector({
     const labSlots = labShiftOptions[selectedLabShift];
     if (!labSlots || labSlots.length === 0) return;
 
-    const subjectData =
-      data[selectedSchool]?.[selectedDomain]?.[selectedSubject];
+    const subjectData = data[selectedSchool]?.[selectedDomain]?.[selectedSubject];
     if (!subjectData) return;
 
     const facultiesInSelectedShift = subjectData
-      .filter((entry) => labSlots.includes(entry.slot))
-      .map((entry) => entry.faculty);
+      .filter(entry => labSlots.includes(entry.slot))
+      .map(entry => entry.faculty);
 
     setFaculties([...new Set(facultiesInSelectedShift)]);
-  }, [
-    selectedLabShift,
-    labShiftOptions,
-    selectedSubject,
-    selectedDomain,
-    selectedSchool,
-  ]);
+  }, [selectedLabShift, labShiftOptions, selectedSubject, selectedDomain, selectedSchool]);
 
   const handleSchoolChange = (school: string) => {
     setSelectedSchool(school);
-    setSelectedDomain("");
-    setSelectedSubject("");
-    setSelectedSlot("");
+    setSelectedDomain('');
+    setSelectedSubject('');
+    setSelectedSlot('');
     setSubjects([]);
     setSlots([]);
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
-    setSelectedLabShift("");
+    setSelectedLabShift('');
     setLabShiftOptions({ morning: [], evening: [] });
   };
 
   const handleDomainChange = (domain: string) => {
     setSelectedDomain(domain);
-    setSelectedSubject("");
-    setSelectedSlot("");
+    setSelectedSubject('');
+    setSelectedSlot('');
     setSubjects([]);
     setSlots([]);
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
-    setSelectedLabShift("");
+    setSelectedLabShift('');
     setLabShiftOptions({ morning: [], evening: [] });
   };
 
   const handleSubjectChange = (subject: string) => {
     setSelectedSubject(subject);
-    setSelectedSlot("");
+    setSelectedSlot('');
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
-    setSelectedLabShift("");
+    setSelectedLabShift('');
     setLabShiftOptions({ morning: [], evening: [] });
   };
 
@@ -661,25 +588,23 @@ export default function FacultySelector({
     setSelectedSlot(slot);
     setSelectedFaculties([]);
     setPriorityList([]);
-    setSelectedLabShift("");
+    setSelectedLabShift('');
     setLabShiftOptions({ morning: [], evening: [] });
   };
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
     if (!selectedSubject || (!selectedSlot && !selectedLabShift)) return;
 
     try {
       const savedCoursesJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
-      const savedCourses: fullCourseData[] = savedCoursesJSON
-        ? JSON.parse(savedCoursesJSON)
-        : [];
+      const savedCourses: fullCourseData[] = savedCoursesJSON ? JSON.parse(savedCoursesJSON) : [];
 
-      const course = savedCourses.find((c) => c.id === selectedSubject);
+      const course = savedCourses.find(c => c.id === selectedSubject);
 
       if (!course) return;
 
-      const matchingSlots = course.courseSlots.filter((slot) => {
+      const matchingSlots = course.courseSlots.filter(slot => {
         if (selectedLabShift) {
           const shiftSlots = labShiftOptions[selectedLabShift] || [];
           return shiftSlots.includes(slot.slotName);
@@ -687,8 +612,8 @@ export default function FacultySelector({
         return slot.slotName === selectedSlot;
       });
       if (matchingSlots.length > 0) {
-        const allFaculties = matchingSlots.flatMap((slot) =>
-          slot.slotFaculties.map((f) => f.facultyName)
+        const allFaculties = matchingSlots.flatMap(slot =>
+          slot.slotFaculties.map(f => f.facultyName)
         );
 
         const uniqueFaculties = Array.from(new Set(allFaculties));
@@ -697,13 +622,11 @@ export default function FacultySelector({
         setPriorityList(uniqueFaculties);
       }
     } catch (err) {
-      console.error("Error restoring faculties from localStorage", err);
+      console.error('Error restoring faculties from localStorage', err);
     }
   }, [selectedSubject, selectedSlot, selectedLabShift, labShiftOptions]);
 
-  const [tooltipFacultyIndex, setTooltipFacultyIndex] = React.useState<
-    number | null
-  >(null);
+  const [tooltipFacultyIndex, setTooltipFacultyIndex] = React.useState<number | null>(null);
 
   return (
     <div>
@@ -711,21 +634,22 @@ export default function FacultySelector({
         <div className="font-poppins relative bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[4px_4px_0_0_black] mx-auto overflow-hidden">
           <div className="flex items-center gap-4 pt-4 px-4 m-4">
             <span className="font-semibold text-lg mr-2">Select School:</span>
-            {schools.map((school) => (
+            {schools.map(school => (
               <button
                 key={school}
                 onClick={() => handleSchoolChange(school)}
-                className={`px-3 py-1 rounded-full text-sm font-bold border-2 shadow-[2px_2px_0_0_black] border-black cursor-pointer transition duration-100 active:shadow-[1px_1px_0_0_black] active:translate-x-[1px] active:translate-y-[1px] ${selectedSchool === school ? "bg-[#FFEA79]" : "bg-white"
-                  }`}
+                className={`px-3 py-1 rounded-full text-sm font-bold border-2 shadow-[2px_2px_0_0_black] border-black cursor-pointer transition duration-100 active:shadow-[1px_1px_0_0_black] active:translate-x-[1px] active:translate-y-[1px] ${
+                  selectedSchool === school ? 'bg-[#FFEA79]' : 'bg-white'
+                }`}
               >
-                {school=="MID_5YEAR" ? "SCOPE(MID)": school}
+                {school == 'MID_5YEAR' ? 'SCOPE(MID)' : school}
               </button>
             ))}
           </div>
 
           <div className="grid grid-cols-3 gap-4 m-4 px-4">
             <SelectField
-              label={"Domain"}
+              label={'Domain'}
               value={selectedDomain}
               options={domains}
               onChange={handleDomainChange}
@@ -737,22 +661,20 @@ export default function FacultySelector({
               options={subjects}
               onChange={handleSubjectChange}
             />
-            {selectedSubject.split(" - ")[0].endsWith("P") &&
-              !selectedSubject.split(" - ")[0].startsWith("BSTS") ? (
+            {selectedSubject.split(' - ')[0].endsWith('P') &&
+            !selectedSubject.split(' - ')[0].startsWith('BSTS') ? (
               <SelectField
                 label="Slot"
                 value={selectedLabShift}
-                onChange={(e) => {
-                  if (e === "morning" || e === "evening") {
+                onChange={e => {
+                  if (e === 'morning' || e === 'evening') {
                     setSelectedLabShift(e);
                   } else {
-                    setSelectedLabShift("");
+                    setSelectedLabShift('');
                   }
                 }}
-                options={["morning", "evening"].filter(
-                  (shift) =>
-                    labShiftOptions[shift as keyof typeof labShiftOptions]
-                      ?.length > 0
+                options={['morning', 'evening'].filter(
+                  shift => labShiftOptions[shift as keyof typeof labShiftOptions]?.length > 0
                 )}
               />
             ) : (
@@ -761,7 +683,7 @@ export default function FacultySelector({
                 value={selectedSlot}
                 options={[...slots].sort((a, b) => a.localeCompare(b))}
                 onChange={handleSlotChange}
-                renderOption={(option) => option}
+                renderOption={option => option}
                 aria-label="Select slot"
               />
             )}
@@ -776,24 +698,18 @@ export default function FacultySelector({
               </div>
               <div className="pt-4 pb-4 px-6 overflow-y-auto space-y-2 scrollbar-thin h-86">
                 {faculties.map((faculty: string, index: number) => {
+                  let labTooltip = '';
 
-                  let labTooltip = "";
-
-                  if (
-                    selectedDomain &&
-                    selectedSubject &&
-                    data[selectedSchool]?.[selectedDomain]
-                  ) {
-                    const courseCode = selectedSubject.split(" - ")[0];
+                  if (selectedDomain && selectedSubject && data[selectedSchool]?.[selectedDomain]) {
+                    const courseCode = selectedSubject.split(' - ')[0];
                     const baseCode = courseCode.slice(0, -1);
                     const domainData = data[selectedSchool][selectedDomain];
 
-
-                    const labSubjectKey = Object.keys(domainData).find((subject) => {
-                      const subjectCode = subject.split(" - ")[0];
+                    const labSubjectKey = Object.keys(domainData).find(subject => {
+                      const subjectCode = subject.split(' - ')[0];
                       return (
                         subjectCode.slice(0, -1) === baseCode &&
-                        (subjectCode.endsWith("P") || subjectCode.endsWith("E"))
+                        (subjectCode.endsWith('P') || subjectCode.endsWith('E'))
                       );
                     });
 
@@ -802,44 +718,39 @@ export default function FacultySelector({
                         (entry: SubjectEntry) => entry.faculty === faculty
                       );
                       let shiftSlots = [];
-                      if (selectedLabShift === "morning") {
+                      if (selectedLabShift === 'morning') {
                         shiftSlots = labEntries
-                          .map((entry) => entry.slot)
-                          .filter((slot) =>
-                            slot
-                              .split("+")
-                              .every((s) => parseInt(s.replace("L", ""), 10) <= 30)
+                          .map(entry => entry.slot)
+                          .filter(slot =>
+                            slot.split('+').every(s => parseInt(s.replace('L', ''), 10) <= 30)
                           );
-                      } else if (selectedLabShift === "evening") {
+                      } else if (selectedLabShift === 'evening') {
                         shiftSlots = labEntries
-                          .map((entry) => entry.slot)
-                          .filter((slot) =>
-                            slot
-                              .split("+")
-                              .every((s) => parseInt(s.replace("L", ""), 10) >= 31)
+                          .map(entry => entry.slot)
+                          .filter(slot =>
+                            slot.split('+').every(s => parseInt(s.replace('L', ''), 10) >= 31)
                           );
                       } else {
-
-                        const isMorningSelected =
-                          selectedSlot.endsWith("1");
-                        const isEveningSelected =
-                          selectedSlot.endsWith("2");
+                        const isMorningSelected = selectedSlot.endsWith('1');
+                        const isEveningSelected = selectedSlot.endsWith('2');
 
                         shiftSlots = labEntries
-                          .map((entry) => entry.slot)
-                          .filter((slot) => {
-                            const parts = slot.split("+");
-                            return parts.every((s) => {
-                              const num = parseInt(s.replace("L", ""), 10);
-                              return isMorningSelected ? num >= 31 : isEveningSelected ? num <= 30 : false;
+                          .map(entry => entry.slot)
+                          .filter(slot => {
+                            const parts = slot.split('+');
+                            return parts.every(s => {
+                              const num = parseInt(s.replace('L', ''), 10);
+                              return isMorningSelected
+                                ? num >= 31
+                                : isEveningSelected
+                                  ? num <= 30
+                                  : false;
                             });
                           });
                       }
 
-
                       if (shiftSlots.length > 0) {
-                        labTooltip = `${shiftSlots.join(", ")}`;
-
+                        labTooltip = `${shiftSlots.join(', ')}`;
                       }
                     }
                   }
@@ -849,24 +760,16 @@ export default function FacultySelector({
                         className="flex items-center justify-between py-1 px-2 relative cursor-pointer"
                         tabIndex={labTooltip ? 0 : -1}
                         aria-label={labTooltip || undefined}
-                        onMouseEnter={() =>
-                          labTooltip && setTooltipFacultyIndex(index)
-                        }
-                        onMouseLeave={() =>
-                          labTooltip && setTooltipFacultyIndex(null)
-                        }
-                        onFocus={() =>
-                          labTooltip && setTooltipFacultyIndex(index)
-                        }
-                        onBlur={() =>
-                          labTooltip && setTooltipFacultyIndex(null)
-                        }
+                        onMouseEnter={() => labTooltip && setTooltipFacultyIndex(index)}
+                        onMouseLeave={() => labTooltip && setTooltipFacultyIndex(null)}
+                        onFocus={() => labTooltip && setTooltipFacultyIndex(index)}
+                        onBlur={() => labTooltip && setTooltipFacultyIndex(null)}
                         onClick={() => toggleFaculty(faculty)}
                       >
                         {labTooltip && tooltipFacultyIndex === index && (
                           <div
                             className="z-50 absolute flex right-0 items-center pr-12"
-                            style={{ pointerEvents: "none" }}
+                            style={{ pointerEvents: 'none' }}
                           >
                             <div
                               className={`
@@ -883,9 +786,7 @@ export default function FacultySelector({
                             </div>
                           </div>
                         )}
-                        <span className="text-[#000000] relative">
-                          {faculty}
-                        </span>
+                        <span className="text-[#000000] relative">{faculty}</span>
                         <label className="inline-flex items-center gap-1 cursor-pointer">
                           <input
                             type="checkbox"
@@ -899,8 +800,8 @@ export default function FacultySelector({
                             <Image
                               src={
                                 selectedFaculties.includes(faculty)
-                                  ? "/icons/check.svg"
-                                  : "/icons/blank.svg"
+                                  ? '/icons/check.svg'
+                                  : '/icons/blank.svg'
                               }
                               alt={
                                 selectedFaculties.includes(faculty)
@@ -938,14 +839,10 @@ export default function FacultySelector({
                       key={index}
                       className="group cursor-grab active:cursor-grabbing"
                       draggable
-                      onDragStart={(e) =>
-                        e.dataTransfer.setData("text/plain", index.toString())
-                      }
-                      onDragOver={(e) => e.preventDefault()}
-                      onDrop={(e) => {
-                        const fromIndex = Number(
-                          e.dataTransfer.getData("text/plain")
-                        );
+                      onDragStart={e => e.dataTransfer.setData('text/plain', index.toString())}
+                      onDragOver={e => e.preventDefault()}
+                      onDrop={e => {
+                        const fromIndex = Number(e.dataTransfer.getData('text/plain'));
                         if (fromIndex === index) return;
 
                         const updatedList = [...priorityList];
@@ -970,9 +867,7 @@ export default function FacultySelector({
                           >
                             <Image
                               src={
-                                index !== 0
-                                  ? "/icons/chevron_up.svg"
-                                  : "/icons/chevron_up_gray.svg"
+                                index !== 0 ? '/icons/chevron_up.svg' : '/icons/chevron_up_gray.svg'
                               }
                               width={120}
                               height={80}
@@ -994,8 +889,8 @@ export default function FacultySelector({
                               height={80}
                               src={
                                 index !== priorityList.length - 1
-                                  ? "/icons/chevron_down.svg"
-                                  : "/icons/chevron_down_gray.svg"
+                                  ? '/icons/chevron_down.svg'
+                                  : '/icons/chevron_down_gray.svg'
                               }
                               alt="down"
                               className="w-3 h-3"
@@ -1042,9 +937,9 @@ export default function FacultySelector({
         open={popup.showPopup}
         message={popup.message}
         onClose={() => {
-          setPopup({ showPopup: false, message: "" });
+          setPopup({ showPopup: false, message: '' });
         }}
-        color={""}
+        color={''}
       />
     </div>
   );

@@ -3,18 +3,16 @@ interface FavouriteTimetable {
   id: string;
 }
 
-export const getFavourites = async (
-  userEmail: string
-): Promise<FavouriteTimetable[]> => {
+export const getFavourites = async (userEmail: string): Promise<FavouriteTimetable[]> => {
   try {
-    const res = await fetch("/api/user/favorites", {
+    const res = await fetch('/api/user/favorites', {
       headers: {
         email: userEmail,
       },
     });
 
     if (!res.ok) {
-      throw new Error("Failed to fetch favourites");
+      throw new Error('Failed to fetch favourites');
     }
 
     const data = await res.json();
@@ -23,23 +21,23 @@ export const getFavourites = async (
       id: fav._id,
     }));
   } catch (err) {
-    console.error("getFavourites error:", err);
+    console.error('getFavourites error:', err);
     return [];
   }
 };
 
 export const deleteFavourite = async (email: string, id: string) => {
-  const res = await fetch("/api/user/favorites", {
-    method: "DELETE",
+  const res = await fetch('/api/user/favorites', {
+    method: 'DELETE',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       email,
     },
     body: JSON.stringify({ id }),
   });
 
   if (!res.ok) {
-    throw new Error("Failed to delete timetable");
+    throw new Error('Failed to delete timetable');
   }
 };
 
@@ -48,10 +46,10 @@ export const renameFavourite = async (
   id: string,
   newName: string
 ): Promise<void> => {
-  const res = await fetch("/api/user/favorites", {
-    method: "PUT",
+  const res = await fetch('/api/user/favorites', {
+    method: 'PUT',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       email,
     },
     body: JSON.stringify({ id, newName }),
@@ -59,6 +57,6 @@ export const renameFavourite = async (
 
   if (!res.ok) {
     const data = await res.json();
-    throw new Error(data.error || "Failed to rename timetable");
+    throw new Error(data.error || 'Failed to rename timetable');
   }
 };

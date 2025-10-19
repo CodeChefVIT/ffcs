@@ -1,45 +1,41 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 
-import Hero from "@/components/ui/Hero";
-import Navbar from "@/components/ui/Navbar";
-import Footer from "@/components/ui/Footer";
-import Accordion from "@/components/ui/Accordion";
+import Hero from '@/components/ui/Hero';
+import Navbar from '@/components/ui/Navbar';
+import Footer from '@/components/ui/Footer';
+import Accordion from '@/components/ui/Accordion';
 
-import FacultySelector from "@/components/cards/FacultySelector";
-import CourseCard from "@/components/cards/CourseCard";
-import ViewTimeTable from "@/components/cards/ViewTimeTable";
-import { TimetableProvider } from "@/lib/TimeTableContext";
-import { fullCourseData } from "@/lib/type";
-const LOCAL_STORAGE_KEY = "selectedCourses";
+import FacultySelector from '@/components/cards/FacultySelector';
+import CourseCard from '@/components/cards/CourseCard';
+import ViewTimeTable from '@/components/cards/ViewTimeTable';
+import { TimetableProvider } from '@/lib/TimeTableContext';
+import { fullCourseData } from '@/lib/type';
+const LOCAL_STORAGE_KEY = 'selectedCourses';
 
 export default function View() {
-  const [selectedCourses, setSelectedCourses] = useState<fullCourseData[]>(
-    () => {
-      if (typeof window === "undefined") return [];
-      try {
-        const saved = localStorage.getItem("selectedCourses");
-        return saved ? JSON.parse(saved) : [];
-      } catch {
-        return [];
-      }
+  const [selectedCourses, setSelectedCourses] = useState<fullCourseData[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const saved = localStorage.getItem('selectedCourses');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
     }
-  );
+  });
 
   const facultySelectorOnConfirm = (newCourse: fullCourseData) => {
-    setSelectedCourses((prevCourses) => {
-      const existingIndex = prevCourses.findIndex(
-        (course) => course.id === newCourse.id
-      );
+    setSelectedCourses(prevCourses => {
+      const existingIndex = prevCourses.findIndex(course => course.id === newCourse.id);
 
       if (existingIndex !== -1) {
         const existingCourse = prevCourses[existingIndex];
 
-        const updatedSlots = newCourse.courseSlots.map((newSlot) => {
+        const updatedSlots = newCourse.courseSlots.map(newSlot => {
           const existingSlot = existingCourse.courseSlots.find(
-            (slot) => slot.slotName === newSlot.slotName
+            slot => slot.slotName === newSlot.slotName
           );
 
           if (existingSlot) {
@@ -53,10 +49,7 @@ export default function View() {
         });
 
         const preservedOldSlots = existingCourse.courseSlots.filter(
-          (oldSlot) =>
-            !newCourse.courseSlots.some(
-              (newSlot) => newSlot.slotName === oldSlot.slotName
-            )
+          oldSlot => !newCourse.courseSlots.some(newSlot => newSlot.slotName === oldSlot.slotName)
         );
 
         const mergedSlots = [...preservedOldSlots, ...updatedSlots];
@@ -77,12 +70,12 @@ export default function View() {
   };
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === 'undefined') return;
 
     try {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(selectedCourses));
     } catch (e) {
-      console.error("Failed to save courses to localStorage", e);
+      console.error('Failed to save courses to localStorage', e);
     }
   }, [selectedCourses]);
 
@@ -112,10 +105,8 @@ export default function View() {
         <div className="w-full px-8">
           <CourseCard
             selectedCourses={selectedCourses}
-            onDelete={(id) =>
-              setSelectedCourses((prev) => prev.filter((c) => c.id !== id))
-            }
-            onUpdate={(updatedCourses) => setSelectedCourses(updatedCourses)}
+            onDelete={id => setSelectedCourses(prev => prev.filter(c => c.id !== id))}
+            onUpdate={updatedCourses => setSelectedCourses(updatedCourses)}
           />
         </div>
 

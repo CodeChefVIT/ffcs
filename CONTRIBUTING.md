@@ -20,15 +20,18 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 - Review code on other people’s submissions and help improving / finding vulnerabilities
 
 ## Making a PR
+
 - Provide all the appropriate details asked in PR template
 - A pull request doesn’t have to represent finished work. It’s usually better to open a pull request early on, so others can watch or give feedback on your progress. Just mark it as a “WIP” (Work in Progress) in the subject line. You can always add more commits later.
 
 ## Opening an Issue
+
 - Make use of an appropriate Issue Template
 - We welcome Feature request, Bug Report, Documentation fix and others
 - Do not open critical security issues here, report them directly at [our email](mailto:contact@codechefvit.com).
 
 ## Communicating effectively
+
 **Give context.** Help others get quickly up to speed. If you’re running into an error, explain what you’re trying to do and how to reproduce it. If you’re suggesting a new idea, explain why you think it’d be useful to the project (not just to you!).
 
 ```
@@ -65,8 +68,10 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 ```
 
 ## Misc
+
 - You are welcome to Propose a new feature by creating an **Issue**.
 - You may Discuss a high-level topic or idea (for example, community, vision or policies) by writing to us at our [Email](mailto:contact@codechefvit.com).
 
 ## Attribution
+
 - [Open Source Guide](https://opensource.guide/how-to-contribute/)

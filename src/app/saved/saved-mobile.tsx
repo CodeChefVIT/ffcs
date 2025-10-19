@@ -1,18 +1,16 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
-import Navbar from "@/components/ui/Navbar";
-import Footer from "@/components/ui/Footer";
-import Image from "next/image";
-import axios from "axios";
-import { PopupViewTT } from "@/components/ui/PopupMobile";
-import Loader from "@/components/ui/Loader";
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import Navbar from '@/components/ui/Navbar';
+import Footer from '@/components/ui/Footer';
+import Image from 'next/image';
+import axios from 'axios';
+import { PopupViewTT } from '@/components/ui/PopupMobile';
+import Loader from '@/components/ui/Loader';
 
 async function fetchTimetablesByOwner(owner: string) {
-  const res = await axios.get(
-    `/api/timetables?owner=${encodeURIComponent(owner)}`
-  );
+  const res = await axios.get(`/api/timetables?owner=${encodeURIComponent(owner)}`);
   return res.data;
 }
 
@@ -42,11 +40,9 @@ export default function SavedMobile() {
   const [timetables, setTimetables] = useState<TimetableEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
-  const [popupType, setPopupType] = useState<
-    "view_tt" | "delete_tt" | "rename_tt" | null
-  >(null);
+  const [popupType, setPopupType] = useState<'view_tt' | 'delete_tt' | 'rename_tt' | null>(null);
   const [popupSlots, setPopupSlots] = useState<PopupSlot[]>([]);
-  const [popupTitle, setPopupTitle] = useState<string>("");
+  const [popupTitle, setPopupTitle] = useState<string>('');
   const [selectedTT, setSelectedTT] = useState<TimetableEntry | null>(null);
   const [publicToggle, setPublicToggle] = useState(true);
 
@@ -54,13 +50,13 @@ export default function SavedMobile() {
     if (!userEmail) return;
     setLoading(true);
     fetchTimetablesByOwner(userEmail)
-      .then((data) => setTimetables(data))
+      .then(data => setTimetables(data))
       .catch(() => setTimetables([]))
       .finally(() => setLoading(false));
   }, [userEmail]);
 
-  function convertSlots(slots: TimetableEntry["slots"]): PopupSlot[] {
-    return slots.map((item) => ({
+  function convertSlots(slots: TimetableEntry['slots']): PopupSlot[] {
+    return slots.map(item => ({
       code: item.courseCode,
       slot: item.slot,
       name: item.facultyName,
@@ -70,7 +66,7 @@ export default function SavedMobile() {
   function handleView(tt: TimetableEntry) {
     setPopupSlots(convertSlots(tt.slots));
     setPopupTitle(tt.title);
-    setPopupType("view_tt");
+    setPopupType('view_tt');
     setSelectedTT(tt);
     setPublicToggle(tt.isPublic);
     setShowPopup(true);
@@ -83,22 +79,20 @@ export default function SavedMobile() {
       });
       const res = await axios.get(`/api/timetables/${tt._id}`);
       const updated = res.data;
-      if (!updated.shareId) throw new Error("No shareId found");
+      if (!updated.shareId) throw new Error('No shareId found');
       const url = `${window.location.origin}/share/${updated.shareId}`;
       await navigator.clipboard.writeText(url);
     } catch {}
   }
 
-  async function handleTogglePublic(state: "on" | "off") {
+  async function handleTogglePublic(state: 'on' | 'off') {
     if (!selectedTT) return;
-    setPublicToggle(state === "on");
+    setPublicToggle(state === 'on');
     await axios.patch(`/api/timetables/${selectedTT._id}`, {
-      isPublic: state === "on",
+      isPublic: state === 'on',
     });
-    setTimetables((prev) =>
-      prev.map((tt) =>
-        tt._id === selectedTT._id ? { ...tt, isPublic: state === "on" } : tt
-      )
+    setTimetables(prev =>
+      prev.map(tt => (tt._id === selectedTT._id ? { ...tt, isPublic: state === 'on' } : tt))
     );
   }
 
@@ -119,9 +113,7 @@ export default function SavedMobile() {
 
       <Navbar page="mobile" />
 
-      <div className="text-4xl mb-8 mt-28 text-black font-pangolin">
-        Saved Timetables
-      </div>
+      <div className="text-4xl mb-8 mt-28 text-black font-pangolin">Saved Timetables</div>
 
       <ul className="w-full space-y-4 px-6">
         {timetables.map((tt, index) => (
@@ -158,7 +150,7 @@ export default function SavedMobile() {
 
       <Footer type="mobile" />
 
-      {showPopup && popupType === "view_tt" && selectedTT && (
+      {showPopup && popupType === 'view_tt' && selectedTT && (
         <PopupViewTT
           TTName={popupTitle}
           TTData={popupSlots}
@@ -169,9 +161,9 @@ export default function SavedMobile() {
           shareLink={
             selectedTT.shareId
               ? `${
-                  typeof window !== "undefined" ? window.location.origin : ""
+                  typeof window !== 'undefined' ? window.location.origin : ''
                 }/share/${selectedTT.shareId}`
-              : ""
+              : ''
           }
         />
       )}
