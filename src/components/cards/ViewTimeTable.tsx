@@ -12,6 +12,7 @@ import Popup from '@/components/ui/Popup';
 import AlertModal from '@/components/ui/AlertModal';
 import LoadingPopup from '@/components/ui/LoadingPopup';
 import { getCurrentDateTime } from '@/lib/utils';
+import { getSlot } from '@/lib/slots';
 import { generateShareId } from '@/lib/shareIDgenerate';
 import { exportToPDF } from '@/lib/exportToPDF';
 import ComboBox from '../ui/ComboBox';
@@ -49,6 +50,9 @@ export default function ViewTimeTable() {
   const owner = session?.user?.email || null;
 
   const [filterFaculty, setFilterFaculty] = useState('');
+  const [smartFilter, setSmartFilter] = useState<'none' | 'sameBuilding' | 'close' | 'noMix'>(
+    'none'
+  );
   const facultyList = Array.from(
     new Set(
       originalTimetableData
@@ -74,6 +78,155 @@ export default function ViewTimeTable() {
   const timetableCount = allTimetables.length;
   const selectedData = allTimetables[selectedIndex] || [];
   const visibleIndexes = getVisibleIndexes(timetableNumber, timetableCount);
+
+  // --- Helpers to analyse timetable geometry and slots ---
+  function extractAtomicSlots(slotName?: string) {
+    if (!slotName) return [] as string[];
+    // break combined names: __ (th__lab), +, comma
+    return slotName
+      .split(/__|\+|,\s*/)
+      .map(s => s.trim())
+      .filter(Boolean);
+  }
+
+  function containsMorningAndEvening(slots: string[]) {
+    const has1 = slots.some(s => /1\b/.test(s));
+    const has2 = slots.some(s => /2\b/.test(s));
+    return has1 && has2;
+  }
+
+  function getSlotCenters(slots: string[]) {
+    const centers: number[] = [];
+    for (const s of slots) {
+      try {
+        const slotObjs = getSlot(s, true);
+        slotObjs.forEach(o => centers.push((o.colStart + o.colEnd) / 2));
+      } catch {
+        // ignore
+      }
+    }
+    return centers;
+  }
+
+  // Build list of indexes that match the selected smart filter
+  const filteredBySmart = React.useMemo(() => {
+    if (!allTimetables || allTimetables.length === 0) return [] as number[];
+    if (smartFilter === 'none') return allTimetables.map((_, i) => i);
+
+    const res: number[] = [];
+    allTimetables.forEach((tt, idx) => {
+      const atomic = tt.flatMap(item => extractAtomicSlots(item.slotName));
+
+      // Helper inline: letters present A-G
+      const letters = atomic.map(s => (s.match(/[A-G]/) || [null])[0]).filter(Boolean) as string[];
+
+      const centers = getSlotCenters(atomic);
+
+      const sameBuilding = (() => {
+        if (letters.length > 0) {
+          const set = new Set(letters);
+          if (set.size === 1) return true;
+        }
+        if (centers.length === 0) return false;
+        const left = centers.every(c => c < 36);
+        const right = centers.every(c => c >= 36);
+        return left || right;
+      })();
+
+      const closeEnough = (() => {
+        if (centers.length === 0) return false;
+        const min = Math.min(...centers);
+        const max = Math.max(...centers);
+        return max - min <= 20;
+      })();
+
+      if (smartFilter === 'sameBuilding') {
+        if (sameBuilding) res.push(idx);
+      } else if (smartFilter === 'close') {
+        if (closeEnough) res.push(idx);
+      } else if (smartFilter === 'noMix') {
+        if (!containsMorningAndEvening(atomic)) res.push(idx);
+      }
+    });
+    return res;
+  }, [allTimetables, smartFilter]);
+
+  // Precompute matches for each smart filter so we can decide whether buttons will have effect
+  const smartMatches = React.useMemo(() => {
+    const same: number[] = [];
+    const close: number[] = [];
+    const noMix: number[] = [];
+
+    if (!allTimetables || allTimetables.length === 0) return { same, close, noMix };
+
+    allTimetables.forEach((tt, idx) => {
+      const atomic = tt.flatMap(item => extractAtomicSlots(item.slotName));
+      const letters = atomic.map(s => (s.match(/[A-G]/) || [null])[0]).filter(Boolean) as string[];
+      const centers = getSlotCenters(atomic);
+
+      const sameBuilding = (() => {
+        if (letters.length > 0) {
+          const set = new Set(letters);
+          if (set.size === 1) return true;
+        }
+        if (centers.length === 0) return false;
+        const left = centers.every(c => c < 36);
+        const right = centers.every(c => c >= 36);
+        return left || right;
+      })();
+
+      const closeEnough = (() => {
+        if (centers.length === 0) return false;
+        const min = Math.min(...centers);
+        const max = Math.max(...centers);
+        return max - min <= 20;
+      })();
+
+      if (sameBuilding) same.push(idx);
+      if (closeEnough) close.push(idx);
+      if (!containsMorningAndEvening(atomic)) noMix.push(idx);
+    });
+
+    return { same, close, noMix };
+  }, [allTimetables]);
+
+  // When a smart filter is activated, navigate to the first matching timetable
+  useEffect(() => {
+    if (smartFilter === 'none') return;
+    if (filteredBySmart.length > 0) {
+      setSelectedIndex(filteredBySmart[0]);
+    } else {
+      setSelectedIndex(0);
+    }
+  }, [smartFilter, filteredBySmart]);
+
+  // Hotkeys: 1 = same building, 2 = close, 3 = no mix, 0 = clear. ArrowLeft/ArrowRight navigate filtered list
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === '1')
+        setSmartFilter(prev => (prev === 'sameBuilding' ? 'none' : 'sameBuilding'));
+      if (e.key === '2') setSmartFilter(prev => (prev === 'close' ? 'none' : 'close'));
+      if (e.key === '3') setSmartFilter(prev => (prev === 'noMix' ? 'none' : 'noMix'));
+      if (e.key === '0') setSmartFilter('none');
+
+      if (e.key === 'ArrowRight') {
+        // move to next matching index in filteredBySmart
+        const arr = filteredBySmart.length ? filteredBySmart : allTimetables.map((_, i) => i);
+        const pos = arr.indexOf(selectedIndex);
+        const next = pos === -1 || pos === arr.length - 1 ? arr[0] : arr[pos + 1];
+        setSelectedIndex(next);
+      }
+      if (e.key === 'ArrowLeft') {
+        const arr = filteredBySmart.length ? filteredBySmart : allTimetables.map((_, i) => i);
+        const pos = arr.indexOf(selectedIndex);
+        const prev = pos <= 0 ? arr[arr.length - 1] : arr[pos - 1];
+        setSelectedIndex(prev);
+      }
+    }
+
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [filteredBySmart, selectedIndex, allTimetables]);
 
   const convertedData = selectedData.map(
     (item: { courseCode?: string; slotName?: string; facultyName?: string }) => ({
@@ -395,6 +548,40 @@ export default function ViewTimeTable() {
                   : `(${timetableCount} timetables were generated)`}
             </div>
           </div>
+          <div className="flex items-center gap-2">
+            {(() => {
+              const arr = filteredBySmart.length ? filteredBySmart : allTimetables.map((_, i) => i);
+              const showPrevNext = arr.length > 1 || (arr.length === 1 && arr[0] !== selectedIndex);
+              if (!showPrevNext) return null;
+              return (
+                <>
+                  <button
+                    onClick={() => {
+                      const pos = arr.indexOf(selectedIndex);
+                      const prev = pos <= 0 ? arr[arr.length - 1] : arr[pos - 1];
+                      setSelectedIndex(prev);
+                    }}
+                    title="Previous matching timetable"
+                    className="bg-[#75E5EA] font-poppins border-2 border-black font-semibold text-sm px-3 py-1 rounded shadow-[3px_3px_0_0_black]"
+                  >
+                    Prev match
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      const pos = arr.indexOf(selectedIndex);
+                      const next = pos === -1 || pos === arr.length - 1 ? arr[0] : arr[pos + 1];
+                      setSelectedIndex(next);
+                    }}
+                    title="Next matching timetable"
+                    className="bg-[#75E5EA] font-poppins border-2 border-black font-semibold text-sm px-3 py-1 rounded shadow-[3px_3px_0_0_black]"
+                  >
+                    Next match
+                  </button>
+                </>
+              );
+            })()}
+          </div>
           <div className="w-[400px]">
             <ComboBox
               label="Filter by Faculty"
@@ -405,109 +592,144 @@ export default function ViewTimeTable() {
           </div>
         </div>
 
-        <div className="w-full max-w-[95vw] my-4">
+        <div className="w-full max-w-[95vw] my-2">
+          <div className="flex flex-wrap gap-3 items-center mb-3">
+            <div className="text-sm font-poppins mr-2">
+              Smart filters (hotkeys: 1 / 2 / 3, 0 = clear)
+            </div>
+            {(smartMatches.same.length > 0 || smartFilter === 'sameBuilding') && (
+              <button
+                onClick={() =>
+                  setSmartFilter(prev => (prev === 'sameBuilding' ? 'none' : 'sameBuilding'))
+                }
+                title="Show timetables with all classrooms in the same building (hotkey 1)"
+                className={`${smartFilter === 'sameBuilding' ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'} font-poppins border-2 border-black font-semibold text-sm px-3 py-1 rounded shadow-[3px_3px_0_0_black]`}
+              >
+                Same building ({smartMatches.same.length})
+              </button>
+            )}
+
+            {(smartMatches.close.length > 0 || smartFilter === 'close') && (
+              <button
+                onClick={() => setSmartFilter(prev => (prev === 'close' ? 'none' : 'close'))}
+                title="Show timetables where classrooms are close to each other (hotkey 2)"
+                className={`${smartFilter === 'close' ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'} font-poppins border-2 border-black font-semibold text-sm px-3 py-1 rounded shadow-[3px_3px_0_0_black]`}
+              >
+                Close ({smartMatches.close.length})
+              </button>
+            )}
+
+            {(smartMatches.noMix.length > 0 || smartFilter === 'noMix') && (
+              <button
+                onClick={() => setSmartFilter(prev => (prev === 'noMix' ? 'none' : 'noMix'))}
+                title="Show timetables without morning/evening mix (hotkey 3)"
+                className={`${smartFilter === 'noMix' ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'} font-poppins border-2 border-black font-semibold text-sm px-3 py-1 rounded shadow-[3px_3px_0_0_black]`}
+              >
+                No Mix (1/2) ({smartMatches.noMix.length})
+              </button>
+            )}
+
+            <button
+              onClick={() => setSmartFilter('none')}
+              title="Clear smart filter (hotkey 0)"
+              className="bg-[#F3F4F6] font-poppins border-2 border-black font-semibold text-sm px-3 py-1 rounded shadow-[3px_3px_0_0_black]"
+            >
+              Clear
+            </button>
+          </div>
+
           <CompoundTable data={convertedData} large={true} />
         </div>
 
         <div className="flex flex-row items-center justify-between px-16 pt-4 gap-8">
           <div className="w-auto">
             <div className=" w-full flex justify-center">
-              <button
-                onClick={timetableNumber === 1 ? undefined : () => setSelectedIndex(0)}
-                disabled={timetableNumber === 1}
-                title="Go to first timetable"
-                aria-label="Go to first timetable"
-                className={` ${
-                  timetableNumber === 1 ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'
-                } font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-l-xl shadow-[4px_4px_0_0_black] ${
-                  timetableNumber === 1 ? 'cursor-normal' : 'cursor-pointer'
-                } ${
-                  timetableNumber === 1
-                    ? ''
-                    : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'
-                }`}
-              >
-                <span style={{ pointerEvents: 'none', display: 'flex' }}>
-                  <Image
-                    src="/icons/start.svg"
-                    alt="Go to first timetable"
-                    width={32}
-                    height={32}
-                    unselectable="on"
-                    draggable={false}
-                    priority
-                  />
-                </span>
-              </button>
+              {timetableNumber !== 1 && (
+                <button
+                  onClick={() => setSelectedIndex(0)}
+                  title="Go to first timetable"
+                  aria-label="Go to first timetable"
+                  className={`bg-[#75E5EA] font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-l-xl shadow-[4px_4px_0_0_black] active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]`}
+                >
+                  <span style={{ pointerEvents: 'none', display: 'flex' }}>
+                    <Image
+                      src="/icons/start.svg"
+                      alt="Go to first timetable"
+                      width={32}
+                      height={32}
+                      unselectable="on"
+                      draggable={false}
+                      priority
+                    />
+                  </span>
+                </button>
+              )}
 
               <div className="flex flex-row">
-                {visibleIndexes.map(index => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedIndex(index - 1)}
-                    aria-label={`Go to timetable ${index}`}
-                    title={`Go to timetable ${index}`}
-                    className={` ${
-                      timetableNumber === index ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'
-                    } font-poppins border-2 border-black font-bold text-lg flex items-center justify-center text-center transition duration-100 h-12 w-12 shadow-[4px_4px_0_0_black] ${
-                      timetableNumber === index ? 'cursor-normal' : 'cursor-pointer'
-                    } ${
-                      timetableNumber === index
-                        ? ''
-                        : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'
-                    }`}
-                  >
-                    {index}
-                  </button>
-                ))}
+                {visibleIndexes.map(index => {
+                  if (timetableNumber === index) {
+                    return (
+                      <div
+                        key={index}
+                        aria-label={`Current timetable ${index}`}
+                        title={`Current timetable ${index}`}
+                        className={`bg-[#6CC0C5] font-poppins border-2 border-black font-bold text-lg flex items-center justify-center text-center h-12 w-12 shadow-[4px_4px_0_0_black] cursor-normal`}
+                      >
+                        {index}
+                      </div>
+                    );
+                  }
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedIndex(index - 1)}
+                      aria-label={`Go to timetable ${index}`}
+                      title={`Go to timetable ${index}`}
+                      className={`bg-[#75E5EA] font-poppins border-2 border-black font-bold text-lg flex items-center justify-center text-center transition duration-100 h-12 w-12 shadow-[4px_4px_0_0_black] cursor-pointer active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]`}
+                    >
+                      {index}
+                    </button>
+                  );
+                })}
               </div>
 
-              <button
-                onClick={
-                  timetableNumber === timetableCount
-                    ? undefined
-                    : () => setSelectedIndex(timetableCount - 1)
-                }
-                disabled={timetableNumber === timetableCount}
-                title="Go to last timetable"
-                aria-label="Go to last timetable"
-                className={` ${
-                  timetableNumber === timetableCount ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'
-                } font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-r-xl shadow-[4px_4px_0_0_black] ${
-                  timetableNumber === timetableCount ? 'cursor-normal' : 'cursor-pointer'
-                } ${
-                  timetableNumber === timetableCount
-                    ? ''
-                    : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'
-                }`}
-              >
-                <span style={{ pointerEvents: 'none', display: 'flex' }}>
-                  <Image
-                    src="/icons/end.svg"
-                    alt="Go to last timetable"
-                    width={32}
-                    height={32}
-                    unselectable="on"
-                    draggable={false}
-                    priority
-                  />
-                </span>
-              </button>
+              {timetableNumber !== timetableCount && (
+                <button
+                  onClick={() => setSelectedIndex(timetableCount - 1)}
+                  title="Go to last timetable"
+                  aria-label="Go to last timetable"
+                  className="bg-[#75E5EA] font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-r-xl shadow-[4px_4px_0_0_black] active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
+                >
+                  <span style={{ pointerEvents: 'none', display: 'flex' }}>
+                    <Image
+                      src="/icons/end.svg"
+                      alt="Go to last timetable"
+                      width={32}
+                      height={32}
+                      unselectable="on"
+                      draggable={false}
+                      priority
+                    />
+                  </span>
+                </button>
+              )}
             </div>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-4">
-            {actionButtons.map((btn, idx) => (
-              <div key={idx}>
-                <ZButton
-                  type="long"
-                  text={btn.label}
-                  image={btn.icon}
-                  color={btn.color || 'blue'}
-                  onClick={btn.onClick}
-                />
-              </div>
-            ))}
+            {selectedData && selectedData.length > 0
+              ? actionButtons.map((btn, idx) => (
+                  <div key={idx}>
+                    <ZButton
+                      type="long"
+                      text={btn.label}
+                      image={btn.icon}
+                      color={btn.color || 'blue'}
+                      onClick={btn.onClick}
+                    />
+                  </div>
+                ))
+              : null}
           </div>
         </div>
       </div>
