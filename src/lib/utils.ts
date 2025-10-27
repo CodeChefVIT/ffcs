@@ -20,6 +20,9 @@ export function generateTT(
               courseName: course.courseName,
               slotName: slot.slotName,
               facultyName: faculty.facultyName,
+              ...((faculty as { venue?: string }).venue
+                ? { venue: (faculty as { venue?: string }).venue }
+                : {}),
             });
           }
         }
@@ -34,6 +37,9 @@ export function generateTT(
                   courseName: course.courseName + '__' + course.courseNameLab,
                   slotName: slot.slotName + '__' + labSlot,
                   facultyName: faculty.facultyName,
+                  ...((faculty as { venue?: string }).venue
+                    ? { venue: (faculty as { venue?: string }).venue }
+                    : {}),
                 });
               }
             }

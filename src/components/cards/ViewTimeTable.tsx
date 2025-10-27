@@ -74,11 +74,6 @@ export default function ViewTimeTable() {
     allTimetables = originalTimetableData;
   }
 
-  const timetableNumber = selectedIndex + 1;
-  const timetableCount = allTimetables.length;
-  const selectedData = allTimetables[selectedIndex] || [];
-  const visibleIndexes = getVisibleIndexes(timetableNumber, timetableCount);
-
   // --- Helpers to analyse timetable geometry and slots ---
   function extractAtomicSlots(slotName?: string) {
     if (!slotName) return [] as string[];
@@ -89,10 +84,34 @@ export default function ViewTimeTable() {
       .filter(Boolean);
   }
 
-  function containsMorningAndEvening(slots: string[]) {
-    const has1 = slots.some(s => /1\b/.test(s));
-    const has2 = slots.some(s => /2\b/.test(s));
-    return has1 && has2;
+  // note: use slotIsMorning/slotIsEvening directly where needed
+
+  function slotIsMorning(slot: string) {
+    if (!slot) return false;
+    // theory slots like A1 are morning if they end with 1
+    if (/\d$/.test(slot)) {
+      return /1$/.test(slot);
+    }
+    // lab slots like L1-L30 are morning
+    const m = slot.match(/L(\d+)/i);
+    if (m) {
+      const n = parseInt(m[1], 10);
+      return !isNaN(n) && n <= 30;
+    }
+    return false;
+  }
+
+  function slotIsEvening(slot: string) {
+    if (!slot) return false;
+    if (/\d$/.test(slot)) {
+      return /2$/.test(slot);
+    }
+    const m = slot.match(/L(\d+)/i);
+    if (m) {
+      const n = parseInt(m[1], 10);
+      return !isNaN(n) && n >= 31;
+    }
+    return false;
   }
 
   function getSlotCenters(slots: string[]) {
@@ -116,16 +135,22 @@ export default function ViewTimeTable() {
     const res: number[] = [];
     allTimetables.forEach((tt, idx) => {
       const atomic = tt.flatMap(item => extractAtomicSlots(item.slotName));
-
-      // Helper inline: letters present A-G
-      const letters = atomic.map(s => (s.match(/[A-G]/) || [null])[0]).filter(Boolean) as string[];
-
       const centers = getSlotCenters(atomic);
 
+      // try to use venue information if available
+      const venues = tt
+        .map(item => (item as timetableDisplayData).venue)
+        .filter(Boolean) as string[];
+
       const sameBuilding = (() => {
-        if (letters.length > 0) {
-          const set = new Set(letters);
-          if (set.size === 1) return true;
+        if (venues.length > 0) {
+          const buildings = venues
+            .map(v => (v || '').toString().match(/^[A-Za-z]+/)?.[0] || '')
+            .filter(Boolean);
+          if (buildings.length > 0) {
+            const set = new Set(buildings.map(b => b.toUpperCase()));
+            if (set.size === 1) return true;
+          }
         }
         if (centers.length === 0) return false;
         const left = centers.every(c => c < 36);
@@ -134,6 +159,21 @@ export default function ViewTimeTable() {
       })();
 
       const closeEnough = (() => {
+        // prefer venue room-number proximity when possible
+        if (venues.length > 0) {
+          const nums = venues
+            .map(v => {
+              const m = v.match(/(\d+)/);
+              return m ? parseInt(m[0], 10) : NaN;
+            })
+            .filter(n => !isNaN(n));
+          if (nums.length > 0) {
+            const min = Math.min(...nums);
+            const max = Math.max(...nums);
+            // consider close if rooms within 30 numbers
+            return max - min <= 30;
+          }
+        }
         if (centers.length === 0) return false;
         const min = Math.min(...centers);
         const max = Math.max(...centers);
@@ -145,7 +185,9 @@ export default function ViewTimeTable() {
       } else if (smartFilter === 'close') {
         if (closeEnough) res.push(idx);
       } else if (smartFilter === 'noMix') {
-        if (!containsMorningAndEvening(atomic)) res.push(idx);
+        const hasMorning = atomic.some(s => slotIsMorning(s));
+        const hasEvening = atomic.some(s => slotIsEvening(s));
+        if (!(hasMorning && hasEvening)) res.push(idx);
       }
     });
     return res;
@@ -161,13 +203,20 @@ export default function ViewTimeTable() {
 
     allTimetables.forEach((tt, idx) => {
       const atomic = tt.flatMap(item => extractAtomicSlots(item.slotName));
-      const letters = atomic.map(s => (s.match(/[A-G]/) || [null])[0]).filter(Boolean) as string[];
       const centers = getSlotCenters(atomic);
+      const venues = tt
+        .map(item => (item as timetableDisplayData).venue)
+        .filter(Boolean) as string[];
 
       const sameBuilding = (() => {
-        if (letters.length > 0) {
-          const set = new Set(letters);
-          if (set.size === 1) return true;
+        if (venues.length > 0) {
+          const buildings = venues
+            .map(v => (v || '').toString().match(/^[A-Za-z]+/)?.[0] || '')
+            .filter(Boolean);
+          if (buildings.length > 0) {
+            const set = new Set(buildings.map(b => b.toUpperCase()));
+            if (set.size === 1) return true;
+          }
         }
         if (centers.length === 0) return false;
         const left = centers.every(c => c < 36);
@@ -176,6 +225,19 @@ export default function ViewTimeTable() {
       })();
 
       const closeEnough = (() => {
+        if (venues.length > 0) {
+          const nums = venues
+            .map(v => {
+              const m = v.match(/(\d+)/);
+              return m ? parseInt(m[0], 10) : NaN;
+            })
+            .filter(n => !isNaN(n));
+          if (nums.length > 0) {
+            const min = Math.min(...nums);
+            const max = Math.max(...nums);
+            return max - min <= 30;
+          }
+        }
         if (centers.length === 0) return false;
         const min = Math.min(...centers);
         const max = Math.max(...centers);
@@ -184,7 +246,9 @@ export default function ViewTimeTable() {
 
       if (sameBuilding) same.push(idx);
       if (closeEnough) close.push(idx);
-      if (!containsMorningAndEvening(atomic)) noMix.push(idx);
+      const hasMorning = atomic.some(s => slotIsMorning(s));
+      const hasEvening = atomic.some(s => slotIsEvening(s));
+      if (!(hasMorning && hasEvening)) noMix.push(idx);
     });
 
     return { same, close, noMix };
@@ -200,39 +264,28 @@ export default function ViewTimeTable() {
     }
   }, [smartFilter, filteredBySmart]);
 
-  // Hotkeys: 1 = same building, 2 = close, 3 = no mix, 0 = clear. ArrowLeft/ArrowRight navigate filtered list
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === '1')
-        setSmartFilter(prev => (prev === 'sameBuilding' ? 'none' : 'sameBuilding'));
-      if (e.key === '2') setSmartFilter(prev => (prev === 'close' ? 'none' : 'close'));
-      if (e.key === '3') setSmartFilter(prev => (prev === 'noMix' ? 'none' : 'noMix'));
-      if (e.key === '0') setSmartFilter('none');
+  // When a smart filter is active, the pagination should show only matching timetables.
+  const displayList =
+    smartFilter === 'none' || filteredBySmart.length === 0
+      ? allTimetables.map((_, i) => i)
+      : filteredBySmart;
 
-      if (e.key === 'ArrowRight') {
-        // move to next matching index in filteredBySmart
-        const arr = filteredBySmart.length ? filteredBySmart : allTimetables.map((_, i) => i);
-        const pos = arr.indexOf(selectedIndex);
-        const next = pos === -1 || pos === arr.length - 1 ? arr[0] : arr[pos + 1];
-        setSelectedIndex(next);
-      }
-      if (e.key === 'ArrowLeft') {
-        const arr = filteredBySmart.length ? filteredBySmart : allTimetables.map((_, i) => i);
-        const pos = arr.indexOf(selectedIndex);
-        const prev = pos <= 0 ? arr[arr.length - 1] : arr[pos - 1];
-        setSelectedIndex(prev);
-      }
-    }
+  const displayCount = displayList.length;
+  // position (1-based) of the currently selected timetable within the display list
+  const displayPosition =
+    displayList.indexOf(selectedIndex) === -1 ? 1 : displayList.indexOf(selectedIndex) + 1;
 
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [filteredBySmart, selectedIndex, allTimetables]);
+  const timetableNumber = displayPosition;
+  const timetableCount = displayCount;
+  const selectedData = allTimetables[selectedIndex] || [];
+  const visibleIndexes = getVisibleIndexes(timetableNumber, timetableCount);
 
   const convertedData = selectedData.map(
-    (item: { courseCode?: string; slotName?: string; facultyName?: string }) => ({
+    (item: { courseCode?: string; slotName?: string; facultyName?: string; venue?: string }) => ({
       code: item.courseCode || '00000000',
       slot: item.slotName || 'NIL',
       name: item.facultyName || 'Unknown',
+      venue: item.venue || '',
     })
   );
 
@@ -548,40 +601,7 @@ export default function ViewTimeTable() {
                   : `(${timetableCount} timetables were generated)`}
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            {(() => {
-              const arr = filteredBySmart.length ? filteredBySmart : allTimetables.map((_, i) => i);
-              const showPrevNext = arr.length > 1 || (arr.length === 1 && arr[0] !== selectedIndex);
-              if (!showPrevNext) return null;
-              return (
-                <>
-                  <button
-                    onClick={() => {
-                      const pos = arr.indexOf(selectedIndex);
-                      const prev = pos <= 0 ? arr[arr.length - 1] : arr[pos - 1];
-                      setSelectedIndex(prev);
-                    }}
-                    title="Previous matching timetable"
-                    className="bg-[#75E5EA] font-poppins border-2 border-black font-semibold text-sm px-3 py-1 rounded shadow-[3px_3px_0_0_black]"
-                  >
-                    Prev match
-                  </button>
 
-                  <button
-                    onClick={() => {
-                      const pos = arr.indexOf(selectedIndex);
-                      const next = pos === -1 || pos === arr.length - 1 ? arr[0] : arr[pos + 1];
-                      setSelectedIndex(next);
-                    }}
-                    title="Next matching timetable"
-                    className="bg-[#75E5EA] font-poppins border-2 border-black font-semibold text-sm px-3 py-1 rounded shadow-[3px_3px_0_0_black]"
-                  >
-                    Next match
-                  </button>
-                </>
-              );
-            })()}
-          </div>
           <div className="w-[400px]">
             <ComboBox
               label="Filter by Faculty"
@@ -594,35 +614,36 @@ export default function ViewTimeTable() {
 
         <div className="w-full max-w-[95vw] my-2">
           <div className="flex flex-wrap gap-3 items-center mb-3">
-            <div className="text-sm font-poppins mr-2">
-              Smart filters (hotkeys: 1 / 2 / 3, 0 = clear)
-            </div>
-            {(smartMatches.same.length > 0 || smartFilter === 'sameBuilding') && (
+            <div className="text-sm font-poppins mr-2">Smart filters</div>
+            {((smartMatches.same.length > 0 && smartMatches.same.length < timetableCount) ||
+              smartFilter === 'sameBuilding') && (
               <button
                 onClick={() =>
                   setSmartFilter(prev => (prev === 'sameBuilding' ? 'none' : 'sameBuilding'))
                 }
-                title="Show timetables with all classrooms in the same building (hotkey 1)"
+                title="Show timetables with all classrooms in the same building"
                 className={`${smartFilter === 'sameBuilding' ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'} font-poppins border-2 border-black font-semibold text-sm px-3 py-1 rounded shadow-[3px_3px_0_0_black]`}
               >
                 Same building ({smartMatches.same.length})
               </button>
             )}
 
-            {(smartMatches.close.length > 0 || smartFilter === 'close') && (
+            {((smartMatches.close.length > 0 && smartMatches.close.length < timetableCount) ||
+              smartFilter === 'close') && (
               <button
                 onClick={() => setSmartFilter(prev => (prev === 'close' ? 'none' : 'close'))}
-                title="Show timetables where classrooms are close to each other (hotkey 2)"
+                title="Show timetables where classrooms are close to each other"
                 className={`${smartFilter === 'close' ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'} font-poppins border-2 border-black font-semibold text-sm px-3 py-1 rounded shadow-[3px_3px_0_0_black]`}
               >
                 Close ({smartMatches.close.length})
               </button>
             )}
 
-            {(smartMatches.noMix.length > 0 || smartFilter === 'noMix') && (
+            {((smartMatches.noMix.length > 0 && smartMatches.noMix.length < timetableCount) ||
+              smartFilter === 'noMix') && (
               <button
                 onClick={() => setSmartFilter(prev => (prev === 'noMix' ? 'none' : 'noMix'))}
-                title="Show timetables without morning/evening mix (hotkey 3)"
+                title="Show timetables without morning/evening mix"
                 className={`${smartFilter === 'noMix' ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'} font-poppins border-2 border-black font-semibold text-sm px-3 py-1 rounded shadow-[3px_3px_0_0_black]`}
               >
                 No Mix (1/2) ({smartMatches.noMix.length})
@@ -631,7 +652,7 @@ export default function ViewTimeTable() {
 
             <button
               onClick={() => setSmartFilter('none')}
-              title="Clear smart filter (hotkey 0)"
+              title="Clear smart filter"
               className="bg-[#F3F4F6] font-poppins border-2 border-black font-semibold text-sm px-3 py-1 rounded shadow-[3px_3px_0_0_black]"
             >
               Clear
@@ -646,7 +667,7 @@ export default function ViewTimeTable() {
             <div className=" w-full flex justify-center">
               {timetableNumber !== 1 && (
                 <button
-                  onClick={() => setSelectedIndex(0)}
+                  onClick={() => setSelectedIndex(displayList[0] ?? 0)}
                   title="Go to first timetable"
                   aria-label="Go to first timetable"
                   className={`bg-[#75E5EA] font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-l-xl shadow-[4px_4px_0_0_black] active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]`}
@@ -667,6 +688,8 @@ export default function ViewTimeTable() {
 
               <div className="flex flex-row">
                 {visibleIndexes.map(index => {
+                  // index here is 1-based position within the display list
+                  const globalIndex = displayList[index - 1];
                   if (timetableNumber === index) {
                     return (
                       <div
@@ -682,7 +705,7 @@ export default function ViewTimeTable() {
                   return (
                     <button
                       key={index}
-                      onClick={() => setSelectedIndex(index - 1)}
+                      onClick={() => setSelectedIndex(globalIndex)}
                       aria-label={`Go to timetable ${index}`}
                       title={`Go to timetable ${index}`}
                       className={`bg-[#75E5EA] font-poppins border-2 border-black font-bold text-lg flex items-center justify-center text-center transition duration-100 h-12 w-12 shadow-[4px_4px_0_0_black] cursor-pointer active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]`}
@@ -695,7 +718,7 @@ export default function ViewTimeTable() {
 
               {timetableNumber !== timetableCount && (
                 <button
-                  onClick={() => setSelectedIndex(timetableCount - 1)}
+                  onClick={() => setSelectedIndex(displayList[displayCount - 1] ?? selectedIndex)}
                   title="Go to last timetable"
                   aria-label="Go to last timetable"
                   className="bg-[#75E5EA] font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-r-xl shadow-[4px_4px_0_0_black] active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"

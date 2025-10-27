@@ -90,6 +90,7 @@ function SelectField({ label, value, options, onChange, renderOption }: SelectFi
 type SubjectEntry = {
   slot: string;
   faculty: string;
+  venue?: string;
 };
 
 function generateCourseSlotsSingle({
@@ -107,9 +108,16 @@ function generateCourseSlotsSingle({
     return [
       {
         slotName: selectedSlot,
-        slotFaculties: selectedFaculties.map(facultyName => ({
-          facultyName,
-        })),
+        slotFaculties: selectedFaculties.map(facultyName => {
+          // try to get venue for this faculty and slot from subjectData
+          const entry = subjectData.find(
+            (e: SubjectEntry) => e.faculty === facultyName && e.slot === selectedSlot
+          );
+          return {
+            facultyName,
+            ...(entry && entry.venue ? { venue: entry.venue } : {}),
+          };
+        }),
       },
     ];
   }
@@ -131,6 +139,7 @@ function generateCourseSlotsSingle({
         )
         .map((entry: SubjectEntry) => ({
           facultyName: entry.faculty,
+          ...(entry.venue ? { venue: entry.venue } : {}),
         })),
     }));
   }
@@ -181,6 +190,7 @@ function generateCourseSlotsLabOnly({
       .filter(entry => entry.slot === slotName && selectedFaculties.includes(entry.faculty))
       .map(entry => ({
         facultyName: entry.faculty,
+        ...(entry.venue ? { venue: entry.venue } : {}),
       })),
   }));
 }
@@ -236,9 +246,27 @@ function generateCourseSlotsBoth({
       )
       .map(entry => entry.slot);
 
+    // try to find a venue for this faculty: prefer labData entry, otherwise try theory entry
+    let venue: string | undefined;
+    const labEntryForVenue = labData.find(
+      entry =>
+        entry.faculty === facultyName && entry.slot.startsWith('L') && isValidLabSlot(entry.slot)
+    );
+    if (labEntryForVenue && labEntryForVenue.venue) {
+      venue = labEntryForVenue.venue;
+    } else {
+      // try to find theory entry
+      const theoryEntries = data[selectedSchool][selectedDomain][selectedSubject];
+      const thEntry = theoryEntries.find(
+        (e: SubjectEntry) => e.faculty === facultyName && e.slot === selectedSlot
+      );
+      if (thEntry && thEntry.venue) venue = thEntry.venue;
+    }
+
     return {
       facultyName,
       ...(labSlots.length > 0 && { facultyLabSlot: labSlots.join(', ') }),
+      ...(venue ? { venue } : {}),
     };
   });
 
