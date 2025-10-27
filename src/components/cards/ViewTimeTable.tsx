@@ -664,39 +664,42 @@ export default function ViewTimeTable() {
 
         <div className="flex flex-row items-center justify-between px-16 pt-4 gap-8">
           <div className="w-auto">
-            <div className=" w-full flex justify-center">
-              {timetableNumber !== 1 && (
-                <button
-                  onClick={() => setSelectedIndex(displayList[0] ?? 0)}
-                  title="Go to first timetable"
-                  aria-label="Go to first timetable"
-                  className={`bg-[#75E5EA] font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-l-xl shadow-[4px_4px_0_0_black] active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]`}
-                >
-                  <span style={{ pointerEvents: 'none', display: 'flex' }}>
-                    <Image
-                      src="/icons/start.svg"
-                      alt="Go to first timetable"
-                      width={32}
-                      height={32}
-                      unselectable="on"
-                      draggable={false}
-                      priority
-                    />
-                  </span>
-                </button>
-              )}
+            <div className="w-full flex justify-center">
+              <button
+                onClick={() => {
+                  if (timetableNumber !== 1) setSelectedIndex(displayList[0] ?? 0);
+                }}
+                title="Go to first timetable"
+                aria-label="Go to first timetable"
+                disabled={timetableNumber === 1}
+                className={`font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-l-xl shadow-[4px_4px_0_0_black] bg-[#75E5EA]
+      ${
+        timetableNumber === 1
+          ? 'cursor-default'
+          : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'
+      }`}
+              >
+                <span style={{ pointerEvents: 'none', display: 'flex' }}>
+                  <Image
+                    src="/icons/start.svg"
+                    alt="Go to first timetable"
+                    width={32}
+                    height={32}
+                    unselectable="on"
+                    draggable={false}
+                    priority
+                  />
+                </span>
+              </button>
 
               <div className="flex flex-row">
                 {visibleIndexes.map(index => {
-                  // index here is 1-based position within the display list
                   const globalIndex = displayList[index - 1];
                   if (timetableNumber === index) {
                     return (
                       <div
                         key={index}
-                        aria-label={`Current timetable ${index}`}
-                        title={`Current timetable ${index}`}
-                        className={`bg-[#6CC0C5] font-poppins border-2 border-black font-bold text-lg flex items-center justify-center text-center h-12 w-12 shadow-[4px_4px_0_0_black] cursor-normal`}
+                        className="bg-[#6CC0C5] font-poppins border-2 border-black font-bold text-lg flex items-center justify-center text-center h-12 w-12 shadow-[4px_4px_0_0_black]"
                       >
                         {index}
                       </div>
@@ -706,9 +709,7 @@ export default function ViewTimeTable() {
                     <button
                       key={index}
                       onClick={() => setSelectedIndex(globalIndex)}
-                      aria-label={`Go to timetable ${index}`}
-                      title={`Go to timetable ${index}`}
-                      className={`bg-[#75E5EA] font-poppins border-2 border-black font-bold text-lg flex items-center justify-center text-center transition duration-100 h-12 w-12 shadow-[4px_4px_0_0_black] cursor-pointer active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]`}
+                      className="bg-[#75E5EA] font-poppins border-2 border-black font-bold text-lg flex items-center justify-center text-center transition duration-100 h-12 w-12 shadow-[4px_4px_0_0_black] active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
                     >
                       {index}
                     </button>
@@ -716,26 +717,33 @@ export default function ViewTimeTable() {
                 })}
               </div>
 
-              {timetableNumber !== timetableCount && (
-                <button
-                  onClick={() => setSelectedIndex(displayList[displayCount - 1] ?? selectedIndex)}
-                  title="Go to last timetable"
-                  aria-label="Go to last timetable"
-                  className="bg-[#75E5EA] font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-r-xl shadow-[4px_4px_0_0_black] active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
-                >
-                  <span style={{ pointerEvents: 'none', display: 'flex' }}>
-                    <Image
-                      src="/icons/end.svg"
-                      alt="Go to last timetable"
-                      width={32}
-                      height={32}
-                      unselectable="on"
-                      draggable={false}
-                      priority
-                    />
-                  </span>
-                </button>
-              )}
+              <button
+                onClick={() => {
+                  if (timetableNumber !== timetableCount)
+                    setSelectedIndex(displayList[displayCount - 1] ?? selectedIndex);
+                }}
+                title="Go to last timetable"
+                aria-label="Go to last timetable"
+                disabled={timetableNumber === timetableCount}
+                className={`font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-r-xl shadow-[4px_4px_0_0_black] bg-[#75E5EA]
+      ${
+        timetableNumber === timetableCount
+          ? 'cursor-default'
+          : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'
+      }`}
+              >
+                <span style={{ pointerEvents: 'none', display: 'flex' }}>
+                  <Image
+                    src="/icons/end.svg"
+                    alt="Go to last timetable"
+                    width={32}
+                    height={32}
+                    unselectable="on"
+                    draggable={false}
+                    priority
+                  />
+                </span>
+              </button>
             </div>
           </div>
 
