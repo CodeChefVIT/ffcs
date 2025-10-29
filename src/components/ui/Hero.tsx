@@ -17,13 +17,13 @@ export default function Hero() {
           draggable={false}
           priority
         />
-        <div className="text-l z-50 sm:text-xl font-poppins font-semibold text-black mb-6">
-          Please wait as we update the faculty list for this year.
+        <div className="text-l z-50 sm:text-m font-poppins font-semibold text-black mb-6">
+          Faculty list for SCOPE, SCHEME, SCORE, SELECT, SENSE, SMEC, SBST, SCE are updated.
           <br />
           <span className="text-sm font-normal">
-            You can still use the app as usual to create timetables.
+            If your branch isn't listed or you're a fresher, check back soon!
             <br />
-            Sorry for the inconvenience.
+            You can still use the app as usual to create timetables.
           </span>
         </div>
 
