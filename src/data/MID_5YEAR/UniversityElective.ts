@@ -1,78 +1,162 @@
 export const UE = {
-  'CSI3023L - Advanced Server Side Programming': [
-    { slot: 'A1', venue: 'SJT407', faculty: 'JUSTIN GOPINATH A' },
-    { slot: 'A2', venue: 'SJT407', faculty: 'JUSTIN GOPINATH A' },
+  'CBS1904 - Capstone Project': [{ slot: 'NIL', venue: 'NIL', faculty: 'PLACEMENT AND TRAINING' }],
+  'CSE1030 - Introduction to Internet of Things': [
+    { slot: 'D1+TD1', venue: 'PRP732', faculty: 'MEHFOOZA' },
+    { slot: 'L37+L38', venue: 'SJT620A', faculty: 'MEHFOOZA' },
+    { slot: 'F2+TF2', venue: 'PRP238A', faculty: 'ISWARYA P' },
+    { slot: 'L7+L8', venue: 'PRP550', faculty: 'ISWARYA P' },
+    { slot: 'F1+TF1', venue: 'PRP732', faculty: 'DIVYA K' },
+    { slot: 'L45+L46', venue: 'PRP445', faculty: 'DIVYA K' },
   ],
-  'CSI3023P - Advanced Server Side Programming': [
-    { slot: 'L23+L24', venue: 'SJT318', faculty: 'JUSTIN GOPINATH A' },
-    { slot: 'L53+L54', venue: 'SJT622', faculty: 'JUSTIN GOPINATH A' },
+  'CSE1031 - Web Technologies': [
+    { slot: 'C2', venue: 'PRP630', faculty: 'G NITHYAVANI' },
+    { slot: 'L1+L2', venue: 'PRP445', faculty: 'G NITHYAVANI' },
   ],
-  'CSI3024L - Software Application Architecture': [
-    { slot: 'E1+TE1', venue: 'SJT627', faculty: 'MARGRET ANOUNCIA S' },
+  'CSE1032 - Cloud Computing Techniques': [
+    { slot: 'A2+TA2+TAA2+V3', venue: 'PRP630', faculty: 'TAMILMANI A' },
   ],
-  'CSI3025L - Application Development and Deployment Architecture': [
-    { slot: 'F2', venue: 'SJT208', faculty: 'SUDHAKAR P' },
+  'CSE1904 - Capstone Project': [{ slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' }],
+  'EEE1001 - Basic Electrical and Electronics Engineering': [
+    { slot: 'D2', venue: 'TT201', faculty: 'WASHIMA TASNIN' },
+    { slot: 'L11+L12', venue: 'TT045', faculty: 'WASHIMA TASNIN' },
   ],
-  'CSI3025P - Application Development and Deployment Architecture': [
-    { slot: 'L11+L12', venue: 'SJT318', faculty: 'SUDHAKAR P' },
+  'HIN1001 - Basic Hindi': [{ slot: 'D1+TD1', venue: 'SMV101', faculty: 'JAYALAKSHMI K' }],
+  'HIN1003 - Prathamik Hindi': [{ slot: 'B2+TB2', venue: 'TT104', faculty: 'JAYALAKSHMI K' }],
+  'MAT1026 - Discrete Mathematics': [
+    { slot: 'C1+TC1+TCC1+V2', venue: 'PRP731', faculty: 'NANDHINI S' },
+    { slot: 'C2+TC2+TCC2+V4', venue: 'PRP731', faculty: 'NANDHINI S' },
+    { slot: 'A1+TA1+TAA1+V1', venue: 'PRP732', faculty: 'PALLAVI MISHRA' },
   ],
-  'CSI3029L - Front End Design and Testing': [
-    { slot: 'E1', venue: 'SJT407', faculty: 'ARULKUMAR V' },
-    { slot: 'E2', venue: 'SJT407', faculty: 'ARULKUMAR V' },
+  'MAT1027 - Design and Analysis of Algorithms': [
+    { slot: 'L23+L24', venue: 'SJT620', faculty: 'PALLAVI MISHRA' },
+    { slot: 'G2+TG2', venue: 'PRP735', faculty: 'PALLAVI MISHRA' },
+    { slot: 'L59+L60', venue: 'SJT620', faculty: 'PALLAVI MISHRA' },
+    { slot: 'B1+TB1', venue: 'PRP731', faculty: 'PALLAVI MISHRA' },
+    { slot: 'E1+TE1', venue: 'PRP731', faculty: 'RAJESH MOHARANA' },
+    { slot: 'L47+L48', venue: 'SJT620', faculty: 'RAJESH MOHARANA' },
   ],
-  'CSI3029P - Front End Design and Testing': [
-    { slot: 'L53+L54', venue: 'SJT316', faculty: 'ARULKUMAR V' },
-    { slot: 'L29+L30', venue: 'SJT318', faculty: 'ARULKUMAR V' },
+  'MAT1028 - Operations Research for Data Analysis': [
+    { slot: 'A1+TA1+TAA1+V1', venue: 'PRP731', faculty: 'PALANIVEL K' },
+    { slot: 'A2+TA2+TAA2+V3', venue: 'PRP731', faculty: 'ANURADHA D' },
+    { slot: 'C1+TC1+TCC1+V2', venue: 'PRP732', faculty: 'KARTHIKEYAN K' },
   ],
-  'ENG1912L - General English - II': [
-    { slot: 'TA2', venue: 'PRP230', faculty: 'SARASWATHY S' },
-    { slot: 'TAA1', venue: 'PRP238A', faculty: 'VIDHYA B' },
-    { slot: 'TB2', venue: 'PRP250', faculty: 'EVANGELINE PRISCILLA B' },
+  'MAT1029 - Statistical Quality Control': [
+    { slot: 'D2+TD2', venue: 'PRP731', faculty: 'MAHAMOOD USMAN' },
+    { slot: 'L5+L6', venue: 'SJT620A', faculty: 'MAHAMOOD USMAN' },
+    { slot: 'L33+L34', venue: 'SJT620', faculty: 'SK. KHADAR BABU' },
+    { slot: 'E1+TE1', venue: 'PRP732', faculty: 'SK. KHADAR BABU' },
+    { slot: 'B1+TB1', venue: 'PRP732', faculty: 'SATHYA NARAYANA SHARMA K' },
+    { slot: 'L35+L36', venue: 'SJT620A', faculty: 'SATHYA NARAYANA SHARMA K' },
   ],
-  'ENG1912P - General English - II': [
-    { slot: 'L31+L32', venue: 'SJTG20', faculty: 'EVANGELINE PRISCILLA B' },
-    { slot: 'L31+L32', venue: 'SJT519', faculty: 'VIDHYA B' },
-    { slot: 'L3+L4', venue: 'PRP249', faculty: 'SARASWATHY S' },
+  'MAT1030 - Statistical Computing for Data Analysis': [
+    { slot: 'L11+L12+L27+L28', venue: 'PRP119', faculty: 'SUBHABRATA RATH' },
+    { slot: 'L3+L4+L23+L24', venue: 'PRP119', faculty: 'CLEMENT J' },
+    { slot: 'L41+L42+L43+L44', venue: 'PRP119', faculty: 'SUBHABRATA RATH' },
   ],
-  'ENG1913L - Effective Communication Skills': [
-    { slot: 'TE2', venue: 'SJT619', faculty: 'PRAJEESH TOMY' },
-    { slot: 'TC1', venue: 'PRP134', faculty: 'CHRISTOPHER RAJASEKARAN W' },
+  'MAT3011 - Non Parametric Tests': [
+    { slot: 'B2+TB2', venue: 'PRP630', faculty: 'MOKESHRAYALU G' },
+    { slot: 'L21+L22', venue: 'SJT620A', faculty: 'MOKESHRAYALU G' },
   ],
-  'ENG1913P - Effective Communication Skills': [
-    { slot: 'L9+L10', venue: 'SJT621', faculty: 'PRAJEESH TOMY' },
-    { slot: 'L45+L46', venue: 'SJT515', faculty: 'CHRISTOPHER RAJASEKARAN W' },
+  'MAT3012 - Data Warehousing and Data Mining': [
+    { slot: 'F2+TF2', venue: 'PRP633', faculty: 'KANIMOZHI V' },
   ],
-  'HIN1001L - Basic Hindi': [{ slot: 'D1+TD1', venue: 'TT621', faculty: 'JAYALAKSHMI K' }],
-  'HIN1003L - Prathamik Hindi': [{ slot: 'E2+TE2', venue: 'SMV104', faculty: 'JAYALAKSHMI K' }],
-  'MAT6002L - Regression Analysis and Predictive Models': [
-    { slot: 'F2+TF2', venue: 'PRP731', faculty: 'SK. KHADAR BABU' },
+  'MAT3013 - Data Engineering for Analytics': [
+    { slot: 'E2', venue: 'PRP732', faculty: 'ASHISH BHATT' },
+    { slot: 'L27+L28', venue: 'SJT620A', faculty: 'ASHISH BHATT' },
+    { slot: 'L27+L28', venue: 'NIL', faculty: 'ASHISH BHATT' },
   ],
-  'MAT6007L - Deep Learning': [{ slot: 'C2', venue: 'PRP731', faculty: 'PRASAD THEEDA' }],
-  'SWE1002L - Optimization Techniques': [
-    { slot: 'D2+TD2+TDD2+V6', venue: 'SJT223', faculty: 'ARUN PANDIAN J' },
+  'MAT5016 - Time Series Analysis and Forecasting': [
+    { slot: 'L13+L14', venue: 'SJT620A', faculty: 'JITENDRA KUMAR' },
+    { slot: 'B2+TB2', venue: 'PRP634', faculty: 'JITENDRA KUMAR' },
+    { slot: 'B1+TB1', venue: 'PRP634', faculty: 'SRIPATHY B' },
+    { slot: 'L51+L52', venue: 'SJT620A', faculty: 'SRIPATHY B' },
   ],
-  'SWE1013L - Multimedia Systems': [
-    { slot: 'B2', venue: 'SJT824', faculty: 'KANCHAN KEISHAM' },
-    { slot: 'B2', venue: 'NIL', faculty: 'KANCHAN KEISHAM' },
-    { slot: 'B1', venue: 'SJT224', faculty: 'RAHAMATHUNNISA U' },
-    { slot: 'B1', venue: 'NIL', faculty: 'RAHAMATHUNNISA U' },
-    { slot: 'B2', venue: 'SJT222', faculty: 'RAHAMATHUNNISA U' },
-    { slot: 'B2', venue: 'NIL', faculty: 'RAHAMATHUNNISA U' },
+  'MAT5017 - Multivariate Data Analysis': [
+    { slot: 'A2+TA2', venue: 'PRP732', faculty: 'SATHYA NARAYANA SHARMA K' },
+    { slot: 'L11+L12', venue: 'SJT620A', faculty: 'SATHYA NARAYANA SHARMA K' },
+    { slot: 'E1+TE1', venue: 'PRP634', faculty: 'JITENDRA KUMAR' },
+    { slot: 'L55+L56', venue: 'SJT620A', faculty: 'JITENDRA KUMAR' },
   ],
-  'SWE2008L - Android Programming': [
-    { slot: 'A1+TA1', venue: 'SJT801', faculty: 'SRINIVASAN P' },
-    { slot: 'A1+TA1', venue: 'NIL', faculty: 'SRINIVASAN P' },
-    { slot: 'A2+TA2', venue: 'SJT801', faculty: 'SRINIVASAN P' },
-    { slot: 'A2+TA2', venue: 'NIL', faculty: 'SRINIVASAN P' },
-    { slot: 'A2+TA2', venue: 'SJT223', faculty: 'VENKETESH  P' },
-    { slot: 'A2+TA2', venue: 'NIL', faculty: 'VENKETESH  P' },
+  'MAT6005 - Machine learning for Data Science': [
+    { slot: 'G2+TG2', venue: 'PRP633', faculty: 'PRAVEEN T' },
+    { slot: 'L3+L4', venue: 'SJT620A', faculty: 'PRAVEEN T' },
+    { slot: 'A1+TA1', venue: 'PRP736', faculty: 'PRASAD THEEDA' },
+    { slot: 'L57+L58', venue: 'SJT620A', faculty: 'PRASAD THEEDA' },
   ],
-  'SWE2030L - Reverse Engineering': [
-    { slot: 'C1+TC1', venue: 'SJT126', faculty: 'PRAVEEN KUMAR REDDY M.' },
-    { slot: 'C2+TC2', venue: 'SJT118', faculty: 'PRAVEEN KUMAR REDDY M.' },
+  'MAT6012 - Programming for Data Analysis': [
+    { slot: 'E2', venue: 'PRP633', faculty: 'GOURANGA  MALLIK' },
+    { slot: 'L23+L24+L29+L30', venue: 'SJT620A', faculty: 'GOURANGA  MALLIK' },
+    { slot: 'C1', venue: 'PRP736', faculty: 'PASUPATHI R' },
+    { slot: 'L47+L48+L53+L54', venue: 'SJT620A', faculty: 'PASUPATHI R' },
   ],
-  'SWE3004L - Software Design and Development Project': [
+  'MAT6015 - Big Data Analytics and Visualization': [
+    { slot: 'C2', venue: 'PRP634', faculty: 'RAJESH MOHARANA' },
+    { slot: 'L5+L6', venue: 'PRP550', faculty: 'RAJESH MOHARANA' },
+    { slot: 'G1', venue: 'PRP634', faculty: 'JISHA FRANCIS' },
+    { slot: 'L33+L34', venue: 'SJT620A', faculty: 'JISHA FRANCIS' },
+  ],
+  'MDI3001 - Advances in Web Technologies': [
+    { slot: 'B1+TB1', venue: 'SJT505', faculty: 'SAMRIDDHI SARKAR' },
+    { slot: 'L47+L48', venue: 'SJT418', faculty: 'SAMRIDDHI SARKAR' },
+    { slot: 'B1+TB1', venue: 'SJT502', faculty: 'ARUN KUMAR G' },
+    { slot: 'L51+L52', venue: 'SJT418', faculty: 'ARUN KUMAR G' },
+    { slot: 'B2+TB2', venue: 'SJT505', faculty: 'JAYA SUBALAKSHMI R' },
+    { slot: 'L27+L28', venue: 'SJT418', faculty: 'JAYA SUBALAKSHMI R' },
+    { slot: 'B2+TB2', venue: 'SJT504', faculty: 'SAMRIDDHI SARKAR' },
+    { slot: 'L29+L30', venue: 'SJT417', faculty: 'SAMRIDDHI SARKAR' },
+    { slot: 'B1+TB1', venue: 'SJT504', faculty: 'MOHANKUMAR B' },
+    { slot: 'L43+L44', venue: 'SJT418', faculty: 'MOHANKUMAR B' },
+    { slot: 'B2+TB2', venue: 'SJT502', faculty: 'MADHAN E S' },
+    { slot: 'L21+L22', venue: 'SJT418', faculty: 'MADHAN E S' },
+    { slot: 'B1+TB1', venue: 'SJT503', faculty: 'SANKAR GANESH  L' },
+    { slot: 'L35+L36', venue: 'SJT418', faculty: 'SANKAR GANESH  L' },
+  ],
+  'MDI3005 - Advances in Data Engineering': [
+    { slot: 'A1+TA1', venue: 'NIL', faculty: 'SIVA SHANMUGAM G' },
+    { slot: 'A1+TA1', venue: 'SJT603', faculty: 'SIVA SHANMUGAM G' },
+    { slot: 'A2+TA2', venue: 'SJT602A', faculty: 'SIVAKUMAR V' },
+    { slot: 'A2+TA2', venue: 'NIL', faculty: 'SIVAKUMAR V' },
+    { slot: 'A1+TA1', venue: 'SJT602', faculty: 'ARULKUMAR V' },
+    { slot: 'A1+TA1', venue: 'NIL', faculty: 'ARULKUMAR V' },
+    { slot: 'A1+TA1', venue: 'SJT602A', faculty: 'ANBARASI M' },
+    { slot: 'A1+TA1', venue: 'NIL', faculty: 'ANBARASI M' },
+    { slot: 'A2+TA2', venue: 'NIL', faculty: 'ARCHANA T' },
+    { slot: 'A2+TA2', venue: 'SJT602', faculty: 'ARCHANA T' },
+  ],
+  'MDI4001 - Machine Learning for Data Science': [
+    { slot: 'E1+TE1', venue: 'SJT504', faculty: 'SAIRABANU J' },
+    { slot: 'L37+L38', venue: 'SJT417', faculty: 'SAIRABANU J' },
+    { slot: 'E2+TE2', venue: 'SJT603', faculty: 'KALYANARAMAN P' },
+    { slot: 'L23+L24', venue: 'SJT418', faculty: 'KALYANARAMAN P' },
+    { slot: 'L7+L8', venue: 'SJT418', faculty: 'KAKELLI ANIL KUMAR' },
+    { slot: 'E2+TE2', venue: 'SJT504', faculty: 'KAKELLI ANIL KUMAR' },
+    { slot: 'E1+TE1', venue: 'SJT503', faculty: 'JEEVANANTHAM  A K' },
+    { slot: 'L37+L38', venue: 'SJT418', faculty: 'JEEVANANTHAM  A K' },
+    { slot: 'E1+TE1', venue: 'SJT505', faculty: 'MADHURI  W' },
+    { slot: 'L51+L52', venue: 'SJT417', faculty: 'MADHURI  W' },
+    { slot: 'E1+TE1', venue: 'SJT502', faculty: 'AARTHY S.L' },
+    { slot: 'L39+L40', venue: 'SJT418', faculty: 'AARTHY S.L' },
+    { slot: 'E2+TE2', venue: 'SJT503', faculty: 'VISWANATHAN  P' },
+    { slot: 'L15+L16', venue: 'SJT417', faculty: 'VISWANATHAN  P' },
+  ],
+  'MDI4009 - Neural Networks and Deep Learning': [
+    { slot: 'C1+TC1', venue: 'SJT603', faculty: 'RAJAY VEDARAJ  I S' },
+    { slot: 'C1+TC1', venue: 'SJT602A', faculty: 'CHIRANJEEVI  C' },
+    { slot: 'C2+TC2', venue: 'SJT602', faculty: 'DEGA NAGARAJU' },
+    { slot: 'C2+TC2', venue: 'SJT602A', faculty: 'VIJAYANAND C' },
+    { slot: 'C1+TC1', venue: 'SJT602', faculty: 'KUMAR K' },
+  ],
+  'MIY6099 - Masters Thesis': [{ slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' }],
+  'PHY1999 - Introduction to Innovative Projects': [
+    { slot: 'TG1', venue: 'PRPG31', faculty: 'ANURADHA C' },
+    { slot: 'TG1', venue: 'NIL', faculty: 'ANURADHA C' },
+  ],
+  'SET4002 - Science, Engineering and Technology Project - II': [
     { slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' },
   ],
-  'TAM1003L - Tamil': [{ slot: 'D2+TD2', venue: 'TT104', faculty: 'MARIA SEBASTIN A' }],
+  'SWE1904 - Capstone Project': [
+    { slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' },
+    { slot: 'NIL', venue: 'NIL', faculty: 'PLACEMENT AND TRAINING' },
+  ],
+  'TAM1003 - Tamil': [{ slot: 'G2+TG2', venue: 'SJT115', faculty: 'MARIA SEBASTIN A' }],
 };
