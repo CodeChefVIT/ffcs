@@ -1,66 +1,57 @@
 export const SchemeDisciplineCore = {
-  'BCHE203L - Chemical Process Calculations': [
-    { slot: 'A2+TA2+TAA2', venue: 'SMV102', faculty: 'SHISHIR KUMAR BEHERA' },
-    { slot: 'A1+TA1+TAA1', venue: 'SMV104', faculty: 'MAHESH GANESAPILLAI' },
-    { slot: 'A2+TA2+TAA2', venue: 'SMV104', faculty: 'THOMAS THEODORE' },
-    { slot: 'A1+TA1+TAA1', venue: 'SMV102', faculty: 'VELU S' },
+  'BCHE205L - Momentum Transfer': [
+    { slot: 'C1+TC1', venue: 'SMV104', faculty: 'DHARMENDRA KUMAR BAL' },
+    { slot: 'C1+TC1', venue: 'SMV102', faculty: 'BABU PONNUSAMI A' },
+    { slot: 'C2+TC2', venue: 'SMV102', faculty: 'MOHAMMED REHAAN CHANDAN' },
+    { slot: 'C2+TC2', venue: 'SMV104', faculty: 'AABID HUSSAIN SHAIK' },
   ],
-  'BCHE301L - Mechanical Operations': [
-    { slot: 'B2+TB2', venue: 'SMV102', faculty: 'MOHAMMED REHAAN CHANDAN' },
-    { slot: 'B2+TB2', venue: 'SMV104', faculty: 'MAHESH GANESAPILLAI' },
-    { slot: 'B1+TB1', venue: 'SMV102', faculty: 'CHITRA  D' },
-    { slot: 'B1+TB1', venue: 'SMV104', faculty: 'AABID HUSSAIN SHAIK' },
+  'BCHE205P - Momentum Transfer Lab': [
+    { slot: 'L31+L32', venue: 'GDN131', faculty: 'DHARMENDRA KUMAR BAL' },
+    { slot: 'L49+L50', venue: 'GDN131', faculty: 'BABU PONNUSAMI A' },
+    { slot: 'L43+L44', venue: 'GDN131', faculty: 'DHARMENDRA KUMAR BAL' },
+    { slot: 'L55+L56', venue: 'GDN131', faculty: 'BABU PONNUSAMI A' },
+    { slot: 'L5+L6', venue: 'GDN131', faculty: 'MOHAMMED REHAAN CHANDAN' },
+    { slot: 'L11+L12', venue: 'GDN131', faculty: 'AABID HUSSAIN SHAIK' },
+    { slot: 'L23+L24', venue: 'GDN131', faculty: 'MOHAMMED REHAAN CHANDAN' },
+    { slot: 'L21+L22', venue: 'GDN131', faculty: 'AABID HUSSAIN SHAIK' },
   ],
-  'BCHE301P - Mechanical Operations Lab': [
-    { slot: 'L21+L22', venue: 'SMVG29', faculty: 'MOHAMMED REHAAN CHANDAN' },
-    { slot: 'L27+L28', venue: 'SMVG29', faculty: 'MOHAMMED REHAAN CHANDAN' },
-    { slot: 'L33+L34', venue: 'SMVG29', faculty: 'AABID HUSSAIN SHAIK' },
-    { slot: 'L55+L56', venue: 'SMVG29', faculty: 'CHITRA  D' },
-    { slot: 'L39+L40', venue: 'SMVG29', faculty: 'CHITRA  D' },
-    { slot: 'L37+L38', venue: 'SMVG29', faculty: 'AABID HUSSAIN SHAIK' },
-    { slot: 'L3+L4', venue: 'SMVG29', faculty: 'MAHESH GANESAPILLAI' },
-    { slot: 'L9+L10', venue: 'SMVG29', faculty: 'MAHESH GANESAPILLAI' },
+  'BCHE207L - Mass Transfer I': [{ slot: 'E2+TE2', venue: 'SMVG21', faculty: 'BALAKUMARAN S J' }],
+  'BCHE208L - Heat Transfer': [
+    { slot: 'B1+TB1', venue: 'SMV102', faculty: 'NIRMALA G S' },
+    { slot: 'B1+TB1', venue: 'SMV104', faculty: 'CHITRA  D' },
+    { slot: 'B2+TB2', venue: 'SMV104', faculty: 'THOMAS THEODORE' },
+    { slot: 'B2+TB2', venue: 'SMV102', faculty: 'CHITRA  D' },
   ],
-  'BCHE302L - Mass Transfer II': [
-    { slot: 'A1+TA1', venue: 'SMV101', faculty: 'NIRMALA G S' },
-    { slot: 'A2+TA2', venue: 'SMV101', faculty: 'SIVAGAMI K' },
+  'BCHE208P - Heat Transfer Lab': [
+    { slot: 'L3+L4', venue: 'SMVG26', faculty: 'THOMAS THEODORE' },
+    { slot: 'L43+L44', venue: 'SMVG26', faculty: 'NIRMALA G S' },
+    { slot: 'L37+L38', venue: 'SMVG26', faculty: 'NIRMALA G S' },
+    { slot: 'L39+L40', venue: 'SMVG26', faculty: 'CHITRA  D' },
+    { slot: 'L55+L56', venue: 'SMVG26', faculty: 'CHITRA  D' },
+    { slot: 'L29+L30', venue: 'SMVG26', faculty: 'THOMAS THEODORE' },
+    { slot: 'L27+L28', venue: 'SMVG26', faculty: 'CHITRA  D' },
+    { slot: 'L9+L10', venue: 'SMVG26', faculty: 'CHITRA  D' },
   ],
-  'BCHE302P - Mass Transfer Lab': [
-    { slot: 'L31+L32', venue: 'SMV127', faculty: 'NIRMALA G S' },
-    { slot: 'L43+L44', venue: 'SMV127', faculty: 'NIRMALA G S' },
-    { slot: 'L3+L4', venue: 'SMV127', faculty: 'SIVAGAMI K' },
-    { slot: 'L15+L16', venue: 'SMV127', faculty: 'SIVAGAMI K' },
+  'BCHE306L - Chemical Reaction Engineering II': [
+    { slot: 'C2+TC2', venue: 'SMVG21', faculty: 'GANESH MOORTHY I' },
+    { slot: 'C1+TC1', venue: 'SMVG21', faculty: 'MURUGANANDAM L' },
   ],
-  'BCHE303L - Chemical Reaction Engineering I': [
-    { slot: 'B1+TB1', venue: 'SMV101', faculty: 'GANESH MOORTHY I' },
-    { slot: 'B2+TB2', venue: 'SMV101', faculty: 'RIMA BISWAS' },
+  'BCHE307L - Process Modelling and Simulation': [
+    { slot: 'D2', venue: 'SMV104', faculty: 'DRISYA G CHANDRAN' },
   ],
-  'BCHE303P - Chemical Reaction Engineering Lab': [
-    { slot: 'L45+L46', venue: 'SMV127', faculty: 'GANESH MOORTHY I' },
-    { slot: 'L13+L14', venue: 'SMV127', faculty: 'RIMA BISWAS' },
-    { slot: 'L55+L56', venue: 'SMV127', faculty: 'GANESH MOORTHY I' },
-    { slot: 'L27+L28', venue: 'SMV127', faculty: 'RIMA BISWAS' },
-  ],
-  'BCHE304L - Chemical Process Technology and Economics': [
-    { slot: 'C1+TC1+TCC1', venue: 'SMV101', faculty: 'ASLAM ABDULLAH M' },
-    { slot: 'C2+TC2+TCC2', venue: 'SMV101', faculty: 'ARUNA SINGH' },
-  ],
-  'BCHE305L - Process Dynamics and Control': [
-    { slot: 'D1+TD1', venue: 'SMV101', faculty: 'BABU PONNUSAMI A' },
-    { slot: 'D2+TD2', venue: 'SMV101', faculty: 'PANDURANGAN.K' },
-  ],
-  'BCHE305P - Process Dynamics and Control Lab': [
-    { slot: 'L49+L50', venue: 'SMVG26A', faculty: 'BABU PONNUSAMI A' },
-    { slot: 'L25+L26', venue: 'SMVG26A', faculty: 'PANDURANGAN.K' },
-    { slot: 'L39+L40', venue: 'SMVG26A', faculty: 'BABU PONNUSAMI A' },
-    { slot: 'L9+L10', venue: 'SMVG26A', faculty: 'PANDURANGAN.K' },
+  'BCHE307P - Process Modelling and Simulation Lab': [
+    { slot: 'L23+L24', venue: 'SMVG17', faculty: 'DRISYA G CHANDRAN' },
   ],
   'BCHE308L - Chemical Process Equipment Design': [
-    { slot: 'A1+TA1', venue: 'SMV109', faculty: 'ARUNA SINGH' },
-    { slot: 'A2+TA2', venue: 'SMV109', faculty: 'SHANKAR RAMAN DHANUSHKODI' },
+    { slot: 'D2+TD2', venue: 'SMVG21', faculty: 'ARUNA SINGH' },
+    { slot: 'D1+TD1', venue: 'SMVG21', faculty: 'BANDARU KIRAN' },
   ],
   'BCHE308P - Chemical Process Equipment Design Lab': [
-    { slot: 'L31+L32', venue: 'SMVG17', faculty: 'ARUNA SINGH' },
-    { slot: 'L23+L24', venue: 'SMVG17', faculty: 'SHANKAR RAMAN DHANUSHKODI' },
+    { slot: 'L19+L20', venue: 'SMVG17', faculty: 'ARUNA SINGH' },
+    { slot: 'L43+L44', venue: 'SMVG17', faculty: 'BANDARU KIRAN' },
+  ],
+  'BCHE311L - Process Utilities and Pipeline Design': [
+    { slot: 'B2+TB2', venue: 'SMVG21', faculty: 'SHANKAR RAMAN DHANUSHKODI' },
+    { slot: 'B1+TB1', venue: 'SMVG21', faculty: 'SIVAGAMI K' },
   ],
 };
