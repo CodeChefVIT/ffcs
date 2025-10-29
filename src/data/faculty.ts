@@ -6,7 +6,8 @@ import { SELECT_LIST } from './SELECT';
 import { SENSE_LIST } from './SENSE';
 import { SMEC_LIST } from './SMEC';
 import { SCE_LIST } from './SCE';
-import { MID_5YEAR } from './MID_5YEAR';
+import { SHINE_LIST } from './SHINE';
+import { MID_5YEAR } from './MTech';
 
 type FacultyEntry = {
   slot: string;
@@ -38,5 +39,6 @@ export const data: Schools = {
   SCHEME: SCHEME_LIST,
   SELECT: SELECT_LIST,
   SCE: SCE_LIST,
-  MID_5YEAR: MID_5YEAR,
+  SHINE: SHINE_LIST,
+  MTech: MID_5YEAR,
 };

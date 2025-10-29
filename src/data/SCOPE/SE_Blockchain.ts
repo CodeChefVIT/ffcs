@@ -1,4 +1,4 @@
-export const SE_Blockchain = {
+export const SE_BKT = {
   'BCSE324L - Foundations of Blockchain Technology': [
     { slot: 'C2+TC2', venue: 'SJT421', faculty: 'MANOOV R' },
     { slot: 'C1+TC1', venue: 'SJT423', faculty: 'DEEPIKAA  S' },

@@ -1,17 +1,9 @@
 export const ScoreDisciplineLinked = {
-  'BECE204L - Microprocessors and Microcontrollers': [
-    { slot: 'F2+TF2', venue: 'SJT803', faculty: 'ABDUL RAHIM  VC' },
-    { slot: 'F2+TF2', venue: 'SJTG04', faculty: 'ANIS FATEMA' },
-    { slot: 'F1+TF1', venue: 'SJTG24', faculty: 'ANIS FATEMA' },
-    { slot: 'F1+TF1', venue: 'SJT803', faculty: 'ABDUL RAHIM  VC' },
-    { slot: 'F2+TF2', venue: 'SJTG10', faculty: 'KARTHIKEYAN A' },
+  'BITE202L - Digital Logic and Microprocessors': [
+    { slot: 'G2+TG2', venue: 'SJT602A', faculty: 'NITHYA.S' },
   ],
-  'BECE204P - Microprocessors and Microcontrollers Lab': [
-    { slot: 'L25+L26', venue: 'PRP108', faculty: 'ABDUL RAHIM  VC' },
-    { slot: 'L5+L6', venue: 'PRP108', faculty: 'ANIS FATEMA' },
-    { slot: 'L37+L38', venue: 'PRP108', faculty: 'ANIS FATEMA' },
-    { slot: 'L35+L36', venue: 'PRP108', faculty: 'ABDUL RAHIM  VC' },
-    { slot: 'L15+L16', venue: 'PRP108', faculty: 'KARTHIKEYAN A' },
+  'BITE202P - Digital Logic and Microprocessors Lab': [
+    { slot: 'L5+L6', venue: 'SJT212', faculty: 'NITHYA.S' },
   ],
   'BMAT205L - Discrete Mathematics and Graph Theory': [
     { slot: 'C1+TC1+TCC1', venue: 'SJT211A', faculty: 'MANIMARAN A' },

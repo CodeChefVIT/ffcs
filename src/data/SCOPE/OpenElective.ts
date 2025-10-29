@@ -1,4 +1,8 @@
 export const ScopeOpenElective = {
+  'BHUM111L - Happiness and Well-being': [
+    { slot: 'A2+TA2', venue: 'SJT627', faculty: 'POONAM SHARMA' },
+    { slot: 'A2+TA2', venue: 'SJT802', faculty: 'TONY P JOSE' },
+  ],
   'BHUM201L - Mass Communication': [
     { slot: 'E1+TE1', venue: 'SMV104', faculty: 'PRABAKAR  S' },
     { slot: 'E2+TE2', venue: 'SMV104', faculty: 'PRABAKAR  S' },
@@ -71,6 +75,12 @@ export const ScopeOpenElective = {
     { slot: 'C1+TC1', venue: 'SJT401', faculty: 'SAVITHA N' },
     { slot: 'B1+TB1', venue: 'PRP126', faculty: 'SHAHID HAMID RAINA' },
     { slot: 'F1+TF1', venue: 'SJT102', faculty: 'SAVITHA N' },
+  ],
+  'BMEE201L - Engineering Mechanics': [
+    { slot: 'B2+TB2', venue: 'MB229', faculty: 'SREEJA SADASIVAN' },
+  ],
+  'BMEE203L - Engineering Thermodynamics': [
+    { slot: 'C2+TC2', venue: 'MB306A', faculty: 'PORPATHAM E' },
   ],
   'BPHY201L - Optics': [{ slot: 'F1+TF1', venue: 'PRP532', faculty: 'RAMBABU YALAVARTHI' }],
   'BPHY202L - Classical Mechanics': [

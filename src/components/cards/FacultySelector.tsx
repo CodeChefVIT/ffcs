@@ -8,7 +8,28 @@ import { data } from '@/data/faculty';
 import { fullCourseData } from '@/lib/type';
 import AlertModal from '../ui/AlertModal';
 
-const schools = ['SCOPE', 'SELECT', 'SCORE', 'SMEC', 'SBST', 'SCHEME', 'SENSE', 'SCE', 'MID_5YEAR'];
+const schools = [
+  'SCOPE',
+  'SCORE',
+  'SELECT',
+  'SMEC',
+  'SBST',
+  'SCHEME',
+  'SENSE',
+  'SCE',
+  'SHINE',
+  'MTech',
+  'SCOPE (Fresher)',
+  'SCORE (Fresher)',
+  'SELECT (Fresher)',
+  'SMEC (Fresher)',
+  'SBST (Fresher)',
+  'SCHEME (Fresher)',
+  'SENSE (Fresher)',
+  'SCE (Fresher)',
+  'SHINE (Fresher)',
+  'MTech (Fresher)',
+];
 
 type SelectFieldProps = {
   label: string;
@@ -632,19 +653,21 @@ export default function FacultySelector({
     <div>
       <div className="relative inline-block mb-20">
         <div className="font-poppins relative bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[4px_4px_0_0_black] mx-auto overflow-hidden">
-          <div className="flex items-center gap-4 pt-4 px-4 m-4">
-            <span className="font-semibold text-lg mr-2">Select School:</span>
-            {schools.map(school => (
-              <button
-                key={school}
-                onClick={() => handleSchoolChange(school)}
-                className={`px-3 py-1 rounded-full text-sm font-bold border-2 shadow-[2px_2px_0_0_black] border-black cursor-pointer transition duration-100 active:shadow-[1px_1px_0_0_black] active:translate-x-[1px] active:translate-y-[1px] ${
-                  selectedSchool === school ? 'bg-[#FFEA79]' : 'bg-white'
-                }`}
-              >
-                {school == 'MID_5YEAR' ? 'SCOPE(MID)' : school}
-              </button>
-            ))}
+          <div className="flex flex-col items-center justify-center gap-4 pt-4 px-4 m-4 text-center">
+            {/* <span className="font-semibold text-lg">Select School:</span> */}
+            <div className="flex flex-wrap justify-center items-center gap-2 mb-4">
+              {schools.map(school => (
+                <button
+                  key={school}
+                  onClick={() => handleSchoolChange(school)}
+                  className={`px-3 py-1 rounded-full text-sm font-bold border-2 shadow-[2px_2px_0_0_black] border-black cursor-pointer transition duration-100 active:shadow-[1px_1px_0_0_black] active:translate-x-[1px] active:translate-y-[1px] ${
+                    selectedSchool === school ? 'bg-[#FFEA79]' : 'bg-white'
+                  }`}
+                >
+                  {school == 'MID_5YEAR' ? 'SCOPE (MID)' : school}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="grid grid-cols-3 gap-4 m-4 px-4">
