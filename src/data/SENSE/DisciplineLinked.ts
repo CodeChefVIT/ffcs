@@ -1,19 +1,9 @@
 export const SenseDisciplineLinked = {
   'BECE201L - Electronic Materials and Devices': [
-    { slot: 'C2+TC2', venue: 'PRP426', faculty: 'MUTHU RAJA S' },
+    { slot: 'D1+TD1', venue: 'TT523', faculty: 'SREETAMA GHOSH' },
   ],
-  'BECE202L - Signals and Systems': [
-    { slot: 'B1+TB1', venue: 'TT619', faculty: 'KARTHIKEYAN M' },
-    { slot: 'B2+TB2', venue: 'TT619', faculty: 'KARTHIKEYAN M' },
-    { slot: 'B1+TB1', venue: 'PRP426', faculty: 'NAWAZ SHAFI' },
-    { slot: 'B1+TB1', venue: 'PRP429', faculty: 'BIJAYLAXMI DAS' },
-    { slot: 'B1+TB1', venue: 'PRP427', faculty: 'JAGANA BIHARI PADHY' },
-    { slot: 'B1+TB1', venue: 'PRP134', faculty: 'ASHISH  P' },
-    { slot: 'B1+TB1', venue: 'TT314', faculty: 'RAJESH N' },
-    { slot: 'B2+TB2', venue: 'PRP230', faculty: 'RAJESH N' },
-    { slot: 'B2+TB2', venue: 'PRP134', faculty: 'NAWAZ SHAFI' },
-    { slot: 'B2+TB2', venue: 'PRP238A', faculty: 'JAGANA BIHARI PADHY' },
-    { slot: 'B2+TB2', venue: 'PRP330', faculty: 'SARANYA K.C.' },
+  'BECE202L - Signals and Systems': [{ slot: 'E2+TE2', venue: 'TT208', faculty: 'RAJESH N' }],
+  'BECE203L - Circuit Theory': [
+    { slot: 'A2+TA2+TAA2', venue: 'TT631', faculty: 'YOGESH KUMAR CHOUKIKER' },
   ],
-  'BECE203L - Circuit Theory': [{ slot: 'C2+TC2+TCC2', venue: 'PRP424', faculty: 'VIJAY KUMAR' }],
 };
