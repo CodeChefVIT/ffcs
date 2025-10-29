@@ -1,4 +1,4 @@
-export const FoundationCore = {
+export const FC = {
   'BARB101L - Arabic': [
     { slot: 'C2', venue: 'SJT215', faculty: 'MOHD SAQIB' },
     { slot: 'G1', venue: 'SJT115', faculty: 'MOHD SAQIB' },
@@ -41,10 +41,6 @@ export const FoundationCore = {
     { slot: 'E1+TE1', venue: 'CDMM403', faculty: 'PARIMALA RENGANAYAKI S' },
     { slot: 'D2+TD2', venue: 'CDMM106', faculty: 'JAGADEESH P' },
     { slot: 'E1+TE1', venue: 'CDMM107', faculty: 'DILLIP KUMAR BARIK' },
-  ],
-  'BCSE103E - Computer Programming: Java': [
-    { slot: 'TBB2', venue: 'SJT801', faculty: 'PRABHANANTHA KUMAR M' },
-    { slot: 'L13+L14+L23+L24', venue: 'SJT219', faculty: 'PRABHANANTHA KUMAR M' },
   ],
   'BEEE102L - Basic Electrical and Electronics Engineering': [
     { slot: 'C1+TC1', venue: 'TT204', faculty: 'RAVI K' },
