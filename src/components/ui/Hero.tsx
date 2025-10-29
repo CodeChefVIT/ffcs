@@ -21,7 +21,7 @@ export default function Hero() {
           Faculty list for SCOPE, SCHEME, SCORE, SELECT, SENSE, SMEC, SBST, SCE are updated.
           <br />
           <span className="text-sm font-normal">
-            If your branch isn't listed or you're a fresher, check back soon!
+            If your branch isn&apos;t listed or you&apos;re a fresher, check back soon!
             <br />
             You can still use the app as usual to create timetables.
           </span>
