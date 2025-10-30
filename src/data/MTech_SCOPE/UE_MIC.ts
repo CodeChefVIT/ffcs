@@ -1,4 +1,4 @@
-export const UE = {
+export const UE_MIC = {
   'CBS1904 - Capstone Project': [{ slot: 'NIL', venue: 'NIL', faculty: 'PLACEMENT AND TRAINING' }],
   'CSE1030 - Introduction to Internet of Things': [
     { slot: 'D1+TD1', venue: 'PRP732', faculty: 'MEHFOOZA' },

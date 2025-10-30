@@ -1,4 +1,4 @@
-export const PC = {
+export const PC_MIC = {
   'CSI1007 - Software Engineering Principles': [
     { slot: 'B1', venue: 'PRP134', faculty: 'RAMANATHAN L' },
     { slot: 'L39+L40', venue: 'PRP353', faculty: 'RAMANATHAN L' },
