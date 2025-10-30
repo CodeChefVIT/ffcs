@@ -17,7 +17,7 @@ export default function Hero() {
           draggable={false}
           priority
         />
-        <div className="text-l z-50 sm:text-m font-poppins font-semibold text-black mb-6">
+        {/* <div className="text-l z-50 sm:text-m font-poppins font-semibold text-black mb-6">
           Faculty list for SCOPE, SCHEME, SCORE, SELECT, SENSE, SMEC, SBST, SCE are updated.
           <br />
           <span className="text-sm font-normal">
@@ -25,7 +25,7 @@ export default function Hero() {
             <br />
             You can still use the app as usual to create timetables.
           </span>
-        </div>
+        </div> */}
 
         <div className="text-5xl md:text-6xl mb-6">FFCS-inator</div>
         {/* <div className="text-sm md:text-base font-poppins font-semibold text-black mb-6">

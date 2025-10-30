@@ -1,4 +1,4 @@
-export const UC = {
+export const UC_MIC = {
   'CHY1701 - Engineering Chemistry': [
     { slot: 'L3+L4', venue: 'PRP408A', faculty: 'TALAMARLLA DEEPTHI' },
     { slot: 'C2+TC2', venue: 'SJT803', faculty: 'SANTHAKUMAR K' },

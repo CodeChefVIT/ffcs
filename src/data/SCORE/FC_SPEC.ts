@@ -1,4 +1,4 @@
-export const SelectFoundatioCore = {
+export const FC_SPEC = {
   'BARB101L - Arabic': [
     { slot: 'C2', venue: 'SJT215', faculty: 'MOHD SAQIB' },
     { slot: 'G1', venue: 'SJT115', faculty: 'MOHD SAQIB' },
@@ -43,12 +43,8 @@ export const SelectFoundatioCore = {
     { slot: 'E1+TE1', venue: 'CDMM107', faculty: 'DILLIP KUMAR BARIK' },
   ],
   'BCSE103E - Computer Programming: Java': [
-    { slot: 'L31+L32+L51+L52', venue: 'TT247A', faculty: 'MEDARAMETLA PRAVEENKUMAR' },
-    { slot: 'TAA1', venue: 'TT424', faculty: 'MEDARAMETLA PRAVEENKUMAR' },
-  ],
-  'BEEE101P - Basic Electrical Engineering Lab': [
-    { slot: 'L35+L36', venue: 'PRP351', faculty: 'ANBARASAN P' },
-    { slot: 'L51+L52', venue: 'PRP351', faculty: 'ANBARASAN P' },
+    { slot: 'TBB2', venue: 'SJT801', faculty: 'PRABHANANTHA KUMAR M' },
+    { slot: 'L13+L14+L23+L24', venue: 'SJT219', faculty: 'PRABHANANTHA KUMAR M' },
   ],
   'BEEE102L - Basic Electrical and Electronics Engineering': [
     { slot: 'C1+TC1', venue: 'TT204', faculty: 'RAVI K' },
@@ -106,11 +102,11 @@ export const SelectFoundatioCore = {
   'BHUM106L - Principles of Sociology': [
     { slot: 'A2+TA2', venue: 'TT404', faculty: 'DOMINIC SAVIO' },
     { slot: 'A2+TA2', venue: 'SJT222', faculty: 'BALAMURUGAN J' },
+    { slot: 'B2+TB2', venue: 'SJT619', faculty: 'SOMA SAHA' },
     { slot: 'B2+TB2', venue: 'SMV214', faculty: 'PRABAKAR  S' },
     { slot: 'E1+TE1', venue: 'PRP320', faculty: 'RASHMI M' },
     { slot: 'C2+TC2', venue: 'SMV116', faculty: 'KUBENDRAN A' },
     { slot: 'B2+TB2', venue: 'SMV219', faculty: 'KUBENDRAN A' },
-    { slot: 'B2+TB2', venue: 'SJT619', faculty: 'SOMA SAHA' },
   ],
   'BHUM107L - Sustainability and Society': [
     { slot: 'E2+TE2', venue: 'TT416', faculty: 'DOMINIC SAVIO' },

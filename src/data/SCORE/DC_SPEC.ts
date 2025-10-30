@@ -1,0 +1,88 @@
+export const DC_SPEC = {
+  'BCSE202L - Data Structures and Algorithms': [
+    { slot: 'F1+TF1', venue: 'SJT602A', faculty: 'ARPITA GHOSH' },
+    { slot: 'F2+TF2', venue: 'SJT602A', faculty: 'ARPITA GHOSH' },
+  ],
+  'BCSE202P - Data Structures and Algorithms Lab': [
+    { slot: 'L49+L50', venue: 'SJT419', faculty: 'ARPITA GHOSH' },
+    { slot: 'L9+L10', venue: 'SJT419', faculty: 'ARPITA GHOSH' },
+  ],
+  'BCSE203E - Web Programming': [
+    { slot: 'TAA1', venue: 'SJT802', faculty: 'KRITHIKA L.B' },
+    { slot: 'L39+L40+L49+L50', venue: 'SJT119', faculty: 'KRITHIKA L.B' },
+    { slot: 'TAA1', venue: 'SJT803', faculty: 'PORKODI S' },
+    { slot: 'L31+L32+L51+L52', venue: 'SJT119', faculty: 'PORKODI S' },
+    { slot: 'L3+L4+L19+L20', venue: 'SJTG19', faculty: 'JAGANNATHAN J' },
+    { slot: 'TAA2', venue: 'SJT801', faculty: 'JAGANNATHAN J' },
+    { slot: 'L3+L4+L13+L14', venue: 'SJT218', faculty: 'PORKODI S' },
+    { slot: 'TAA2', venue: 'SJT802', faculty: 'PORKODI S' },
+    { slot: 'TAA1', venue: 'SJT807', faculty: 'JAGANNATHAN J' },
+    { slot: 'L47+L48+L57+L58', venue: 'SJT119', faculty: 'JAGANNATHAN J' },
+    { slot: 'TAA2', venue: 'SJT803', faculty: 'YOGA RAJA C A' },
+    { slot: 'L3+L4+L25+L26', venue: 'SJT219', faculty: 'YOGA RAJA C A' },
+  ],
+  'BCSE204L - Design and Analysis of Algorithms': [
+    { slot: 'A1+TA1', venue: 'SJT802', faculty: 'KURUVA LAKSHMANNA' },
+    { slot: 'A2+TA2', venue: 'SJT807', faculty: 'YUSUF AKHTAR' },
+    { slot: 'A2+TA2', venue: 'SJT801', faculty: 'KURUVA LAKSHMANNA' },
+    { slot: 'F1+TF1', venue: 'PRP323', faculty: 'VASANTHI P' },
+    { slot: 'A1+TA1', venue: 'SJTG02', faculty: 'YUSUF AKHTAR' },
+    { slot: 'A1+TA1', venue: 'SJT803', faculty: 'ANGULAKSHMI M' },
+    { slot: 'A2+TA2', venue: 'SJT803', faculty: 'ANGULAKSHMI M' },
+    { slot: 'F2+TF2', venue: 'PRP220', faculty: 'RISHIN HALDAR' },
+  ],
+  'BCSE204P - Design and Analysis of Algorithms Lab': [
+    { slot: 'L45+L46', venue: 'SJTG18', faculty: 'KURUVA LAKSHMANNA' },
+    { slot: 'L11+L12', venue: 'SJT120', faculty: 'YUSUF AKHTAR' },
+    { slot: 'L11+L12', venue: 'SJTG18', faculty: 'KURUVA LAKSHMANNA' },
+    { slot: 'L35+L36', venue: 'PRP233', faculty: 'VASANTHI P' },
+    { slot: 'L45+L46', venue: 'SJT120', faculty: 'YUSUF AKHTAR' },
+    { slot: 'L45+L46', venue: 'SJT216', faculty: 'ANGULAKSHMI M' },
+    { slot: 'L11+L12', venue: 'SJT216', faculty: 'ANGULAKSHMI M' },
+    { slot: 'L21+L22', venue: 'PRP234', faculty: 'RISHIN HALDAR' },
+  ],
+  'BCSE205L - Computer Architecture and Organization': [
+    { slot: 'A2+TA2', venue: 'PRP304', faculty: 'ARUN PRASATH G' },
+    { slot: 'A1+TA1', venue: 'PRP220', faculty: 'RUBY D' },
+  ],
+  'BCSE301L - Software Engineering': [
+    { slot: 'A2+TA2', venue: 'SJT315', faculty: 'RANJITHKUMAR S' },
+    { slot: 'A2+TA2', venue: 'SJT403', faculty: 'ANAND BIHARI' },
+  ],
+  'BCSE301P - Software Engineering Lab': [
+    { slot: 'L11+L12', venue: 'SJT316', faculty: 'RANJITHKUMAR S' },
+    { slot: 'L11+L12', venue: 'SJT318', faculty: 'ANAND BIHARI' },
+  ],
+  'BCSE303L - Operating Systems': [
+    { slot: 'D1+TD1', venue: 'SJT602', faculty: 'BANUPRIYA R' },
+    { slot: 'D2+TD2', venue: 'SJT602', faculty: 'BANUPRIYA R' },
+  ],
+  'BCSE303P - Operating Systems Lab': [
+    { slot: 'L39+L40', venue: 'SJT419', faculty: 'BANUPRIYA R' },
+    { slot: 'L15+L16', venue: 'SJT419', faculty: 'BANUPRIYA R' },
+  ],
+  'BCSE304L - Theory of Computation': [
+    { slot: 'B2+TB2', venue: 'SJT801', faculty: 'SUMATHI D' },
+    { slot: 'B1+TB1', venue: 'SJT803', faculty: 'PRADEEPA M' },
+    { slot: 'B1+TB1', venue: 'SJT802', faculty: 'UMA MAHESWARI  G' },
+    { slot: 'B1+TB1', venue: 'SJT824', faculty: 'RAGHAVAN R' },
+    { slot: 'B2+TB2', venue: 'SJT802', faculty: 'UMA MAHESWARI  G' },
+    { slot: 'B2+TB2', venue: 'SJT824', faculty: 'RAGHAVAN R' },
+  ],
+  'BCSE305L - Embedded Systems': [
+    { slot: 'G1+TG1', venue: 'PRP339', faculty: 'ABHISHEK G' },
+    { slot: 'G2+TG2', venue: 'SJT617', faculty: 'KALAISELVAN N' },
+    { slot: 'G1+TG1', venue: 'PRP532', faculty: 'SARIGAMALA KARTHIK KIRAN' },
+    { slot: 'G1+TG1', venue: 'PRP529', faculty: 'GAYATHRI V' },
+    { slot: 'G2+TG2', venue: 'SJT505', faculty: 'SANTANU KUMAR DASH' },
+    { slot: 'G2+TG2', venue: 'SJTG16', faculty: 'ABHISHEK G' },
+  ],
+  'BCSE308L - Computer Networks': [
+    { slot: 'G1+TG1', venue: 'SJT617', faculty: 'TAMIZHARASI T' },
+    { slot: 'G2+TG2', venue: 'SJT607', faculty: 'GANESH SHAMRAO KHEKARE' },
+  ],
+  'BCSE308P - Computer Networks Lab': [
+    { slot: 'L49+L50', venue: 'SJT515', faculty: 'TAMIZHARASI T' },
+    { slot: 'L3+L4', venue: 'SJT419', faculty: 'GANESH SHAMRAO KHEKARE' },
+  ],
+};
