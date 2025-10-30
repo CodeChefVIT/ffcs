@@ -20,11 +20,11 @@ export const UC_MIC = {
   ],
   'MGT1022 - Lean Start-up Management': [
     { slot: 'TCC1', venue: 'PRPG03', faculty: 'VINCENT HERALD WILSON' },
-    { slot: 'TCC1', venue: 'NIL', faculty: 'VINCENT HERALD WILSON' },
+    // { slot: 'TCC1', venue: 'NIL', faculty: 'VINCENT HERALD WILSON' },
     { slot: 'TAA1', venue: 'PRPG03', faculty: 'SRIDHAR V G' },
-    { slot: 'TAA1', venue: 'NIL', faculty: 'SRIDHAR V G' },
+    // { slot: 'TAA1', venue: 'NIL', faculty: 'SRIDHAR V G' },
     { slot: 'TAA2', venue: 'PRPG03', faculty: 'SRIDHAR V G' },
-    { slot: 'TAA2', venue: 'NIL', faculty: 'SRIDHAR V G' },
+    // { slot: 'TAA2', venue: 'NIL', faculty: 'SRIDHAR V G' },
   ],
   'PHY1701 - Engineering Physics': [
     { slot: 'L11+L12', venue: 'TT436', faculty: 'USHA RANI M' },

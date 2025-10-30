@@ -29,7 +29,7 @@ const schools = [
   // 'SCHEME (Fresher)',
   'SENSE (Fresher)',
   // 'SCE (Fresher)',
-  // 'SHINE (Fresher)',
+  'SHINE (Fresher)',
   // 'MTech (Fresher)',
 ];
 

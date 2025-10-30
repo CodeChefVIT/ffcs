@@ -1,5 +1,5 @@
 export const UE_MIC = {
-  'CBS1904 - Capstone Project': [{ slot: 'NIL', venue: 'NIL', faculty: 'PLACEMENT AND TRAINING' }],
+  // 'CBS1904 - Capstone Project': [{ slot: 'NIL', venue: 'NIL', faculty: 'PLACEMENT AND TRAINING' }],
   'CSE1030 - Introduction to Internet of Things': [
     { slot: 'D1+TD1', venue: 'PRP732', faculty: 'MEHFOOZA' },
     { slot: 'L37+L38', venue: 'SJT620A', faculty: 'MEHFOOZA' },
@@ -15,7 +15,7 @@ export const UE_MIC = {
   'CSE1032 - Cloud Computing Techniques': [
     { slot: 'A2+TA2+TAA2+V3', venue: 'PRP630', faculty: 'TAMILMANI A' },
   ],
-  'CSE1904 - Capstone Project': [{ slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' }],
+  // 'CSE1904 - Capstone Project': [{ slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' }],
   'EEE1001 - Basic Electrical and Electronics Engineering': [
     { slot: 'D2', venue: 'TT201', faculty: 'WASHIMA TASNIN' },
     { slot: 'L11+L12', venue: 'TT045', faculty: 'WASHIMA TASNIN' },
@@ -63,7 +63,7 @@ export const UE_MIC = {
   'MAT3013 - Data Engineering for Analytics': [
     { slot: 'E2', venue: 'PRP732', faculty: 'ASHISH BHATT' },
     { slot: 'L27+L28', venue: 'SJT620A', faculty: 'ASHISH BHATT' },
-    { slot: 'L27+L28', venue: 'NIL', faculty: 'ASHISH BHATT' },
+    // { slot: 'L27+L28', venue: 'NIL', faculty: 'ASHISH BHATT' },
   ],
   'MAT5016 - Time Series Analysis and Forecasting': [
     { slot: 'L13+L14', venue: 'SJT620A', faculty: 'JITENDRA KUMAR' },
@@ -112,15 +112,15 @@ export const UE_MIC = {
     { slot: 'L35+L36', venue: 'SJT418', faculty: 'SANKAR GANESH  L' },
   ],
   'MDI3005 - Advances in Data Engineering': [
-    { slot: 'A1+TA1', venue: 'NIL', faculty: 'SIVA SHANMUGAM G' },
+    // { slot: 'A1+TA1', venue: 'NIL', faculty: 'SIVA SHANMUGAM G' },
     { slot: 'A1+TA1', venue: 'SJT603', faculty: 'SIVA SHANMUGAM G' },
     { slot: 'A2+TA2', venue: 'SJT602A', faculty: 'SIVAKUMAR V' },
-    { slot: 'A2+TA2', venue: 'NIL', faculty: 'SIVAKUMAR V' },
+    // { slot: 'A2+TA2', venue: 'NIL', faculty: 'SIVAKUMAR V' },
     { slot: 'A1+TA1', venue: 'SJT602', faculty: 'ARULKUMAR V' },
-    { slot: 'A1+TA1', venue: 'NIL', faculty: 'ARULKUMAR V' },
+    // { slot: 'A1+TA1', venue: 'NIL', faculty: 'ARULKUMAR V' },
     { slot: 'A1+TA1', venue: 'SJT602A', faculty: 'ANBARASI M' },
-    { slot: 'A1+TA1', venue: 'NIL', faculty: 'ANBARASI M' },
-    { slot: 'A2+TA2', venue: 'NIL', faculty: 'ARCHANA T' },
+    // { slot: 'A1+TA1', venue: 'NIL', faculty: 'ANBARASI M' },
+    // { slot: 'A2+TA2', venue: 'NIL', faculty: 'ARCHANA T' },
     { slot: 'A2+TA2', venue: 'SJT602', faculty: 'ARCHANA T' },
   ],
   'MDI4001 - Machine Learning for Data Science': [
@@ -146,17 +146,17 @@ export const UE_MIC = {
     { slot: 'C2+TC2', venue: 'SJT602A', faculty: 'VIJAYANAND C' },
     { slot: 'C1+TC1', venue: 'SJT602', faculty: 'KUMAR K' },
   ],
-  'MIY6099 - Masters Thesis': [{ slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' }],
+  // 'MIY6099 - Masters Thesis': [{ slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' }],
   'PHY1999 - Introduction to Innovative Projects': [
     { slot: 'TG1', venue: 'PRPG31', faculty: 'ANURADHA C' },
-    { slot: 'TG1', venue: 'NIL', faculty: 'ANURADHA C' },
+    // { slot: 'TG1', venue: 'NIL', faculty: 'ANURADHA C' },
   ],
-  'SET4002 - Science, Engineering and Technology Project - II': [
-    { slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' },
-  ],
-  'SWE1904 - Capstone Project': [
-    { slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' },
-    { slot: 'NIL', venue: 'NIL', faculty: 'PLACEMENT AND TRAINING' },
-  ],
+  // 'SET4002 - Science, Engineering and Technology Project - II': [
+  //   { slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' },
+  // ],
+  // 'SWE1904 - Capstone Project': [
+  //   { slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' },
+  //   { slot: 'NIL', venue: 'NIL', faculty: 'PLACEMENT AND TRAINING' },
+  // ],
   'TAM1003 - Tamil': [{ slot: 'G2+TG2', venue: 'SJT115', faculty: 'MARIA SEBASTIN A' }],
 };

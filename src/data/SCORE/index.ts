@@ -14,8 +14,8 @@ export const SCORE_LIST = {
   DisciplineCore: ScoreDisciplineCore,
   DisciplineElective: ScoreDisciplinedElective,
   OpenElective: ScoreOpenElective,
-  'FC (Specialization)': FC_SPEC,
-  'DC (Specialization)': DC_SPEC,
-  'DLES (Specialization)': DLES_SPEC,
-  'OE (Specialization)': OE_SPEC,
+  'FC (BYB, BDE)': FC_SPEC,
+  'DC (BYB, BDE)': DC_SPEC,
+  'DLES (BYB, BDE)': DLES_SPEC,
+  'OE (BYB, BDE)': OE_SPEC,
 };
