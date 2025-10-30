@@ -25,7 +25,7 @@ const schools = [
   'SCORE (Fresher)',
   'SELECT (Fresher)',
   'SMEC (Fresher)',
-  // 'SBST (Fresher)',
+  'SBST (Fresher)',
   // 'SCHEME (Fresher)',
   'SENSE (Fresher)',
   // 'SCE (Fresher)',
