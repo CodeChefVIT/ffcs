@@ -28,4 +28,7 @@ export const PCC = {
     { slot: 'C1+TC1+TCC1', venue: 'TT415', faculty: 'INDRAGANDHI V' },
     { slot: 'C2+TC2+TCC2', venue: 'TT414', faculty: 'ANUSUYA BHATACHARYYA' },
   ],
+  'BAEIE101 - Signals and Systems': [
+    { slot: 'C1+TC1+TCC1', venue: 'TT434A', faculty: 'AMUTHA PRABHA N' },
+  ],
 };
