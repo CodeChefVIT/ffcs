@@ -14,6 +14,7 @@ import { SCORE_F } from './SCORE_F';
 import { SELECT_F } from './SELECT_F';
 import { SENSE_F } from './SENSE_F';
 import { SMEC_F } from './SMEC_F';
+import { SHINE_F } from './SHINE_F';
 
 type FacultyEntry = {
   slot: string;
@@ -53,4 +54,5 @@ export const data: Schools = {
   'SELECT (Fresher)': SELECT_F,
   'SENSE (Fresher)': SENSE_F,
   'SMEC (Fresher)': SMEC_F,
+  'SHINE (Fresher)': SHINE_F,
 };
