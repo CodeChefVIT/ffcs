@@ -90,7 +90,10 @@ export default function CompoundTable({ data, large }: CompoundTableProps) {
                       <div className="w-[80px] shrink-0 ml-4 mr-4 break-words whitespace-normal text-left">
                         {entry.slot.replace(/\+/g, '+\u200B')}
                       </div>
-                      <div className="w-[160px] shrink-0 break-words whitespace-normal text-right pr-4">
+                      <div
+                        title={i === 0 ? displayName : undefined}
+                        className="w-[160px] shrink-0 break-words whitespace-normal text-right pr-4"
+                      >
                         {i === 0 ? initials : ''}
                       </div>
                     </div>
