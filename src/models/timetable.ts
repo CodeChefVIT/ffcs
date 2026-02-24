@@ -1,19 +1,6 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, InferSchemaType, Model } from 'mongoose';
 
-export interface ITimetable extends Document {
-  title: string;
-  owner: string;
-  isPublic: boolean;
-  shareId: string;
-  slots: {
-    slot: string;
-    courseCode: string;
-    courseName: string;
-    facultyName: string;
-  }[];
-}
-
-const timetableSchema = new Schema<ITimetable>(
+const timetableSchema = new Schema(
   {
     title: { type: String, required: true },
     owner: { type: String, required: true },
@@ -33,5 +20,9 @@ const timetableSchema = new Schema<ITimetable>(
 
 timetableSchema.index({ owner: 1 });
 
-export default mongoose.models.Timetable ||
-  mongoose.model<ITimetable>('Timetable', timetableSchema);
+export type ITimetable = InferSchemaType<typeof timetableSchema>;
+
+const Timetable: Model<ITimetable> =
+  mongoose.models.Timetable || mongoose.model<ITimetable>('Timetable', timetableSchema);
+
+export default Timetable;
