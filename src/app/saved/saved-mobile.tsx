@@ -45,6 +45,8 @@ export default function SavedMobile() {
   const [popupTitle, setPopupTitle] = useState<string>('');
   const [selectedTT, setSelectedTT] = useState<TimetableEntry | null>(null);
   const [publicToggle, setPublicToggle] = useState(true);
+  // NEW: for rename support
+  const [renameValue, setRenameValue] = useState('');
 
   useEffect(() => {
     if (!userEmail) return;
@@ -72,11 +74,29 @@ export default function SavedMobile() {
     setShowPopup(true);
   }
 
+  // NEW: delete handler (mirrors saved.tsx)
+  async function handleDelete() {
+    if (!selectedTT) return;
+    await axios.delete(`/api/timetables/${selectedTT._id}`);
+    setTimetables(prev => prev.filter(t => t._id !== selectedTT._id));
+    setShowPopup(false);
+    setSelectedTT(null);
+  }
+
+  // NEW: rename handler (mirrors saved.tsx)
+  async function handleRename() {
+    if (!selectedTT) return;
+    await axios.patch(`/api/timetables/${selectedTT._id}`, { title: renameValue });
+    setTimetables(prev =>
+      prev.map(t => (t._id === selectedTT._id ? { ...t, title: renameValue } : t))
+    );
+    setShowPopup(false);
+    setSelectedTT(null);
+  }
+
   async function handleCopyLink(tt: TimetableEntry) {
     try {
-      await axios.patch(`/api/timetables/${tt._id}`, {
-        isPublic: publicToggle,
-      });
+      await axios.patch(`/api/timetables/${tt._id}`, { isPublic: publicToggle });
       const res = await axios.get(`/api/timetables/${tt._id}`);
       const updated = res.data;
       if (!updated.shareId) throw new Error('No shareId found');
@@ -88,9 +108,7 @@ export default function SavedMobile() {
   async function handleTogglePublic(state: 'on' | 'off') {
     if (!selectedTT) return;
     setPublicToggle(state === 'on');
-    await axios.patch(`/api/timetables/${selectedTT._id}`, {
-      isPublic: state === 'on',
-    });
+    await axios.patch(`/api/timetables/${selectedTT._id}`, { isPublic: state === 'on' });
     setTimetables(prev =>
       prev.map(tt => (tt._id === selectedTT._id ? { ...tt, isPublic: state === 'on' } : tt))
     );
@@ -98,6 +116,7 @@ export default function SavedMobile() {
 
   return (
     <div className="flex flex-col min-h-screen relative items-center font-poppins">
+      {/* Background */}
       <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
         <Image
           src="/art/bg_dots.svg"
@@ -113,43 +132,84 @@ export default function SavedMobile() {
 
       <Navbar page="mobile" />
 
-      <div className="text-4xl mb-8 mt-28 text-black font-pangolin">Saved Timetables</div>
+      {/* FIX: reduced mt-28 → mt-20 so title isn't pushed too far down on short phones */}
+      <div className="text-4xl mb-8 mt-20 text-black font-pangolin">Saved Timetables</div>
 
-      <ul className="w-full space-y-4 px-6">
-        {timetables.map((tt, index) => (
-          <li
-            key={tt._id}
-            className="grid grid-cols-[auto_1fr] items-center px-3 py-3 bg-[#A7D5D7] text-black rounded-xl border-2 border-black shadow-[2px_2px_0_0_black]"
-            onClick={() => handleView(tt)}
-          >
-            <span className="font-medium text-base mr-4">{index + 1}.</span>
-            <span className="font-medium text-base truncate">{tt.title}</span>
-          </li>
-        ))}
-      </ul>
-
-      <div className="flex items-center w-full mt-8 mb-8 text-sm font-poppins font-semibold text-black/50 px-8">
-        <div className="flex-grow h-0.5 bg-gradient-to-r from-transparent to-black/33" />
-        {loading ? null : timetables.length === 0 ? (
-          <span className="mx-4">Nothing To Show Here</span>
-        ) : (
-          <span className="mx-4">End of List</span>
-        )}
-        <div className="flex-grow h-0.5 bg-gradient-to-r from-black/33 to-transparent" />
-      </div>
-
+      {/* FIX: unified loading/empty/list rendering — no orphaned divider during load */}
       {loading ? (
-        <Loader />
-      ) : timetables.length === 0 ? (
-        <div className="mx-auto my-auto text-center text-sm font-poppins font-semibold text-black/70">
-          No saved timetables found.
-          <br />
-          Create and save from the desktop website.
+        <div className="flex-1 flex items-center justify-center">
+          <Loader />
         </div>
-      ) : null}
+      ) : timetables.length === 0 ? (
+        <div className="flex-1 flex items-center justify-center px-8">
+          <p className="text-center text-sm font-semibold text-black/70">
+            No saved timetables found.
+            <br />
+            Create and save from the desktop website.
+          </p>
+        </div>
+      ) : (
+        <>
+          <ul className="w-full space-y-4 px-6">
+            {timetables.map((tt, index) => (
+              <li
+                key={tt._id}
+                className="grid grid-cols-[auto_1fr_auto] items-center px-3 py-3 bg-[#A7D5D7] text-black rounded-xl border-2 border-black shadow-[2px_2px_0_0_black] active:opacity-70 transition-opacity"
+              >
+                {/* Tapping the number or title opens the view popup */}
+                <span
+                  className="font-medium text-base mr-4"
+                  onClick={() => handleView(tt)}
+                >
+                  {index + 1}.
+                </span>
+                <span
+                  className="font-medium text-base truncate"
+                  onClick={() => handleView(tt)}
+                >
+                  {tt.title}
+                </span>
+
+                {/* NEW: action buttons for rename and delete on mobile */}
+                <div className="flex gap-2 ml-2" onClick={e => e.stopPropagation()}>
+                  <button
+                    className="p-1 rounded-lg bg-blue-200 border border-black text-xs font-semibold"
+                    onClick={() => {
+                      setSelectedTT(tt);
+                      setRenameValue(tt.title);
+                      setPopupType('rename_tt');
+                      setShowPopup(true);
+                    }}
+                  >
+                    ✏️
+                  </button>
+                  <button
+                    className="p-1 rounded-lg bg-red-200 border border-black text-xs font-semibold"
+                    onClick={() => {
+                      setSelectedTT(tt);
+                      setPopupType('delete_tt');
+                      setShowPopup(true);
+                    }}
+                  >
+                    🗑️
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          {/* Divider only shown when list is visible */}
+          <div className="flex items-center w-full mt-8 mb-8 text-sm font-poppins font-semibold text-black/50 px-8">
+            <div className="flex-grow h-0.5 bg-gradient-to-r from-transparent to-black/33" />
+            <span className="mx-4">End of List</span>
+            <div className="flex-grow h-0.5 bg-gradient-to-r from-black/33 to-transparent" />
+          </div>
+        </>
+      )}
 
       <Footer type="mobile" />
 
+      {/* View popup — unchanged */}
       {showPopup && popupType === 'view_tt' && selectedTT && (
         <PopupViewTT
           TTName={popupTitle}
@@ -160,12 +220,63 @@ export default function SavedMobile() {
           shareSwitchAction={handleTogglePublic}
           shareLink={
             selectedTT.shareId
-              ? `${
-                  typeof window !== 'undefined' ? window.location.origin : ''
-                }/share/${selectedTT.shareId}`
+              ? `${typeof window !== 'undefined' ? window.location.origin : ''}/share/${selectedTT.shareId}`
               : ''
           }
         />
+      )}
+
+      {/* NEW: delete confirmation popup */}
+      {showPopup && popupType === 'delete_tt' && selectedTT && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6">
+          <div className="bg-white rounded-2xl border-2 border-black p-6 w-full max-w-sm shadow-[4px_4px_0_0_black]">
+            <p className="text-base font-semibold mb-4 text-center">
+              Delete &quot;{selectedTT.title}&quot;?
+            </p>
+            <div className="flex gap-3 justify-center">
+              <button
+                className="px-4 py-2 rounded-xl border-2 border-black bg-red-300 font-semibold active:opacity-70"
+                onClick={handleDelete}
+              >
+                Delete
+              </button>
+              <button
+                className="px-4 py-2 rounded-xl border-2 border-black bg-gray-100 font-semibold active:opacity-70"
+                onClick={() => setShowPopup(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* NEW: rename popup */}
+      {showPopup && popupType === 'rename_tt' && selectedTT && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6">
+          <div className="bg-white rounded-2xl border-2 border-black p-6 w-full max-w-sm shadow-[4px_4px_0_0_black]">
+            <p className="text-base font-semibold mb-4 text-center">Rename Timetable</p>
+            <input
+              className="w-full border-2 border-black rounded-xl px-3 py-2 mb-4 text-sm font-poppins"
+              value={renameValue}
+              onChange={e => setRenameValue(e.target.value)}
+            />
+            <div className="flex gap-3 justify-center">
+              <button
+                className="px-4 py-2 rounded-xl border-2 border-black bg-blue-300 font-semibold active:opacity-70"
+                onClick={handleRename}
+              >
+                Save
+              </button>
+              <button
+                className="px-4 py-2 rounded-xl border-2 border-black bg-gray-100 font-semibold active:opacity-70"
+                onClick={() => setShowPopup(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
