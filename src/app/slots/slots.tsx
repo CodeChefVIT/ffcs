@@ -177,9 +177,9 @@ export default function View() {
         )}
 
         {/* Timetable Section */}
-        <div className="w-full mt-12 mb-10 px-4">
+        <div className="mx-auto mt-12 mb-10 w-full max-w-[1000px]">
           <div className="overflow-x-auto">
-            <div className="min-w-[1000px]">
+            <div className="min-w-[1000px] h-[480px]">
               <TimeTable ... />
             </div>
           </div>
