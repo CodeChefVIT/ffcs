@@ -119,12 +119,8 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
 
   return (
     <div
-      className="grid bg-black relative w-full p-[1px] select-none font-inter"
-      style={{
-        gridTemplateColumns,
-        gridTemplateRows,
-        aspectRatio: `${totalColWeight} / ${totalRowWeight}`,
-      }}
+      className="grid bg-black relative w-full h-full p-[1px] select-none font-inter"
+      style={{ gridTemplateColumns, gridTemplateRows }}
     >
       {cells}
       <div
