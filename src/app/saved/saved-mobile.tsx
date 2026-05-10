@@ -8,6 +8,8 @@ import Image from 'next/image';
 import axios from 'axios';
 import { PopupViewTT } from '@/components/ui/PopupMobile';
 import Loader from '@/components/ui/Loader';
+import Popup from '@/components/ui/Popup';
+import { ZButton } from '@/components/ui/Buttons';
 
 async function fetchTimetablesByOwner(owner: string) {
   const res = await axios.get(`/api/timetables?owner=${encodeURIComponent(owner)}`);
@@ -45,6 +47,7 @@ export default function SavedMobile() {
   const [popupTitle, setPopupTitle] = useState<string>('');
   const [selectedTT, setSelectedTT] = useState<TimetableEntry | null>(null);
   const [publicToggle, setPublicToggle] = useState(true);
+  
   // NEW: for rename support
   const [renameValue, setRenameValue] = useState('');
 
@@ -172,27 +175,27 @@ export default function SavedMobile() {
 
                 {/* NEW: action buttons for rename and delete on mobile */}
                 <div className="flex gap-2 ml-2" onClick={e => e.stopPropagation()}>
-                  <button
-                    className="p-1 rounded-lg bg-blue-200 border border-black text-xs font-semibold"
+                  <ZButton
+                    type="image"
+                    color="blue"
+                    image="/icons/edit.svg"
                     onClick={() => {
                       setSelectedTT(tt);
                       setRenameValue(tt.title);
                       setPopupType('rename_tt');
                       setShowPopup(true);
                     }}
-                  >
-                    ✏️
-                  </button>
-                  <button
-                    className="p-1 rounded-lg bg-red-200 border border-black text-xs font-semibold"
+                  />
+                  <ZButton
+                    type="image"
+                    color="red"
+                    image="/icons/trash.svg"
                     onClick={() => {
                       setSelectedTT(tt);
                       setPopupType('delete_tt');
                       setShowPopup(true);
                     }}
-                  >
-                    🗑️
-                  </button>
+                  />
                 </div>
               </li>
             ))}
@@ -226,58 +229,24 @@ export default function SavedMobile() {
         />
       )}
 
-      {/* NEW: delete confirmation popup */}
       {showPopup && popupType === 'delete_tt' && selectedTT && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6">
-          <div className="bg-white rounded-2xl border-2 border-black p-6 w-full max-w-sm shadow-[4px_4px_0_0_black]">
-            <p className="text-base font-semibold mb-4 text-center">
-              Delete &quot;{selectedTT.title}&quot;?
-            </p>
-            <div className="flex gap-3 justify-center">
-              <button
-                className="px-4 py-2 rounded-xl border-2 border-black bg-red-300 font-semibold active:opacity-70"
-                onClick={handleDelete}
-              >
-                Delete
-              </button>
-              <button
-                className="px-4 py-2 rounded-xl border-2 border-black bg-gray-100 font-semibold active:opacity-70"
-                onClick={() => setShowPopup(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+              <Popup
+                type="delete_tt"
+                dataBody={selectedTT.title}
+                closeLink={() => setShowPopup(false)}
+                action={handleDelete}
+              />
+            )}
 
-      {/* NEW: rename popup */}
-      {showPopup && popupType === 'rename_tt' && selectedTT && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6">
-          <div className="bg-white rounded-2xl border-2 border-black p-6 w-full max-w-sm shadow-[4px_4px_0_0_black]">
-            <p className="text-base font-semibold mb-4 text-center">Rename Timetable</p>
-            <input
-              className="w-full border-2 border-black rounded-xl px-3 py-2 mb-4 text-sm font-poppins"
-              value={renameValue}
-              onChange={e => setRenameValue(e.target.value)}
-            />
-            <div className="flex gap-3 justify-center">
-              <button
-                className="px-4 py-2 rounded-xl border-2 border-black bg-blue-300 font-semibold active:opacity-70"
-                onClick={handleRename}
-              >
-                Save
-              </button>
-              <button
-                className="px-4 py-2 rounded-xl border-2 border-black bg-gray-100 font-semibold active:opacity-70"
-                onClick={() => setShowPopup(false)}
-              >
-                Cancel
-              </button>
+            {showPopup && popupType === 'rename_tt' && selectedTT && (
+              <Popup
+                type="rename_tt"
+                dataBody={renameValue}
+                closeLink={() => setShowPopup(false)}
+                action={handleRename}
+                onInputChange={setRenameValue}
+              />
+            )}
             </div>
-          </div>
-        </div>
-      )}
-    </div>
   );
 }
