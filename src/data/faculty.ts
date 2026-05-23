@@ -6,7 +6,16 @@ import { SELECT_LIST } from './SELECT';
 import { SENSE_LIST } from './SENSE';
 import { SMEC_LIST } from './SMEC';
 import { SCE_LIST } from './SCE';
-import { MID_5YEAR } from './MID_5YEAR';
+import { SHINE_LIST } from './SHINE';
+import { MTech_SCOPE } from './MTech_SCOPE';
+import { MIS_LIST } from './MTech_SCORE';
+import { SCOPE_F } from './SCOPE_F';
+import { SCORE_F } from './SCORE_F';
+import { SELECT_F } from './SELECT_F';
+import { SENSE_F } from './SENSE_F';
+import { SMEC_F } from './SMEC_F';
+import { SHINE_F } from './SHINE_F';
+import { SBST_F } from './SBST_F';
 
 type FacultyEntry = {
   slot: string;
@@ -38,5 +47,14 @@ export const data: Schools = {
   SCHEME: SCHEME_LIST,
   SELECT: SELECT_LIST,
   SCE: SCE_LIST,
-  MID_5YEAR: MID_5YEAR,
+  SHINE: SHINE_LIST,
+  'MTech (SCOPE)': MTech_SCOPE,
+  'MTech (MIS)': MIS_LIST,
+  'SCOPE (Fresher)': SCOPE_F,
+  'SCORE (Fresher)': SCORE_F,
+  'SELECT (Fresher)': SELECT_F,
+  'SENSE (Fresher)': SENSE_F,
+  'SMEC (Fresher)': SMEC_F,
+  'SHINE (Fresher)': SHINE_F,
+  'SBST (Fresher)': SBST_F,
 };

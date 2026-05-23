@@ -17,12 +17,22 @@ export default function Hero() {
           draggable={false}
           priority
         />
+        {/* <div className="text-l z-50 sm:text-m font-poppins font-semibold text-black mb-6">
+          Faculty list for SCOPE, SCHEME, SCORE, SELECT, SENSE, SMEC, SBST, SCE are updated.
+          <br />
+          <span className="text-sm font-normal">
+            If your branch isn&apos;t listed or you&apos;re a fresher, check back soon!
+            <br />
+            You can still use the app as usual to create timetables.
+          </span>
+        </div> */}
+
         <div className="text-5xl md:text-6xl mb-6">FFCS-inator</div>
-        <div className="text-sm md:text-base font-poppins font-semibold text-black mb-6">
+        {/* <div className="text-sm md:text-base font-poppins font-semibold text-black mb-6">
           Generate priority-based timetables in seconds.
           <br />
           No more clashes, no more stress.
-        </div>
+        </div> */}
         <div className="text-2xl md:text-3xl mb-8">Create Your Ideal Timetable!</div>
         <ZButton
           type="large"

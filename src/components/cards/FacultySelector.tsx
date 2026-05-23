@@ -7,8 +7,31 @@ import { ZButton } from '../ui/Buttons';
 import { data } from '@/data/faculty';
 import { fullCourseData } from '@/lib/type';
 import AlertModal from '../ui/AlertModal';
+import { course_type_map } from '@/lib/course_codes_map';
 
-const schools = ['SCOPE', 'SELECT', 'SCORE', 'SMEC', 'SBST', 'SCHEME', 'SENSE', 'SCE', 'MID_5YEAR'];
+const schools = [
+  'SCOPE',
+  'SCORE',
+  'SELECT',
+  'SMEC',
+  'SBST',
+  'SCHEME',
+  'SENSE',
+  'SCE',
+  'SHINE',
+  'MTech (SCOPE)',
+  // 'MTech (SCORE)',
+  'SCOPE (Fresher)',
+  'SCORE (Fresher)',
+  'SELECT (Fresher)',
+  'SMEC (Fresher)',
+  'SBST (Fresher)',
+  // 'SCHEME (Fresher)',
+  'SENSE (Fresher)',
+  // 'SCE (Fresher)',
+  'SHINE (Fresher)',
+  // 'MTech (Fresher)',
+];
 
 type SelectFieldProps = {
   label: string;
@@ -202,6 +225,7 @@ function generateCourseSlotsBoth({
   selectedSubject,
   selectedSlot,
   selectedFaculties,
+  courseCodeType,
 }: {
   data: FacultyData;
   selectedSchool: string;
@@ -209,18 +233,25 @@ function generateCourseSlotsBoth({
   selectedSubject: string;
   selectedSlot: string;
   selectedFaculties: string[];
+  courseCodeType: 'L' | 'P' | 'E' | undefined;
 }) {
   const [courseCode] = selectedSubject.split(' - ');
   const baseCode = courseCode.slice(0, -1);
 
-  const labEntryKey = Object.keys(data[selectedSchool][selectedDomain]).find(key => {
-    const code = key.split(' - ')[0];
-    return code.slice(0, -1) === baseCode && (code.endsWith('P') || code.endsWith('E'));
-  });
+  let labData: SubjectEntry[] = [];
 
-  const labData: SubjectEntry[] = labEntryKey
-    ? data[selectedSchool][selectedDomain][labEntryKey]
-    : [];
+  if (courseCodeType === 'E') {
+    labData = data[selectedSchool][selectedDomain][selectedSubject];
+  } else {
+    const labEntryKey = Object.keys(data[selectedSchool][selectedDomain]).find(key => {
+      const code = key.split(' - ')[0];
+      const type = getCourseType(code);
+      return code.slice(0, -1) === baseCode && (type === 'P' || type === 'E');
+    });
+    if (labEntryKey) {
+      labData = data[selectedSchool][selectedDomain][labEntryKey];
+    }
+  }
 
   const isMorningTheory = selectedSlot.includes('1');
   const isEveningTheory = selectedSlot.includes('2');
@@ -265,7 +296,7 @@ function generateCourseSlotsBoth({
 
     return {
       facultyName,
-      ...(labSlots.length > 0 && { facultyLabSlot: labSlots.join(', ') }),
+      facultyLabSlot: labSlots.length > 0 ? labSlots.join(', ') : courseCode,
       ...(venue ? { venue } : {}),
     };
   });
@@ -287,6 +318,18 @@ const prettifyDomain = (domain: string) => {
     .replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')
     .trim();
 };
+
+const getCourseType = (courseCode: string): 'L' | 'P' | 'E' | undefined => {
+  if (course_type_map[courseCode]) {
+    return course_type_map[courseCode] as 'L' | 'P' | 'E';
+  }
+  const lastChar = courseCode.slice(-1).toUpperCase();
+  if (['L', 'P', 'E'].includes(lastChar)) {
+    return lastChar as 'L' | 'P' | 'E';
+  }
+  return undefined;
+};
+
 type ShiftKey = 'morning' | 'evening';
 export default function FacultySelector({
   onConfirm,
@@ -335,18 +378,16 @@ export default function FacultySelector({
       setPopup({ showPopup: true, message: 'Please select a subject.' });
       return;
     }
-    if (
-      !selectedLabShift &&
-      selectedSubject.split(' - ')[0].endsWith('P') &&
-      !selectedSubject.split(' - ')[0].startsWith('BSTS')
-    ) {
+    const courseCode = selectedSubject.split(' - ')[0];
+    const courseCodeType = getCourseType(courseCode);
+
+    if (!selectedLabShift && courseCodeType === 'P' && !courseCode.startsWith('BSTS')) {
       setPopup({ showPopup: true, message: 'Please select a lab slot.' });
       return;
     }
     if (
       !selectedSlot &&
-      (!selectedSubject.split(' - ')[0].endsWith('P') ||
-        selectedSubject.split(' - ')[0].startsWith('BSTS'))
+      (courseCodeType === 'L' || courseCodeType === 'E' || courseCode.startsWith('BSTS'))
     ) {
       setPopup({ showPopup: true, message: 'Please select a theory slot.' });
       return;
@@ -362,39 +403,36 @@ export default function FacultySelector({
       setPopup({ showPopup: true, message: 'Successfully added course' });
     }
 
-    const courseCode = selectedSubject.split(' - ')[0];
-    const courseCodeType = courseCode.at(-1);
     const id = selectedSubject;
 
     const labSubject = Object.keys(data[selectedSchool][selectedDomain]).filter(subject => {
       const subjectCode = subject.split(' - ')[0];
+      const subjectType = getCourseType(subjectCode);
       return (
         subjectCode.slice(0, -1) === courseCode.slice(0, -1) &&
-        (subjectCode.at(-1) === 'P' || subjectCode.at(-1) === 'E') &&
+        (subjectType === 'P' || subjectType === 'E') &&
         subjectCode !== courseCode &&
         !courseCode.startsWith('BSTS')
       );
     });
 
     const courseType: 'both' | 'th' | 'lab' =
-      labSubject.length == 1 || courseCodeType === 'E'
+      labSubject.length === 1 && courseCodeType !== 'E'
         ? 'both'
         : courseCodeType === 'P' && !courseCode.startsWith('BSTS')
           ? 'lab'
-          : courseCodeType === 'L' || courseCode.startsWith('BSTS')
-            ? 'th'
-            : 'th';
+          : 'th';
 
     const courseName = selectedSubject.split(' - ')[1];
 
     let courseCodeLab;
     let courseNameLab;
     let courseSlots;
-    if (courseCodeType == 'E') {
-      courseCodeLab = courseCode;
-      courseNameLab = courseName;
+    if (courseCodeType === 'E') {
+      courseCodeLab = '';
+      courseNameLab = '';
     } else {
-      courseCodeLab = courseCodeLab = labSubject.length == 1 ? labSubject[0].split(' - ')[0] : '';
+      courseCodeLab = labSubject.length == 1 ? labSubject[0].split(' - ')[0] : '';
       courseNameLab = labSubject.length == 1 ? labSubject[0].split(' - ')[1] : '';
     }
     if (selectedLabShift) {
@@ -404,7 +442,7 @@ export default function FacultySelector({
         labShift: selectedLabShift,
       });
     } else {
-      if (courseType == 'both') {
+      if (courseType == 'both' || courseCodeType === 'E') {
         courseSlots = generateCourseSlotsBoth({
           data,
           selectedSchool,
@@ -412,6 +450,7 @@ export default function FacultySelector({
           selectedSubject,
           selectedSlot,
           selectedFaculties: priorityList,
+          courseCodeType,
         });
       } else if (courseType == 'th') {
         courseSlots = generateCourseSlotsSingle({
@@ -431,13 +470,14 @@ export default function FacultySelector({
     }
     const courseData: fullCourseData = {
       id,
-      courseType,
+      courseType: courseCodeType === 'E' ? 'both' : courseType,
       courseCode,
       courseName,
-      ...((labSubject.length == 1 || courseCodeType === 'E') && {
-        courseCodeLab,
-        courseNameLab,
-      }),
+      ...(labSubject.length == 1 &&
+        courseCodeType !== 'E' && {
+          courseCodeLab,
+          courseNameLab,
+        }),
       courseSlots: courseSlots!,
     };
 
@@ -500,9 +540,10 @@ export default function FacultySelector({
 
       const filteredSubjects = allSubjects.filter(subject => {
         const code = subject.split(' - ')[0];
-        const base = code.slice(0, -1);
-        if (code.endsWith('P')) {
-          return !allSubjects.some(s => s.startsWith(base + 'L'));
+        const type = getCourseType(code);
+        if (type === 'P') {
+          const theoryCode = code.slice(0, -1) + 'L';
+          return !allSubjects.some(s => s.startsWith(theoryCode));
         }
         return true;
       });
@@ -512,8 +553,9 @@ export default function FacultySelector({
       if (selectedSubject) {
         const subjectData = domainData[selectedSubject];
         const courseCode = selectedSubject.split(' - ')[0];
+        const courseType = getCourseType(courseCode);
 
-        if (courseCode.endsWith('P') && !courseCode.startsWith('BSTS')) {
+        if (courseType === 'P' && !courseCode.startsWith('BSTS')) {
           const allLabSlots = [...new Set(subjectData.map(entry => entry.slot))];
 
           const morningLabSlots = allLabSlots.filter(slot => {
@@ -660,19 +702,21 @@ export default function FacultySelector({
     <div>
       <div className="relative inline-block mb-20">
         <div className="font-poppins relative bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[4px_4px_0_0_black] mx-auto overflow-hidden">
-          <div className="flex items-center gap-4 pt-4 px-4 m-4">
-            <span className="font-semibold text-lg mr-2">Select School:</span>
-            {schools.map(school => (
-              <button
-                key={school}
-                onClick={() => handleSchoolChange(school)}
-                className={`px-3 py-1 rounded-full text-sm font-bold border-2 shadow-[2px_2px_0_0_black] border-black cursor-pointer transition duration-100 active:shadow-[1px_1px_0_0_black] active:translate-x-[1px] active:translate-y-[1px] ${
-                  selectedSchool === school ? 'bg-[#FFEA79]' : 'bg-white'
-                }`}
-              >
-                {school == 'MID_5YEAR' ? 'SCOPE(MID)' : school}
-              </button>
-            ))}
+          <div className="flex flex-col items-center justify-center gap-4 pt-4 px-4 m-4 text-center">
+            {/* <span className="font-semibold text-lg">Select School:</span> */}
+            <div className="flex flex-wrap justify-center items-center gap-2 mb-4">
+              {schools.map(school => (
+                <button
+                  key={school}
+                  onClick={() => handleSchoolChange(school)}
+                  className={`px-3 py-1 rounded-full text-sm font-bold border-2 shadow-[2px_2px_0_0_black] border-black cursor-pointer transition duration-100 active:shadow-[1px_1px_0_0_black] active:translate-x-[1px] active:translate-y-[1px] ${
+                    selectedSchool === school ? 'bg-[#FFEA79]' : 'bg-white'
+                  }`}
+                >
+                  {school == 'MID_5YEAR' ? 'SCOPE (MID)' : school}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="grid grid-cols-3 gap-4 m-4 px-4">
@@ -689,7 +733,7 @@ export default function FacultySelector({
               options={subjects}
               onChange={handleSubjectChange}
             />
-            {selectedSubject.split(' - ')[0].endsWith('P') &&
+            {getCourseType(selectedSubject.split(' - ')[0]) === 'P' &&
             !selectedSubject.split(' - ')[0].startsWith('BSTS') ? (
               <SelectField
                 label="Slot"
@@ -735,9 +779,10 @@ export default function FacultySelector({
 
                     const labSubjectKey = Object.keys(domainData).find(subject => {
                       const subjectCode = subject.split(' - ')[0];
+                      const subjectType = getCourseType(subjectCode);
                       return (
                         subjectCode.slice(0, -1) === baseCode &&
-                        (subjectCode.endsWith('P') || subjectCode.endsWith('E'))
+                        (subjectType === 'P' || subjectType === 'E')
                       );
                     });
 
