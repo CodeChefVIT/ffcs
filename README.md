@@ -7,10 +7,12 @@
 <h2 align="center" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
   FFCS-inator
 </h2>
-
+   
 ## FFCS-inator - CodeChef VIT
 
-Generate priority-based timetables in seconds with FFCS-inator. The smartest way to plan your VIT FFCS. Pick your favorite faculties, set your subject and faculty priorities, and let FFCS-inator create the perfect clash-free timetable for you. Save your timetables for later, and easily share them with friends. No hassle. No stress. Just your ideal schedule, tailored to you.
+Generate priority-based timetables in seconds with FFCS-inator. The smartest way to plan your VIT FFCS. Pick your favorite faculties, set your subject and faculty priorities, and let FFCS-inator create the perfect clash-free timetable for you. Save your timetables for later, and easily share them with friends. No hassle. No stress. Just your ideal schedule, tailored to you. 
+
+
 
 ## Tech Stack
 
