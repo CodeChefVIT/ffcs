@@ -16,24 +16,23 @@ export function ErrorCard({ bigText, title, subtitle, mobile = false }: HeroMess
         numberSize: 'text-[96px]',
         shadowOffset: 'left-1.5 top-1.5',
         stroke: '8px black',
-        buttonType: 'regular',
-        textSize: 'text-xl mb-6',
+        buttonType: 'regular' as const,
+        textSize: 'text-xl mb-16',
       } as const)
     : ({
         numberSize: 'text-[160px]',
         shadowOffset: 'left-2 top-2',
         stroke: '16px black',
-        buttonType: 'large',
-
+        buttonType: 'large' as const,
         textSize: 'text-3xl mb-8',
       } as const);
 
   return (
     <>
-      <div className="relative w-fit h-fit mb-4">
+      <div className="relative w-fit h-fit mb-4 pb-3 pr-3">
         {/*Shadow*/}
         <span
-          className={`absolute ${ui.shadowOffset} ${ui.numberSize} select-none pointer-events-none font-poppins font-extrabold z-0 text-black`}
+          className={`absolute ${ui.shadowOffset} ${ui.numberSize} whitespace-nowrap select-none pointer-events-none font-poppins font-extrabold z-0 text-black`}
           style={{
             WebkitTextStroke: ui.stroke,
           }}
@@ -42,7 +41,7 @@ export function ErrorCard({ bigText, title, subtitle, mobile = false }: HeroMess
         </span>
         {/*Stroke*/}
         <span
-          className={`absolute left-0 top-0 select-none pointer-events-none font-poppins font-extrabold ${ui.numberSize} z-10 text-transparent`}
+          className={`absolute left-0 top-0 select-none pointer-events-none whitespace-nowrap font-poppins font-extrabold ${ui.numberSize} z-10 text-transparent`}
           style={{
             WebkitTextStroke: ui.stroke,
           }}
@@ -51,7 +50,7 @@ export function ErrorCard({ bigText, title, subtitle, mobile = false }: HeroMess
         </span>
         {/*Fill*/}
         <span
-          className={`relative select-none pointer-events-none font-poppins font-extrabold ${ui.numberSize} z-20 text-[#90BDFF]`}
+          className={`relative select-none pointer-events-none whitespace-nowrap font-poppins font-extrabold ${ui.numberSize} z-20 text-[#90BDFF]`}
         >
           {bigText}
         </span>

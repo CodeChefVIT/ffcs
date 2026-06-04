@@ -43,28 +43,47 @@ export default function SharedTimetablePage() {
   const [alertMsg, setAlertMsg] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
+  const fetchTimeTable = async () => {
+    try {
+      const res = await axios.get(`/api/shared-timetable/${shareId}`);
+
+      const ttData = res.data;
+      if (Array.isArray(ttData?.timetable?.slots)) {
+        setTitle(ttData.timetable.title || '');
+        setData(
+          ttData.timetable.slots.map(
+            (item: { courseCode: string; slot: string; facultyName: string }): dataProps => ({
+              code: item.courseCode,
+              slot: item.slot,
+              name: item.facultyName,
+            })
+          )
+        );
+      } else {
+        setNotFound(true);
+      }
+    } catch (error: unknown) {
+      const status = axios.isAxiosError(error) ? error?.response?.status : undefined;
+
+      if (status === 404) {
+        console.log('Timetable not found');
+        router.push('/404');
+        return;
+      }
+
+      if (status === 403) {
+        console.log('Timetable is private');
+        router.push('/denied-access');
+        return;
+      }
+      console.error('Unexpected error:', error);
+      setNotFound(true);
+    }
+  };
+
   useEffect(() => {
     if (!shareId) return;
-    axios
-      .get(`/api/shared-timetable/${shareId}`)
-      .then(res => {
-        const json = res.data;
-        if (json && json.timetable && Array.isArray(json.timetable.slots)) {
-          setTitle(json.timetable.title || '');
-          setData(
-            json.timetable.slots.map(
-              (item: { courseCode: string; slot: string; facultyName: string }): dataProps => ({
-                code: item.courseCode,
-                slot: item.slot,
-                name: item.facultyName,
-              })
-            )
-          );
-        } else {
-          setNotFound(true);
-        }
-      })
-      .catch(() => setNotFound(true));
+    fetchTimeTable();
   }, [shareId]);
 
   if (notFound) {
