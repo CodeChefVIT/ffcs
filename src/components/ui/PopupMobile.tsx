@@ -5,6 +5,7 @@ import Image from 'next/image';
 import CompoundTable from './CompoundTable';
 import Footer from './Footer';
 import { GoogleLoginButton, BasicToggleButton, ZButton } from './Buttons';
+import QRCode from './QRCode';
 
 type dataProps = {
   code: string;
@@ -162,12 +163,16 @@ export function PopupViewTT({
 
         <div className="text-2xl mt-4 mb-2 text-black font-semibold font-poppins">{TTName}</div>
 
-        <div className="text-center text-sm mb-2 text-gray-700 px-4 break-words">
-          Shareable Link: <span className="underline">{shareLink}</span>
-        </div>
+        <div className="flex flex-col items-center justify-center gap-4 mb-4">
+          {shareEnabledDefault && <QRCode url={shareLink} />}
+          
+          <div className="text-center text-sm text-gray-700 px-4 break-words">
+            Shareable Link: <span className="underline">{shareLink}</span>
+          </div>
 
-        <div className="text-center text-sm mb-4 text-gray-600 px-4">
-          {shareEnabledDefault ? 'Publicly Shareable' : 'Private'}
+          <div className="text-center text-sm text-gray-600 px-4">
+            {shareEnabledDefault ? 'Publicly Shareable' : 'Private'}
+          </div>
         </div>
 
         <div className="flex flex-col items-center justify-center gap-4 mb-4">

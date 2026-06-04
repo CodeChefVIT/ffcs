@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { BasicToggleButton, GoogleLoginButton, ZButton } from './Buttons';
 import CompoundTable from './CompoundTable';
 import LoadingPopup from './LoadingPopup';
+import QRCode from './QRCode';
 
 type dataProps = {
   code: string;
@@ -68,7 +69,7 @@ const typeTextMap = {
   login: 'Please log-in to save and share your time-tables.',
   rem_course: 'Are you sure you want to remove this course?',
   rem_allcourse: 'Are you sure you want to remove all courses?',
-  share_tt: 'Share your timetable with anyone.',
+  share_tt: 'Scan QR or copy the link to share.',
   save_tt: 'Save this timetable in your collection.',
   delete_tt: 'Are you sure you want to delete this timetable?',
   view_tt: '',
@@ -249,17 +250,20 @@ export default function Popup({
               <div className="break-words w-full text-center mt-2 mb-4">{text}</div>
 
               {shareState === 'on' && (
-                <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
-                  <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-[#606060] font-semibold">
-                    {dataBody}
+                <div className="flex flex-col items-center justify-center gap-6 mt-2 mb-4">
+                  <QRCode url={dataBody || ''} />
+                  <div className="flex flex-row items-center justify-center gap-8">
+                    <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-[#606060] font-semibold">
+                      {dataBody}
+                    </div>
+                    <ZButton
+                      type="regular"
+                      text="Copy"
+                      color="blue"
+                      forceColor={theme[1]}
+                      onClick={() => copy(dataBody || '')}
+                    />
                   </div>
-                  <ZButton
-                    type="regular"
-                    text="Copy"
-                    color="blue"
-                    forceColor={theme[1]}
-                    onClick={() => copy(dataBody || '')}
-                  />
                 </div>
               )}
             </div>
