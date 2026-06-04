@@ -37,10 +37,10 @@ export default function AccessDenied({ isMobile }: { isMobile: boolean }) {
             <div className="text-2xl mb-8 font-pangolin text-black">By CodeChef-VIT</div>
           </>
         )}
-        <div className="h-36" />
+        <div className="h-24" />
         <ErrorCard
-          bigText={`ACCESS DENIED`}
-          title="Private Property! No Trespassing!"
+          bigText={`ACCESS \nDENIED`}
+          title="Private Property! No Trespassing."
           subtitle=""
           mobile={isMobile}
         />
