@@ -12,7 +12,7 @@ import Popup from '@/components/ui/Popup';
 import AlertModal from '@/components/ui/AlertModal';
 import LoadingPopup from '@/components/ui/LoadingPopup';
 import { getCurrentDateTime } from '@/lib/utils';
-import { getSlot } from '@/lib/slots';
+import { evaluateFilters } from '@/lib/filterUtils';
 import { generateShareId } from '@/lib/shareIDgenerate';
 import { exportToPDF } from '@/lib/exportToPDF';
 import ComboBox from '../ui/ComboBox';
@@ -33,7 +33,10 @@ interface SavedTimetable {
 
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
-  const originalTimetableData = timetableData ? timetableData : [];
+  const originalTimetableData = React.useMemo(
+    () => (timetableData ? timetableData : []),
+    [timetableData]
+  );
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [showSharePopup, setShowSharePopup] = useState(false);
@@ -53,79 +56,32 @@ export default function ViewTimeTable() {
   const [smartFilter, setSmartFilter] = useState<'none' | 'sameBuilding' | 'close' | 'noMix'>(
     'none'
   );
-  const facultyList = Array.from(
-    new Set(
-      originalTimetableData
-        .flat()
-        .map((item: { facultyName?: string }) => item.facultyName || 'Unknown')
-    )
-  ).sort((a, b) => a.localeCompare(b));
+  const facultyList = React.useMemo(
+    () =>
+      Array.from(
+        new Set(
+          originalTimetableData
+            .flat()
+            .map((item: { facultyName?: string }) => item.facultyName || 'Unknown')
+        )
+      ).sort((a, b) => a.localeCompare(b)),
+    [originalTimetableData]
+  );
 
   useEffect(() => {
     setSelectedIndex(0);
   }, [filterFaculty]);
 
-  let allTimetables: timetableDisplayData[][];
-  if (filterFaculty && filterFaculty !== '') {
-    allTimetables = originalTimetableData.filter((tt: timetableDisplayData[]) =>
-      tt.some((item: { facultyName?: string }) => (item.facultyName || 'Unknown') === filterFaculty)
-    );
-  } else {
-    allTimetables = originalTimetableData;
-  }
-
-  // --- Helpers to analyse timetable geometry and slots ---
-  function extractAtomicSlots(slotName?: string) {
-    if (!slotName) return [] as string[];
-    // break combined names: __ (th__lab), +, comma
-    return slotName
-      .split(/__|\+|,\s*/)
-      .map(s => s.trim())
-      .filter(Boolean);
-  }
-
-  // note: use slotIsMorning/slotIsEvening directly where needed
-
-  function slotIsMorning(slot: string) {
-    if (!slot) return false;
-    // theory slots like A1 are morning if they end with 1
-    if (/\d$/.test(slot)) {
-      return /1$/.test(slot);
+  const allTimetables = React.useMemo(() => {
+    if (filterFaculty && filterFaculty !== '') {
+      return originalTimetableData.filter((tt: timetableDisplayData[]) =>
+        tt.some(
+          (item: { facultyName?: string }) => (item.facultyName || 'Unknown') === filterFaculty
+        )
+      );
     }
-    // lab slots like L1-L30 are morning
-    const m = slot.match(/L(\d+)/i);
-    if (m) {
-      const n = parseInt(m[1], 10);
-      return !isNaN(n) && n <= 30;
-    }
-    return false;
-  }
-
-  function slotIsEvening(slot: string) {
-    if (!slot) return false;
-    if (/\d$/.test(slot)) {
-      return /2$/.test(slot);
-    }
-    const m = slot.match(/L(\d+)/i);
-    if (m) {
-      const n = parseInt(m[1], 10);
-      return !isNaN(n) && n >= 31;
-    }
-    return false;
-  }
-
-  function getSlotCenters(slots: string[]) {
-    const centers: number[] = [];
-    for (const s of slots) {
-      try {
-        const slotObjs = getSlot(s, true);
-        slotObjs.forEach(o => centers.push((o.colStart + o.colEnd) / 2));
-      } catch {
-        // ignore
-      }
-    }
-    return centers;
-  }
+    return originalTimetableData;
+  }, [originalTimetableData, filterFaculty]);
 
   // Build list of indexes that match the selected smart filter
   const filteredBySmart = React.useMemo(() => {
@@ -134,61 +90,10 @@ export default function ViewTimeTable() {
 
     const res: number[] = [];
     allTimetables.forEach((tt, idx) => {
-      const atomic = tt.flatMap(item => extractAtomicSlots(item.slotName));
-      const centers = getSlotCenters(atomic);
-
-      // try to use venue information if available
-      const venues = tt
-        .map(item => (item as timetableDisplayData).venue)
-        .filter(Boolean) as string[];
-
-      const sameBuilding = (() => {
-        if (venues.length > 0) {
-          const buildings = venues
-            .map(v => (v || '').toString().match(/^[A-Za-z]+/)?.[0] || '')
-            .filter(Boolean);
-          if (buildings.length > 0) {
-            const set = new Set(buildings.map(b => b.toUpperCase()));
-            if (set.size === 1) return true;
-          }
-        }
-        if (centers.length === 0) return false;
-        const left = centers.every(c => c < 36);
-        const right = centers.every(c => c >= 36);
-        return left || right;
-      })();
-
-      const closeEnough = (() => {
-        // prefer venue room-number proximity when possible
-        if (venues.length > 0) {
-          const nums = venues
-            .map(v => {
-              const m = v.match(/(\d+)/);
-              return m ? parseInt(m[0], 10) : NaN;
-            })
-            .filter(n => !isNaN(n));
-          if (nums.length > 0) {
-            const min = Math.min(...nums);
-            const max = Math.max(...nums);
-            // consider close if rooms within 30 numbers
-            return max - min <= 30;
-          }
-        }
-        if (centers.length === 0) return false;
-        const min = Math.min(...centers);
-        const max = Math.max(...centers);
-        return max - min <= 20;
-      })();
-
-      if (smartFilter === 'sameBuilding') {
-        if (sameBuilding) res.push(idx);
-      } else if (smartFilter === 'close') {
-        if (closeEnough) res.push(idx);
-      } else if (smartFilter === 'noMix') {
-        const hasMorning = atomic.some(s => slotIsMorning(s));
-        const hasEvening = atomic.some(s => slotIsEvening(s));
-        if (!(hasMorning && hasEvening)) res.push(idx);
-      }
+      const result = evaluateFilters(tt);
+      if (smartFilter === 'sameBuilding' && result.sameBuilding) res.push(idx);
+      else if (smartFilter === 'close' && result.closeEnough) res.push(idx);
+      else if (smartFilter === 'noMix' && result.noMix) res.push(idx);
     });
     return res;
   }, [allTimetables, smartFilter]);
@@ -202,53 +107,10 @@ export default function ViewTimeTable() {
     if (!allTimetables || allTimetables.length === 0) return { same, close, noMix };
 
     allTimetables.forEach((tt, idx) => {
-      const atomic = tt.flatMap(item => extractAtomicSlots(item.slotName));
-      const centers = getSlotCenters(atomic);
-      const venues = tt
-        .map(item => (item as timetableDisplayData).venue)
-        .filter(Boolean) as string[];
-
-      const sameBuilding = (() => {
-        if (venues.length > 0) {
-          const buildings = venues
-            .map(v => (v || '').toString().match(/^[A-Za-z]+/)?.[0] || '')
-            .filter(Boolean);
-          if (buildings.length > 0) {
-            const set = new Set(buildings.map(b => b.toUpperCase()));
-            if (set.size === 1) return true;
-          }
-        }
-        if (centers.length === 0) return false;
-        const left = centers.every(c => c < 36);
-        const right = centers.every(c => c >= 36);
-        return left || right;
-      })();
-
-      const closeEnough = (() => {
-        if (venues.length > 0) {
-          const nums = venues
-            .map(v => {
-              const m = v.match(/(\d+)/);
-              return m ? parseInt(m[0], 10) : NaN;
-            })
-            .filter(n => !isNaN(n));
-          if (nums.length > 0) {
-            const min = Math.min(...nums);
-            const max = Math.max(...nums);
-            return max - min <= 30;
-          }
-        }
-        if (centers.length === 0) return false;
-        const min = Math.min(...centers);
-        const max = Math.max(...centers);
-        return max - min <= 20;
-      })();
-
-      if (sameBuilding) same.push(idx);
-      if (closeEnough) close.push(idx);
-      const hasMorning = atomic.some(s => slotIsMorning(s));
-      const hasEvening = atomic.some(s => slotIsEvening(s));
-      if (!(hasMorning && hasEvening)) noMix.push(idx);
+      const result = evaluateFilters(tt);
+      if (result.sameBuilding) same.push(idx);
+      if (result.closeEnough) close.push(idx);
+      if (result.noMix) noMix.push(idx);
     });
 
     return { same, close, noMix };
@@ -291,6 +153,7 @@ export default function ViewTimeTable() {
 
   useEffect(() => {
     setSelectedIndex(0);
+    setFilterFaculty('');
   }, [timetableData]);
 
   useEffect(() => {
