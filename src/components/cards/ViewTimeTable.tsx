@@ -108,8 +108,8 @@ export default function ViewTimeTable() {
   const owner = session?.user?.email || null;
 
   const [filterFaculty, setFilterFaculty] = useState('');
-  const [smartFilter, setSmartFilter] = useState<'none' | 'sameBuilding' | 'close' | 'noMix'>(
-    'none'
+  const [activeFilters, setActiveFilters] = useState<Set<'sameBuilding' | 'close' | 'noMix'>>(
+    new Set()
   );
   const facultyList = React.useMemo(
     () =>
@@ -138,20 +138,21 @@ export default function ViewTimeTable() {
     return originalTimetableData;
   }, [originalTimetableData, filterFaculty]);
 
-  // Build list of indexes that match the selected smart filter
+  // Build list of indexes that match ALL active smart filters (AND logic)
   const filteredBySmart = React.useMemo(() => {
     if (!allTimetables || allTimetables.length === 0) return [] as number[];
-    if (smartFilter === 'none') return allTimetables.map((_, i) => i);
+    if (activeFilters.size === 0) return allTimetables.map((_, i) => i);
 
-    const res: number[] = [];
-    allTimetables.forEach((tt, idx) => {
+    return allTimetables.reduce((res, tt, idx) => {
       const result = evaluateFilters(tt);
-      if (smartFilter === 'sameBuilding' && result.sameBuilding) res.push(idx);
-      else if (smartFilter === 'close' && result.closeEnough) res.push(idx);
-      else if (smartFilter === 'noMix' && result.noMix) res.push(idx);
-    });
-    return res;
-  }, [allTimetables, smartFilter]);
+      const passes =
+        (!activeFilters.has('sameBuilding') || result.sameBuilding) &&
+        (!activeFilters.has('close') || result.closeEnough) &&
+        (!activeFilters.has('noMix') || result.noMix);
+      if (passes) res.push(idx);
+      return res;
+    }, [] as number[]);
+  }, [allTimetables, activeFilters]);
 
   // Precompute matches for each smart filter so we can decide whether buttons will have effect
   const smartMatches = React.useMemo(() => {
@@ -171,19 +172,19 @@ export default function ViewTimeTable() {
     return { same, close, noMix };
   }, [allTimetables]);
 
-  // When a smart filter is activated, navigate to the first matching timetable
+  // When active filters change, navigate to the first matching timetable
   useEffect(() => {
-    if (smartFilter === 'none') return;
+    if (activeFilters.size === 0) return;
     if (filteredBySmart.length > 0) {
       setSelectedIndex(filteredBySmart[0]);
     } else {
       setSelectedIndex(0);
     }
-  }, [smartFilter, filteredBySmart]);
+  }, [activeFilters, filteredBySmart]);
 
   // When a smart filter is active, the pagination should show only matching timetables.
   const displayList =
-    smartFilter === 'none' || filteredBySmart.length === 0
+    activeFilters.size === 0 || filteredBySmart.length === 0
       ? allTimetables.map((_, i) => i)
       : filteredBySmart;
 
@@ -502,6 +503,20 @@ export default function ViewTimeTable() {
     setAlertOpen(true);
   }
 
+  function toggleFilter(key: 'sameBuilding' | 'close' | 'noMix') {
+    setActiveFilters(prev => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+        if (key === 'sameBuilding') next.delete('close');
+      } else {
+        next.add(key);
+        if (key === 'close') next.add('sameBuilding');
+      }
+      return next;
+    });
+  }
+
   return (
     <div
       id="timetable-view"
@@ -555,25 +570,23 @@ export default function ViewTimeTable() {
               </div>
               <SmartFilterCheckbox
                 label="Same Building"
-                checked={smartFilter === 'sameBuilding'}
+                checked={activeFilters.has('sameBuilding')}
                 disabled={smartMatches.same.length === 0}
-                onClick={() =>
-                  setSmartFilter(prev => (prev === 'sameBuilding' ? 'none' : 'sameBuilding'))
-                }
+                onClick={() => toggleFilter('sameBuilding')}
                 title="Show timetables with all classrooms in the same building"
               />
               <SmartFilterCheckbox
                 label="Close"
-                checked={smartFilter === 'close'}
+                checked={activeFilters.has('close')}
                 disabled={smartMatches.close.length === 0}
-                onClick={() => setSmartFilter(prev => (prev === 'close' ? 'none' : 'close'))}
+                onClick={() => toggleFilter('close')}
                 title="Show timetables where classrooms are close to each other"
               />
               <SmartFilterCheckbox
                 label="No Mix"
-                checked={smartFilter === 'noMix'}
+                checked={activeFilters.has('noMix')}
                 disabled={smartMatches.noMix.length === 0}
-                onClick={() => setSmartFilter(prev => (prev === 'noMix' ? 'none' : 'noMix'))}
+                onClick={() => toggleFilter('noMix')}
                 title="Show timetables without morning/evening mix"
               />
             </div>

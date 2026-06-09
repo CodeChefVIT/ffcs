@@ -26,7 +26,7 @@ export function evaluateFilters(tt: timetableDisplayData[]): FilterEvalResult {
   }
 
   let closeEnough = false;
-  if (venues.length > 0) {
+  if (sameBuilding && venues.length > 0) {
     const nums = venues
       .map(v => {
         const m = v.match(/(\d+)/);
