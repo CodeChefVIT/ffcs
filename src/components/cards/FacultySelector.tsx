@@ -455,14 +455,14 @@ export default function FacultySelector({
       } else if (courseType == 'th') {
         courseSlots = generateCourseSlotsSingle({
           subjectData: data[selectedSchool][selectedDomain][selectedSubject],
-          selectedFaculties,
+          selectedFaculties: priorityList,
           selectedSlot,
           courseType: 'th',
         });
       } else {
         courseSlots = generateCourseSlotsSingle({
           subjectData: data[selectedSchool][selectedDomain][selectedSubject],
-          selectedFaculties,
+          selectedFaculties: priorityList,
           selectedSlot,
           courseType: 'lab',
         });
