@@ -172,6 +172,17 @@ export default function ViewTimeTable() {
     return { same, close, noMix };
   }, [allTimetables]);
 
+  const filterWouldMatch = React.useMemo(() => {
+    const currentSet = new Set(filteredBySmart);
+    const check = (idxs: number[]) =>
+      activeFilters.size === 0 ? idxs.length > 0 : idxs.some(i => currentSet.has(i));
+    return {
+      sameBuilding: check(smartMatches.same),
+      close: check(smartMatches.close),
+      noMix: check(smartMatches.noMix),
+    };
+  }, [filteredBySmart, smartMatches, activeFilters]);
+
   // When active filters change, navigate to the first matching timetable
   useEffect(() => {
     if (activeFilters.size === 0) return;
@@ -571,21 +582,21 @@ export default function ViewTimeTable() {
               <SmartFilterCheckbox
                 label="Same Building"
                 checked={activeFilters.has('sameBuilding')}
-                disabled={smartMatches.same.length === 0}
+                disabled={!activeFilters.has('sameBuilding') && !filterWouldMatch.sameBuilding}
                 onClick={() => toggleFilter('sameBuilding')}
                 title="Show timetables with all classrooms in the same building"
               />
               <SmartFilterCheckbox
                 label="Close"
                 checked={activeFilters.has('close')}
-                disabled={smartMatches.close.length === 0}
+                disabled={!activeFilters.has('close') && !filterWouldMatch.close}
                 onClick={() => toggleFilter('close')}
                 title="Show timetables where classrooms are close to each other"
               />
               <SmartFilterCheckbox
                 label="No Mix"
                 checked={activeFilters.has('noMix')}
-                disabled={smartMatches.noMix.length === 0}
+                disabled={!activeFilters.has('noMix') && !filterWouldMatch.noMix}
                 onClick={() => toggleFilter('noMix')}
                 title="Show timetables without morning/evening mix"
               />

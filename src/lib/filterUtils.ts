@@ -57,26 +57,26 @@ function extractAtomicSlots(slotName?: string) {
 
 function slotIsMorning(slot: string) {
   if (!slot) return false;
+  const lab = slot.match(/^L(\d+)$/i);
+  if (lab) {
+    const n = parseInt(lab[1], 10);
+    return !isNaN(n) && n <= MORNING_LAB_MAX;
+  }
   if (/\d$/.test(slot)) {
     return /1$/.test(slot);
-  }
-  const m = slot.match(/L(\d+)/i);
-  if (m) {
-    const n = parseInt(m[1], 10);
-    return !isNaN(n) && n <= MORNING_LAB_MAX;
   }
   return false;
 }
 
 function slotIsEvening(slot: string) {
   if (!slot) return false;
+  const lab = slot.match(/^L(\d+)$/i);
+  if (lab) {
+    const n = parseInt(lab[1], 10);
+    return !isNaN(n) && n >= EVENING_LAB_MIN;
+  }
   if (/\d$/.test(slot)) {
     return /2$/.test(slot);
-  }
-  const m = slot.match(/L(\d+)/i);
-  if (m) {
-    const n = parseInt(m[1], 10);
-    return !isNaN(n) && n >= EVENING_LAB_MIN;
   }
   return false;
 }
