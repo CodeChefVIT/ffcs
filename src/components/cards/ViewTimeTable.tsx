@@ -31,6 +31,60 @@ interface SavedTimetable {
   isShared?: boolean;
 }
 
+type SmartFilterCheckboxProps = {
+  label: string;
+  checked: boolean;
+  disabled: boolean;
+  onClick: () => void;
+  title?: string;
+};
+
+function SmartFilterCheckbox({
+  label,
+  checked,
+  disabled,
+  onClick,
+  title,
+}: SmartFilterCheckboxProps) {
+  return (
+    <button
+      onClick={disabled ? undefined : onClick}
+      title={title}
+      aria-disabled={disabled}
+      className={`flex items-center gap-2 ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+    >
+      <div
+        className={`w-5 h-5 flex items-center justify-center shrink-0 border-2 rounded-sm transition-colors ${
+          disabled
+            ? 'bg-gray-200 border-gray-400'
+            : checked
+              ? 'bg-[#C1FF83] border-black'
+              : 'bg-white border-black'
+        }`}
+      >
+        {checked && !disabled && (
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#1E1E1E"
+            strokeWidth="4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="w-3 h-3"
+          >
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        )}
+      </div>
+      <span
+        className={`font-poppins font-semibold text-sm leading-none ${disabled ? 'text-gray-400' : 'text-black'}`}
+      >
+        {label}
+      </span>
+    </button>
+  );
+}
+
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
   const originalTimetableData = React.useMemo(
@@ -48,6 +102,7 @@ export default function ViewTimeTable() {
 
   const [isSaving, setIsSaving] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
+  const [showFilterInfo, setShowFilterInfo] = useState(false);
 
   const { data: session } = useSession();
   const owner = session?.user?.email || null;
@@ -453,73 +508,94 @@ export default function ViewTimeTable() {
       className="w-screen mt-12 bg-[#A7D5D7] font-poppins flex items-center justify-center flex-col border-black border-3"
     >
       <div className="flex flex-col h-full p-12 overflow-hidden">
-        <div className="flex flex-row mb-4 justify-between w-full px-4">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:gap-8 gap-4">
-            <div className="text-5xl font-pangolin">Your Timetables</div>
-            <div className="text-xl font-poppins pb-1">
-              {timetableCount == 0
-                ? '(Empty List)'
-                : timetableCount == 1
-                  ? '(1 timetable was generated)'
-                  : `(${timetableCount} timetables were generated)`}
-            </div>
-          </div>
+        <div className="flex flex-row mb-4 justify-between w-full px-4 items-center">
+          <div className="text-5xl font-pangolin">Your Timetables</div>
 
-          <div className="w-[400px]">
-            <ComboBox
-              label="Filter by Faculty"
-              value={filterFaculty}
-              options={facultyList}
-              onChange={setFilterFaculty}
-            />
-          </div>
-        </div>
-
-        <div className="w-full max-w-[95vw] my-2">
-          <div className="flex flex-wrap gap-3 items-center mb-3">
-            <div className="text-sm font-poppins mr-2">Smart filters</div>
-            {((smartMatches.same.length > 0 && smartMatches.same.length < timetableCount) ||
-              smartFilter === 'sameBuilding') && (
-              <button
+          <div className="flex items-center gap-6">
+            <div className="flex gap-5 items-center">
+              <div className="relative shrink-0">
+                <button
+                  onClick={() => setShowFilterInfo(prev => !prev)}
+                  aria-label="Smart filter info"
+                  className="w-8 h-8 rounded-full bg-[#FFEA79] border-2 border-black shadow-[2px_2px_0px_0px_black] flex items-center justify-center font-[var(--font-plus-jakarta-sans)] font-medium text-sm leading-none select-none"
+                >
+                  ?
+                </button>
+                {showFilterInfo && (
+                  <>
+                    <div className="fixed inset-0 z-10" onClick={() => setShowFilterInfo(false)} />
+                    <div className="absolute top-full left-0 mt-2 z-20 bg-white border-2 border-black rounded-xl shadow-[4px_4px_0px_0px_black] p-4 w-72 font-poppins">
+                      <p className="font-semibold text-xs text-black mb-3">Smart Filters</p>
+                      <div className="flex flex-col gap-3">
+                        <div>
+                          <p className="font-semibold text-xs text-black">Same Building</p>
+                          <p className="text-xs text-gray-500 mt-0.5">
+                            All classes are in the same building, no cross-campus walking between
+                            lectures.
+                          </p>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-xs text-black">Close</p>
+                          <p className="text-xs text-gray-500 mt-0.5">
+                            Classrooms are close to each other, minimal travel between back-to-back
+                            classes.
+                          </p>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-xs text-black">No Mix</p>
+                          <p className="text-xs text-gray-500 mt-0.5">
+                            No mixing of morning and evening theory slots, keeps your schedule on
+                            one half of the day.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+              <SmartFilterCheckbox
+                label="Same Building"
+                checked={smartFilter === 'sameBuilding'}
+                disabled={smartMatches.same.length === 0}
                 onClick={() =>
                   setSmartFilter(prev => (prev === 'sameBuilding' ? 'none' : 'sameBuilding'))
                 }
                 title="Show timetables with all classrooms in the same building"
-                className={`${smartFilter === 'sameBuilding' ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'} font-poppins border-2 border-black font-semibold text-sm px-3 py-1 rounded shadow-[3px_3px_0_0_black]`}
-              >
-                Same building ({smartMatches.same.length})
-              </button>
-            )}
-
-            {((smartMatches.close.length > 0 && smartMatches.close.length < timetableCount) ||
-              smartFilter === 'close') && (
-              <button
+              />
+              <SmartFilterCheckbox
+                label="Close"
+                checked={smartFilter === 'close'}
+                disabled={smartMatches.close.length === 0}
                 onClick={() => setSmartFilter(prev => (prev === 'close' ? 'none' : 'close'))}
                 title="Show timetables where classrooms are close to each other"
-                className={`${smartFilter === 'close' ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'} font-poppins border-2 border-black font-semibold text-sm px-3 py-1 rounded shadow-[3px_3px_0_0_black]`}
-              >
-                Close ({smartMatches.close.length})
-              </button>
-            )}
-
-            {((smartMatches.noMix.length > 0 && smartMatches.noMix.length < timetableCount) ||
-              smartFilter === 'noMix') && (
-              <button
+              />
+              <SmartFilterCheckbox
+                label="No Mix"
+                checked={smartFilter === 'noMix'}
+                disabled={smartMatches.noMix.length === 0}
                 onClick={() => setSmartFilter(prev => (prev === 'noMix' ? 'none' : 'noMix'))}
                 title="Show timetables without morning/evening mix"
-                className={`${smartFilter === 'noMix' ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'} font-poppins border-2 border-black font-semibold text-sm px-3 py-1 rounded shadow-[3px_3px_0_0_black]`}
-              >
-                No Mix (1/2) ({smartMatches.noMix.length})
-              </button>
-            )}
+              />
+            </div>
 
-            <button
-              onClick={() => setSmartFilter('none')}
-              title="Clear smart filter"
-              className="bg-[#F3F4F6] font-poppins border-2 border-black font-semibold text-sm px-3 py-1 rounded shadow-[3px_3px_0_0_black]"
-            >
-              Clear
-            </button>
+            <div className="w-[400px]">
+              <ComboBox
+                label="Filter by Faculty"
+                value={filterFaculty}
+                options={facultyList}
+                onChange={setFilterFaculty}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full max-w-[95vw] my-2">
+          <div className="text-xl font-poppins mb-3">
+            {timetableCount === 0
+              ? '(Empty List)'
+              : timetableCount === 1
+                ? '(1 timetable was generated)'
+                : `(${timetableCount} timetables were generated)`}
           </div>
 
           <CompoundTable data={convertedData} large={true} />
