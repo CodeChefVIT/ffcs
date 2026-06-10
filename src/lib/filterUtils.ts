@@ -1,19 +1,17 @@
 import { timetableDisplayData } from '@/lib/type';
 
-export const CLOSE_ROOM_RANGE = 30;
-export const MORNING_LAB_MAX = 30;
-export const EVENING_LAB_MIN = 31;
-
 export interface FilterEvalResult {
   sameBuilding: boolean;
-  closeEnough: boolean;
-  noMix: boolean;
+  morningOnly: boolean;
+  eveningOnly: boolean;
+  mixOnly: boolean;
 }
 
 export function evaluateFilters(tt: timetableDisplayData[]): FilterEvalResult {
   const atomic = tt.flatMap(item => extractAtomicSlots(item.slotName));
   const venues = tt.map(item => item.venue).filter(Boolean) as string[];
 
+  // sameBuilding: all venues share the same building prefix
   let sameBuilding = false;
   if (venues.length > 0) {
     const buildings = venues
@@ -25,58 +23,23 @@ export function evaluateFilters(tt: timetableDisplayData[]): FilterEvalResult {
     }
   }
 
-  let closeEnough = false;
-  if (sameBuilding && venues.length > 0) {
-    const nums = venues
-      .map(v => {
-        const m = v.match(/(\d+)/);
-        return m ? parseInt(m[0], 10) : NaN;
-      })
-      .filter(n => !isNaN(n));
-    if (nums.length > 0) {
-      const min = Math.min(...nums);
-      const max = Math.max(...nums);
-      closeEnough = max - min <= CLOSE_ROOM_RANGE;
-    }
-  }
+  // Theory-slot time classification: lab slots (L\d+) are excluded
+  const theorySlots = atomic.filter(s => !/^L\d+$/i.test(s));
+  const hasMorning = theorySlots.some(s => /1$/.test(s));
+  const hasEvening = theorySlots.some(s => /2$/.test(s));
 
-  const hasMorning = atomic.some(s => slotIsMorning(s));
-  const hasEvening = atomic.some(s => slotIsEvening(s));
-  const noMix = !(hasMorning && hasEvening);
-
-  return { sameBuilding, closeEnough, noMix };
+  return {
+    sameBuilding,
+    morningOnly: hasMorning && !hasEvening,
+    eveningOnly: !hasMorning && hasEvening,
+    mixOnly: hasMorning && hasEvening,
+  };
 }
 
-function extractAtomicSlots(slotName?: string) {
-  if (!slotName) return [] as string[];
+function extractAtomicSlots(slotName?: string): string[] {
+  if (!slotName) return [];
   return slotName
     .split(/__|\+|,\s*/)
     .map(s => s.trim())
     .filter(Boolean);
-}
-
-function slotIsMorning(slot: string) {
-  if (!slot) return false;
-  const lab = slot.match(/^L(\d+)$/i);
-  if (lab) {
-    const n = parseInt(lab[1], 10);
-    return !isNaN(n) && n <= MORNING_LAB_MAX;
-  }
-  if (/\d$/.test(slot)) {
-    return /1$/.test(slot);
-  }
-  return false;
-}
-
-function slotIsEvening(slot: string) {
-  if (!slot) return false;
-  const lab = slot.match(/^L(\d+)$/i);
-  if (lab) {
-    const n = parseInt(lab[1], 10);
-    return !isNaN(n) && n >= EVENING_LAB_MIN;
-  }
-  if (/\d$/.test(slot)) {
-    return /2$/.test(slot);
-  }
-  return false;
 }

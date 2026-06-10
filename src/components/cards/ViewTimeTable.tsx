@@ -39,6 +39,43 @@ type SmartFilterCheckboxProps = {
   title?: string;
 };
 
+type SmartFilterPillProps = {
+  label: string;
+  selected: boolean;
+  disabled: boolean;
+  onClick: () => void;
+  title?: string;
+};
+
+// Hover/focus tooltip wrapper shared by the smart-filter controls
+function WithTooltip({ text, children }: { text?: string; children: React.ReactNode }) {
+  const [show, setShow] = useState(false);
+  return (
+    <div
+      className="relative inline-flex items-center"
+      onMouseEnter={() => text && setShow(true)}
+      onMouseLeave={() => setShow(false)}
+      onFocus={() => text && setShow(true)}
+      onBlur={() => setShow(false)}
+    >
+      {children}
+      {text && show && (
+        <div
+          className="z-50 absolute top-full left-1/2 -translate-x-1/2 mt-2"
+          style={{ pointerEvents: 'none' }}
+        >
+          <div
+            className="px-2 py-1 shadow-lg border border-gray-300 rounded-md min-w-max max-w-xs whitespace-pre-line text-xs font-inter bg-white text-gray-900 pointer-events-none"
+            role="tooltip"
+          >
+            {text}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function SmartFilterCheckbox({
   label,
   checked,
@@ -47,10 +84,11 @@ function SmartFilterCheckbox({
   title,
 }: SmartFilterCheckboxProps) {
   return (
-    <div className="relative group inline-flex items-center">
+    <WithTooltip text={title}>
       <button
         onClick={disabled ? undefined : onClick}
         aria-disabled={disabled}
+        aria-pressed={checked}
         className={`flex items-center gap-2 ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
       >
         <div
@@ -86,17 +124,31 @@ function SmartFilterCheckbox({
           {label}
         </span>
       </button>
-      {title && (
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-30 hidden group-hover:block pointer-events-none">
-          <div className="relative">
-            <div className="bg-[#1a1a1a] text-white text-xs font-poppins rounded-lg px-3 py-2 w-max max-w-[220px] text-center">
-              {title}
-            </div>
-            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#1a1a1a] rotate-45" />
-          </div>
-        </div>
-      )}
-    </div>
+    </WithTooltip>
+  );
+}
+
+// Single-select pill used for the mutually-exclusive time-period group
+function SmartFilterPill({ label, selected, disabled, onClick, title }: SmartFilterPillProps) {
+  const stateCls =
+    selected && !disabled
+      ? 'bg-[#C1FF83] border-black text-black shadow-[2px_2px_0_0_black]'
+      : selected && disabled
+        ? 'bg-[#B8E07A] border-gray-500 text-gray-600 cursor-not-allowed'
+        : disabled
+          ? 'bg-gray-200 border-gray-400 text-gray-400 cursor-not-allowed'
+          : 'bg-white border-black text-black cursor-pointer hover:shadow-[2px_2px_0_0_black]';
+  return (
+    <WithTooltip text={title}>
+      <button
+        onClick={disabled ? undefined : onClick}
+        aria-pressed={selected}
+        aria-disabled={disabled}
+        className={`px-3 py-1.5 rounded-full border-2 font-poppins font-semibold text-sm leading-none transition ${stateCls}`}
+      >
+        {label}
+      </button>
+    </WithTooltip>
   );
 }
 
@@ -123,9 +175,9 @@ export default function ViewTimeTable() {
   const owner = session?.user?.email || null;
 
   const [filterFaculty, setFilterFaculty] = useState('');
-  const [activeFilters, setActiveFilters] = useState<Set<'sameBuilding' | 'close' | 'noMix'>>(
-    new Set()
-  );
+  const [activeFilters, setActiveFilters] = useState<
+    Set<'sameBuilding' | 'morningOnly' | 'eveningOnly' | 'mixOnly'>
+  >(new Set());
   const facultyList = React.useMemo(
     () =>
       Array.from(
@@ -153,36 +205,36 @@ export default function ViewTimeTable() {
     return originalTimetableData;
   }, [originalTimetableData, filterFaculty]);
 
-  // Precompute matches for each smart filter
+  // Precompute per-filter match lists
   const smartMatches = React.useMemo(() => {
     const same: number[] = [];
-    const close: number[] = [];
-    const noMix: number[] = [];
+    const morningOnly: number[] = [];
+    const eveningOnly: number[] = [];
+    const mixOnly: number[] = [];
 
-    if (!allTimetables || allTimetables.length === 0) return { same, close, noMix };
+    if (!allTimetables || allTimetables.length === 0)
+      return { same, morningOnly, eveningOnly, mixOnly };
 
     allTimetables.forEach((tt, idx) => {
-      const result = evaluateFilters(tt);
-      if (result.sameBuilding) same.push(idx);
-      if (result.closeEnough) close.push(idx);
-      if (result.noMix) noMix.push(idx);
+      const r = evaluateFilters(tt);
+      if (r.sameBuilding) same.push(idx);
+      if (r.morningOnly) morningOnly.push(idx);
+      if (r.eveningOnly) eveningOnly.push(idx);
+      if (r.mixOnly) mixOnly.push(idx);
     });
 
-    return { same, close, noMix };
+    return { same, morningOnly, eveningOnly, mixOnly };
   }, [allTimetables]);
 
-  // Filters that are forced on because every timetable already satisfies them
+  // Filters forced on because every timetable already satisfies them
   const forcedFilters = React.useMemo(() => {
-    const forced = new Set<'sameBuilding' | 'close' | 'noMix'>();
+    const forced = new Set<'sameBuilding' | 'morningOnly' | 'eveningOnly' | 'mixOnly'>();
     if (!allTimetables || allTimetables.length === 0) return forced;
     const total = allTimetables.length;
-    if (smartMatches.close.length === total) {
-      forced.add('close');
-      forced.add('sameBuilding'); // close ⊆ sameBuilding
-    } else if (smartMatches.same.length === total) {
-      forced.add('sameBuilding');
-    }
-    if (smartMatches.noMix.length === total) forced.add('noMix');
+    if (smartMatches.same.length === total) forced.add('sameBuilding');
+    if (smartMatches.morningOnly.length === total) forced.add('morningOnly');
+    if (smartMatches.eveningOnly.length === total) forced.add('eveningOnly');
+    if (smartMatches.mixOnly.length === total) forced.add('mixOnly');
     return forced;
   }, [allTimetables, smartMatches]);
 
@@ -193,17 +245,18 @@ export default function ViewTimeTable() {
     return result;
   }, [activeFilters, forcedFilters]);
 
-  // Build list of indexes that match ALL effective smart filters (AND logic)
+  // Indexes matching ALL effective smart filters (AND logic)
   const filteredBySmart = React.useMemo(() => {
     if (!allTimetables || allTimetables.length === 0) return [] as number[];
     if (effectiveActiveFilters.size === 0) return allTimetables.map((_, i) => i);
 
     return allTimetables.reduce((res, tt, idx) => {
-      const result = evaluateFilters(tt);
+      const r = evaluateFilters(tt);
       const passes =
-        (!effectiveActiveFilters.has('sameBuilding') || result.sameBuilding) &&
-        (!effectiveActiveFilters.has('close') || result.closeEnough) &&
-        (!effectiveActiveFilters.has('noMix') || result.noMix);
+        (!effectiveActiveFilters.has('sameBuilding') || r.sameBuilding) &&
+        (!effectiveActiveFilters.has('morningOnly') || r.morningOnly) &&
+        (!effectiveActiveFilters.has('eveningOnly') || r.eveningOnly) &&
+        (!effectiveActiveFilters.has('mixOnly') || r.mixOnly);
       if (passes) res.push(idx);
       return res;
     }, [] as number[]);
@@ -213,12 +266,26 @@ export default function ViewTimeTable() {
     const currentSet = new Set(filteredBySmart);
     const check = (idxs: number[]) =>
       effectiveActiveFilters.size === 0 ? idxs.length > 0 : idxs.some(i => currentSet.has(i));
+
+    // Time filters (morning/evening/mix) are mutually exclusive. Check them against the
+    // sameBuilding-only filtered set so that switching between them stays possible.
+    const nonTimeSet = new Set(
+      !allTimetables
+        ? []
+        : allTimetables.reduce((res, tt, idx) => {
+            const r = evaluateFilters(tt);
+            if (!effectiveActiveFilters.has('sameBuilding') || r.sameBuilding) res.push(idx);
+            return res;
+          }, [] as number[])
+    );
+    const checkTime = (idxs: number[]) => idxs.some(i => nonTimeSet.has(i));
     return {
       sameBuilding: check(smartMatches.same),
-      close: check(smartMatches.close),
-      noMix: check(smartMatches.noMix),
+      morningOnly: checkTime(smartMatches.morningOnly),
+      eveningOnly: checkTime(smartMatches.eveningOnly),
+      mixOnly: checkTime(smartMatches.mixOnly),
     };
-  }, [filteredBySmart, smartMatches, effectiveActiveFilters]);
+  }, [allTimetables, filteredBySmart, smartMatches, effectiveActiveFilters]);
 
   // When active filters change, navigate to the first matching timetable
   useEffect(() => {
@@ -551,61 +618,83 @@ export default function ViewTimeTable() {
     setAlertOpen(true);
   }
 
-  function toggleFilter(key: 'sameBuilding' | 'close' | 'noMix') {
-    if (forcedFilters.has(key)) return;
-    // sameBuilding is locked when 'close' is effectively active (close ⊆ sameBuilding)
-    if (key === 'sameBuilding' && effectiveActiveFilters.has('close')) return;
+  function toggleSameBuilding() {
+    if (forcedFilters.has('sameBuilding')) return;
     setActiveFilters(prev => {
       const next = new Set(prev);
-      if (next.has(key)) {
-        next.delete(key);
-        if (key === 'sameBuilding') next.delete('close');
-      } else {
-        next.add(key);
-        if (key === 'close') next.add('sameBuilding');
-      }
+      if (next.has('sameBuilding')) next.delete('sameBuilding');
+      else next.add('sameBuilding');
       return next;
     });
   }
 
   // === Smart filter disabled states and tooltips ===
   const isSameBuildingForced = forcedFilters.has('sameBuilding');
-  const isSameBuildingLockedByClose = !isSameBuildingForced && effectiveActiveFilters.has('close');
   const isSameBuildingNoMatch =
     !isSameBuildingForced &&
-    !isSameBuildingLockedByClose &&
     !effectiveActiveFilters.has('sameBuilding') &&
     !filterWouldMatch.sameBuilding;
-  const sameBuildingDisabled =
-    isSameBuildingForced || isSameBuildingLockedByClose || isSameBuildingNoMatch;
-  const sameBuildingTitle =
-    isSameBuildingForced && forcedFilters.has('close')
-      ? 'All timetables already have close classrooms — Same Building is included'
-      : isSameBuildingForced
-        ? 'All generated timetables are already in the same building'
-        : isSameBuildingLockedByClose
-          ? 'Required because the Close filter is active'
-          : isSameBuildingNoMatch
-            ? 'No timetables would match this filter'
-            : 'Show timetables with all classrooms in the same building';
-
-  const isCloseForced = forcedFilters.has('close');
-  const isCloseNoMatch = !effectiveActiveFilters.has('close') && !filterWouldMatch.close;
-  const closeDisabled = isCloseForced || isCloseNoMatch;
-  const closeTitle = isCloseForced
-    ? 'All generated timetables already have close classrooms'
-    : isCloseNoMatch
+  const sameBuildingDisabled = isSameBuildingForced || isSameBuildingNoMatch;
+  const sameBuildingTitle = isSameBuildingForced
+    ? 'All generated timetables are already in the same building'
+    : isSameBuildingNoMatch
       ? 'No timetables would match this filter'
-      : 'Show timetables where classrooms are close to each other';
+      : 'Show timetables with all classrooms in the same building';
 
-  const isNoMixForced = forcedFilters.has('noMix');
-  const isNoMixNoMatch = !effectiveActiveFilters.has('noMix') && !filterWouldMatch.noMix;
-  const noMixDisabled = isNoMixForced || isNoMixNoMatch;
-  const noMixTitle = isNoMixForced
-    ? 'All generated timetables are already morning or evening only'
-    : isNoMixNoMatch
-      ? 'No timetables would match this filter'
-      : 'Show timetables without morning/evening mix';
+  const isMorningOnlyForced = forcedFilters.has('morningOnly');
+  const isMorningOnlyNoMatch = !filterWouldMatch.morningOnly;
+  const morningOnlyDisabled = isMorningOnlyForced || isMorningOnlyNoMatch;
+  const morningOnlyTitle = isMorningOnlyForced
+    ? 'All generated timetables already have only morning theory slots'
+    : effectiveActiveFilters.has('morningOnly')
+      ? 'Showing morning theory only — click to clear'
+      : isMorningOnlyNoMatch
+        ? 'No timetables have only morning theory slots'
+        : effectiveActiveFilters.has('eveningOnly') || effectiveActiveFilters.has('mixOnly')
+          ? 'Show only morning theory timetables — click to switch'
+          : 'Show timetables with only morning theory slots';
+
+  const isEveningOnlyForced = forcedFilters.has('eveningOnly');
+  const isEveningOnlyNoMatch = !filterWouldMatch.eveningOnly;
+  const eveningOnlyDisabled = isEveningOnlyForced || isEveningOnlyNoMatch;
+  const eveningOnlyTitle = isEveningOnlyForced
+    ? 'All generated timetables already have only evening theory slots'
+    : effectiveActiveFilters.has('eveningOnly')
+      ? 'Showing evening theory only — click to clear'
+      : isEveningOnlyNoMatch
+        ? 'No timetables have only evening theory slots'
+        : effectiveActiveFilters.has('morningOnly') || effectiveActiveFilters.has('mixOnly')
+          ? 'Show only evening theory timetables — click to switch'
+          : 'Show timetables with only evening theory slots';
+
+  const isMixOnlyForced = forcedFilters.has('mixOnly');
+  const isMixOnlyNoMatch = !filterWouldMatch.mixOnly;
+  const mixOnlyDisabled = isMixOnlyForced || isMixOnlyNoMatch;
+  const mixOnlyTitle = isMixOnlyForced
+    ? 'All generated timetables already have both morning and evening theory slots'
+    : effectiveActiveFilters.has('mixOnly')
+      ? 'Showing mixed morning/evening only — click to clear'
+      : isMixOnlyNoMatch
+        ? 'No timetables have mixed morning/evening theory slots'
+        : effectiveActiveFilters.has('morningOnly') || effectiveActiveFilters.has('eveningOnly')
+          ? 'Show mixed morning/evening timetables — click to switch'
+          : 'Show timetables with both morning and evening theory slots';
+
+  // === Time group: single-select; click the active one to deselect ===
+  const timeForced = isMorningOnlyForced || isEveningOnlyForced || isMixOnlyForced;
+
+  function toggleTime(key: 'morningOnly' | 'eveningOnly' | 'mixOnly') {
+    if (timeForced) return;
+    setActiveFilters(prev => {
+      const next = new Set(prev);
+      const wasActive = next.has(key);
+      next.delete('morningOnly');
+      next.delete('eveningOnly');
+      next.delete('mixOnly');
+      if (!wasActive) next.add(key);
+      return next;
+    });
+  }
 
   return (
     <div
@@ -635,22 +724,15 @@ export default function ViewTimeTable() {
                         <div>
                           <p className="font-semibold text-xs text-black">Same Building</p>
                           <p className="text-xs text-gray-500 mt-0.5">
-                            All classes are in the same building, no cross-campus walking between
-                            lectures.
+                            All classes share the same building prefix — no cross-campus walking
+                            between lectures.
                           </p>
                         </div>
                         <div>
-                          <p className="font-semibold text-xs text-black">Close</p>
+                          <p className="font-semibold text-xs text-black">Time period</p>
                           <p className="text-xs text-gray-500 mt-0.5">
-                            Classrooms are close to each other, minimal travel between back-to-back
-                            classes.
-                          </p>
-                        </div>
-                        <div>
-                          <p className="font-semibold text-xs text-black">No Mix</p>
-                          <p className="text-xs text-gray-500 mt-0.5">
-                            No mixing of morning and evening theory slots, keeps your schedule on
-                            one half of the day.
+                            Pick one: Morning (theory slots end in 1), Evening (end in 2), or Mixed
+                            (both). Click the active one again to clear it.
                           </p>
                         </div>
                       </div>
@@ -662,23 +744,36 @@ export default function ViewTimeTable() {
                 label="Same Building"
                 checked={effectiveActiveFilters.has('sameBuilding')}
                 disabled={sameBuildingDisabled}
-                onClick={() => toggleFilter('sameBuilding')}
+                onClick={toggleSameBuilding}
                 title={sameBuildingTitle}
               />
-              <SmartFilterCheckbox
-                label="Close"
-                checked={effectiveActiveFilters.has('close')}
-                disabled={closeDisabled}
-                onClick={() => toggleFilter('close')}
-                title={closeTitle}
-              />
-              <SmartFilterCheckbox
-                label="No Mix"
-                checked={effectiveActiveFilters.has('noMix')}
-                disabled={noMixDisabled}
-                onClick={() => toggleFilter('noMix')}
-                title={noMixTitle}
-              />
+              <div className="w-px h-7 bg-black/30" />
+              <div className="flex items-center gap-2">
+                <span className="font-poppins font-semibold text-sm text-black/60 select-none">
+                  Time
+                </span>
+                <SmartFilterPill
+                  label="Morning"
+                  selected={effectiveActiveFilters.has('morningOnly')}
+                  disabled={morningOnlyDisabled}
+                  onClick={() => toggleTime('morningOnly')}
+                  title={morningOnlyTitle}
+                />
+                <SmartFilterPill
+                  label="Evening"
+                  selected={effectiveActiveFilters.has('eveningOnly')}
+                  disabled={eveningOnlyDisabled}
+                  onClick={() => toggleTime('eveningOnly')}
+                  title={eveningOnlyTitle}
+                />
+                <SmartFilterPill
+                  label="Mixed"
+                  selected={effectiveActiveFilters.has('mixOnly')}
+                  disabled={mixOnlyDisabled}
+                  onClick={() => toggleTime('mixOnly')}
+                  title={mixOnlyTitle}
+                />
+              </div>
             </div>
 
             <div className="w-[400px]">
