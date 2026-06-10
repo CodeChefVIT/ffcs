@@ -8,8 +8,9 @@ export async function generateMetadata({
   params: Promise<{ shareId: string }>;
 }): Promise<Metadata> {
   try {
-    const shareId = await params;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/shared-timetable/${shareId}`);
+    const { shareId } = await params;
+    const baseUrl = process.env.BASE_URL;
+    const res = await fetch(`${baseUrl}/api/shared-timetable/${shareId}`);
     if (!res.ok) return metadata;
 
     const data = await res.json();
@@ -17,7 +18,7 @@ export async function generateMetadata({
     if (!ttName) return metadata;
 
     return {
-      metadataBase: new URL(process.env.BASE_URL!),
+      metadataBase: new URL(baseUrl!),
       title: `${ttName} | FFCS-inator`,
       description:
         'Generate priority-based timetables in seconds with FFCS-inator. No hassle. No stress. No more clashes. The smartest way to plan your VIT FFCS.',
