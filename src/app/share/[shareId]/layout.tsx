@@ -17,6 +17,7 @@ export async function generateMetadata({
     if (!ttName) return metadata;
 
     return {
+      metadataBase: new URL(process.env.BASE_URL!),
       title: `${ttName} | FFCS-inator`,
       description:
         'Generate priority-based timetables in seconds with FFCS-inator. No hassle. No stress. No more clashes. The smartest way to plan your VIT FFCS.',
