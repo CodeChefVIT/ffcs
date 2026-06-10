@@ -45,14 +45,16 @@ export default function SharedTimetablePage() {
 
   useEffect(() => {
     if (!shareId) return;
-    axios
-      .get(`/api/shared-timetable/${shareId}`)
-      .then(res => {
-        const json = res.data;
-        if (json && json.timetable && Array.isArray(json.timetable.slots)) {
-          setTitle(json.timetable.title || '');
+
+    const fetchTimeTable = async () => {
+      try {
+        const res = await axios.get(`/api/shared-timetable/${shareId}`);
+
+        const ttData = res.data;
+        if (Array.isArray(ttData?.timetable?.slots)) {
+          setTitle(ttData.timetable.title || '');
           setData(
-            json.timetable.slots.map(
+            ttData.timetable.slots.map(
               (item: { courseCode: string; slot: string; facultyName: string }): dataProps => ({
                 code: item.courseCode,
                 slot: item.slot,
@@ -63,9 +65,27 @@ export default function SharedTimetablePage() {
         } else {
           setNotFound(true);
         }
-      })
-      .catch(() => setNotFound(true));
-  }, [shareId]);
+      } catch (error: unknown) {
+        const status = axios.isAxiosError(error) ? error?.response?.status : undefined;
+
+        if (status === 404) {
+          console.log('Timetable not found');
+          router.push('/404');
+          return;
+        }
+
+        if (status === 403) {
+          console.log('Timetable is private');
+          router.push('/denied-access');
+          return;
+        }
+        console.error('Unexpected error:', error);
+        setNotFound(true);
+      }
+    };
+
+    fetchTimeTable();
+  }, [shareId, router]);
 
   if (notFound) {
     router.push('/404');

@@ -19,24 +19,30 @@ export async function GET(req: NextRequest) {
     }
 
     if (!timetable.isPublic) {
-      return NextResponse.json({
-        success: false,
-        message: 'Timetable is private',
-        timetable: {
-          title: timetable.title,
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Timetable is private',
+          timetable: {
+            title: timetable.title,
+          },
         },
-      });
+        { status: 403 }
+      );
     }
 
-    return NextResponse.json({
-      success: true,
-      timetable: {
-        title: timetable.title,
-        slots: timetable.slots,
-        owner: timetable.owner,
-        shareId: timetable.shareId,
+    return NextResponse.json(
+      {
+        success: true,
+        timetable: {
+          title: timetable.title,
+          slots: timetable.slots,
+          owner: timetable.owner,
+          shareId: timetable.shareId,
+        },
       },
-    });
+      { status: 200 }
+    );
   } catch {
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
