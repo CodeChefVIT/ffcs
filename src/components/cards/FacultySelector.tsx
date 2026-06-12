@@ -43,37 +43,73 @@ type SelectFieldProps = {
 
 function SelectField({ label, value, options, onChange, renderOption }: SelectFieldProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState('');
   const ref = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
         setIsOpen(false);
+        setSearch('');
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Focus input when dropdown opens
+  useEffect(() => {
+    if (isOpen) inputRef.current?.focus();
+  }, [isOpen]);
+
+  const filteredOptions = options.filter(option => {
+    const label = renderOption ? renderOption(option) : option;
+    return label.toLowerCase().includes(search.toLowerCase());
+  });
+
   const selectedLabel = value ? (renderOption ? renderOption(value) : value) : `Select ${label}`;
+
+  const handleToggle = () => {
+    setIsOpen(prev => {
+      if (prev) setSearch('');
+      return !prev;
+    });
+  };
 
   return (
     <div ref={ref} className="relative w-full font-semibold text-[#000000B2]">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        title={selectedLabel}
-        aria-label={`Select ${label}`}
+      <div
         className={`
-         w-full h-10 pl-3 pr-12 text-left bg-white rounded-xl border-3 border-black
-         cursor-pointer relative
-         ${!value ? 'text-[#00000080]' : 'text-black'}
-         truncate whitespace-nowrap overflow-hidden
-       `}
+          w-full h-10 pl-3 pr-12 text-left bg-white rounded-xl border-3 border-black
+          relative flex items-center
+        `}
       >
-        {selectedLabel}
+        {isOpen ? (
+          <input
+            ref={inputRef}
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder={`Search ${label}...`}
+            className="w-full bg-transparent outline-none text-black placeholder:text-[#00000050] font-semibold"
+          />
+        ) : (
+          <span
+            className={`truncate whitespace-nowrap overflow-hidden cursor-pointer flex-1 ${!value ? 'text-[#00000080]' : 'text-black'}`}
+            onClick={handleToggle}
+          >
+            {selectedLabel}
+          </span>
+        )}
+
         <div className="absolute right-11 top-0 h-full w-[3px] bg-black" />
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+
+        <button
+          onClick={handleToggle}
+          className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+          aria-label={`Toggle ${label} dropdown`}
+        >
           <Image
             src="/icons/chevron_down.svg"
             alt="icon"
@@ -84,26 +120,31 @@ function SelectField({ label, value, options, onChange, renderOption }: SelectFi
             draggable={false}
             priority
           />
-        </div>
-      </button>
+        </button>
+      </div>
 
       {isOpen && (
         <ul className="absolute -left-7 -right-7 z-10 bg-white border-3 border-black rounded-xl mt-1 max-h-120 overflow-y-auto shadow-lg">
-          {options.map((option, index) => (
-            <li
-              key={index}
-              onClick={() => {
-                onChange(option);
-                setIsOpen(false);
-              }}
-              className={`
-               px-4 py-2 cursor-pointer hover:bg-[#FFEA79]
-               ${value === option ? 'bg-[#C1FF83] font-bold' : ''}
-             `}
-            >
-              {renderOption ? renderOption(option) : option}
-            </li>
-          ))}
+          {filteredOptions.length > 0 ? (
+            filteredOptions.map((option, index) => (
+              <li
+                key={index}
+                onClick={() => {
+                  onChange(option);
+                  setIsOpen(false);
+                  setSearch('');
+                }}
+                className={`
+                  px-4 py-2 cursor-pointer hover:bg-[#FFEA79]
+                  ${value === option ? 'bg-[#C1FF83] font-bold' : ''}
+                `}
+              >
+                {renderOption ? renderOption(option) : option}
+              </li>
+            ))
+          ) : (
+            <li className="px-4 py-2 text-[#00000060] italic">No results</li>
+          )}
         </ul>
       )}
     </div>
@@ -708,7 +749,7 @@ export default function FacultySelector({
             {getCourseType(selectedSubject.split(' - ')[0]) === 'P' &&
             !selectedSubject.split(' - ')[0].startsWith('BSTS') ? (
               <SelectField
-                label="Slot"
+                label="Slot LOL"
                 value={selectedLabShift}
                 onChange={e => {
                   if (e === 'morning' || e === 'evening') {
