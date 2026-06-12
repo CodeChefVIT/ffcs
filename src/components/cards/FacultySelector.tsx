@@ -749,7 +749,7 @@ export default function FacultySelector({
             {getCourseType(selectedSubject.split(' - ')[0]) === 'P' &&
             !selectedSubject.split(' - ')[0].startsWith('BSTS') ? (
               <SelectField
-                label="Slot LOL"
+                label="Slot"
                 value={selectedLabShift}
                 onChange={e => {
                   if (e === 'morning' || e === 'evening') {
