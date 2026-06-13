@@ -73,7 +73,7 @@ export default function View() {
             </div>
           </div>
 
-          <div className="flex flex-col items-center gap-6 w-[420px]">
+          <div className="flex flex-col items-center gap-6 w-[410px]">
             <SlotToggleButton onToggle={setSelected} />
 
             {selected === 'Theory' && (

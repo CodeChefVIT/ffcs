@@ -1,3 +1,5 @@
+{
+  /*
 "use client";
 
 import { useQRCode } from "next-qrcode";
@@ -26,4 +28,7 @@ export default function QRCode({ url }: QRCodeProps) {
       />
     </div>
   );
+}
+
+*/
 }
