@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { BasicToggleButton, GoogleLoginButton, ZButton } from './Buttons';
 import CompoundTable from './CompoundTable';
 import LoadingPopup from './LoadingPopup';
+// QRCode.tsx may not have proper module typings; ignore TypeScript module check for this import
+// @ts-ignore
 import QRCode from './QRCode';
 
 type dataProps = {
@@ -188,7 +190,7 @@ export default function Popup({
           )}
         </div>
 
-        <div className="flex flex-col items-center justify-center text-lg font-poppins font-regular p-8">
+        <div className="flex flex-col items-center justify-center text-lg font-poppins font-regular p-4">
           {type == 'login' && (
             <div className="flex flex-col items-center justify-center relative">
               <div className="absolute -top-0 -left-12 -rotate-[5deg] z-[1]">
@@ -471,14 +473,14 @@ export default function Popup({
             </div>
           )}
           {type == 'view_tt' && (
-            <div className="flex flex-col w-full max-h-[90vh] overflow-hidden">
+            <div className="flex flex-col w-full max-h-[60vh] overflow-hidden">
               <div className="overflow-auto w-full max-h-[calc(70vh-80px)]">
                 <div className="min-w-[768px] text-center p-4">
                   <CompoundTable data={dataTT || []} />
                 </div>
               </div>
 
-              <div className="flex flex-row flex-wrap items-center justify-center gap-16 px-4 py-3">
+              <div className="flex flex-row flex-wrap items-center justify-center gap-16 px-4 py-1 pb-2">
                 <div className="flex flex-row items-center gap-3">
                   <ZButton
                     type="regular"
