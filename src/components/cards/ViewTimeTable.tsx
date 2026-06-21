@@ -12,6 +12,7 @@ import Popup from '@/components/ui/Popup';
 import AlertModal from '@/components/ui/AlertModal';
 import LoadingPopup from '@/components/ui/LoadingPopup';
 import { getCurrentDateTime } from '@/lib/utils';
+import { evaluateFilters } from '@/lib/filterUtils';
 import { generateShareId } from '@/lib/shareIDgenerate';
 import { exportToPDF } from '@/lib/exportToPDF';
 import ComboBox from '../ui/ComboBox';
@@ -30,9 +31,133 @@ interface SavedTimetable {
   isShared?: boolean;
 }
 
+type SmartFilterCheckboxProps = {
+  label: string;
+  checked: boolean;
+  disabled: boolean;
+  onClick: () => void;
+  title?: string;
+};
+
+type SmartFilterPillProps = {
+  label: string;
+  selected: boolean;
+  disabled: boolean;
+  onClick: () => void;
+  title?: string;
+};
+
+// Hover/focus tooltip wrapper shared by the smart-filter controls
+function WithTooltip({ text, children }: { text?: string; children: React.ReactNode }) {
+  const [show, setShow] = useState(false);
+  return (
+    <div
+      className="relative inline-flex items-center"
+      onMouseEnter={() => text && setShow(true)}
+      onMouseLeave={() => setShow(false)}
+      onFocus={() => text && setShow(true)}
+      onBlur={() => setShow(false)}
+    >
+      {children}
+      {text && show && (
+        <div
+          className="z-50 absolute top-full left-1/2 -translate-x-1/2 mt-2"
+          style={{ pointerEvents: 'none' }}
+        >
+          <div
+            className="px-2 py-1 shadow-lg border border-gray-300 rounded-md min-w-max max-w-xs whitespace-pre-line text-xs font-inter bg-white text-gray-900 pointer-events-none"
+            role="tooltip"
+          >
+            {text}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SmartFilterCheckbox({
+  label,
+  checked,
+  disabled,
+  onClick,
+  title,
+}: SmartFilterCheckboxProps) {
+  return (
+    <WithTooltip text={title}>
+      <button
+        onClick={disabled ? undefined : onClick}
+        aria-disabled={disabled}
+        aria-pressed={checked}
+        className={`flex items-center gap-2 ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+      >
+        <div
+          className={`w-5 h-5 flex items-center justify-center shrink-0 border-2 rounded-sm transition-colors ${
+            disabled && checked
+              ? 'bg-[#B8E07A] border-gray-500'
+              : disabled
+                ? 'bg-gray-200 border-gray-400'
+                : checked
+                  ? 'bg-[#C1FF83] border-black'
+                  : 'bg-white border-black'
+          }`}
+        >
+          {checked && (
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={disabled ? '#888' : '#1E1E1E'}
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-3 h-3"
+            >
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          )}
+        </div>
+        <span
+          className={`font-poppins font-semibold text-sm leading-none ${
+            disabled && !checked ? 'text-gray-400' : disabled ? 'text-gray-500' : 'text-black'
+          }`}
+        >
+          {label}
+        </span>
+      </button>
+    </WithTooltip>
+  );
+}
+
+// Single-select pill used for the mutually-exclusive time-period group
+function SmartFilterPill({ label, selected, disabled, onClick, title }: SmartFilterPillProps) {
+  const stateCls =
+    selected && !disabled
+      ? 'bg-[#C1FF83] border-black text-black shadow-[2px_2px_0_0_black]'
+      : selected && disabled
+        ? 'bg-[#B8E07A] border-gray-500 text-gray-600 cursor-not-allowed'
+        : disabled
+          ? 'bg-gray-200 border-gray-400 text-gray-400 cursor-not-allowed'
+          : 'bg-white border-black text-black cursor-pointer hover:shadow-[2px_2px_0_0_black]';
+  return (
+    <WithTooltip text={title}>
+      <button
+        onClick={disabled ? undefined : onClick}
+        aria-pressed={selected}
+        aria-disabled={disabled}
+        className={`px-3 py-1.5 rounded-full border-2 font-poppins font-semibold text-sm leading-none transition ${stateCls}`}
+      >
+        {label}
+      </button>
+    </WithTooltip>
+  );
+}
+
 export default function ViewTimeTable() {
   const { timetableData } = useTimetable();
-  const originalTimetableData = timetableData ? timetableData : [];
+  const originalTimetableData = React.useMemo(
+    () => (timetableData ? timetableData : []),
+    [timetableData]
+  );
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [showSharePopup, setShowSharePopup] = useState(false);
@@ -44,47 +169,162 @@ export default function ViewTimeTable() {
 
   const [isSaving, setIsSaving] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
+  const [showFilterInfo, setShowFilterInfo] = useState(false);
 
   const { data: session } = useSession();
   const owner = session?.user?.email || null;
 
   const [filterFaculty, setFilterFaculty] = useState('');
-  const facultyList = Array.from(
-    new Set(
-      originalTimetableData
-        .flat()
-        .map((item: { facultyName?: string }) => item.facultyName || 'Unknown')
-    )
-  ).sort((a, b) => a.localeCompare(b));
+  const [activeFilters, setActiveFilters] = useState<
+    Set<'sameBuilding' | 'morningOnly' | 'eveningOnly' | 'mixOnly'>
+  >(new Set());
+  const facultyList = React.useMemo(
+    () =>
+      Array.from(
+        new Set(
+          originalTimetableData
+            .flat()
+            .map((item: { facultyName?: string }) => item.facultyName || 'Unknown')
+        )
+      ).sort((a, b) => a.localeCompare(b)),
+    [originalTimetableData]
+  );
 
   useEffect(() => {
     setSelectedIndex(0);
   }, [filterFaculty]);
 
-  let allTimetables: timetableDisplayData[][];
-  if (filterFaculty && filterFaculty !== '') {
-    allTimetables = originalTimetableData.filter((tt: timetableDisplayData[]) =>
-      tt.some((item: { facultyName?: string }) => (item.facultyName || 'Unknown') === filterFaculty)
-    );
-  } else {
-    allTimetables = originalTimetableData;
-  }
+  const allTimetables = React.useMemo(() => {
+    if (filterFaculty && filterFaculty !== '') {
+      return originalTimetableData.filter((tt: timetableDisplayData[]) =>
+        tt.some(
+          (item: { facultyName?: string }) => (item.facultyName || 'Unknown') === filterFaculty
+        )
+      );
+    }
+    return originalTimetableData;
+  }, [originalTimetableData, filterFaculty]);
 
-  const timetableNumber = selectedIndex + 1;
-  const timetableCount = allTimetables.length;
+  // Precompute per-filter match lists
+  const smartMatches = React.useMemo(() => {
+    const same: number[] = [];
+    const morningOnly: number[] = [];
+    const eveningOnly: number[] = [];
+    const mixOnly: number[] = [];
+
+    if (!allTimetables || allTimetables.length === 0)
+      return { same, morningOnly, eveningOnly, mixOnly };
+
+    allTimetables.forEach((tt, idx) => {
+      const r = evaluateFilters(tt);
+      if (r.sameBuilding) same.push(idx);
+      if (r.morningOnly) morningOnly.push(idx);
+      if (r.eveningOnly) eveningOnly.push(idx);
+      if (r.mixOnly) mixOnly.push(idx);
+    });
+
+    return { same, morningOnly, eveningOnly, mixOnly };
+  }, [allTimetables]);
+
+  // Filters forced on because every timetable already satisfies them
+  const forcedFilters = React.useMemo(() => {
+    const forced = new Set<'sameBuilding' | 'morningOnly' | 'eveningOnly' | 'mixOnly'>();
+    if (!allTimetables || allTimetables.length === 0) return forced;
+    const total = allTimetables.length;
+    if (smartMatches.same.length === total) forced.add('sameBuilding');
+    if (smartMatches.morningOnly.length === total) forced.add('morningOnly');
+    if (smartMatches.eveningOnly.length === total) forced.add('eveningOnly');
+    if (smartMatches.mixOnly.length === total) forced.add('mixOnly');
+    return forced;
+  }, [allTimetables, smartMatches]);
+
+  // Union of user-selected and forced filters — drives all filtering logic
+  const effectiveActiveFilters = React.useMemo(() => {
+    const result = new Set(activeFilters);
+    forcedFilters.forEach(f => result.add(f));
+    return result;
+  }, [activeFilters, forcedFilters]);
+
+  // Indexes matching ALL effective smart filters (AND logic)
+  const filteredBySmart = React.useMemo(() => {
+    if (!allTimetables || allTimetables.length === 0) return [] as number[];
+    if (effectiveActiveFilters.size === 0) return allTimetables.map((_, i) => i);
+
+    return allTimetables.reduce((res, tt, idx) => {
+      const r = evaluateFilters(tt);
+      const passes =
+        (!effectiveActiveFilters.has('sameBuilding') || r.sameBuilding) &&
+        (!effectiveActiveFilters.has('morningOnly') || r.morningOnly) &&
+        (!effectiveActiveFilters.has('eveningOnly') || r.eveningOnly) &&
+        (!effectiveActiveFilters.has('mixOnly') || r.mixOnly);
+      if (passes) res.push(idx);
+      return res;
+    }, [] as number[]);
+  }, [allTimetables, effectiveActiveFilters]);
+
+  const filterWouldMatch = React.useMemo(() => {
+    const currentSet = new Set(filteredBySmart);
+    const check = (idxs: number[]) =>
+      effectiveActiveFilters.size === 0 ? idxs.length > 0 : idxs.some(i => currentSet.has(i));
+
+    // Time filters (morning/evening/mix) are mutually exclusive. Check them against the
+    // sameBuilding-only filtered set so that switching between them stays possible.
+    const nonTimeSet = new Set(
+      !allTimetables
+        ? []
+        : allTimetables.reduce((res, tt, idx) => {
+            const r = evaluateFilters(tt);
+            if (!effectiveActiveFilters.has('sameBuilding') || r.sameBuilding) res.push(idx);
+            return res;
+          }, [] as number[])
+    );
+    const checkTime = (idxs: number[]) => idxs.some(i => nonTimeSet.has(i));
+    return {
+      sameBuilding: check(smartMatches.same),
+      morningOnly: checkTime(smartMatches.morningOnly),
+      eveningOnly: checkTime(smartMatches.eveningOnly),
+      mixOnly: checkTime(smartMatches.mixOnly),
+    };
+  }, [allTimetables, filteredBySmart, smartMatches, effectiveActiveFilters]);
+
+  // When active filters change, navigate to the first matching timetable
+  useEffect(() => {
+    if (effectiveActiveFilters.size === 0) return;
+    if (filteredBySmart.length > 0) {
+      setSelectedIndex(filteredBySmart[0]);
+    } else {
+      setSelectedIndex(0);
+    }
+  }, [effectiveActiveFilters, filteredBySmart]);
+
+  // When a smart filter is active, the pagination should show only matching timetables.
+  const displayList =
+    effectiveActiveFilters.size === 0 || filteredBySmart.length === 0
+      ? allTimetables.map((_, i) => i)
+      : filteredBySmart;
+
+  const displayCount = displayList.length;
+  // position (1-based) of the currently selected timetable within the display list
+  const displayPosition =
+    displayList.indexOf(selectedIndex) === -1 ? 1 : displayList.indexOf(selectedIndex) + 1;
+
+  const timetableNumber = displayPosition;
+  const timetableCount = displayCount;
   const selectedData = allTimetables[selectedIndex] || [];
   const visibleIndexes = getVisibleIndexes(timetableNumber, timetableCount);
 
   const convertedData = selectedData.map(
-    (item: { courseCode?: string; slotName?: string; facultyName?: string }) => ({
+    (item: { courseCode?: string; slotName?: string; facultyName?: string; venue?: string }) => ({
       code: item.courseCode || '00000000',
       slot: item.slotName || 'NIL',
       name: item.facultyName || 'Unknown',
+      venue: item.venue || '',
     })
   );
 
   useEffect(() => {
     setSelectedIndex(0);
+    setFilterFaculty('');
   }, [timetableData]);
 
   useEffect(() => {
@@ -378,54 +618,203 @@ export default function ViewTimeTable() {
     setAlertOpen(true);
   }
 
+  function toggleSameBuilding() {
+    if (forcedFilters.has('sameBuilding')) return;
+    setActiveFilters(prev => {
+      const next = new Set(prev);
+      if (next.has('sameBuilding')) next.delete('sameBuilding');
+      else next.add('sameBuilding');
+      return next;
+    });
+  }
+
+  // === Smart filter disabled states and tooltips ===
+  const isSameBuildingForced = forcedFilters.has('sameBuilding');
+  const isSameBuildingNoMatch =
+    !isSameBuildingForced &&
+    !effectiveActiveFilters.has('sameBuilding') &&
+    !filterWouldMatch.sameBuilding;
+  const sameBuildingDisabled = isSameBuildingForced || isSameBuildingNoMatch;
+  const sameBuildingTitle = isSameBuildingForced
+    ? 'All generated timetables are already in the same building'
+    : isSameBuildingNoMatch
+      ? 'No timetables would match this filter'
+      : 'Show timetables with all classrooms in the same building';
+
+  const isMorningOnlyForced = forcedFilters.has('morningOnly');
+  const isMorningOnlyNoMatch = !filterWouldMatch.morningOnly;
+  const morningOnlyDisabled = isMorningOnlyForced || isMorningOnlyNoMatch;
+  const morningOnlyTitle = isMorningOnlyForced
+    ? 'All generated timetables already have only morning theory slots'
+    : effectiveActiveFilters.has('morningOnly')
+      ? 'Showing morning theory only — click to clear'
+      : isMorningOnlyNoMatch
+        ? 'No timetables have only morning theory slots'
+        : effectiveActiveFilters.has('eveningOnly') || effectiveActiveFilters.has('mixOnly')
+          ? 'Show only morning theory timetables — click to switch'
+          : 'Show timetables with only morning theory slots';
+
+  const isEveningOnlyForced = forcedFilters.has('eveningOnly');
+  const isEveningOnlyNoMatch = !filterWouldMatch.eveningOnly;
+  const eveningOnlyDisabled = isEveningOnlyForced || isEveningOnlyNoMatch;
+  const eveningOnlyTitle = isEveningOnlyForced
+    ? 'All generated timetables already have only evening theory slots'
+    : effectiveActiveFilters.has('eveningOnly')
+      ? 'Showing evening theory only — click to clear'
+      : isEveningOnlyNoMatch
+        ? 'No timetables have only evening theory slots'
+        : effectiveActiveFilters.has('morningOnly') || effectiveActiveFilters.has('mixOnly')
+          ? 'Show only evening theory timetables — click to switch'
+          : 'Show timetables with only evening theory slots';
+
+  const isMixOnlyForced = forcedFilters.has('mixOnly');
+  const isMixOnlyNoMatch = !filterWouldMatch.mixOnly;
+  const mixOnlyDisabled = isMixOnlyForced || isMixOnlyNoMatch;
+  const mixOnlyTitle = isMixOnlyForced
+    ? 'All generated timetables already have both morning and evening theory slots'
+    : effectiveActiveFilters.has('mixOnly')
+      ? 'Showing mixed morning/evening only — click to clear'
+      : isMixOnlyNoMatch
+        ? 'No timetables have mixed morning/evening theory slots'
+        : effectiveActiveFilters.has('morningOnly') || effectiveActiveFilters.has('eveningOnly')
+          ? 'Show mixed morning/evening timetables — click to switch'
+          : 'Show timetables with both morning and evening theory slots';
+
+  // === Time group: single-select; click the active one to deselect ===
+  const timeForced = isMorningOnlyForced || isEveningOnlyForced || isMixOnlyForced;
+
+  function toggleTime(key: 'morningOnly' | 'eveningOnly' | 'mixOnly') {
+    if (timeForced) return;
+    setActiveFilters(prev => {
+      const next = new Set(prev);
+      const wasActive = next.has(key);
+      next.delete('morningOnly');
+      next.delete('eveningOnly');
+      next.delete('mixOnly');
+      if (!wasActive) next.add(key);
+      return next;
+    });
+  }
+
   return (
     <div
       id="timetable-view"
       className="w-screen mt-12 bg-[#A7D5D7] font-poppins flex items-center justify-center flex-col border-black border-3"
     >
       <div className="flex flex-col h-full p-12 overflow-hidden">
-        <div className="flex flex-row mb-4 justify-between w-full px-4">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:gap-8 gap-4">
-            <div className="text-5xl font-pangolin">Your Timetables</div>
-            <div className="text-xl font-poppins pb-1">
-              {timetableCount == 0
-                ? '(Empty List)'
-                : timetableCount == 1
-                  ? '(1 timetable was generated)'
-                  : `(${timetableCount} timetables were generated)`}
+        <div className="flex flex-row mb-4 justify-between w-full px-4 items-center">
+          <div className="text-5xl font-pangolin">Your Timetables</div>
+
+          <div className="flex items-center gap-6">
+            <div className="flex gap-5 items-center">
+              <div className="relative shrink-0">
+                <button
+                  onClick={() => setShowFilterInfo(prev => !prev)}
+                  aria-label="Smart filter info"
+                  className="w-8 h-8 rounded-full bg-[#FFEA79] border-2 border-black shadow-[2px_2px_0px_0px_black] flex items-center justify-center font-[var(--font-plus-jakarta-sans)] font-medium text-sm leading-none select-none"
+                >
+                  ?
+                </button>
+                {showFilterInfo && (
+                  <>
+                    <div className="fixed inset-0 z-10" onClick={() => setShowFilterInfo(false)} />
+                    <div className="absolute top-full left-0 mt-2 z-20 bg-white border-2 border-black rounded-xl shadow-[4px_4px_0px_0px_black] p-4 w-72 font-poppins">
+                      <p className="font-semibold text-xs text-black mb-3">Smart Filters</p>
+                      <div className="flex flex-col gap-3">
+                        <div>
+                          <p className="font-semibold text-xs text-black">Same Building</p>
+                          <p className="text-xs text-gray-500 mt-0.5">
+                            All classes share the same building prefix — no cross-campus walking
+                            between lectures.
+                          </p>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-xs text-black">Time period</p>
+                          <p className="text-xs text-gray-500 mt-0.5">
+                            Pick one: Morning (theory slots end in 1), Evening (end in 2), or Mixed
+                            (both). Click the active one again to clear it.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+              <SmartFilterCheckbox
+                label="Same Building"
+                checked={effectiveActiveFilters.has('sameBuilding')}
+                disabled={sameBuildingDisabled}
+                onClick={toggleSameBuilding}
+                title={sameBuildingTitle}
+              />
+              <div className="w-px h-7 bg-black/30" />
+              <div className="flex items-center gap-2">
+                <span className="font-poppins font-semibold text-sm text-black/60 select-none">
+                  Time
+                </span>
+                <SmartFilterPill
+                  label="Morning"
+                  selected={effectiveActiveFilters.has('morningOnly')}
+                  disabled={morningOnlyDisabled}
+                  onClick={() => toggleTime('morningOnly')}
+                  title={morningOnlyTitle}
+                />
+                <SmartFilterPill
+                  label="Evening"
+                  selected={effectiveActiveFilters.has('eveningOnly')}
+                  disabled={eveningOnlyDisabled}
+                  onClick={() => toggleTime('eveningOnly')}
+                  title={eveningOnlyTitle}
+                />
+                <SmartFilterPill
+                  label="Mixed"
+                  selected={effectiveActiveFilters.has('mixOnly')}
+                  disabled={mixOnlyDisabled}
+                  onClick={() => toggleTime('mixOnly')}
+                  title={mixOnlyTitle}
+                />
+              </div>
             </div>
-          </div>
-          <div className="w-[400px]">
-            <ComboBox
-              label="Filter by Faculty"
-              value={filterFaculty}
-              options={facultyList}
-              onChange={setFilterFaculty}
-            />
+
+            <div className="w-[400px]">
+              <ComboBox
+                label="Filter by Faculty"
+                value={filterFaculty}
+                options={facultyList}
+                onChange={setFilterFaculty}
+              />
+            </div>
           </div>
         </div>
 
-        <div className="w-full max-w-[95vw] my-4">
+        <div className="w-full max-w-[95vw] my-2">
+          <div className="text-xl font-poppins mb-3">
+            {timetableCount === 0
+              ? '(Empty List)'
+              : timetableCount === 1
+                ? '(1 timetable was generated)'
+                : `(${timetableCount} timetables were generated)`}
+          </div>
+
           <CompoundTable data={convertedData} large={true} />
         </div>
 
         <div className="flex flex-row items-center justify-between px-16 pt-4 gap-8">
           <div className="w-auto">
-            <div className=" w-full flex justify-center">
+            <div className="w-full flex justify-center">
               <button
-                onClick={timetableNumber === 1 ? undefined : () => setSelectedIndex(0)}
-                disabled={timetableNumber === 1}
+                onClick={() => {
+                  if (timetableNumber !== 1) setSelectedIndex(displayList[0] ?? 0);
+                }}
                 title="Go to first timetable"
                 aria-label="Go to first timetable"
-                className={` ${
-                  timetableNumber === 1 ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'
-                } font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-l-xl shadow-[4px_4px_0_0_black] ${
-                  timetableNumber === 1 ? 'cursor-normal' : 'cursor-pointer'
-                } ${
-                  timetableNumber === 1
-                    ? ''
-                    : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'
-                }`}
+                disabled={timetableNumber === 1}
+                className={`font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-l-xl shadow-[4px_4px_0_0_black] bg-[#75E5EA]
+      ${
+        timetableNumber === 1
+          ? 'cursor-default'
+          : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'
+      }`}
               >
                 <span style={{ pointerEvents: 'none', display: 'flex' }}>
                   <Image
@@ -441,45 +830,44 @@ export default function ViewTimeTable() {
               </button>
 
               <div className="flex flex-row">
-                {visibleIndexes.map(index => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedIndex(index - 1)}
-                    aria-label={`Go to timetable ${index}`}
-                    title={`Go to timetable ${index}`}
-                    className={` ${
-                      timetableNumber === index ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'
-                    } font-poppins border-2 border-black font-bold text-lg flex items-center justify-center text-center transition duration-100 h-12 w-12 shadow-[4px_4px_0_0_black] ${
-                      timetableNumber === index ? 'cursor-normal' : 'cursor-pointer'
-                    } ${
-                      timetableNumber === index
-                        ? ''
-                        : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'
-                    }`}
-                  >
-                    {index}
-                  </button>
-                ))}
+                {visibleIndexes.map(index => {
+                  const globalIndex = displayList[index - 1];
+                  if (timetableNumber === index) {
+                    return (
+                      <div
+                        key={index}
+                        className="bg-[#6CC0C5] font-poppins border-2 border-black font-bold text-lg flex items-center justify-center text-center h-12 w-12 shadow-[4px_4px_0_0_black]"
+                      >
+                        {index}
+                      </div>
+                    );
+                  }
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedIndex(globalIndex)}
+                      className="bg-[#75E5EA] font-poppins border-2 border-black font-bold text-lg flex items-center justify-center text-center transition duration-100 h-12 w-12 shadow-[4px_4px_0_0_black] active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]"
+                    >
+                      {index}
+                    </button>
+                  );
+                })}
               </div>
 
               <button
-                onClick={
-                  timetableNumber === timetableCount
-                    ? undefined
-                    : () => setSelectedIndex(timetableCount - 1)
-                }
-                disabled={timetableNumber === timetableCount}
+                onClick={() => {
+                  if (timetableNumber !== timetableCount)
+                    setSelectedIndex(displayList[displayCount - 1] ?? selectedIndex);
+                }}
                 title="Go to last timetable"
                 aria-label="Go to last timetable"
-                className={` ${
-                  timetableNumber === timetableCount ? 'bg-[#6CC0C5]' : 'bg-[#75E5EA]'
-                } font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-r-xl shadow-[4px_4px_0_0_black] ${
-                  timetableNumber === timetableCount ? 'cursor-normal' : 'cursor-pointer'
-                } ${
-                  timetableNumber === timetableCount
-                    ? ''
-                    : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'
-                }`}
+                disabled={timetableNumber === timetableCount}
+                className={`font-poppins border-2 border-black font-semibold flex items-center justify-center text-center transition duration-100 h-12 w-12 rounded-r-xl shadow-[4px_4px_0_0_black] bg-[#75E5EA]
+      ${
+        timetableNumber === timetableCount
+          ? 'cursor-default'
+          : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'
+      }`}
               >
                 <span style={{ pointerEvents: 'none', display: 'flex' }}>
                   <Image
@@ -497,17 +885,19 @@ export default function ViewTimeTable() {
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-4">
-            {actionButtons.map((btn, idx) => (
-              <div key={idx}>
-                <ZButton
-                  type="long"
-                  text={btn.label}
-                  image={btn.icon}
-                  color={btn.color || 'blue'}
-                  onClick={btn.onClick}
-                />
-              </div>
-            ))}
+            {selectedData && selectedData.length > 0
+              ? actionButtons.map((btn, idx) => (
+                  <div key={idx}>
+                    <ZButton
+                      type="long"
+                      text={btn.label}
+                      image={btn.icon}
+                      color={btn.color || 'blue'}
+                      onClick={btn.onClick}
+                    />
+                  </div>
+                ))
+              : null}
           </div>
         </div>
       </div>
