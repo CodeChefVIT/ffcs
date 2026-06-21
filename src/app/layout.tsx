@@ -1,4 +1,4 @@
-import { Pangolin, Poppins, Inter } from 'next/font/google';
+import { Pangolin, Poppins, Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import SessionProviderWrapper from './SessionProvider';
 import ServiceWorkerRegister from '../components/ServiceWorkerRegister/ServiceWorkerRegister';
@@ -22,6 +22,13 @@ const inter = Inter({
   weight: ['400', '500', '600', '700'],
   subsets: ['latin'],
   variable: '--font-inter',
+  display: 'swap',
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  weight: ['500'],
+  subsets: ['latin'],
+  variable: '--font-plus-jakarta-sans',
   display: 'swap',
 });
 
@@ -72,7 +79,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </Script>
       </head>
       <body
-        className={`${pangolin.variable} ${poppins.variable} ${inter.variable} antialiased bg-[#CEE4E5] select-none`}
+        className={`${pangolin.variable} ${poppins.variable} ${inter.variable} ${plusJakartaSans.variable} antialiased bg-[#CEE4E5] select-none`}
       >
         <SessionProviderWrapper>{children}</SessionProviderWrapper>
         <ServiceWorkerRegister />

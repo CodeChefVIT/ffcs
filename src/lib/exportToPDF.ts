@@ -6,7 +6,8 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 import type { TDocumentDefinitions } from 'pdfmake/interfaces';
 import { getCurrentDateTime } from './utils';
 
-(pdfMake as typeof pdfMake & { vfs: Record<string, string> }).vfs = pdfFonts.vfs;
+(pdfMake as typeof pdfMake & { vfs: Record<string, string> }).vfs =
+  pdfFonts.vfs as unknown as Record<string, string>;
 
 interface TableCell {
   text: string;

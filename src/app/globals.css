@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Pangolin&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
@@ -14,6 +15,7 @@ html {
   --font-inter: var(--font-inter);
   --font-poppins: var(--font-poppins);
   --font-pangolin: var(--font-pangolin);
+  --font-plus-jakarta-sans: var(--font-plus-jakarta-sans);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -153,4 +155,8 @@ html {
 
 *::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+button {
+  cursor: pointer;
 }
