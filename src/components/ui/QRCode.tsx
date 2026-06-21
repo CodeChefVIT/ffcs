@@ -1,8 +1,6 @@
-{
-  /*
-"use client";
+'use client';
 
-import { useQRCode } from "next-qrcode";
+import { useQRCode } from 'next-qrcode';
 
 interface QRCodeProps {
   url: string;
@@ -16,19 +14,16 @@ export default function QRCode({ url }: QRCodeProps) {
       <Canvas
         text={url}
         options={{
-          errorCorrectionLevel: "M",
+          errorCorrectionLevel: 'M',
           margin: 3,
           scale: 4,
           width: 200,
           color: {
-            dark: "#000000",
-            light: "#FFFFFF",
+            dark: '#000000',
+            light: '#FFFFFF',
           },
         }}
       />
     </div>
   );
-}
-
-*/
 }

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import CompoundTable from './CompoundTable';
 import Footer from './Footer';
 import { GoogleLoginButton, BasicToggleButton, ZButton } from './Buttons';
-//import QRCode from './QRCode';
+import QRCode from './QRCode';
 
 type dataProps = {
   code: string;
