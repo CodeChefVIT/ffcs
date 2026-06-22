@@ -7,9 +7,10 @@ type ComboBoxProps = {
   value: string;
   options: string[];
   onChange: (val: string) => void;
+  renderOption?: (val: string) => string;
 };
 
-export default function ComboBox({ label, value, options, onChange }: ComboBoxProps) {
+export default function ComboBox({ label, value, options, onChange, renderOption }: ComboBoxProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const ref = useRef<HTMLDivElement>(null);
@@ -24,19 +25,21 @@ export default function ComboBox({ label, value, options, onChange }: ComboBoxPr
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const filteredOptions = options.filter(option =>
-    option.toLowerCase().includes(inputValue.toLowerCase())
-  );
+  const filteredOptions = options.filter(option => {
+    const label = renderOption ? renderOption(option) : option;
+    return label.toLowerCase().includes(inputValue.toLowerCase());
+  });
 
   const handleSelect = (option: string) => {
+    const renderedOption = renderOption ? renderOption(option) : option;
     onChange(option);
-    setInputValue(option);
+    setInputValue(renderedOption);
     setIsOpen(false);
   };
 
   useEffect(() => {
-    if (value) setInputValue(value);
-  }, [value]);
+    if (value) setInputValue(renderOption ? renderOption(value) : value);
+  }, [value, renderOption]);
 
   return (
     <div ref={ref} className="relative w-full font-semibold text-[#000000B2]">
@@ -82,7 +85,7 @@ export default function ComboBox({ label, value, options, onChange }: ComboBoxPr
       </div>
 
       {isOpen && (
-        <ul className="absolute left-0 right-0 z-10 bg-white border-3 border-black rounded-xl mt-1 max-h-120 overflow-y-auto shadow-lg">
+        <ul className="absolute -left-2 -right-2 z-10 bg-white border-3 border-black rounded-xl mt-1 max-h-120 overflow-y-auto shadow-lg">
           {filteredOptions.map((option, index) => (
             <li
               key={index}
@@ -92,7 +95,7 @@ export default function ComboBox({ label, value, options, onChange }: ComboBoxPr
                 ${value === option ? 'bg-[#C1FF83] font-bold' : ''}
               `}
             >
-              {option}
+              {renderOption ? renderOption(option) : option}
             </li>
           ))}
         </ul>
