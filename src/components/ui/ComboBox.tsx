@@ -39,7 +39,7 @@ export default function ComboBox({ label, value, options, onChange, renderOption
 
   useEffect(() => {
     if (value) setInputValue(renderOption ? renderOption(value) : value);
-  }, [value]);
+  }, [value, renderOption]);
 
   return (
     <div ref={ref} className="relative w-full font-semibold text-[#000000B2]">
