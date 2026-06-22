@@ -8,7 +8,7 @@ import { data } from '@/data/faculty';
 import { fullCourseData } from '@/lib/type';
 import AlertModal from '../ui/AlertModal';
 import { course_type_map } from '@/lib/course_codes_map';
-
+import ComboBox from '@/components/ui/ComboBox';
 const schools = [
   'SCOPE',
   'SCORE',
@@ -733,14 +733,14 @@ export default function FacultySelector({
           </div>
 
           <div className="grid grid-cols-3 gap-4 m-4 px-4">
-            <SelectField
+            <ComboBox
               label={'Domain'}
               value={selectedDomain}
               options={domains}
               onChange={handleDomainChange}
               renderOption={prettifyDomain}
             />
-            <SelectField
+            <ComboBox
               label="Subject"
               value={selectedSubject}
               options={subjects}
@@ -748,7 +748,7 @@ export default function FacultySelector({
             />
             {getCourseType(selectedSubject.split(' - ')[0]) === 'P' &&
             !selectedSubject.split(' - ')[0].startsWith('BSTS') ? (
-              <SelectField
+              <ComboBox
                 label="Slot"
                 value={selectedLabShift}
                 onChange={e => {
@@ -763,7 +763,7 @@ export default function FacultySelector({
                 )}
               />
             ) : (
-              <SelectField
+              <ComboBox
                 label="Slot"
                 value={selectedSlot}
                 options={[...slots].sort((a, b) => a.localeCompare(b))}
