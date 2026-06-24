@@ -4,8 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { BasicToggleButton, GoogleLoginButton, ZButton } from './Buttons';
 import CompoundTable from './CompoundTable';
 import LoadingPopup from './LoadingPopup';
-// QRCode.tsx may not have proper module typings; ignore TypeScript module check for this import
-// @ts-ignore
 import QRCode from './QRCode';
 
 type dataProps = {

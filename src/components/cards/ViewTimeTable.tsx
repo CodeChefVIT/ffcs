@@ -723,7 +723,7 @@ export default function ViewTimeTable() {
                       <div className="flex flex-col gap-3">
                         <div>
                           <p className="font-semibold text-xs text-black">Same Building</p>
-                          <p className="text-xs text-gray-500 mt-0.5">
+                          <p className=" text-xs text-gray-500 mt-0.5">
                             All classes share the same building prefix — no cross-campus walking
                             between lectures.
                           </p>
