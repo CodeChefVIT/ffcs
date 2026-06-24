@@ -9,7 +9,6 @@ export default function Hero() {
 
   return (
     <div className="relative w-320 h-150 md:h-180 flex justify-center items-center font-pangolin text-black isolate">
-      {/* ================= BACKGROUND LAYER ================= */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="w-16 h-16 left-100 top-108 md:w-24 md:h-24 md:left-80 md:top-115 absolute rotate-[-60deg]">
           <Image
@@ -132,8 +131,6 @@ export default function Hero() {
           />
         </div>
       </div>
-
-      {/* ================= MAIN CONTENT ================= */}
       <div className="absolute left-1/2 top-36 w-full transform -translate-x-1/2 flex flex-col items-center text-center z-20">
         <Image
           src="/logo_ffcs.svg"
