@@ -1,4 +1,4 @@
-export const PE_MIC = {
+export const PFEC_MIC = {
   'CSI3005 - Advanced Data Visualization Techniques': [
     { slot: 'A1+TA1', venue: 'SJT502', faculty: 'ABDUL GAFFAR H' },
     { slot: 'L45+L46', venue: 'SJT417', faculty: 'ABDUL GAFFAR H' },
