@@ -58,135 +58,139 @@ export default function View() {
 
         <div className="text-6xl mt-36 mb-4 font-pangolin text-black">Slot View</div>
 
-        <div className="mt-8 mb-8">
-          <SlotToggleButton onToggle={setSelected} />
-        </div>
-
-        {selected === 'Theory' && (
-          <div className="flex gap-16 mt-6">
-            {/* Morning Theory */}
-            <div className="flex flex-col gap-2">
-              {[0, 1, 2].map(row => (
-                <div
-                  key={`morning-row-${row}`}
-                  className={`grid ${row < 2 ? 'grid-cols-7' : 'grid-cols-4'} gap-2`}
-                >
-                  {buttonTexts
-                    .filter(text => rowFilters[row](text, '1'))
-                    .map(text => {
-                      const idx = buttonTexts.indexOf(text);
-                      const activeTexts = active.map(i => buttonTexts[i]);
-                      const isDisabled = activeTexts.some(activeText =>
-                        disableMap[activeText.split('+')[0]]?.includes(text.split('+')[0])
-                      );
-                      return (
-                        <ZButton
-                          type="regular"
-                          key={`morning-${text}`}
-                          text={text}
-                          color="blue"
-                          clicked={active.includes(idx)}
-                          disabled={!!isDisabled}
-                          onClick={() => handleClick(idx)}
-                        />
-                      );
-                    })}
-                </div>
-              ))}
-            </div>
-
-            {/* Evening Theory */}
-            <div className="flex flex-col gap-2">
-              {[0, 1, 2].map(row => (
-                <div
-                  key={`evening-row-${row}`}
-                  className={`grid ${row < 2 ? 'grid-cols-7' : 'grid-cols-4'} gap-2`}
-                >
-                  {buttonTexts
-                    .filter(text => rowFilters[row](text, '2'))
-                    .map(text => {
-                      const idx = buttonTexts.indexOf(text);
-                      const activeTexts = active.map(i => buttonTexts[i]);
-                      const isDisabled = activeTexts.some(activeText =>
-                        disableMap[activeText.split('+')[0]]?.includes(text.split('+')[0])
-                      );
-                      return (
-                        <ZButton
-                          type="regular"
-                          key={`evening-${text}`}
-                          text={text}
-                          color="blue"
-                          clicked={active.includes(idx)}
-                          disabled={!!isDisabled}
-                          onClick={() => handleClick(idx)}
-                        />
-                      );
-                    })}
-                </div>
-              ))}
+        <div className="flex flex-row items-start gap-8 mt-10 px-8 w-full max-w-[1600px]">
+          {/* Timetable Section */}
+          <div className="flex-1 mt-12 mb-10 w-full max-w-[1000px]">
+            <div className="overflow-x-auto">
+              <div className="min-w-[700px] h-[480px]">
+                <TimeTable
+                  slotNames={active.map(i => ({
+                    slotName: buttonTexts[i],
+                    showName: true,
+                  }))}
+                />
+              </div>
             </div>
           </div>
-        )}
 
-        {selected === 'Lab' && (
-          <div className="flex gap-16 mt-8">
-            {/* Morning Lab */}
-            <div className="grid grid-cols-3 gap-2">
-              {lSlotPairsCol1.map(pair => {
-                const btnIdx = buttonTexts.findIndex(text => text === pair);
-                const activeTexts = active.map(i => buttonTexts[i]);
-                const isDisabled = activeTexts.some(activeText =>
-                  disableMap[activeText.split('+')[0]]?.includes(pair.split('+')[0])
-                );
-                return (
-                  <ZButton
-                    type="regular"
-                    key={pair}
-                    text={pair}
-                    color="blue"
-                    clicked={btnIdx !== -1 && active.includes(btnIdx)}
-                    disabled={!!isDisabled || btnIdx === -1}
-                    onClick={() => btnIdx !== -1 && handleClick(btnIdx)}
-                  />
-                );
-              })}
-            </div>
+          <div className="flex flex-col items-center gap-6 w-[410px]">
+            <SlotToggleButton onToggle={setSelected} />
 
-            {/* Evening Lab */}
-            <div className="grid grid-cols-3 gap-2">
-              {lSlotPairsCol2.map(pair => {
-                const btnIdx = buttonTexts.findIndex(text => text === pair);
-                const activeTexts = active.map(i => buttonTexts[i]);
-                const isDisabled = activeTexts.some(activeText =>
-                  disableMap[activeText.split('+')[0]]?.includes(pair.split('+')[0])
-                );
-                return (
-                  <ZButton
-                    type="regular"
-                    key={pair}
-                    text={pair}
-                    color="blue"
-                    clicked={btnIdx !== -1 && active.includes(btnIdx)}
-                    disabled={!!isDisabled || btnIdx === -1}
-                    onClick={() => btnIdx !== -1 && handleClick(btnIdx)}
-                  />
-                );
-              })}
-            </div>
-          </div>
-        )}
+            {selected === 'Theory' && (
+              <div className="flex flex-col gap-6 mt-6 w-full">
+                {/* Morning Theory */}
+                <div className="flex flex-col gap-2">
+                  {[0, 1, 2].map(row => (
+                    <div
+                      key={`morning-row-${row}`}
+                      className={`grid ${row < 2 ? 'grid-cols-7' : 'grid-cols-4'} gap-2`}
+                    >
+                      {buttonTexts
+                        .filter(text => rowFilters[row](text, '1'))
+                        .map(text => {
+                          const idx = buttonTexts.indexOf(text);
+                          const activeTexts = active.map(i => buttonTexts[i]);
+                          const isDisabled = activeTexts.some(activeText =>
+                            disableMap[activeText.split('+')[0]]?.includes(text.split('+')[0])
+                          );
+                          return (
+                            <ZButton
+                              type="regular"
+                              key={`morning-${text}`}
+                              text={text}
+                              color="blue"
+                              clicked={active.includes(idx)}
+                              disabled={!!isDisabled}
+                              onClick={() => handleClick(idx)}
+                            />
+                          );
+                        })}
+                    </div>
+                  ))}
+                </div>
 
-        {/* Timetable Section */}
-        <div className="mx-auto mt-12 mb-10 w-full max-w-[1000px]">
-          <div className="overflow-x-auto">
-            <div className="min-w-[1000px] h-[480px]">
-              <TimeTable
-                slotNames={active.map(i => ({
-                  slotName: buttonTexts[i],
-                  showName: true,
-                }))}
-              />
-            </div>
+                {/* Evening Theory */}
+                <div className="flex flex-col gap-2">
+                  {[0, 1, 2].map(row => (
+                    <div
+                      key={`evening-row-${row}`}
+                      className={`grid ${row < 2 ? 'grid-cols-7' : 'grid-cols-4'} gap-2`}
+                    >
+                      {buttonTexts
+                        .filter(text => rowFilters[row](text, '2'))
+                        .map(text => {
+                          const idx = buttonTexts.indexOf(text);
+                          const activeTexts = active.map(i => buttonTexts[i]);
+                          const isDisabled = activeTexts.some(activeText =>
+                            disableMap[activeText.split('+')[0]]?.includes(text.split('+')[0])
+                          );
+                          return (
+                            <ZButton
+                              type="regular"
+                              key={`evening-${text}`}
+                              text={text}
+                              color="blue"
+                              clicked={active.includes(idx)}
+                              disabled={!!isDisabled}
+                              onClick={() => handleClick(idx)}
+                            />
+                          );
+                        })}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* Theory ends */}
+
+            {selected === 'Lab' && (
+              <div className="flex flex-col mt-6 gap-6 w-full">
+                {/* Morning Lab */}
+                <div className="grid grid-cols-5 gap-2">
+                  {lSlotPairsCol1.map(pair => {
+                    const btnIdx = buttonTexts.findIndex(text => text === pair);
+                    const activeTexts = active.map(i => buttonTexts[i]);
+                    const isDisabled = activeTexts.some(activeText =>
+                      disableMap[activeText.split('+')[0]]?.includes(pair.split('+')[0])
+                    );
+                    return (
+                      <ZButton
+                        type="regular"
+                        key={pair}
+                        text={pair}
+                        color="blue"
+                        clicked={btnIdx !== -1 && active.includes(btnIdx)}
+                        disabled={!!isDisabled || btnIdx === -1}
+                        onClick={() => btnIdx !== -1 && handleClick(btnIdx)}
+                      />
+                    );
+                  })}
+                </div>
+
+                {/* Evening Lab */}
+                <div className="grid grid-cols-5 gap-2">
+                  {lSlotPairsCol2.map(pair => {
+                    const btnIdx = buttonTexts.findIndex(text => text === pair);
+                    const activeTexts = active.map(i => buttonTexts[i]);
+                    const isDisabled = activeTexts.some(activeText =>
+                      disableMap[activeText.split('+')[0]]?.includes(pair.split('+')[0])
+                    );
+                    return (
+                      <ZButton
+                        type="regular"
+                        key={pair}
+                        text={pair}
+                        color="blue"
+                        clicked={btnIdx !== -1 && active.includes(btnIdx)}
+                        disabled={!!isDisabled || btnIdx === -1}
+                        onClick={() => btnIdx !== -1 && handleClick(btnIdx)}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+            {/* Lab ends */}
           </div>
         </div>
       </main>

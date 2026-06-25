@@ -5,6 +5,7 @@ import Image from 'next/image';
 import CompoundTable from './CompoundTable';
 import Footer from './Footer';
 import { GoogleLoginButton, BasicToggleButton, ZButton } from './Buttons';
+import QRCode from './QRCode';
 
 type dataProps = {
   code: string;
@@ -141,8 +142,10 @@ export function PopupViewTT({
   shareLink,
 }: PopupViewTTProps) {
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-white">
-      <div className="flex flex-col min-h-screen relative items-center font-poppins">
+    // Outer: fixed full-screen, scrollable vertically, clips horizontal overflow
+    <div className="fixed inset-0 z-50 overflow-y-hidden overflow-x-hidden bg-white">
+      <div className="flex flex-col min-h-screen w-full relative items-center font-poppins">
+        {/* Background */}
         <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
           <Image
             src="/art/bg_dots.svg"
@@ -156,30 +159,40 @@ export function PopupViewTT({
           />
         </div>
 
+        {/* Back button — pinned to left edge */}
         <div className="w-full p-2">
           <ZButton type="regular" text="Go Back" color="red" onClick={closeLink} />
         </div>
 
-        <div className="text-2xl mt-4 mb-2 text-black font-semibold font-poppins">{TTName}</div>
-
-        <div className="text-center text-sm mb-2 text-gray-700 px-4 break-words">
-          Shareable Link: <span className="underline">{shareLink}</span>
+        {/* Title */}
+        <div className="text-2xl mt-4 mb-4 text-black font-semibold font-poppins px-4 text-center">
+          {TTName}
         </div>
 
-        <div className="text-center text-sm mb-4 text-gray-600 px-4">
-          {shareEnabledDefault ? 'Publicly Shareable' : 'Private'}
-        </div>
+        {/* Share controls */}
+        <div className="w-full px-4 flex flex-col items-center gap-3 mb-4">
+          {shareEnabledDefault && shareLink && <QRCode url={shareLink} />}
 
-        <div className="flex flex-col items-center justify-center gap-4 mb-4">
-          <ZButton
-            type="regular"
-            text="Copy Share Link"
-            color="green"
-            image="/icons/send.svg"
-            forceColor="#C1FF83"
-            onClick={onShareClick}
-          />
-          <div className="flex gap-2">
+          {shareLink && (
+            <div className="text-center text-xs text-gray-700 w-full break-all">
+              <span className="font-medium">Shareable Link: </span>
+              <span className="underline">{shareLink}</span>
+            </div>
+          )}
+
+          <div className="text-center text-sm text-gray-600">
+            {shareEnabledDefault ? 'Publicly Shareable' : 'Private'}
+          </div>
+
+          <div className="flex flex-col items-center gap-3">
+            <ZButton
+              type="regular"
+              text="Copy Share Link"
+              color="green"
+              image="/icons/send.svg"
+              forceColor="#C1FF83"
+              onClick={onShareClick}
+            />
             <BasicToggleButton
               defaultState={shareEnabledDefault ? 'on' : 'off'}
               onToggle={shareSwitchAction}
@@ -187,7 +200,8 @@ export function PopupViewTT({
           </div>
         </div>
 
-        <div className="w-full max-w-7xl overflow-x-auto mb-8">
+        {/* Timetable — scrolls horizontally within its own box */}
+        <div className="w-full overflow-x-auto mb-8 px-2">
           <CompoundTable data={TTData} />
         </div>
 

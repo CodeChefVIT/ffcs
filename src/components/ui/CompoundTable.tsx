@@ -7,10 +7,11 @@ type dataProps = {
   code: string;
   slot: string;
   name: string;
+  venue?: string;
 };
 
 type groupedDataProps = {
-  [name: string]: { code: string; slot: string }[];
+  [name: string]: { code: string; slot: string; venue?: string }[];
 };
 
 type CompoundTableProps = {
@@ -23,10 +24,10 @@ const sortData = (data: dataProps[]): dataProps[] => {
 };
 
 const getGroupedData = (data: dataProps[]): groupedDataProps => {
-  return sortData(data).reduce((acc, { code, slot, name }) => {
+  return sortData(data).reduce((acc, { code, slot, name, venue }) => {
     const codePrefix = code.slice(0, -1);
     const groupKey = `${name}__${codePrefix}`;
-    (acc[groupKey] ||= []).push({ code, slot });
+    (acc[groupKey] ||= []).push({ code, slot, venue });
     return acc;
   }, {} as groupedDataProps);
 };
@@ -83,12 +84,16 @@ export default function CompoundTable({ data, large }: CompoundTableProps) {
               <div key={idx} className="border-b-1 border-black last:border-b-0 pb-2">
                 <div className="space-y-1">
                   {entries.map((entry, i) => (
-                    <div key={i} className="flex px-2 min-w-0 justify-between">
-                      <div className="w-[80px] shrink-0 break-words whitespace-normal text-left">
-                        {entry.code}
+                    <div
+                      key={i}
+                      className="flex px-2 min-w-0 justify-between items-start gap-2 md:gap-4"
+                    >
+                      <div className="flex-shrink-0 w-20 md:w-[80px] min-w-0 text-left">
+                        <div className="truncate">{entry.code}</div>
                       </div>
-                      <div className="w-[80px] shrink-0 ml-4 mr-4 break-words whitespace-normal text-left">
-                        {entry.slot.replace(/\+/g, '+\u200B')}
+
+                      <div className="flex-1 min-w-[90px] md:min-w-[80px] lg:min-w-[120px] text-left ml-1 md:ml-4 mr-1 md:mr-4">
+                        <div className="truncate">{entry.slot.replace(/\+/g, '+\u200B')}</div>
                       </div>
                       <div className="w-[160px] shrink-0 break-words whitespace-normal text-right pr-4">
                         {i === 0 ? initials : ''}
