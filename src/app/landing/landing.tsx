@@ -96,12 +96,6 @@ export default function View() {
 
       <Navbar page="landing" />
 
-      <div className="w-full flex justify-center px-4 mt-2">
-        <div className="rounded-xl bg-[#ffea79] text-black outline-2 outline-black px-6 py-2 text-sm font-medium">
-          Can't find faculty for your branch? Remaining Faculty lists will be updated by tonight.
-        </div>
-      </div>
-
       <Hero />
 
       <div className="w-4xl mx-4 pt-12" id="start">
