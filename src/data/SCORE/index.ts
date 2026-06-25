@@ -7,6 +7,7 @@ import { FC_SPEC } from './FC_SPEC';
 import { DC_SPEC } from './DC_SPEC';
 import { DLES_SPEC } from './DLES_SPEC';
 import { OE_SPEC } from './OE_SPEC';
+import { SPE_BYB } from './SPE_BYB';
 
 export const SCORE_LIST = {
   FoundationCore: FoundationCore,
@@ -18,4 +19,5 @@ export const SCORE_LIST = {
   'DC (BYB, BDE)': DC_SPEC,
   'DLES (BYB, BDE)': DLES_SPEC,
   'OE (BYB, BDE)': OE_SPEC,
+  'SPE (BYB)': SPE_BYB,
 };
