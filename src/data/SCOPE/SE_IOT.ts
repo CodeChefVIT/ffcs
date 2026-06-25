@@ -1,41 +1,49 @@
 export const SE_IOT = {
-  'BCSE310L - IoT Architectures and Protocols': [
-    { slot: 'C2+TC2', venue: 'SJT617', faculty: 'BALAJI S' },
-    { slot: 'C1+TC1', venue: 'SJT619', faculty: 'GEETHA M' },
-    { slot: 'C2+TC2', venue: 'SJT409', faculty: 'VENKATA RAMANA KASI' },
-    { slot: 'C1+TC1', venue: 'SJT617', faculty: 'BALAJI S' },
+  'BCSE317L - Information Security': [
+    { slot: 'D2+TD2', venue: 'SJT504', faculty: 'SARITHA MURALI' },
+    { slot: 'D1+TD1', venue: 'SJT503', faculty: 'SATISH C.J' },
   ],
-  'BCSE311L - Sensors and Actuator Devices': [
-    { slot: 'D2', venue: 'SJT423', faculty: 'BAGYAVEERESWARAN V' },
-    { slot: 'D1', venue: 'SJT607', faculty: 'YUVAPRIYA T' },
-    { slot: 'D2', venue: 'SJT424', faculty: 'JAGANATHA PANDIAN B' },
-    { slot: 'D1', venue: 'SJT604', faculty: 'MANIMOZHI M' },
+  'BCSE318L - Data Privacy': [{ slot: 'E1+TE1', venue: 'SJT617', faculty: 'KATHIRAVAN S' }],
+  'BCSE319L - Penetration Testing and Vulnerability Analysis': [
+    { slot: 'F1', venue: 'SJT619', faculty: 'THANGARAMYA K' },
   ],
-  'BCSE311P - Sensors and Actuator Devices Lab': [
-    { slot: 'L15+L16', venue: 'SJT515', faculty: 'BAGYAVEERESWARAN V' },
-    { slot: 'L37+L38', venue: 'SJT319', faculty: 'YUVAPRIYA T' },
-    { slot: 'L11+L12', venue: 'SJT319', faculty: 'JAGANATHA PANDIAN B' },
-    { slot: 'L43+L44', venue: 'SJT319', faculty: 'MANIMOZHI M' },
+  'BCSE319P - Penetration Testing and Vulnerability Analysis Lab': [
+    { slot: 'L39+L40', venue: 'PRP350', faculty: 'THANGARAMYA K' },
   ],
-  'BCSE312L - Programming for IoT Boards': [
-    { slot: 'B1', venue: 'SJT602A', faculty: 'KAMESHWARAN G' },
+  'BCSE320L - Web Application Security': [
+    { slot: 'A2+TA2', venue: 'SJT617', faculty: 'MOHANKUMAR B' },
+    { slot: 'A2+TA2', venue: 'SJT619', faculty: 'EZHIL ARASI V' },
+    { slot: 'A1+TA1', venue: 'SJT617', faculty: 'MEENAKSHI S P' },
+    { slot: 'A1+TA1', venue: 'SJT619', faculty: 'HELENSHARMILA A' },
   ],
-  'BCSE312P - Programming for IoT Boards Lab': [
-    { slot: 'L35+L36', venue: 'SJT419', faculty: 'KAMESHWARAN G' },
+  'BCSE321L - Malware Analysis': [
+    { slot: 'B1', venue: 'SJT607', faculty: 'SANMUGA PRIYA M' },
+    { slot: 'B2', venue: 'SJT603', faculty: 'SANMUGA PRIYA M' },
+    { slot: 'B1', venue: 'SJT604', faculty: 'SUNIJA A P' },
+    { slot: 'B2', venue: 'SJT602A', faculty: 'SUNIJA A P' },
   ],
-  'BCSE313L - Fundamentals of Fog and Edge Computing': [
-    { slot: 'F2+TF2', venue: 'SJT301', faculty: 'SYAMASUDHA VEERAGANDHAM' },
-    { slot: 'F1+TF1', venue: 'SJT303', faculty: 'KAUSER AHMED P' },
-    { slot: 'F2+TF2', venue: 'SJT305', faculty: 'SUDHAKAR K' },
-    { slot: 'F1+TF1', venue: 'SJT401', faculty: 'PADMA PRIYA R' },
+  'BCSE321P - Malware Analysis Lab': [
+    { slot: 'L47+L48', venue: 'PRP354', faculty: 'SUNIJA A P' },
+    { slot: 'L23+L24', venue: 'PRP350', faculty: 'SANMUGA PRIYA M' },
+    { slot: 'L29+L30', venue: 'PRP350', faculty: 'SUNIJA A P' },
+    { slot: 'L33+L34', venue: 'PRP350', faculty: 'SANMUGA PRIYA M' },
   ],
-  'BCSE314L - Privacy and Security in IoT': [
-    { slot: 'A1+TA1', venue: 'SJT604', faculty: 'EBENEZER JULIET S' },
+  'BCSE322L - Digital Forensics': [
+    { slot: 'C2', venue: 'SJT603', faculty: 'VIDHYA G' },
+    { slot: 'C2', venue: 'SJT604', faculty: 'KUMARESAN A' },
+    { slot: 'C1', venue: 'SJT607', faculty: 'KUMARESAN A' },
+    { slot: 'C1', venue: 'SJT604', faculty: 'MADIAJAGAN M' },
   ],
-  'BCSE315L - Wearable Computing': [
-    { slot: 'E1+TE1', venue: 'SJT603', faculty: 'JAFAR ALI IBRAHIM S' },
+  'BCSE322P - Digital Forensics Lab': [
+    { slot: 'L45+L46', venue: 'PRP350', faculty: 'MADIAJAGAN M' },
+    { slot: 'L11+L12', venue: 'PRP137', faculty: 'VIDHYA G' },
+    { slot: 'L3+L4', venue: 'PRP233', faculty: 'KUMARESAN A' },
+    { slot: 'L41+L42', venue: 'PRP350', faculty: 'KUMARESAN A' },
   ],
-  'BCSE316L - Design of Smart Cities': [
-    { slot: 'G1+TG1', venue: 'SJT304', faculty: 'SWARNALATHA P' },
+  'BCSE323L - Digital Watermarking and Steganography': [
+    { slot: 'G2+TG2', venue: 'SJT503', faculty: 'RAJKUMAR S' },
+    { slot: 'G1+TG1', venue: 'SJT504', faculty: 'SOUMYAJYOTI DEY' },
+    { slot: 'G1+TG1', venue: 'SJT503', faculty: 'DIVIYA M' },
+    { slot: 'G2+TG2', venue: 'SJT504', faculty: 'GOUTAM MAJUMDER' },
   ],
 };
