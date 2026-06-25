@@ -5,6 +5,7 @@ import { SenseDisciplineElective } from './DisciplineElective';
 import { SenseOpenElective } from './OpenElective';
 import { SE_BVD } from './SE_BVD';
 import { SE_BML } from './SE_BML';
+import { SE_BEC } from './SE_BEC';
 
 export const SENSE_LIST = {
   FoundationCore: FoundationCore,
@@ -14,4 +15,5 @@ export const SENSE_LIST = {
   openElective: SenseOpenElective,
   'SpecializationElective - BML': SE_BML,
   'SpecializationElective - BVD': SE_BVD,
+  'DisciplineElective - BEC': SE_BEC,
 };
