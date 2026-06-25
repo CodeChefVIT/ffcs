@@ -53,6 +53,7 @@ export default function Navbar({ page }: NavbarProps) {
             {(page === 'landing' || page === '404' || page === 'placeholder') && (
               <>
                 <CCButton />
+
                 <ZButton
                   type="long"
                   text="Slot View"
@@ -61,10 +62,17 @@ export default function Navbar({ page }: NavbarProps) {
                 />
               </>
             )}
+            <div className="flex gap-4 mx-5 items-center">
+              <div className="rounded-xl bg-[#ffea79] text-black outline-2 outline-black px-6 py-2 text-sm font-medium">
+                Can&apos;t find faculty for your branch? Remaining Faculty lists will be updated by
+                tonight.
+              </div>
+            </div>
 
             {(page === 'slots' || page === 'saved' || page === 'shared') && (
               <>
                 <FFCSButton />
+
                 <div
                   className="text-4xl font-[pangolin] cursor-pointer"
                   onClick={() => router.push('/')}
