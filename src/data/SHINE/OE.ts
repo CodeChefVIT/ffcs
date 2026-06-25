@@ -1,19 +1,4 @@
-export const OE_SPEC = {
-  'BCSE355L - Cloud Architecture Design': [
-    { slot: 'D1+TD1', venue: 'SJT802', faculty: 'JAGANNATHAN J' },
-    { slot: 'D2+TD2', venue: 'SJT803', faculty: 'RATHI R' },
-    { slot: 'D2+TD2', venue: 'SJT802', faculty: 'MUTHAMIL SELVAN T' },
-    { slot: 'D1+TD1', venue: 'SJT807', faculty: 'RATHI R' },
-    { slot: 'D1+TD1', venue: 'SJT803', faculty: 'MUTHAMIL SELVAN T' },
-  ],
-  'BHUM111L - Happiness and Well-being': [
-    { slot: 'F1+TF1', venue: 'TT204', faculty: 'MOHD OWAIS KHAN' },
-    { slot: 'F1+TF1', venue: 'SJT504', faculty: 'POONAM SHARMA' },
-    { slot: 'F1+TF1', venue: 'SJT522', faculty: 'TANU KUKREJA' },
-    { slot: 'F1+TF1', venue: 'TT201', faculty: 'NAVIN KUMAR' },
-    { slot: 'F2+TF2', venue: 'SJTG24', faculty: 'POONAM SHARMA' },
-    { slot: 'F1+TF1', venue: 'MGB204', faculty: 'JENEEFER JEBA RAJA SELVI  N' },
-  ],
+export const OE = {
   'BSTS301P - Advanced Competitive Coding - I': [
     { slot: 'F1+TF1', venue: 'SMV218', faculty: 'ETHNUS (APT)' },
     { slot: 'F2+TF2', venue: 'SMV218', faculty: 'ETHNUS (APT)' },
