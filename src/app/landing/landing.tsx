@@ -81,7 +81,7 @@ export default function View() {
 
   return (
     <div className="flex flex-col min-h-screen relative w-full items-center justify-center overflow-x-hidden">
-      <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
+      <div className="absolute mt-4 inset-0 -z-10 bg-[#CEE4E5]">
         <Image
           src="/art/bg_dots.svg"
           alt="Background"
@@ -93,7 +93,14 @@ export default function View() {
           unselectable="on"
         />
       </div>
+
       <Navbar page="landing" />
+
+      <div className="w-full flex justify-center px-4 mt-2">
+        <div className="rounded-xl bg-[#ffea79] text-black outline-2 outline-black px-6 py-2 text-sm font-medium">
+          Can't find faculty for your branch? Remaining Faculty lists will be updated by tonight.
+        </div>
+      </div>
 
       <Hero />
 
