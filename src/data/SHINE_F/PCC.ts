@@ -1,15 +1,14 @@
 export const PCC = {
-  'BAHST102 - Fundamentals of Artificial Intelligence for Healthcare': [
-    { slot: 'C1+TC1+TCC1', venue: 'PRP250', faculty: 'DURAI RAJ VINCENT P.M' },
+  'BAHST103 - Diagnostics, Therapeutic and Surgical Equipments': [
+    { slot: 'A2+TA2', venue: 'PRP250', faculty: 'SRIDHARAN GANESAN' },
+    { slot: 'L53+L54', venue: 'PRP407', faculty: 'SRIDHARAN GANESAN' },
+    { slot: 'L27+L28', venue: 'PRP407', faculty: 'SRIDHARAN GANESAN' },
   ],
-  'BAHST202 - Materials in Healthcare': [
-    { slot: 'F1+TF1', venue: 'PRP250', faculty: 'YOGENDRA PRATAP SINGH' },
-    { slot: 'L31+L32', venue: 'PRP150', faculty: 'YOGENDRA PRATAP SINGH' },
-    { slot: 'L45+L46', venue: 'PRP150', faculty: 'YOGENDRA PRATAP SINGH' },
+  'BAHST201 - Bio-Medical Imaging and Image Processing': [
+    { slot: 'C2+TC2', venue: 'PRP250', faculty: 'RAJARATHINAM THENMOZHI' },
+    { slot: 'L11+L12', venue: 'PRP550', faculty: 'RAJARATHINAM THENMOZHI' },
   ],
-  'BAHST203 - Molecular and Cellular Biology for Health Sciences': [
-    { slot: 'L35+L36', venue: 'PRP150', faculty: 'SRIDHARAN GANESAN' },
-    { slot: 'D1+TD1', venue: 'PRP250', faculty: 'ARUN KUMAR P' },
-    { slot: 'L59+L60', venue: 'PRP150', faculty: 'SRIDHARAN GANESAN' },
+  'BAHST304 - Biosensors, Wearable Devices, and Internet of Medical Things': [
+    { slot: 'D2+TD2+TDD2', venue: 'PRP250', faculty: 'RAJARATHINAM THENMOZHI' },
   ],
 };

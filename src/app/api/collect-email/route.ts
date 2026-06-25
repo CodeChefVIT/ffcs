@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
 import { google, sheets_v4 } from 'googleapis';
-import { JWT } from 'google-auth-library';
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const SHEET_ID = process.env.SHEET_ID;
 
-async function getAuth(): Promise<JWT> {
+async function getAuth() {
   return new google.auth.JWT({
     email: process.env.GOOGLE_CLIENT_EMAIL,
     key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),

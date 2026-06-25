@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { BasicToggleButton, GoogleLoginButton, ZButton } from './Buttons';
 import CompoundTable from './CompoundTable';
 import LoadingPopup from './LoadingPopup';
+import QRCode from './QRCode';
 
 type dataProps = {
   code: string;
@@ -68,7 +69,7 @@ const typeTextMap = {
   login: 'Please log-in to save and share your time-tables.',
   rem_course: 'Are you sure you want to remove this course?',
   rem_allcourse: 'Are you sure you want to remove all courses?',
-  share_tt: 'Share your timetable with anyone.',
+  share_tt: 'Scan QR or copy the link to share.',
   save_tt: 'Save this timetable in your collection.',
   delete_tt: 'Are you sure you want to delete this timetable?',
   view_tt: '',
@@ -187,7 +188,7 @@ export default function Popup({
           )}
         </div>
 
-        <div className="flex flex-col items-center justify-center text-lg font-poppins font-regular p-8">
+        <div className="flex flex-col items-center justify-center text-lg font-poppins font-regular p-4">
           {type == 'login' && (
             <div className="flex flex-col items-center justify-center relative">
               <div className="absolute -top-0 -left-12 -rotate-[5deg] z-[1]">
@@ -249,17 +250,20 @@ export default function Popup({
               <div className="break-words w-full text-center mt-2 mb-4">{text}</div>
 
               {shareState === 'on' && (
-                <div className="flex flex-row items-center justify-center gap-8 mt-2 mb-4">
-                  <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-[#606060] font-semibold">
-                    {dataBody}
+                <div className="flex flex-col items-center justify-center gap-6 mt-2 mb-4">
+                  <QRCode url={dataBody || ''} />
+                  <div className="flex flex-row items-center justify-center gap-8">
+                    <div className="border-3 border-black pt-2 pb-2 px-4 rounded-xl shadow-[4px_4px_0_0_black] bg-white text-[#606060] font-semibold">
+                      {dataBody}
+                    </div>
+                    <ZButton
+                      type="regular"
+                      text="Copy"
+                      color="blue"
+                      forceColor={theme[1]}
+                      onClick={() => copy(dataBody || '')}
+                    />
                   </div>
-                  <ZButton
-                    type="regular"
-                    text="Copy"
-                    color="blue"
-                    forceColor={theme[1]}
-                    onClick={() => copy(dataBody || '')}
-                  />
                 </div>
               )}
             </div>
@@ -467,14 +471,14 @@ export default function Popup({
             </div>
           )}
           {type == 'view_tt' && (
-            <div className="flex flex-col w-full max-h-[90vh] overflow-hidden">
+            <div className="flex flex-col w-full max-h-[60vh] overflow-hidden">
               <div className="overflow-auto w-full max-h-[calc(70vh-80px)]">
                 <div className="min-w-[768px] text-center p-4">
                   <CompoundTable data={dataTT || []} />
                 </div>
               </div>
 
-              <div className="flex flex-row flex-wrap items-center justify-center gap-16 px-4 py-3">
+              <div className="flex flex-row flex-wrap items-center justify-center gap-16 px-4 py-1 pb-2">
                 <div className="flex flex-row items-center gap-3">
                   <ZButton
                     type="regular"

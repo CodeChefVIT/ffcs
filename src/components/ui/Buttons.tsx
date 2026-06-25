@@ -15,6 +15,7 @@ type ZButtonProps = {
   disabled?: boolean;
   clicked?: boolean;
   forceColor?: string;
+  className?: string;
 };
 
 type SlotToggleButtonProps = {
@@ -47,6 +48,7 @@ export function ZButton({
   forceColor,
   disabled = false,
   clicked = false,
+  className = '',
 }: ZButtonProps) {
   const variantClasses = {
     regular: 'h-12 rounded-xl px-4 text-base gap-2.5',
@@ -91,6 +93,7 @@ export function ZButton({
               : 'active:shadow-[2px_2px_0_0_black] active:translate-x-[2px] active:translate-y-[2px]'
         }
         ${variantClasses[type]}
+        ${className}
       `}
     >
       {text}

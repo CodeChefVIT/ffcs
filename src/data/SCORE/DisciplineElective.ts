@@ -1,32 +1,20 @@
 export const ScoreDisciplinedElective = {
-  'BITE312E - Data Mining': [
-    { slot: 'L21+L22', venue: 'SJTG20', faculty: 'PRABHAVATHY P' },
-    { slot: 'C2', venue: 'SJT211', faculty: 'PRABHAVATHY P' },
-    { slot: 'C1', venue: 'SJT211', faculty: 'NEELU KHARE' },
-    { slot: 'L55+L56', venue: 'SJTG20', faculty: 'NEELU KHARE' },
-    { slot: 'L43+L44', venue: 'SJTG20', faculty: 'SATHIYAMOORTHY E' },
-    { slot: 'C1', venue: 'SJT208', faculty: 'SATHIYAMOORTHY E' },
+  'BITE311L - Human Computer Interaction': [
+    { slot: 'B1+TB1', venue: 'SJT825', faculty: 'PRABHAVATHY P' },
   ],
-  'BITE404E - Object Oriented Analysis and Design': [
-    { slot: 'C2', venue: 'SJT824', faculty: 'SREE DHARINYA S' },
-    { slot: 'L21+L22', venue: 'SJT219', faculty: 'SREE DHARINYA S' },
-    { slot: 'C1', venue: 'SJT824', faculty: 'SREE DHARINYA S' },
-    { slot: 'L31+L32', venue: 'SJT219', faculty: 'SREE DHARINYA S' },
-  ],
-  'BITE405L - Soft Computing': [
-    { slot: 'G2+TG2', venue: 'SJT208', faculty: 'BALAKRUSHNA TRIPATHY' },
-    { slot: 'G1+TG1', venue: 'SJT211A', faculty: 'CHIRANJI LAL CHOWDHARY' },
-    { slot: 'G1+TG1', venue: 'SJTG05', faculty: 'BALAKRUSHNA TRIPATHY' },
+  'BITE314L - Multimedia Systems': [
+    { slot: 'C1+TC1', venue: 'SJT825', faculty: 'BALASUBRAMANI M' },
   ],
   'BITE407L - Quantum Computing': [
-    { slot: 'B1+TB1', venue: 'SJT118', faculty: 'ASWANI KUMAR CHERUKURI' },
+    { slot: 'E2+TE2', venue: 'SJTG24', faculty: 'GANESAN K' },
+    { slot: 'E1+TE1', venue: 'SJTG24', faculty: 'ASWANI KUMAR CHERUKURI' },
   ],
-  'BITE409L - Mobile Application Development': [
-    { slot: 'G2+TG2', venue: 'SJT211', faculty: 'SHUNMUGA PERUMAL P' },
-    { slot: 'G1+TG1', venue: 'SJT211', faculty: 'SHUNMUGA PERUMAL P' },
+  'BITE408L - Network Management': [
+    { slot: 'B2+TB2', venue: 'SJT823', faculty: 'JOTHISH KUMAR M' },
   ],
-  'BITE413L - Cyber Security': [{ slot: 'C1+TC1', venue: 'SJTG14', faculty: 'VIVEKANANDA GN' }],
-  'BITE414L - Blockchain Technology': [
-    { slot: 'G1+TG1', venue: 'SJT208', faculty: 'VIJAY ANAND  R' },
+  'BITE412L - Cloud Computing': [
+    { slot: 'A2+TA2', venue: 'SJT801', faculty: 'PRIYA V' },
+    { slot: 'A1+TA1', venue: 'SJT825', faculty: 'SIVA RAMA KRISHNAN S' },
+    { slot: 'A1+TA1', venue: 'SJT823', faculty: 'CHANDRA MOULISWARAN S' },
   ],
 };
