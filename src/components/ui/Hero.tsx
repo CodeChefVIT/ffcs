@@ -1,12 +1,8 @@
-'use client';
-
 import Image from 'next/image';
 import { ZButton } from '../ui/Buttons';
-import { useRouter } from 'next/navigation';
+//import { useRouter } from 'next/navigation';
 
 export default function Hero() {
-  const router = useRouter();
-
   return (
     <div className="relative w-320 h-150 md:h-180 flex justify-center items-center font-pangolin text-black isolate">
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -131,6 +127,7 @@ export default function Hero() {
           />
         </div>
       </div>
+
       <div className="absolute left-1/2 top-36 w-full transform -translate-x-1/2 flex flex-col items-center text-center z-20">
         <Image
           src="/logo_ffcs.svg"
@@ -141,40 +138,6 @@ export default function Hero() {
           draggable={false}
           priority
         />
-
-        <div
-          style={{ backgroundColor: '#ffea79' }}
-          className="
-            rounded-xl
-            flex items-center
-            text-lg font-semibold
-            outline-4 outline-black
-            relative
-            z-30
-            px-4 py-3
-            my-2
-            shadow-xl
-          "
-        >
-          <span className="text-xl font-medium">
-            Faculty lists for this semester are currently being updated and will be available soon.
-            <br />
-            Please check back later for the latest faculty information.
-            <br />
-            In the meantime, you can continue planning your timetable using Slot View.
-          </span>
-        </div>
-
-        <div className="mt-4 flex justify-center">
-          <ZButton
-            type="long"
-            text="Switch to Slot View"
-            color="blue"
-            onClick={() => router.push('/slots')}
-          />
-        </div>
-
-        <br />
 
         <div className="text-5xl md:text-6xl mb-6">FFCS-inator</div>
 

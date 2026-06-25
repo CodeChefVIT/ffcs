@@ -1,35 +1,29 @@
 export const SE_BKT = {
   'BCSE324L - Foundations of Blockchain Technology': [
-    { slot: 'C2+TC2', venue: 'SJT421', faculty: 'MANOOV R' },
-    { slot: 'C1+TC1', venue: 'SJT423', faculty: 'DEEPIKAA  S' },
+    { slot: 'A1+TA1', venue: 'SJT607', faculty: 'BASKARAN P' },
   ],
   'BCSE325L - Introduction to Bitcoin': [
-    { slot: 'D1+TD1', venue: 'SJT421', faculty: 'KATHIRAVAN S' },
-    { slot: 'D2+TD2', venue: 'SJT422', faculty: 'SARANYA P' },
+    { slot: 'G1+TG1', venue: 'SJT602A', faculty: 'MANOHAR KUMAR C V S S' },
   ],
   'BCSE326L - Blockchain Architecture Design': [
-    { slot: 'B1+TB1', venue: 'SJT604', faculty: 'NIHA K' },
+    { slot: 'C2+TC2', venue: 'SJT602', faculty: 'UMA PRIYA D' },
+    { slot: 'C1+TC1', venue: 'SJT602', faculty: 'POORNIMA N' },
   ],
-  'BCSE327L - Smart Contracts': [
-    { slot: 'F1', venue: 'SJT324', faculty: 'KEYUR BHANUPRASAD JOSHI' },
-    { slot: 'F2', venue: 'SJT324', faculty: 'MOHANASUNDARAM R' },
-  ],
-  'BCSE327P - Smart Contracts Lab': [
-    { slot: 'L43+L44', venue: 'SJT317', faculty: 'KEYUR BHANUPRASAD JOSHI' },
-    { slot: 'L15+L16', venue: 'SJT317', faculty: 'MOHANASUNDARAM R' },
-  ],
+  'BCSE327L - Smart Contracts': [{ slot: 'D1', venue: 'SJT602A', faculty: 'KANKANA ROY' }],
   'BCSE328L - Cryptocurrency Technologies': [
-    { slot: 'A1+TA1', venue: 'SJT617', faculty: 'DEEPIKA J' },
-    { slot: 'A2+TA2', venue: 'PRP230', faculty: 'KARPURASUNDHARAPONDIAN P' },
+    { slot: 'F1+TF1', venue: 'SJT602', faculty: 'SATHYA K' },
+    { slot: 'F2+TF2', venue: 'SJT601', faculty: 'S M FAROOQ' },
   ],
   'BCSE329L - Blockchain and Distributed Ledger Technology': [
-    { slot: 'E1', venue: 'SJT604', faculty: 'ARUN JOSE' },
+    { slot: 'E1', venue: 'SJT602A', faculty: 'SIVARANJANI A' },
+    { slot: 'E2', venue: 'SJT602A', faculty: 'SIVARANJANI A' },
   ],
   'BCSE329P - Blockchain and Distributed Ledger Technology Lab': [
-    { slot: 'L53+L54', venue: 'SJT419', faculty: 'ARUN JOSE' },
+    { slot: 'L23+L24', venue: 'SJT517', faculty: 'SIVARANJANI A' },
+    { slot: 'L51+L52', venue: 'PRP136', faculty: 'SIVARANJANI A' },
   ],
   'BCSE330L - Public Key Infrastructure and Trust Management': [
-    { slot: 'G1+TG1', venue: 'SJT508', faculty: 'VANI RAJASEKAR' },
-    { slot: 'G2+TG2', venue: 'SJT508', faculty: 'RAKHI MOL V' },
+    { slot: 'B2+TB2', venue: 'SJT604', faculty: 'THANGARAMYA K' },
+    { slot: 'B1+TB1', venue: 'SJT617', faculty: 'BERLIN M A' },
   ],
 };
