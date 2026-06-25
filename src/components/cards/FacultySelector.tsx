@@ -20,17 +20,13 @@ const schools = [
   'SCE',
   'SHINE',
   "MTech ('25 Batch)",
-  // 'MTech (SCORE)',
   "SCOPE ('25 Batch)",
   "SCORE ('25 Batch)",
   "SELECT ('25 Batch)",
   "SMEC ('25 Batch)",
   "SBST ('25 Batch)",
-  // 'SCHEME (Fresher)',
   "SENSE ('25 Batch)",
-  // 'SCE (Fresher)',
   "SHINE ('25 Batch)",
-  // 'MTech (Fresher)',
 ];
 
 type SubjectEntry = {
