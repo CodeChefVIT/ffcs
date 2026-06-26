@@ -1,1 +1,150 @@
-export const SchemeFoundationCore = {};
+export const SchemeFoundationCore = {
+  'BARB101L - Arabic': [
+    { slot: 'F1', venue: 'PRP734', faculty: 'MOHD SAQIB' },
+    { slot: 'D2', venue: 'PRP339', faculty: 'MOHD SAQIB' },
+    { slot: 'E1', venue: 'PRP735', faculty: 'MOHD SAQIB' },
+    { slot: 'G2', venue: 'PRP339', faculty: 'MOHD SAQIB' },
+  ],
+
+  'BCHI101L - Chinese I': [
+    { slot: 'G1', venue: 'SJT604', faculty: 'KHANA BAIDYA' },
+    { slot: 'D1', venue: 'TT305', faculty: 'KHANA BAIDYA' },
+    { slot: 'E2', venue: 'SJT508', faculty: 'KHANA BAIDYA' },
+  ],
+
+  'BCLE212L - Natural Disaster Mitigation and Management': [
+    { slot: 'F1+TF1', venue: 'CDMM404', faculty: 'PRIYADHARSHINI  B' },
+    { slot: 'F2+TF2', venue: 'CDMM403', faculty: 'PRASANTH S' },
+  ],
+
+  'BCLE215L - Waste Management': [
+    { slot: 'F1+TF1', venue: 'CDMM405', faculty: 'AMIT B MAHINDRAKAR' },
+  ],
+
+  'BCLE216L - Water Resource Management': [
+    { slot: 'C2+TC2', venue: 'CDMM104', faculty: 'DILLIP KUMAR BARIK' },
+    { slot: 'C1+TC1', venue: 'CDMM104', faculty: 'JAGADEESH P' },
+  ],
+
+  'BENG102P - Technical Report Writing': [
+    { slot: 'L25+L26', venue: 'TT306', faculty: 'ANITHA DEVI V' },
+  ],
+
+  'BESP101L - Spanish I': [
+    { slot: 'F1', venue: 'SMV104', faculty: 'SHILPI GUPTA' },
+    { slot: 'A2', venue: 'SJT604', faculty: 'ATUL KUMAR' },
+    { slot: 'B2', venue: 'CDMM403', faculty: 'SABYASACHI MISHRA' },
+    { slot: 'G1', venue: 'PRP333', faculty: 'SHILPI GUPTA' },
+    { slot: 'B1', venue: 'PRP333', faculty: 'SHILPI GUPTA' },
+    { slot: 'A2', venue: 'CDMM405', faculty: 'SABYASACHI MISHRA' },
+    { slot: 'F2', venue: 'SJT807', faculty: 'NUPUR MANASI' },
+    { slot: 'A2', venue: 'SJT324', faculty: 'BAISHALI CHOUDHURI' },
+    { slot: 'B2', venue: 'CDMM404', faculty: 'ATUL KUMAR' },
+    { slot: 'A1', venue: 'CDMM404', faculty: 'SHILPI GUPTA' },
+  ],
+
+  'BFRE101L - French I': [
+    { slot: 'E1', venue: 'PRP736', faculty: 'COUMARAN G' },
+    { slot: 'D2', venue: 'SMV116', faculty: 'VISALAKSHI R' },
+    { slot: 'F2', venue: 'CDMM405', faculty: 'VISALAKSHI R' },
+    { slot: 'D2', venue: 'SJT627', faculty: 'SHANTANU SHANDILYA' },
+    { slot: 'F1', venue: 'PRP629', faculty: 'CALAIVANANE R' },
+    { slot: 'F1', venue: 'SJT508', faculty: 'ANTOINETTE DANIEL' },
+    { slot: 'G1', venue: 'SJT617', faculty: 'SHANTANU SHANDILYA' },
+    { slot: 'A2', venue: 'SMV219', faculty: 'MALATHY O' },
+    { slot: 'G1', venue: 'PRP372', faculty: 'VISALAKSHI R' },
+  ],
+
+  'BGER101L - German I': [
+    { slot: 'B2', venue: 'SMV214', faculty: 'AMIT KUMAR SAINI' },
+    { slot: 'B2', venue: 'SMV219', faculty: 'ABHIJIT KR DARBEY' },
+    { slot: 'F1', venue: 'SJTG24', faculty: 'ADAIKALAM ARULANANDAM' },
+    { slot: 'G1', venue: 'PRP339', faculty: 'DHANANJAY KUMAR' },
+    { slot: 'E1', venue: 'PRP670', faculty: 'ARATI KUMARI' },
+    { slot: 'F2', venue: 'SJT603', faculty: 'ARATI KUMARI' },
+    { slot: 'G1', venue: 'PRP379', faculty: 'ABHIJIT KR DARBEY' },
+  ],
+
+  'BHUM102E - Indian Classical Music': [
+    { slot: 'F1', venue: 'SJTA301', faculty: 'SUDHEER C V' },
+    { slot: 'L11+L12', venue: 'SJTA301', faculty: 'SUDHEER C V' },
+  ],
+  'BHUM103L - Micro Economics': [
+    { slot: 'F1+TF1', venue: 'PRP736', faculty: 'NILAVATHY K' },
+    { slot: 'F1+TF1', venue: 'MGB 401', faculty: 'SUMEETHA M' },
+  ],
+
+  'BHUM104L - Macro Economics': [
+    { slot: 'F1+TF1', venue: 'MGB302', faculty: 'SIVAKUMAR S' },
+    { slot: 'F2+TF2', venue: 'PRP734', faculty: 'SUMEETHA M' },
+    { slot: 'F1+TF1', venue: 'PRP426', faculty: 'SHAHID HAMID RAINA' },
+    { slot: 'F2+TF2', venue: 'PRP339', faculty: 'AQUIB PARVEZ' },
+    { slot: 'F2+TF2', venue: 'PRP230', faculty: 'ADIL AHMAD SHAH' },
+  ],
+
+  'BHUM106L - Principles of Sociology': [
+    { slot: 'F2+TF2', venue: 'SJT707', faculty: 'KUBENDRAN A' },
+    { slot: 'F2+TF2', venue: 'SJT607', faculty: 'RASHMI M' },
+    { slot: 'F1+TF1', venue: 'MGB303', faculty: 'KUBENDRAN A' },
+  ],
+
+  'BHUM107L - Sustainability and Society': [
+    { slot: 'F2+TF2', venue: 'SJT124', faculty: 'RAHUL SHUKLA' },
+    { slot: 'F1+TF1', venue: 'PRP429', faculty: 'RASHMI M' },
+    { slot: 'F2+TF2', venue: 'SJT709', faculty: 'ABHIJIT DASGUPTA' },
+    { slot: 'F1+TF1', venue: 'PRP772', faculty: 'ABHIJIT DASGUPTA' },
+  ],
+
+  'BHUM108L - Urban Community Development': [
+    { slot: 'F1+TF1', venue: 'MGB308', faculty: 'BALAMURUGAN J' },
+  ],
+
+  'BHUM109L - Social Work and Sustainability': [
+    { slot: 'F2+TF2', venue: 'SJT803', faculty: 'DOMINIC SAVIO' },
+  ],
+
+  'BJAP101L - Japanese I': [
+    { slot: 'E2', venue: 'SJT522', faculty: 'KHANJAN' },
+    { slot: 'D1', venue: 'SMV126', faculty: 'HIYA MUKHERJEE' },
+    { slot: 'F1', venue: 'PRP633', faculty: 'KHANJAN' },
+    { slot: 'A2', venue: 'SJT603', faculty: 'KHANJAN' },
+    { slot: 'G2', venue: 'SJT521', faculty: 'KHANJAN' },
+    { slot: 'B2', venue: 'SMV121', faculty: 'HIYA MUKHERJEE' },
+    { slot: 'G1', venue: 'SMV104', faculty: 'HIYA MUKHERJEE' },
+    { slot: 'A2', venue: 'SMV220', faculty: 'HIYA MUKHERJEE' },
+  ],
+
+  'BMAT102L - Differential Equations and Transforms': [
+    { slot: 'A1+TA1+TAA1', venue: 'SJT709', faculty: 'JAGADEESHKUMAR K' },
+    { slot: 'A2+TA2+TAA2', venue: 'SMV126', faculty: 'INDHIRA K' },
+    { slot: 'C1+TC1+TCC1', venue: 'SMV109', faculty: 'AKELLA VENKATA SURYANARAYANA MURTY' },
+    { slot: 'B2+TB2+TBB2', venue: 'SMV109', faculty: 'AKELLA VENKATA SURYANARAYANA MURTY' },
+  ],
+
+  'BMAT201L - Complex Variables and Linear Algebra': [
+    { slot: 'C1+TC1+TCC1', venue: 'SJT619', faculty: 'MURUGUSUNDARAMOORTHY G' },
+    { slot: 'C1+TC1+TCC1', venue: 'SJT709', faculty: 'JAGADEESHKUMAR K' },
+    { slot: 'C2+TC2+TCC2', venue: 'SJT707', faculty: 'VIJAYA K' },
+  ],
+
+  'BMAT202L - Probability and Statistics': [
+    { slot: 'B1+TB1', venue: 'SMV109', faculty: 'JISHA FRANCIS' },
+    { slot: 'B2+TB2', venue: 'SJT709', faculty: 'SOUMITRA DAPTARI' },
+  ],
+
+  'BMAT202P - Probability and Statistics Lab': [
+    { slot: 'L13+L14', venue: 'PRP446', faculty: 'SOUMITRA DAPTARI' },
+    { slot: 'L43+L44', venue: 'PRP445', faculty: 'JISHA FRANCIS' },
+  ],
+
+  'BMEE201L - Engineering Mechanics': [{ slot: 'G1+TG1', venue: 'GDN123', faculty: 'SRIDHARAN K' }],
+
+  'BPHY101L - Engineering Physics': [
+    { slot: 'E2+TE2', venue: 'PRP339', faculty: 'SAMIR RANJAN MEHER' },
+    { slot: 'B1+TB1', venue: 'PRP772', faculty: 'KRISHNA CHANDAR N' },
+  ],
+
+  'BPHY101P - Engineering Physics Lab': [
+    { slot: 'L57+L58', venue: 'TT420', faculty: 'KRISHNA CHANDAR N' },
+  ],
+};
