@@ -19,6 +19,7 @@ const schools = [
   'SENSE',
   'SCE',
   'SHINE',
+  'MTech',
   "MTech ('25 Batch)",
   "SCOPE ('25 Batch)",
   "SCORE ('25 Batch)",
