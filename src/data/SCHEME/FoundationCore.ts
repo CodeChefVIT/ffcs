@@ -69,7 +69,7 @@ export const SchemeFoundationCore = {
     { slot: 'F1', venue: 'SJTA301', faculty: 'SUDHEER C V' },
     { slot: 'L11+L12', venue: 'SJTA301', faculty: 'SUDHEER C V' },
   ],
-    'BHUM103L - Micro Economics': [
+  'BHUM103L - Micro Economics': [
     { slot: 'F1+TF1', venue: 'PRP736', faculty: 'NILAVATHY K' },
     { slot: 'F1+TF1', venue: 'MGB 401', faculty: 'SUMEETHA M' },
   ],
@@ -137,9 +137,7 @@ export const SchemeFoundationCore = {
     { slot: 'L43+L44', venue: 'PRP445', faculty: 'JISHA FRANCIS' },
   ],
 
-  'BMEE201L - Engineering Mechanics': [
-    { slot: 'G1+TG1', venue: 'GDN123', faculty: 'SRIDHARAN K' },
-  ],
+  'BMEE201L - Engineering Mechanics': [{ slot: 'G1+TG1', venue: 'GDN123', faculty: 'SRIDHARAN K' }],
 
   'BPHY101L - Engineering Physics': [
     { slot: 'E2+TE2', venue: 'PRP339', faculty: 'SAMIR RANJAN MEHER' },

@@ -79,4 +79,3 @@ export const openElective = {
     { slot: 'F2+TF2', venue: 'TT531A', faculty: 'ETHNUS (APT)' },
   ],
 };
-

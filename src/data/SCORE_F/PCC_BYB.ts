@@ -1,4 +1,4 @@
-export const PCC_BYB= {
+export const PCC_BYB = {
   'BACSE201 - Models of Computation': [
     { slot: 'A1+TA1+TAA1', venue: 'SJT126', faculty: 'DHARMENDRA SINGH RAJPUT' },
     { slot: 'A2+TA2+TAA2', venue: 'SJT126', faculty: 'DHARMENDRA SINGH RAJPUT' },

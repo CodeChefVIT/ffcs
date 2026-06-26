@@ -1,15 +1,11 @@
 export const disciplineCore = {
-  'BBIT202L - Biochemistry': [
-    { slot: 'C2+TC2', venue: 'SMV109', faculty: 'JANAKI RAMAIAH M' },
-  ],
+  'BBIT202L - Biochemistry': [{ slot: 'C2+TC2', venue: 'SMV109', faculty: 'JANAKI RAMAIAH M' }],
 
   'BBIT202P - Biochemistry Lab': [
     { slot: 'L35+L36', venue: 'SMV212', faculty: 'JANAKI RAMAIAH M' },
   ],
 
-  'BBIT209L - Molecular Biology': [
-    { slot: 'E1+TE1', venue: 'CDMM103', faculty: 'VENKATRAMAN M' },
-  ],
+  'BBIT209L - Molecular Biology': [{ slot: 'E1+TE1', venue: 'CDMM103', faculty: 'VENKATRAMAN M' }],
 
   'BBIT209P - Molecular Biology Lab': [
     { slot: 'L51+L52+L53+L54', venue: 'SMV225', faculty: 'VENKATRAMAN M' },
@@ -59,9 +55,7 @@ export const disciplineCore = {
     { slot: 'L21+L22', venue: 'SMV212', faculty: 'GAYATHRI M' },
   ],
 
-  'BBIT306L - Animal Biotechnology': [
-    { slot: 'F2+TF2', venue: 'SMV104', faculty: 'BABU G' },
-  ],
+  'BBIT306L - Animal Biotechnology': [{ slot: 'F2+TF2', venue: 'SMV104', faculty: 'BABU G' }],
 
   'BBIT307L - Plant Biotechnology': [
     { slot: 'E1+TE1', venue: 'SMV218', faculty: 'RAJASEKARAN C' },

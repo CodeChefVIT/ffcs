@@ -1,2 +1,1 @@
-export const disciplineElective = {
-  };
+export const disciplineElective = {};

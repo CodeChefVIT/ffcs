@@ -11,13 +11,9 @@ export const UCC_BYB = {
     { slot: 'TCC1', venue: 'SJT112', faculty: 'KHANA BAIDYA' },
   ],
 
-  'BACHY105 - Applied Chemistry': [
-    { slot: 'D1+TD1', venue: 'PRP251', faculty: 'SANTHAKUMAR K' },
-  ],
+  'BACHY105 - Applied Chemistry': [{ slot: 'D1+TD1', venue: 'PRP251', faculty: 'SANTHAKUMAR K' }],
 
-  'BACLE104 - Waste Management': [
-    { slot: 'F2+TF2', venue: 'CDMM404', faculty: 'KAVITHA M.S' },
-  ],
+  'BACLE104 - Waste Management': [{ slot: 'F2+TF2', venue: 'CDMM404', faculty: 'KAVITHA M.S' }],
 
   'BACLE105 - Disaster Mitigation and Management': [
     { slot: 'G2+TG2', venue: 'CDMM104', faculty: 'SURENDAR M' },
@@ -35,9 +31,7 @@ export const UCC_BYB = {
     { slot: 'L49+L50+L55+L56', venue: 'SJT122', faculty: 'KUMARESAN P' },
   ],
 
-  'BACSE291 - Innovative Design Project': [
-    { slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' },
-  ],
+  'BACSE291 - Innovative Design Project': [{ slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' }],
 
   'BAESP101 - Spanish Level I': [
     { slot: 'TDD2', venue: 'SJT105', faculty: 'NUPUR MANASI' },
@@ -98,7 +92,7 @@ export const UCC_BYB = {
     { slot: 'TCC1', venue: 'MB214', faculty: 'ABHIJIT KR DARBEY' },
   ],
 
-    'BAHUM106 - Micro Economics': [
+  'BAHUM106 - Micro Economics': [
     { slot: 'G1+TG1', venue: 'PRP425', faculty: 'NILAVATHY K' },
     { slot: 'G1+TG1', venue: 'TT621', faculty: 'SRIRAM G' },
     { slot: 'G2+TG2', venue: 'TT313', faculty: 'NILAVATHY K' },
@@ -183,7 +177,7 @@ export const UCC_BYB = {
     { slot: 'TCC2', venue: 'SJT105', faculty: 'KHANJAN' },
   ],
 
-    'BAMAT207 - Probability and Statistics': [
+  'BAMAT207 - Probability and Statistics': [
     { slot: 'L29+L30', venue: 'PRP450', faculty: 'YAMUNA M' },
     { slot: 'L45+L46', venue: 'PRP446', faculty: 'YAMUNA M' },
     { slot: 'L23+L24', venue: 'PRP446', faculty: 'PALLAVI MISHRA' },

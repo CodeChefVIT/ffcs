@@ -9,12 +9,8 @@ export const UCC_BDE = {
     { slot: 'L45+L46', venue: 'PRP555', faculty: 'KHANA BAIDYA' },
     { slot: 'TCC1', venue: 'SJT112', faculty: 'KHANA BAIDYA' },
   ],
-  'BACHY105 - Applied Chemistry': [
-    { slot: 'D1+TD1', venue: 'PRP251', faculty: 'SANTHAKUMAR K' },
-  ],
-  'BACLE104 - Waste Management': [
-    { slot: 'F2+TF2', venue: 'CDMM404', faculty: 'KAVITHA M.S' },
-  ],
+  'BACHY105 - Applied Chemistry': [{ slot: 'D1+TD1', venue: 'PRP251', faculty: 'SANTHAKUMAR K' }],
+  'BACLE104 - Waste Management': [{ slot: 'F2+TF2', venue: 'CDMM404', faculty: 'KAVITHA M.S' }],
   'BACLE105 - Disaster Mitigation and Management': [
     { slot: 'G2+TG2', venue: 'CDMM104', faculty: 'SURENDAR M' },
   ],
@@ -158,9 +154,7 @@ export const UCC_BDE = {
     { slot: 'G1+TG1', venue: 'PRP576', faculty: 'MULUGU S NEELOTPAL' },
     { slot: 'C2+TC2', venue: 'SMV218', faculty: 'MULUGU S NEELOTPAL' },
   ],
-  'BAITE291 - Innovative Design Project': [
-    { slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' },
-  ],
+  'BAITE291 - Innovative Design Project': [{ slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' }],
   'BAJAP101 - Japanese Level I': [
     { slot: 'L23+L24', venue: 'PRP555', faculty: 'KHANJAN' },
     { slot: 'TCC2', venue: 'SJT112', faculty: 'HIYA MUKHERJEE' },
