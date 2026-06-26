@@ -75,11 +75,17 @@ export const course_type_map: Record<string, string> = {
 
   BAEEE103: 'E',
   BAEEE201: 'E',
+  BAEEE202: 'E',
   BAEEE204: 'L',
   BAEIE101: 'L',
+  BAEIE102: 'E',
+  BAEIE204: 'E',
+  BAITE201: 'E',
+  BAITE203: 'E',
 
   BAECE102: 'E',
   BAECE103: 'L',
+  BAECE350: 'E',
 
   BAMEE201: 'E',
   BAMEE205: 'E',
@@ -117,6 +123,7 @@ export const course_type_map: Record<string, string> = {
   BAESP101: 'E',
   BAFRE101: 'E',
   BAJAP101: 'E',
+  BAGER101: 'E',
   BAMAT207: 'E',
   BABIT101: 'E',
   BABIT202: 'E',
