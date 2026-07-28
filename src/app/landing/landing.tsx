@@ -81,7 +81,7 @@ export default function View() {
 
   return (
     <div className="flex flex-col min-h-screen relative w-full items-center justify-center overflow-x-hidden">
-      <div className="absolute inset-0 -z-10 bg-[#CEE4E5]">
+      <div className="absolute mt-4 inset-0 -z-10 bg-[#CEE4E5]">
         <Image
           src="/art/bg_dots.svg"
           alt="Background"
@@ -93,6 +93,7 @@ export default function View() {
           unselectable="on"
         />
       </div>
+
       <Navbar page="landing" />
 
       <Hero />

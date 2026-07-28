@@ -1,20 +1,18 @@
 export const disciplineLinked = {
-  'BBIT201L - Principles of Chemical Engineering': [
-    { slot: 'C1+TC1', venue: 'SMV121', faculty: 'DHANYA V' },
+  'BBIT301L - Principles of Bioprocess Engineering': [
+    { slot: 'A1+TA1', venue: 'SMV220', faculty: 'SANGEETHA SUBRAMANIAN' },
+    { slot: 'A2+TA2', venue: 'PRP773', faculty: 'SANGEETHA SUBRAMANIAN' },
+    { slot: 'A1+TA1', venue: 'SMV128', faculty: 'RAMESH PATHY M' },
+    { slot: 'A2+TA2', venue: 'SMV218', faculty: 'RASHMI KATARIA' },
   ],
-  'BBIT201P - Chemical Engineering Lab': [
-    { slot: 'L45+L46', venue: 'SMVG26', faculty: 'DHANYA V' },
-  ],
-  'BBIT205L - Bioinformatics': [
-    { slot: 'F1', venue: 'SMV124', faculty: 'SHANTHI V' },
-    { slot: 'F2', venue: 'SMV121', faculty: 'SUDANDIRA DOSS C' },
-    { slot: 'F2', venue: 'SMV124', faculty: 'RAJINIRAJA M' },
-    { slot: 'F1', venue: 'SMV121', faculty: 'RAMANATHAN K' },
-  ],
-  'BBIT205P - Bioinformatics Lab': [
-    { slot: 'L37+L38', venue: 'SMVG17', faculty: 'SHANTHI V' },
-    { slot: 'L5+L6', venue: 'SMVG15', faculty: 'SUDANDIRA DOSS C' },
-    { slot: 'L27+L28', venue: 'SMVG15', faculty: 'RAJINIRAJA M' },
-    { slot: 'L49+L50', venue: 'SMVG15', faculty: 'RAMANATHAN K' },
+
+  'BBIT301P - Bioprocess Engineering Lab': [
+    { slot: 'L45+L46', venue: 'SMV242', faculty: 'ROHIT' },
+    { slot: 'L9+L10', venue: 'SMV242', faculty: 'ROHIT' },
+    { slot: 'L45+L46', venue: 'SMV216', faculty: 'KALI KISHORE REDDY TETALA' },
+    { slot: 'L45+L46', venue: 'SMV225', faculty: 'SANGEETHA SUBRAMANIAN' },
+    { slot: 'L9+L10', venue: 'SMV225', faculty: 'SANGEETHA SUBRAMANIAN' },
+    { slot: 'L45+L46', venue: 'SMV212', faculty: 'RAMESH PATHY M' },
+    { slot: 'L29+L30', venue: 'SMV225', faculty: 'RASHMI KATARIA' },
   ],
 };
