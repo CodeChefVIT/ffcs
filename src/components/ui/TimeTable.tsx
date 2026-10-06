@@ -8,14 +8,41 @@ import Image from 'next/image';
 export type tableFacingSlot = {
   slotName: string;
   showName: boolean;
-  venue?: string;
+  code?: string;
+  subject?: string;
+  faculty?: string;
 };
 
+type HoverSlot = slot & { code?: string; subject?: string; faculty?: string };
+
 export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] }) {
-  const slots: (slot & { venue?: string })[] = slotNames
-    .map(s => getSlot(s.slotName, s.showName).map(sl => ({ ...sl, venue: s.venue })))
+  const slots: HoverSlot[] = slotNames
+    .map(s =>
+      getSlot(s.slotName, s.showName).map(sl => ({
+        ...sl,
+        code: s.code,
+        subject: s.subject,
+        faculty: s.faculty,
+      }))
+    )
     .flat();
-  const [tip, setTip] = React.useState<{ text: string; x: number; y: number } | null>(null);
+  const [tip, setTip] = React.useState<{
+    title: string;
+    faculty?: string;
+    slotName: string;
+    color: string;
+    x: number;
+    y: number;
+  } | null>(null);
+  const showTip = (e: React.MouseEvent, s: HoverSlot) =>
+    setTip({
+      title: s.subject || s.code || s.slotName,
+      faculty: s.faculty,
+      slotName: s.slotName,
+      color: LAB_ROWS.includes(s.rowStart) ? '#96FFCA' : '#86d7FF',
+      x: e.clientX,
+      y: e.clientY,
+    });
 
   const ROWS = 17;
   const COLUMNS = 69;
@@ -178,12 +205,8 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
       {slots.map((slot, i) => (
         <div
           key={`slot-${i}`}
-          onMouseEnter={e => {
-            if (slot.venue) setTip({ text: slot.venue, x: e.clientX, y: e.clientY });
-          }}
-          onMouseMove={e => {
-            if (slot.venue) setTip({ text: slot.venue, x: e.clientX, y: e.clientY });
-          }}
+          onMouseEnter={e => showTip(e, slot)}
+          onMouseMove={e => showTip(e, slot)}
           onMouseLeave={() => setTip(null)}
           className={`border-black border-[0.5px] box-border flex items-center justify-center w-full h-full overflow-hidden ${
             LAB_ROWS.includes(slot.rowStart) ? 'bg-[#96FFCA]' : 'bg-[#86d7FF]'
@@ -203,10 +226,19 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
 
       {tip && (
         <div
-          className="fixed z-50 px-2 py-1 bg-[#FFEA79] text-black border-2 border-black rounded-md shadow-[2px_2px_0_0_black] text-xs font-poppins font-semibold whitespace-nowrap pointer-events-none"
-          style={{ left: tip.x + 8, top: tip.y + 8 }}
+          className="fixed z-50 pointer-events-none bg-white text-black border-2 border-black rounded-xl shadow-[4px_4px_0px_0px_black] font-poppins max-w-[260px] overflow-hidden"
+          style={{ left: tip.x + 14, top: tip.y + 14 }}
         >
-          {tip.text}
+          <div
+            className="px-3 py-1 border-b-2 border-black text-xs font-bold"
+            style={{ backgroundColor: tip.color }}
+          >
+            {tip.slotName}
+          </div>
+          <div className="px-3 py-2">
+            <div className="font-semibold text-sm leading-snug">{tip.title}</div>
+            {tip.faculty && <div className="mt-1 text-xs text-gray-600">{tip.faculty}</div>}
+          </div>
         </div>
       )}
     </div>
