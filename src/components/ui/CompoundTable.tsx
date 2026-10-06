@@ -36,7 +36,7 @@ export default function CompoundTable({ data, large }: CompoundTableProps) {
   const groupedData = getGroupedData(data);
 
   const tfs = data.map(d => {
-    return { slotName: d.slot, showName: true };
+    return { slotName: d.slot, showName: true, venue: d.venue };
   });
 
   return (

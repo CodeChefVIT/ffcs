@@ -8,12 +8,14 @@ import Image from 'next/image';
 export type tableFacingSlot = {
   slotName: string;
   showName: boolean;
+  venue?: string;
 };
 
 export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] }) {
-  const slots: slot[] = slotNames
-    .map(slotNames => getSlot(slotNames.slotName, slotNames.showName))
+  const slots: (slot & { venue?: string })[] = slotNames
+    .map(s => getSlot(s.slotName, s.showName).map(sl => ({ ...sl, venue: s.venue })))
     .flat();
+  const [tip, setTip] = React.useState<{ text: string; x: number; y: number } | null>(null);
 
   const ROWS = 17;
   const COLUMNS = 69;
@@ -176,6 +178,13 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
       {slots.map((slot, i) => (
         <div
           key={`slot-${i}`}
+          onMouseEnter={e => {
+            if (slot.venue) setTip({ text: slot.venue, x: e.clientX, y: e.clientY });
+          }}
+          onMouseMove={e => {
+            if (slot.venue) setTip({ text: slot.venue, x: e.clientX, y: e.clientY });
+          }}
+          onMouseLeave={() => setTip(null)}
           className={`border-black border-[0.5px] box-border flex items-center justify-center w-full h-full overflow-hidden ${
             LAB_ROWS.includes(slot.rowStart) ? 'bg-[#96FFCA]' : 'bg-[#86d7FF]'
           }`}
@@ -191,6 +200,15 @@ export default function TimeTable({ slotNames }: { slotNames: tableFacingSlot[] 
           </span>
         </div>
       ))}
+
+      {tip && (
+        <div
+          className="fixed z-50 px-2 py-1 bg-[#FFEA79] text-black border-2 border-black rounded-md shadow-[2px_2px_0_0_black] text-xs font-poppins font-semibold whitespace-nowrap pointer-events-none"
+          style={{ left: tip.x + 8, top: tip.y + 8 }}
+        >
+          {tip.text}
+        </div>
+      )}
     </div>
   );
 }
