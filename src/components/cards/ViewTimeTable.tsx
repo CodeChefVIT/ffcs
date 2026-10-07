@@ -313,12 +313,18 @@ export default function ViewTimeTable() {
   const selectedData = allTimetables[selectedIndex] || [];
   const visibleIndexes = getVisibleIndexes(timetableNumber, timetableCount);
 
+  console.log('selectedData', selectedData);
   const convertedData = selectedData.map(
-    (item: { courseCode?: string; slotName?: string; facultyName?: string; venue?: string }) => ({
+    (item: {
+      courseCode?: string;
+      courseName?: string;
+      slotName?: string;
+      facultyName?: string;
+    }) => ({
       code: item.courseCode || '00000000',
+      subject: item.courseName || '',
       slot: item.slotName || 'NIL',
       name: item.facultyName || 'Unknown',
-      venue: item.venue || '',
     })
   );
 
