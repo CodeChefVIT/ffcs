@@ -7,11 +7,11 @@ type dataProps = {
   code: string;
   slot: string;
   name: string;
-  venue?: string;
+  subject?: string;
 };
 
 type groupedDataProps = {
-  [name: string]: { code: string; slot: string; venue?: string }[];
+  [name: string]: { code: string; slot: string }[];
 };
 
 type CompoundTableProps = {
@@ -24,10 +24,10 @@ const sortData = (data: dataProps[]): dataProps[] => {
 };
 
 const getGroupedData = (data: dataProps[]): groupedDataProps => {
-  return sortData(data).reduce((acc, { code, slot, name, venue }) => {
+  return sortData(data).reduce((acc, { code, slot, name }) => {
     const codePrefix = code.slice(0, -1);
     const groupKey = `${name}__${codePrefix}`;
-    (acc[groupKey] ||= []).push({ code, slot, venue });
+    (acc[groupKey] ||= []).push({ code, slot });
     return acc;
   }, {} as groupedDataProps);
 };
@@ -35,9 +35,13 @@ const getGroupedData = (data: dataProps[]): groupedDataProps => {
 export default function CompoundTable({ data, large }: CompoundTableProps) {
   const groupedData = getGroupedData(data);
 
-  const tfs = data.map(d => {
-    return { slotName: d.slot, showName: true };
-  });
+  const tfs = data.map(d => ({
+    slotName: d.slot,
+    showName: true,
+    code: d.code,
+    subject: d.subject,
+    faculty: d.name,
+  }));
 
   return (
     <div className="flex flex-col lg:flex-row gap-4 m-2 text-black text-sm font-inter select-none lg:overflow-x-auto">

@@ -64,8 +64,7 @@ export default function Navbar({ page }: NavbarProps) {
             )}
             <div className="flex gap-4 mx-5 items-center">
               <div className="rounded-xl bg-[#ffea79] text-black outline-2 outline-black px-6 py-2 text-sm font-medium">
-                Can&apos;t find faculty for your branch? Remaining Faculty lists will be updated by
-                tonight.
+                Can&apos;t find faculty for your branch? Remaining Faculty lists will be updated soon.
               </div>
             </div>
 
