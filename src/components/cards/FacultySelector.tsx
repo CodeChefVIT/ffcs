@@ -648,6 +648,7 @@ export default function FacultySelector({
               renderOption={prettifyDomain}
             />
             <ComboBox
+              key={`subject-${selectedDomain}`}
               label="Subject"
               value={selectedSubject}
               options={subjects}
@@ -656,6 +657,7 @@ export default function FacultySelector({
             {getCourseType(selectedSubject.split(' - ')[0]) === 'P' &&
             !selectedSubject.split(' - ')[0].startsWith('BSTS') ? (
               <ComboBox
+                key={`lab-${selectedDomain}-${selectedSubject}`}
                 label="Slot"
                 value={selectedLabShift}
                 onChange={e => {
@@ -671,6 +673,7 @@ export default function FacultySelector({
               />
             ) : (
               <ComboBox
+                key={`slot-${selectedDomain}-${selectedSubject}`}
                 label="Slot"
                 value={selectedSlot}
                 options={[...slots].sort((a, b) => a.localeCompare(b))}
