@@ -10,7 +10,7 @@ import Popup from '@/components/ui/Popup';
 import Image from 'next/image';
 import AlertModal from '@/components/ui/AlertModal';
 import axios from 'axios';
-import Loader from '@/components/ui/Loader';
+import { SavedTimetablesSkeleton } from './saved-skeleton';
 
 async function fetchTimetablesByOwner(owner: string) {
   const res = await axios.get(`/api/timetables?owner=${encodeURIComponent(owner)}`);
@@ -160,7 +160,7 @@ export default function Saved() {
           <h2 className="text-4xl mb-8 font-pangolin font-light">All Timetables</h2>
 
           {loading ? (
-            <Loader />
+            <SavedTimetablesSkeleton />
           ) : timetables.length === 0 ? (
             <div className="flex flex-col items-center">
               <p className="text-3xl mb-6">(No Timetables Found)</p>
