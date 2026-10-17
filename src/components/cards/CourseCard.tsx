@@ -8,6 +8,7 @@ import { generateTT } from '@/lib/utils';
 import { fullCourseData } from '@/lib/type';
 import { setGlobalCourses } from '@/lib/globalCourses';
 import AlertModal from '../ui/AlertModal';
+import FacultyPriorityModal from '../ui/FacultyPriorityModal';
 
 type CourseCardProps = {
   selectedCourses: fullCourseData[];
@@ -25,6 +26,7 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
   const [error, setError] = useState<string | null>(null);
   const [deletePopupOpen, setDeletePopupOpen] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState<fullCourseData | null>(null);
+  const [courseToView, setCourseToView] = useState<fullCourseData | null>(null);
 
   const [allSubjectsMode, setAllSubjectsMode] = useState<'on' | 'off'>('on');
 
@@ -251,6 +253,18 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
               {/* Buttons */}
               <div className="flex items-center justify-end gap-2 flex-shrink-0">
                 <button
+                  onClick={() => setCourseToView(course)}
+                  onDragStart={e => e.stopPropagation()}
+                  draggable={false}
+                  aria-label={`View faculty priorities for ${course.courseCode}`}
+                  aria-haspopup="dialog"
+                  className="bg-[#FFFFFF]/50 hover:bg-[#8BD5FF] text-black rounded-lg transition cursor-pointer w-10 h-10 flex items-center justify-center flex-shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                  type="button"
+                  title="View faculty priorities"
+                >
+                  <Image src="/icons/eye.svg" width={24} height={24} alt="" draggable={false} />
+                </button>
+                <button
                   onClick={() => {
                     setCourseToDelete(course);
                     setDeletePopupOpen(true);
@@ -423,6 +437,21 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
           </div>
         )}
       </div>
+
+      {courseToView && (
+        <FacultyPriorityModal
+          course={courseToView}
+          onClose={() => setCourseToView(null)}
+          onSave={courseSlots => {
+            onUpdate(
+              selectedCourses.map(course =>
+                course.id === courseToView.id ? { ...course, courseSlots } : course
+              )
+            );
+            setCourseToView(null);
+          }}
+        />
+      )}
 
       {deletePopupOpen && courseToDelete && (
         <Popup
