@@ -7,7 +7,7 @@ import Footer from '@/components/ui/Footer';
 import Image from 'next/image';
 import axios from 'axios';
 import { PopupViewTT } from '@/components/ui/PopupMobile';
-import Loader from '@/components/ui/Loader';
+import { SavedTimetablesSkeleton } from './saved-skeleton';
 
 async function fetchTimetablesByOwner(owner: string) {
   const res = await axios.get(`/api/timetables?owner=${encodeURIComponent(owner)}`);
@@ -115,18 +115,24 @@ export default function SavedMobile() {
 
       <div className="text-4xl mb-8 mt-28 text-black font-pangolin">Saved Timetables</div>
 
-      <ul className="w-full space-y-4 px-6">
-        {timetables.map((tt, index) => (
-          <li
-            key={tt._id}
-            className="grid grid-cols-[auto_1fr] items-center px-3 py-3 bg-[#A7D5D7] text-black rounded-xl border-2 border-black shadow-[2px_2px_0_0_black]"
-            onClick={() => handleView(tt)}
-          >
-            <span className="font-medium text-base mr-4">{index + 1}.</span>
-            <span className="font-medium text-base truncate">{tt.title}</span>
-          </li>
-        ))}
-      </ul>
+      {loading ? (
+        <div className="w-full">
+          <SavedTimetablesSkeleton />
+        </div>
+      ) : (
+        <ul className="w-full space-y-4 px-6">
+          {timetables.map((tt, index) => (
+            <li
+              key={tt._id}
+              className="grid grid-cols-[auto_1fr] items-center px-3 py-3 bg-[#A7D5D7] text-black rounded-xl border-2 border-black shadow-[2px_2px_0_0_black]"
+              onClick={() => handleView(tt)}
+            >
+              <span className="font-medium text-base mr-4">{index + 1}.</span>
+              <span className="font-medium text-base truncate">{tt.title}</span>
+            </li>
+          ))}
+        </ul>
+      )}
 
       <div className="flex items-center w-full mt-8 mb-8 text-sm font-poppins font-semibold text-black/50 px-8">
         <div className="flex-grow h-0.5 bg-gradient-to-r from-transparent to-black/33" />
@@ -138,9 +144,7 @@ export default function SavedMobile() {
         <div className="flex-grow h-0.5 bg-gradient-to-r from-black/33 to-transparent" />
       </div>
 
-      {loading ? (
-        <Loader />
-      ) : timetables.length === 0 ? (
+      {!loading && timetables.length === 0 ? (
         <div className="mx-auto my-auto text-center text-sm font-poppins font-semibold text-black/70">
           No saved timetables found.
           <br />
