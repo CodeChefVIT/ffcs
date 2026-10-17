@@ -158,12 +158,14 @@ function breakClubbed(combinations: timetableDisplayData[][]): timetableDisplayD
             courseName: thName,
             slotName: thSlot,
             facultyName: item.facultyName,
+            venue: item.venue,
           },
           {
             courseCode: labCode,
             courseName: labName,
             slotName: labSlots,
             facultyName: item.facultyName,
+            venue: item.venue,
           },
         ];
       }

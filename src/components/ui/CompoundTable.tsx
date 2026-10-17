@@ -7,11 +7,11 @@ type dataProps = {
   code: string;
   slot: string;
   name: string;
-  venue?: string;
+  subject?: string;
 };
 
 type groupedDataProps = {
-  [name: string]: { code: string; slot: string; venue?: string }[];
+  [name: string]: { code: string; slot: string }[];
 };
 
 type CompoundTableProps = {
@@ -24,10 +24,10 @@ const sortData = (data: dataProps[]): dataProps[] => {
 };
 
 const getGroupedData = (data: dataProps[]): groupedDataProps => {
-  return sortData(data).reduce((acc, { code, slot, name, venue }) => {
+  return sortData(data).reduce((acc, { code, slot, name }) => {
     const codePrefix = code.slice(0, -1);
     const groupKey = `${name}__${codePrefix}`;
-    (acc[groupKey] ||= []).push({ code, slot, venue });
+    (acc[groupKey] ||= []).push({ code, slot });
     return acc;
   }, {} as groupedDataProps);
 };
@@ -35,9 +35,13 @@ const getGroupedData = (data: dataProps[]): groupedDataProps => {
 export default function CompoundTable({ data, large }: CompoundTableProps) {
   const groupedData = getGroupedData(data);
 
-  const tfs = data.map(d => {
-    return { slotName: d.slot, showName: true };
-  });
+  const tfs = data.map(d => ({
+    slotName: d.slot,
+    showName: true,
+    code: d.code,
+    subject: d.subject,
+    faculty: d.name,
+  }));
 
   return (
     <div className="flex flex-col lg:flex-row gap-4 m-2 text-black text-sm font-inter select-none lg:overflow-x-auto">
@@ -65,21 +69,6 @@ export default function CompoundTable({ data, large }: CompoundTableProps) {
         >
           {Object.entries(groupedData).map(([groupKey, entries], idx) => {
             const displayName = groupKey.split('__')[0];
-            //console.log(displayName)
-            // let initials = "";
-            // const parts = displayName.split(" ");
-
-            // if (displayName.length > 12) {
-            //   initials = parts[0];
-            //   if (parts.length > 1) {
-            //     initials += " " + parts[1].charAt(0);
-            //   }
-            //   initials += " " + parts[parts.length - 1].charAt(0);
-            // } else {
-            //   initials = displayName;
-            // }
-            const initials =
-              displayName.length > 12 ? displayName.slice(0, 12) + '...' : displayName;
             return (
               <div key={idx} className="border-b-1 border-black last:border-b-0 pb-2">
                 <div className="space-y-1">
@@ -96,7 +85,7 @@ export default function CompoundTable({ data, large }: CompoundTableProps) {
                         <div className="truncate">{entry.slot.replace(/\+/g, '+\u200B')}</div>
                       </div>
                       <div className="w-[160px] shrink-0 break-words whitespace-normal text-right pr-4">
-                        {i === 0 ? initials : ''}
+                        {i === 0 ? displayName : ''}
                       </div>
                     </div>
                   ))}
