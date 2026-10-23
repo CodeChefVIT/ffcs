@@ -15,8 +15,16 @@ import { getCurrentDateTime } from '@/lib/utils';
 import { evaluateFilters } from '@/lib/filterUtils';
 import { generateShareId } from '@/lib/shareIDgenerate';
 import { exportToPDF } from '@/lib/exportToPDF';
+import { getSelectedCourses } from '@/lib/selectedCourses';
+import { getGlobalCourses } from '@/lib/globalCourses';
 import ComboBox from '../ui/ComboBox';
 import { timetableDisplayData } from '@/lib/type';
+import {
+  groupTimetablesByLayout,
+  filterGroupsByFaculty,
+  evaluateGroupFilters,
+} from '@/lib/groupTimetables';
+import FacultyVariantArrows from '@/components/ui/FacultyVariantArrows';
 
 interface Slot {
   slot: string;
@@ -159,6 +167,9 @@ export default function ViewTimeTable() {
     [timetableData]
   );
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedVariant, setSelectedVariant] = useState(0);
+  // Off = every generated timetable is its own tab, exactly like before
+  const [groupBySlot, setGroupBySlot] = useState(false);
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [showSharePopup, setShowSharePopup] = useState(false);
   const [shareLink, setShareLink] = useState<string>('');
@@ -194,16 +205,14 @@ export default function ViewTimeTable() {
     setSelectedIndex(0);
   }, [filterFaculty]);
 
+  // One entry per tab. Group by Slot on: one per slot layout, faculty combinations in `variants`.
+  // Off: every timetable is its own entry with a single variant, so behaviour matches before.
   const allTimetables = React.useMemo(() => {
-    if (filterFaculty && filterFaculty !== '') {
-      return originalTimetableData.filter((tt: timetableDisplayData[]) =>
-        tt.some(
-          (item: { facultyName?: string }) => (item.facultyName || 'Unknown') === filterFaculty
-        )
-      );
-    }
-    return originalTimetableData;
-  }, [originalTimetableData, filterFaculty]);
+    const groups = groupBySlot
+      ? groupTimetablesByLayout(originalTimetableData)
+      : originalTimetableData.map(tt => ({ layoutKey: '', variants: [tt] }));
+    return filterGroupsByFaculty(groups, filterFaculty);
+  }, [originalTimetableData, filterFaculty, groupBySlot]);
 
   // Precompute per-filter match lists
   const smartMatches = React.useMemo(() => {
@@ -215,8 +224,8 @@ export default function ViewTimeTable() {
     if (!allTimetables || allTimetables.length === 0)
       return { same, morningOnly, eveningOnly, mixOnly };
 
-    allTimetables.forEach((tt, idx) => {
-      const r = evaluateFilters(tt);
+    allTimetables.forEach((group, idx) => {
+      const r = evaluateGroupFilters(group);
       if (r.sameBuilding) same.push(idx);
       if (r.morningOnly) morningOnly.push(idx);
       if (r.eveningOnly) eveningOnly.push(idx);
@@ -250,8 +259,8 @@ export default function ViewTimeTable() {
     if (!allTimetables || allTimetables.length === 0) return [] as number[];
     if (effectiveActiveFilters.size === 0) return allTimetables.map((_, i) => i);
 
-    return allTimetables.reduce((res, tt, idx) => {
-      const r = evaluateFilters(tt);
+    return allTimetables.reduce((res, group, idx) => {
+      const r = evaluateGroupFilters(group);
       const passes =
         (!effectiveActiveFilters.has('sameBuilding') || r.sameBuilding) &&
         (!effectiveActiveFilters.has('morningOnly') || r.morningOnly) &&
@@ -272,8 +281,8 @@ export default function ViewTimeTable() {
     const nonTimeSet = new Set(
       !allTimetables
         ? []
-        : allTimetables.reduce((res, tt, idx) => {
-            const r = evaluateFilters(tt);
+        : allTimetables.reduce((res, group, idx) => {
+            const r = evaluateGroupFilters(group);
             if (!effectiveActiveFilters.has('sameBuilding') || r.sameBuilding) res.push(idx);
             return res;
           }, [] as number[])
@@ -310,7 +319,15 @@ export default function ViewTimeTable() {
 
   const timetableNumber = displayPosition;
   const timetableCount = displayCount;
-  const selectedData = allTimetables[selectedIndex] || [];
+  const selectedGroup = allTimetables[selectedIndex];
+  // With Same Building on, only offer the combinations that really are in one building
+  const visibleVariants = React.useMemo(() => {
+    if (!selectedGroup) return [] as timetableDisplayData[][];
+    if (!effectiveActiveFilters.has('sameBuilding')) return selectedGroup.variants;
+    const inOneBuilding = selectedGroup.variants.filter(tt => evaluateFilters(tt).sameBuilding);
+    return inOneBuilding.length > 0 ? inOneBuilding : selectedGroup.variants;
+  }, [selectedGroup, effectiveActiveFilters]);
+  const selectedData = visibleVariants[selectedVariant] || visibleVariants[0] || [];
   const visibleIndexes = getVisibleIndexes(timetableNumber, timetableCount);
 
   console.log('selectedData', selectedData);
@@ -327,6 +344,16 @@ export default function ViewTimeTable() {
       name: item.facultyName || 'Unknown',
     })
   );
+
+  // A new tab, a new filter, a new generation or a toggle starts at faculty combination 1
+  useEffect(() => {
+    setSelectedVariant(0);
+  }, [selectedIndex, filterFaculty, effectiveActiveFilters, timetableData, groupBySlot]);
+
+  // Turning Group by Slot on or off changes what each tab is, so go back to tab 1
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [groupBySlot]);
 
   useEffect(() => {
     setSelectedIndex(0);
@@ -601,7 +628,7 @@ export default function ViewTimeTable() {
           showAlert('No Timetables generated');
           return;
         }
-        exportToPDF();
+        exportToPDF(getSelectedCourses(getGlobalCourses(), selectedData));
       },
     },
     {
@@ -728,6 +755,13 @@ export default function ViewTimeTable() {
                       <p className="font-semibold text-xs text-black mb-3">Smart Filters</p>
                       <div className="flex flex-col gap-3">
                         <div>
+                          <p className="font-semibold text-xs text-black">Group by Slot</p>
+                          <p className=" text-xs text-gray-500 mt-0.5">
+                            Timetables with the same slots but different faculty become one tab. Use
+                            the arrows in the side panel to switch faculty.
+                          </p>
+                        </div>
+                        <div>
                           <p className="font-semibold text-xs text-black">Same Building</p>
                           <p className=" text-xs text-gray-500 mt-0.5">
                             All classes share the same building prefix — no cross-campus walking
@@ -746,6 +780,17 @@ export default function ViewTimeTable() {
                   </>
                 )}
               </div>
+              <SmartFilterCheckbox
+                label="Group by Slot"
+                checked={groupBySlot}
+                disabled={false}
+                onClick={() => setGroupBySlot(prev => !prev)}
+                title={
+                  groupBySlot
+                    ? 'Showing one timetable per slot layout — click to show every faculty combination as its own timetable'
+                    : 'Show one timetable per slot layout and switch faculty with the arrows'
+                }
+              />
               <SmartFilterCheckbox
                 label="Same Building"
                 checked={effectiveActiveFilters.has('sameBuilding')}
@@ -802,7 +847,19 @@ export default function ViewTimeTable() {
                 : `(${timetableCount} timetables were generated)`}
           </div>
 
-          <CompoundTable data={convertedData} large={true} />
+          <CompoundTable
+            data={convertedData}
+            large={true}
+            sidePanelFooter={
+              visibleVariants.length > 1 ? (
+                <FacultyVariantArrows
+                  count={visibleVariants.length}
+                  selected={selectedVariant}
+                  onSelect={setSelectedVariant}
+                />
+              ) : undefined
+            }
+          />
         </div>
 
         <div className="flex flex-row items-center justify-between px-16 pt-4 gap-8">

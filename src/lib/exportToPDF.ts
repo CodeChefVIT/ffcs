@@ -16,7 +16,7 @@ interface TableCell {
   valign: 'top';
 }
 
-export const exportToPDF = async (): Promise<void> => {
+export const exportToPDF = async (courseList?: fullCourseData[]): Promise<void> => {
   const colors = {
     pageBg: '#FFFFFF',
     headerBg: '#7AC1C2',
@@ -26,7 +26,7 @@ export const exportToPDF = async (): Promise<void> => {
     text: '#000000',
   };
 
-  const courses: fullCourseData[] = getGlobalCourses();
+  const courses: fullCourseData[] = courseList ?? getGlobalCourses();
   if (!courses || courses.length === 0) {
     throw new Error('No course data available to export.');
   }
