@@ -37,6 +37,7 @@ export function generateTT(
                   courseName: course.courseName + '__' + course.courseNameLab,
                   slotName: slot.slotName + '__' + labSlot,
                   facultyName: faculty.facultyName,
+                  labVenue: faculty.labVenues?.[labSlot],
                   ...((faculty as { venue?: string }).venue
                     ? { venue: (faculty as { venue?: string }).venue }
                     : {}),
@@ -165,7 +166,7 @@ function breakClubbed(combinations: timetableDisplayData[][]): timetableDisplayD
             courseName: labName,
             slotName: labSlots,
             facultyName: item.facultyName,
-            venue: item.venue,
+            venue: item.labVenue,
           },
         ];
       }
