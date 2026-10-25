@@ -15,8 +15,6 @@ import { getCurrentDateTime } from '@/lib/utils';
 import { evaluateFilters } from '@/lib/filterUtils';
 import { generateShareId } from '@/lib/shareIDgenerate';
 import { exportToPDF } from '@/lib/exportToPDF';
-import { getSelectedCourses } from '@/lib/selectedCourses';
-import { getGlobalCourses } from '@/lib/globalCourses';
 import ComboBox from '../ui/ComboBox';
 import { timetableDisplayData } from '@/lib/type';
 import {
@@ -628,7 +626,7 @@ export default function ViewTimeTable() {
           showAlert('No Timetables generated');
           return;
         }
-        exportToPDF(getSelectedCourses(getGlobalCourses(), selectedData));
+        exportToPDF();
       },
     },
     {
