@@ -9,19 +9,17 @@ export interface FilterEvalResult {
 
 export function evaluateFilters(tt: timetableDisplayData[]): FilterEvalResult {
   const atomic = tt.flatMap(item => extractAtomicSlots(item.slotName));
-  const venues = tt.map(item => item.venue).filter(Boolean) as string[];
+  const buildings = tt
+    .map(item => {
+      const venue = (item.venue ?? '').trim().toUpperCase();
+      // NIL explicitly means no physical location; missing venues remain unknown.
+      if (venue === 'NIL') return null;
+      return venue.match(/^[A-Z]+/)?.[0] ?? '';
+    })
+    .filter((building): building is string => building !== null);
 
-  // sameBuilding: all venues share the same building prefix
-  let sameBuilding = false;
-  if (venues.length > 0) {
-    const buildings = venues
-      .map(v => (v || '').toString().match(/^[A-Za-z]+/)?.[0] || '')
-      .filter(Boolean);
-    if (buildings.length > 0) {
-      const set = new Set(buildings.map(b => b.toUpperCase()));
-      if (set.size === 1) sameBuilding = true;
-    }
-  }
+  const sameBuilding =
+    tt.length > 0 && buildings.every(building => building !== '') && new Set(buildings).size <= 1;
 
   // Theory-slot time classification: lab slots (L\d+) are excluded
   const theorySlots = atomic.filter(s => !/^L\d+$/i.test(s));

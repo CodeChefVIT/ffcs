@@ -197,27 +197,25 @@ function generateCourseSlotsBoth({
       )
       .map(entry => entry.slot);
 
-    // try to find a venue for this faculty: prefer labData entry, otherwise try theory entry
-    let venue: string | undefined;
-    const labEntryForVenue = labData.find(
-      entry =>
-        entry.faculty === facultyName && entry.slot.startsWith('L') && isValidLabSlot(entry.slot)
+    const theoryEntries = data[selectedSchool][selectedDomain][selectedSubject];
+    const theoryEntry = theoryEntries.find(
+      entry => entry.faculty === facultyName && entry.slot === selectedSlot
     );
-    if (labEntryForVenue && labEntryForVenue.venue) {
-      venue = labEntryForVenue.venue;
-    } else {
-      // try to find theory entry
-      const theoryEntries = data[selectedSchool][selectedDomain][selectedSubject];
-      const thEntry = theoryEntries.find(
-        (e: SubjectEntry) => e.faculty === facultyName && e.slot === selectedSlot
-      );
-      if (thEntry && thEntry.venue) venue = thEntry.venue;
+    const venue = theoryEntry?.venue?.trim();
+
+    const labVenues: Record<string, string> = {};
+
+    for (const entry of labData) {
+      if (entry.faculty === facultyName && labSlots.includes(entry.slot) && entry.venue?.trim()) {
+        labVenues[entry.slot] = entry.venue.trim();
+      }
     }
 
     return {
       facultyName,
       facultyLabSlot: labSlots.length > 0 ? labSlots.join(', ') : courseCode,
       ...(venue ? { venue } : {}),
+      labVenues,
     };
   });
 
