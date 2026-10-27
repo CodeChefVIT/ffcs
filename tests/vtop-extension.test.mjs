@@ -105,6 +105,8 @@ test('messaging: reject other origins, other extensions, subframes, and write at
   for (const sender of [
     { url: 'https://example.com/' },
     { url: 'https://ffcs.codechefvit.com.evil.test/' },
+    { url: 'https://perrytheplatypus.codechefvit.com.evil.test/' },
+    { url: 'https://evil.codechefvit.com/' },
     { id: 'another-extension' },
     { frameId: 1 },
     { url: 'https://vtop.vit.ac.in/unrelated' },
@@ -113,7 +115,17 @@ test('messaging: reject other origins, other extensions, subframes, and write at
   }
   assert.equal((await send('GET_DATA')).ok, false);
   assert.equal((await send('VTOP_BEGIN', { contextKey: 'a'.repeat(64) }, app)).ok, false);
-  assert.equal((await send('GET_STATUS', {}, { url: 'https://ffcs.codechefvit.com/' })).ok, true);
+  for (const origin of [
+    'https://ffcs.codechefvit.com',
+    'https://perrytheplatypus.codechefvit.com',
+  ]) {
+    assert.equal((await send('GET_STATUS', {}, { url: origin + '/' })).ok, true);
+    assert.equal((await send('GET_DATA', {}, { url: origin + '/' })).ok, true);
+    assert.equal(
+      (await send('VTOP_BEGIN', { contextKey: 'a'.repeat(64) }, { url: origin + '/' })).ok,
+      false
+    );
+  }
 });
 function loadTs(file) {
   const exports = {};

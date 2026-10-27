@@ -1,13 +1,18 @@
 {
   "manifest_version": 3,
   "name": "FFCS-inator - My VTOP courses",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "minimum_chrome_version": "111",
   "description": "Keep your available VTOP courses in this browser and use them in FFCS-inator.",
   "permissions": ["storage"],
   "host_permissions": ["https://vtop.vit.ac.in/vtop/*"],
-  "background": { "service_worker": "background.js" },
-  "action": { "default_popup": "popup.html", "default_title": "My VTOP courses" },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "My VTOP courses"
+  },
   "content_scripts": [
     {
       "matches": ["https://vtop.vit.ac.in/vtop/*"],
@@ -15,7 +20,12 @@
       "run_at": "document_idle"
     },
     {
-      "matches": ["https://ffcs.codechefvit.com/*", "http://localhost/*", "http://127.0.0.1/*"],
+      "matches": [
+        "https://ffcs.codechefvit.com/*",
+        "http://localhost/*",
+        "http://127.0.0.1/*",
+        "https://perrytheplatypus.codechefvit.com/*"
+      ],
       "js": ["app-bridge.js"],
       "run_at": "document_idle"
     }

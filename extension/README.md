@@ -13,6 +13,8 @@ The app changes must be running locally or deployed before the production site c
 
 This ZIP is an unpacked extension, not a Chrome Web Store listing. Mobile browsers without desktop extension support are not supported.
 
+The VTOP readiness banner and extension popup open **https://ffcs.codechefvit.com/#start**. Both the FFCS and Perry domains can access the captured catalogue.
+
 ## Automatic capture and privacy
 
 The extension detects the signed-in account/session fields and reads the course-allocation menu link from the authenticated dashboard. It fetches that view in the background to discover the account's available curriculum categories and default/current semester. It parses responses without inserting the view into the page or executing returned scripts. If a semester picker has no selection, it uses the option labelled current, otherwise the first available semester in VTOP's ordering.
@@ -34,7 +36,7 @@ A capture is a snapshot, not a live seat-count feed. To fetch again while signed
 
 ## Development and checks
 
-Run `npm run extension:package` after extension changes to regenerate `public/extensions/ffcs-vtop.zip`. The manifest permits only VTOP Vellore, the production app, and localhost/127.0.0.1 development origins. For another app origin, update both the manifest's content-script matches and `background.js` APP_ORIGINS, repackage, and reload the extension.
+Run `npm run extension:package` after extension changes to regenerate `public/extensions/ffcs-vtop.zip`. The manifest permits only VTOP Vellore, `https://perrytheplatypus.codechefvit.com`, `https://ffcs.codechefvit.com`, and localhost/127.0.0.1 development origins. For another app origin, update both the manifest's content-script matches and `background.js` APP_ORIGINS, repackage, and reload the extension.
 
 `npm run extension:test` covers storage and origin boundaries, schema validation, the DOM parser, automatic login/dashboard capture, progress and readiness banners. Set `FFCS_TEST_APP_URL` to a running app URL to include the planner UI tests for branch preservation, installation detection, progress, personal selections and deletion. DOM tests use installed Chrome/Edge or `FFCS_TEST_BROWSER` and skip if no browser is found.
 

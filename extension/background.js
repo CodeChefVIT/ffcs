@@ -3,6 +3,7 @@ importScripts('parser.js');
 const VTOP = 'https://vtop.vit.ac.in';
 const APP_ORIGINS = new Set([
   'https://ffcs.codechefvit.com',
+  'https://perrytheplatypus.codechefvit.com',
   'http://localhost',
   'http://127.0.0.1',
 ]);
