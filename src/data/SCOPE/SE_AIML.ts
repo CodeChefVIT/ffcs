@@ -1,35 +1,67 @@
 export const SE_AIML = {
-  'BCSE209L - Machine Learning': [{ slot: 'A1+TA1', venue: 'SJT601', faculty: 'AARTHY S.L' }],
-  'BCSE209P - Machine Learning Lab': [{ slot: 'L57+L58', venue: 'SJT517', faculty: 'AARTHY S.L' }],
-  'BCSE332L - Deep Learning': [
-    { slot: 'E2+TE2', venue: 'SJT601', faculty: 'LAVANYA K' },
-    { slot: 'E1+TE1', venue: 'SJT602', faculty: 'CHELLATAMILAN T' },
-    { slot: 'E1+TE1', venue: 'SJT601', faculty: 'SARAVANAKUMAR K' },
+  "BCSE209L - Machine Learning": [
+    { slot: "C1+TC1", venue: "SJT502", faculty: "DURGESH KUMAR" },
+    { slot: "C1+TC1", venue: "SJT503", faculty: "SAYAN SIKDER" },
+    { slot: "E1+TE1", venue: "SJT324", faculty: "SAYAN SIKDER" },
+    { slot: "C1+TC1", venue: "SJT324", faculty: "MANJULA R" },
+    { slot: "C1+TC1", venue: "SJT501", faculty: "AARTHY S.L" },
+    { slot: "C2+TC2", venue: "SJT501", faculty: "AARTHY S.L" },
+    { slot: "C2+TC2", venue: "SJT502", faculty: "DURGESH KUMAR" },
+    { slot: "B1+TB1", venue: "SJT308", faculty: "GAYATHRI S" },
   ],
-  'BCSE332P - Deep Learning Lab': [
-    { slot: 'L5+L6', venue: 'SJT517', faculty: 'LAVANYA K' },
-    { slot: 'L47+L48', venue: 'PRP356', faculty: 'SARAVANAKUMAR K' },
-    { slot: 'L53+L54', venue: 'SJT419', faculty: 'CHELLATAMILAN T' },
+  "BCSE209P - Machine Learning Lab": [
+    { slot: "L3+L4", venue: "SJT418", faculty: "AARTHY S.L" },
+    { slot: "L51+L52", venue: "SJT418", faculty: "DURGESH KUMAR" },
+    { slot: "L23+L24", venue: "SJT418", faculty: "DURGESH KUMAR" },
+    { slot: "L55+L56", venue: "SJT419", faculty: "SAYAN SIKDER" },
+    { slot: "L33+L34", venue: "SJT416", faculty: "AARTHY S.L" },
+    { slot: "L47+L48", venue: "SJT416", faculty: "SAYAN SIKDER" },
+    { slot: "L39+L40", venue: "SJT418", faculty: "GAYATHRI S" },
+    { slot: "L33+L34", venue: "SJT515", faculty: "MANJULA R" },
   ],
-  'BCSE417L - Machine Vision': [{ slot: 'B1+TB1', venue: 'SJT601', faculty: 'AJU D' }],
-  'BCSE417P - Machine Vision Lab': [{ slot: 'L37+L38', venue: 'SJT319', faculty: 'AJU D' }],
-  'BCSE418L - Explainable Artificial Intelligence': [
-    { slot: 'C2', venue: 'SJT601', faculty: 'ABDUL GAFFAR H' },
-    { slot: 'C1', venue: 'SJT601', faculty: 'VANI RAJASEKAR' },
-    { slot: 'C1', venue: 'SJT617', faculty: 'MANIKANDAN G' },
+  "BCSE332L - Deep Learning": [
+    { slot: "G2+TG2", venue: "SJT324", faculty: "MALATHI  M" },
+    { slot: "F1+TF1", venue: "SJT324", faculty: "MAHESWARI B" },
   ],
-  'BCSE419L - Speech and Language Processing': [
-    { slot: 'D1+TD1', venue: 'SJT602', faculty: 'DIVYA MEENA S' },
-    { slot: 'D2+TD2', venue: 'SJT601', faculty: 'DIVYA MEENA S' },
-    { slot: 'D1+TD1', venue: 'SJT601', faculty: 'SWETHA V' },
+  "BCSE332P - Deep Learning Lab": [
+    { slot: "L53+L54", venue: "SJT418", faculty: "MAHESWARI B" },
+    { slot: "L5+L6", venue: "SJT621", faculty: "MALATHI  M" },
   ],
-  'BCSE419P - Speech and Language Processing lab': [
-    { slot: 'L35+L36', venue: 'SJT319', faculty: 'SWETHA V' },
-    { slot: 'L31+L32', venue: 'PRP356', faculty: 'DIVYA MEENA S' },
-    { slot: 'L11+L12', venue: 'PRP350', faculty: 'DIVYA MEENA S' },
+  "BCSE417L - Machine Vision": [
+    { slot: "D1+TD1", venue: "SJT421", faculty: "AJU D" },
+    { slot: "D1+TD1", venue: "SJT422", faculty: "RAVITEJA BUDDALA" },
+    { slot: "D1+TD1", venue: "SJT424", faculty: "ARPITA GHOSH" },
+    { slot: "D2+TD2", venue: "SJT422", faculty: "RAVITEJA BUDDALA" },
+    { slot: "D1+TD1", venue: "SJT423", faculty: "RANJITHKUMAR S" },
+    { slot: "D2+TD2", venue: "SJT423", faculty: "RANJITHKUMAR S" },
   ],
-  'BCSE432E - Reinforcement Learning': [
-    { slot: 'F1+TF1', venue: 'SJT601', faculty: 'SAYAN SIKDER' },
-    { slot: 'L41+L42', venue: 'PRP356', faculty: 'SAYAN SIKDER' },
+  "BCSE417P - Machine Vision Lab": [
+    { slot: "L11+L12", venue: "SJT515", faculty: "RAVITEJA BUDDALA" },
+    { slot: "L37+L38", venue: "SJT418", faculty: "RANJITHKUMAR S" },
+    { slot: "L39+L40", venue: "SJT419", faculty: "RAVITEJA BUDDALA" },
+    { slot: "L13+L14", venue: "SJT418", faculty: "RANJITHKUMAR S" },
+    { slot: "L49+L50", venue: "SJT418", faculty: "AJU D" },
+    { slot: "L41+L42", venue: "SJT418", faculty: "ARPITA GHOSH" },
+  ],
+  "BCSE418L - Explainable Artificial Intelligence": [
+    { slot: "A2", venue: "SJT304", faculty: "ARUN PRASATH G" },
+  ],
+  "BCSE419L - Speech and Language Processing": [
+    { slot: "G1+TG1", venue: "SJT324", faculty: "MAHESWARI B" },
+  ],
+  "BCSE419P - Speech and Language Processing lab": [
+    { slot: "L35+L36", venue: "SJT419", faculty: "MAHESWARI B" },
+  ],
+  "BCSE432E - Reinforcement Learning": [
+    { slot: "B1+TB1", venue: "SJT421", faculty: "ARPAN GARAI" },
+    { slot: "B2+TB2", venue: "SJT421", faculty: "ARPAN GARAI" },
+    { slot: "B1+TB1", venue: "SJT422", faculty: "REYA SHARMA" },
+    { slot: "B2+TB2", venue: "SJT422", faculty: "REYA SHARMA" },
+    { slot: "B1+TB1", venue: "SJT423", faculty: "GINA GEORGE" },
+    { slot: "L47+L48", venue: "SJT515", faculty: "REYA SHARMA" },
+    { slot: "L25+L26", venue: "SJT318", faculty: "ARPAN GARAI" },
+    { slot: "L9+L10", venue: "SJT515", faculty: "REYA SHARMA" },
+    { slot: "L57+L58", venue: "SJT418", faculty: "GINA GEORGE" },
+    { slot: "L45+L46", venue: "SJT419", faculty: "ARPAN GARAI" },
   ],
 };
