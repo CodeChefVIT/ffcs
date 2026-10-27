@@ -54,6 +54,7 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
   const handleDeleteAllCourses = () => {
     onUpdate([]);
     setGlobalCourses([]);
+    setTimetableData(null);
   };
 
   const resetDragRefs = () => {
@@ -68,8 +69,9 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
       onUpdate(updatedCourses);
 
       setGlobalCourses(updatedCourses);
-      //const { result } = generateTT(updatedCourses);
-      // setTimetableData(result);
+      if (updatedCourses.length === 0) {
+        setTimetableData(null);
+      }
     }
 
     setDeletePopupOpen(false);
