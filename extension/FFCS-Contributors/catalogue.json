@@ -1,0 +1,646 @@
+{
+  "schemaVersion": 1,
+  "profiles": [
+    {
+      "folder": "MTech_SCOPE",
+      "symbol": "MTech_SCOPE",
+      "label": "MTech",
+      "files": [
+        {
+          "file": "PC_MIC.ts",
+          "symbol": "PC_MIC",
+          "category": "ProgrammeCore - MIC"
+        },
+        {
+          "file": "PE_MIC.ts",
+          "symbol": "PE_MIC",
+          "category": "ProgrammeElective - MIC"
+        },
+        {
+          "file": "UC_MIC.ts",
+          "symbol": "UC_MIC",
+          "category": "UniversityCore - MIC"
+        },
+        {
+          "file": "UE_MIC.ts",
+          "symbol": "UE_MIC",
+          "category": "UniversityElective - MIC"
+        }
+      ],
+      "indexSource": "// import { SPE } from './SpecializationElective';\r\n\r\nimport { PC_MIC } from './PC_MIC';\r\nimport { PE_MIC } from './PE_MIC';\r\nimport { UC_MIC } from './UC_MIC';\r\nimport { UE_MIC } from './UE_MIC';\r\n\r\nexport const MTech_SCOPE = {\r\n  'ProgrammeCore - MIC': PC_MIC,\r\n  'ProgrammeElective - MIC': PE_MIC,\r\n  'UniversityCore - MIC': UC_MIC,\r\n  'UniversityElective - MIC': UE_MIC,\r\n  // SpecializationElective: SPE,\r\n};\r\n"
+    },
+    {
+      "folder": "MTech_SCOPE_F",
+      "symbol": "MTech_SCOPE_F",
+      "label": "MTech ('25 Batch)",
+      "files": [
+        {
+          "file": "PFCC_MIC.ts",
+          "symbol": "PFCC_MIC",
+          "category": "Programme Foundation Core - MIC"
+        },
+        {
+          "file": "PFEC_MIC.ts",
+          "symbol": "PFEC_MIC",
+          "category": "Programme Free Elective - MIC"
+        },
+        {
+          "file": "UCC_MIC.ts",
+          "symbol": "UCC_MIC",
+          "category": "University Core - MIC"
+        },
+        {
+          "file": "OEC_MIC.ts",
+          "symbol": "OEC_MIC",
+          "category": "Open Elective - MIC"
+        }
+      ],
+      "indexSource": "// import { SPE } from './SpecializationElective';\r\n\r\nimport { PFCC_MIC } from './PFCC_MIC';\r\nimport { PFEC_MIC } from './PFEC_MIC';\r\nimport { UCC_MIC } from './UCC_MIC';\r\nimport { OEC_MIC } from './OEC_MIC';\r\n\r\nexport const MTech_SCOPE_F = {\r\n  'Programme Foundation Core - MIC': PFCC_MIC,\r\n  'Programme Free Elective - MIC': PFEC_MIC,\r\n  'University Core - MIC': UCC_MIC,\r\n  'Open Elective - MIC': OEC_MIC,\r\n  // SpecializationElective: SPE,\r\n};\r\n"
+    },
+    {
+      "folder": "MTech_SCORE",
+      "symbol": "MIS_LIST",
+      "label": "MIS ('25 Batch)",
+      "files": [],
+      "indexSource": "// import { SPE } from './SpecializationElective';\r\n\r\n// import { PC_MIC } from './PC_MIC';\r\n// import { PE_MIC } from './PE_MIC';\r\n// import { UC_MIC } from './UC_MIC';\r\n// import { UE_MIC } from './UE_MIC';\r\n\r\nexport const MIS_LIST = {\r\n  // \"ProgrammeCore - MIC\": PC_MIC,\r\n  // \"ProgrammeElective - MIC\": PE_MIC,\r\n  // \"UniversityCore - MIC\": UC_MIC,\r\n  // \"UniversityElective - MIC\": UE_MIC,\r\n  // SpecializationElective: SPE,\r\n};\r\n"
+    },
+    {
+      "folder": "SBST",
+      "symbol": "SBST_LIST",
+      "label": "SBST",
+      "files": [
+        {
+          "file": "FoundationCore.ts",
+          "symbol": "foundationCore",
+          "category": "FoundationCore"
+        },
+        {
+          "file": "DisciplineCore.ts",
+          "symbol": "disciplineCore",
+          "category": "DisciplineCore"
+        },
+        {
+          "file": "DisciplineElective.ts",
+          "symbol": "disciplineElective",
+          "category": "DisciplineElective"
+        },
+        {
+          "file": "DisciplineLinked.ts",
+          "symbol": "disciplineLinked",
+          "category": "DisciplineLinkedEngineeringSciences"
+        },
+        {
+          "file": "OpenElective.ts",
+          "symbol": "openElective",
+          "category": "OpenElective"
+        },
+        {
+          "file": "MultidisciplinaryElective.ts",
+          "symbol": "multidisciplinaryElective",
+          "category": "MultidisciplinaryElective"
+        }
+      ],
+      "indexSource": "import { foundationCore } from './FoundationCore';\r\nimport { disciplineCore } from './DisciplineCore';\r\nimport { disciplineElective } from './DisciplineElective';\r\nimport { disciplineLinked } from './DisciplineLinked';\r\nimport { openElective } from './OpenElective';\r\nimport { multidisciplinaryElective } from './MultidisciplinaryElective';\r\n\r\nexport const SBST_LIST = {\r\n  FoundationCore: foundationCore,\r\n  DisciplineCore: disciplineCore,\r\n  DisciplineElective: disciplineElective,\r\n  DisciplineLinkedEngineeringSciences: disciplineLinked,\r\n  OpenElective: openElective,\r\n  MultidisciplinaryElective: multidisciplinaryElective,\r\n};\r\n"
+    },
+    {
+      "folder": "SBST_F",
+      "symbol": "SBST_F",
+      "label": "SBST ('25 Batch)",
+      "files": [
+        {
+          "file": "UCC.ts",
+          "symbol": "UCC",
+          "category": "UniversityCoreCourses"
+        },
+        {
+          "file": "PCC.ts",
+          "symbol": "PCC",
+          "category": "ProfessionalCoreCourses"
+        }
+      ],
+      "indexSource": "import { PCC } from './PCC';\r\nimport { UCC } from './UCC';\r\n\r\nexport const SBST_F = {\r\n  UniversityCoreCourses: UCC,\r\n  ProfessionalCoreCourses: PCC,\r\n};\r\n"
+    },
+    {
+      "folder": "SCE",
+      "symbol": "SCE_LIST",
+      "label": "SCE",
+      "files": [
+        {
+          "file": "FoundationCore.ts",
+          "symbol": "CivilFoundationCore",
+          "category": "FoundationCore"
+        },
+        {
+          "file": "DisciplineCore.ts",
+          "symbol": "CivilDisciplineCore",
+          "category": "DisciplineCore"
+        },
+        {
+          "file": "DisciplineElective.ts",
+          "symbol": "CivilDisciplineElective",
+          "category": "DisciplineElective"
+        },
+        {
+          "file": "DisciplineLinked.ts",
+          "symbol": "CivilDisciplineLinked",
+          "category": "DisciplineLinkedEngineeringSciences"
+        },
+        {
+          "file": "OpenElective.ts",
+          "symbol": "CivilOpenElective",
+          "category": "OpenElective"
+        }
+      ],
+      "indexSource": "import { CivilFoundationCore } from './FoundationCore';\r\nimport { CivilDisciplineCore } from './DisciplineCore';\r\nimport { CivilDisciplineElective } from './DisciplineElective';\r\nimport { CivilDisciplineLinked } from './DisciplineLinked';\r\nimport { CivilOpenElective } from './OpenElective';\r\n\r\nexport const SCE_LIST = {\r\n  FoundationCore: CivilFoundationCore,\r\n  DisciplineCore: CivilDisciplineCore,\r\n  DisciplineElective: CivilDisciplineElective,\r\n  DisciplineLinkedEngineeringSciences: CivilDisciplineLinked,\r\n  OpenElective: CivilOpenElective,\r\n};\r\n"
+    },
+    {
+      "folder": "SCHEME",
+      "symbol": "SCHEME_LIST",
+      "label": "SCHEME",
+      "files": [
+        {
+          "file": "FoundationCore.ts",
+          "symbol": "SchemeFoundationCore",
+          "category": "FoundationCore"
+        },
+        {
+          "file": "DisciplineCore.ts",
+          "symbol": "SchemeDisciplineCore",
+          "category": "DisciplineCore"
+        },
+        {
+          "file": "DisciplineElective.ts",
+          "symbol": "SchemeDisciplineElective",
+          "category": "DisciplineElective"
+        },
+        {
+          "file": "DisciplineLinked.ts",
+          "symbol": "SchemeDisciplineLinked",
+          "category": "DisciplineLinkedEngineeringSciences"
+        },
+        {
+          "file": "OpenElective.ts",
+          "symbol": "SchemeOpenElective",
+          "category": "OpenElective"
+        }
+      ],
+      "indexSource": "import { SchemeFoundationCore } from './FoundationCore';\r\nimport { SchemeDisciplineCore } from './DisciplineCore';\r\nimport { SchemeDisciplineElective } from './DisciplineElective';\r\nimport { SchemeDisciplineLinked } from './DisciplineLinked';\r\nimport { SchemeOpenElective } from './OpenElective';\r\n\r\nexport const SCHEME_LIST = {\r\n  FoundationCore: SchemeFoundationCore,\r\n  DisciplineCore: SchemeDisciplineCore,\r\n  DisciplineElective: SchemeDisciplineElective,\r\n  DisciplineLinkedEngineeringSciences: SchemeDisciplineLinked,\r\n  OpenElective: SchemeOpenElective,\r\n};\r\n"
+    },
+    {
+      "folder": "SCOPE",
+      "symbol": "SCOPE_LIST",
+      "label": "SCOPE",
+      "files": [
+        {
+          "file": "FoundationCore.ts",
+          "symbol": "ScopeFoundationCore",
+          "category": "FoundationCore"
+        },
+        {
+          "file": "DisciplineLinked.ts",
+          "symbol": "ScopeDisciplineLinked",
+          "category": "DisciplineLinkedEngineeringSciences"
+        },
+        {
+          "file": "DisciplineElective.ts",
+          "symbol": "ScopeDisciplineElective",
+          "category": "DisciplineElective"
+        },
+        {
+          "file": "DiscliplineCore.ts",
+          "symbol": "ScopeDisciplineCore",
+          "category": "DisciplineCore"
+        },
+        {
+          "file": "OpenElective.ts",
+          "symbol": "ScopeOpenElective",
+          "category": "OpenElective"
+        },
+        {
+          "file": "SE_IS.ts",
+          "symbol": "SE_IS",
+          "category": "Specialization Elective - BCI"
+        },
+        {
+          "file": "SE_AIML.ts",
+          "symbol": "SE_AIML",
+          "category": "Specialization Elective - BAI"
+        },
+        {
+          "file": "SE_DS.ts",
+          "symbol": "SE_DS",
+          "category": "Specialization Elective - BDS"
+        },
+        {
+          "file": "SE_IOT.ts",
+          "symbol": "SE_IOT",
+          "category": "Specialization Elective - BCT"
+        },
+        {
+          "file": "SE_Blockchain.ts",
+          "symbol": "SE_BKT",
+          "category": "Specialization Elective - BKT"
+        },
+        {
+          "file": "SE_BCB.ts",
+          "symbol": "SE_BCB",
+          "category": "Specialization Elective - BCB"
+        }
+      ],
+      "indexSource": "import { ScopeDisciplineElective } from './DisciplineElective';\r\nimport { ScopeDisciplineLinked } from './DisciplineLinked';\r\nimport { ScopeDisciplineCore } from './DiscliplineCore';\r\nimport { ScopeFoundationCore } from './FoundationCore';\r\nimport { ScopeOpenElective } from './OpenElective';\r\nimport { SE_AIML } from './SE_AIML';\r\nimport { SE_BKT } from './SE_Blockchain';\r\nimport { SE_DS } from './SE_DS';\r\nimport { SE_IOT } from './SE_IOT';\r\nimport { SE_IS } from './SE_IS';\r\nimport { SE_BCB } from './SE_BCB';\r\n\r\nexport const SCOPE_LIST = {\r\n  FoundationCore: ScopeFoundationCore,\r\n  DisciplineLinkedEngineeringSciences: ScopeDisciplineLinked,\r\n  DisciplineElective: ScopeDisciplineElective,\r\n  DisciplineCore: ScopeDisciplineCore,\r\n  OpenElective: ScopeOpenElective,\r\n  'Specialization Elective - BCI': SE_IS,\r\n  'Specialization Elective - BAI': SE_AIML,\r\n  'Specialization Elective - BDS': SE_DS,\r\n  'Specialization Elective - BCT': SE_IOT,\r\n  'Specialization Elective - BKT': SE_BKT,\r\n  'Specialization Elective - BCB': SE_BCB,\r\n};\r\n"
+    },
+    {
+      "folder": "SCOPE_F",
+      "symbol": "SCOPE_F",
+      "label": "SCOPE ('25 Batch)",
+      "files": [
+        {
+          "file": "UCC.ts",
+          "symbol": "UCC",
+          "category": "UniversityCoreCourses"
+        },
+        {
+          "file": "PCC.ts",
+          "symbol": "PCC",
+          "category": "ProfessionalCoreCourses"
+        },
+        {
+          "file": "FCON.ts",
+          "symbol": "CON",
+          "category": "ConcentrationCourses"
+        },
+        {
+          "file": "OEC.ts",
+          "symbol": "OEC",
+          "category": "OpenElectiveCourses"
+        }
+      ],
+      "indexSource": "import { PCC } from './PCC';\nimport { UCC } from './UCC';\nimport { CON } from './FCON';\nimport { OEC } from './OEC';\n\nexport const SCOPE_F = {\n  UniversityCoreCourses: UCC,\n  ProfessionalCoreCourses: PCC,\n  ConcentrationCourses: CON,\n  OpenElectiveCourses: OEC,\n};\n"
+    },
+    {
+      "folder": "SCORE",
+      "symbol": "SCORE_LIST",
+      "label": "SCORE",
+      "files": [
+        {
+          "file": "FoundationCore.ts",
+          "symbol": "FoundationCore",
+          "category": "FoundationCore"
+        },
+        {
+          "file": "DiscipledLinked.ts",
+          "symbol": "ScoreDisciplineLinked",
+          "category": "DisciplineLinkedEngineeringSciences"
+        },
+        {
+          "file": "DisciplineCore.ts",
+          "symbol": "ScoreDisciplineCore",
+          "category": "DisciplineCore"
+        },
+        {
+          "file": "DisciplineElective.ts",
+          "symbol": "ScoreDisciplinedElective",
+          "category": "DisciplineElective"
+        },
+        {
+          "file": "OpenElective.ts",
+          "symbol": "ScoreOpenElective",
+          "category": "OpenElective"
+        },
+        {
+          "file": "FC_SPEC.ts",
+          "symbol": "FC_SPEC",
+          "category": "FC (BYB, BDE)"
+        },
+        {
+          "file": "DC_SPEC.ts",
+          "symbol": "DC_SPEC",
+          "category": "DC (BYB, BDE)"
+        },
+        {
+          "file": "DLES_SPEC.ts",
+          "symbol": "DLES_SPEC",
+          "category": "DLES (BYB, BDE)"
+        },
+        {
+          "file": "OE_SPEC.ts",
+          "symbol": "OE_SPEC",
+          "category": "OE (BYB, BDE)"
+        },
+        {
+          "file": "SPE_BYB.ts",
+          "symbol": "SPE_BYB",
+          "category": "SPE (BYB)"
+        }
+      ],
+      "indexSource": "import { FoundationCore } from './FoundationCore';\nimport { ScoreDisciplineLinked } from './DiscipledLinked';\nimport { ScoreDisciplineCore } from './DisciplineCore';\nimport { ScoreDisciplinedElective } from './DisciplineElective';\nimport { ScoreOpenElective } from './OpenElective';\nimport { FC_SPEC } from './FC_SPEC';\nimport { DC_SPEC } from './DC_SPEC';\nimport { DLES_SPEC } from './DLES_SPEC';\nimport { OE_SPEC } from './OE_SPEC';\nimport { SPE_BYB } from './SPE_BYB';\n\nexport const SCORE_LIST = {\n  FoundationCore: FoundationCore,\n  DisciplineLinkedEngineeringSciences: ScoreDisciplineLinked,\n  DisciplineCore: ScoreDisciplineCore,\n  DisciplineElective: ScoreDisciplinedElective,\n  OpenElective: ScoreOpenElective,\n  'FC (BYB, BDE)': FC_SPEC,\n  'DC (BYB, BDE)': DC_SPEC,\n  'DLES (BYB, BDE)': DLES_SPEC,\n  'OE (BYB, BDE)': OE_SPEC,\n  'SPE (BYB)': SPE_BYB,\n};\n"
+    },
+    {
+      "folder": "SCORE_F",
+      "symbol": "SCORE_F",
+      "label": "SCORE ('25 Batch)",
+      "files": [
+        {
+          "file": "UCC.ts",
+          "symbol": "UCC",
+          "category": "UniversityCoreCourses"
+        },
+        {
+          "file": "PCC.ts",
+          "symbol": "PCC",
+          "category": "ProfessionalCoreCourses"
+        },
+        {
+          "file": "OEC.ts",
+          "symbol": "OEC",
+          "category": "OpenElectiveCourses"
+        },
+        {
+          "file": "PCC_BYB.ts",
+          "symbol": "PCC_BYB",
+          "category": "ProfessionalCoreCoursesCSE"
+        },
+        {
+          "file": "UCC_BDE.ts",
+          "symbol": "UCC_BDE",
+          "category": "UniversityCoreCoursesBDE"
+        },
+        {
+          "file": "UCC_BYB.ts",
+          "symbol": "UCC_BYB",
+          "category": "UniversityCoreCoursesBYB"
+        }
+      ],
+      "indexSource": "import { PCC } from './PCC';\r\nimport { UCC } from './UCC';\r\nimport { OEC } from './OEC';\r\nimport { PCC_BYB } from './PCC_BYB';\r\nimport { UCC_BDE } from './UCC_BDE';\r\nimport { UCC_BYB } from './UCC_BYB';\r\n\r\nexport const SCORE_F = {\r\n  UniversityCoreCourses: UCC,\r\n  ProfessionalCoreCourses: PCC,\r\n  OpenElectiveCourses: OEC,\r\n  ProfessionalCoreCoursesCSE: PCC_BYB,\r\n  UniversityCoreCoursesBDE: UCC_BDE,\r\n  UniversityCoreCoursesBYB: UCC_BYB,\r\n};\r\n"
+    },
+    {
+      "folder": "SELECT",
+      "symbol": "SELECT_LIST",
+      "label": "SELECT",
+      "files": [
+        {
+          "file": "FoundationCore.ts",
+          "symbol": "SelectFoundationCore",
+          "category": "FoundationCore"
+        },
+        {
+          "file": "DiscliplineCore.ts",
+          "symbol": "SelectDisciplineCore",
+          "category": "DisciplineCore"
+        },
+        {
+          "file": "DiscliplineElective.ts",
+          "symbol": "SelectDisciplineElective",
+          "category": "DisciplineElective"
+        },
+        {
+          "file": "OpenElective.ts",
+          "symbol": "SelectOpenElective",
+          "category": "OpenElective"
+        }
+      ],
+      "indexSource": "import { SelectFoundationCore } from './FoundationCore';\n// import { SelectDisciplineLinked } from './DisciplineLinked';\nimport { SelectDisciplineCore } from './DiscliplineCore';\nimport { SelectDisciplineElective } from './DiscliplineElective';\nimport { SelectOpenElective } from './OpenElective';\n\nexport const SELECT_LIST = {\n  FoundationCore: SelectFoundationCore,\n  // DisciplineLinkedEngineeringSciences: SelectDisciplineLinked,\n  DisciplineCore: SelectDisciplineCore,\n  DisciplineElective: SelectDisciplineElective,\n  OpenElective: SelectOpenElective,\n};\n"
+    },
+    {
+      "folder": "SELECT_F",
+      "symbol": "SELECT_F",
+      "label": "SELECT ('25 Batch)",
+      "files": [
+        {
+          "file": "UCC.ts",
+          "symbol": "UCC",
+          "category": "UniversityCoreCourses"
+        },
+        {
+          "file": "PCC.ts",
+          "symbol": "PCC",
+          "category": "ProfessionalCoreCourses"
+        },
+        {
+          "file": "FCON.ts",
+          "symbol": "CON",
+          "category": "ConcentrationCourses"
+        },
+        {
+          "file": "OE.ts",
+          "symbol": "OE",
+          "category": "OpenElectiveCourses"
+        },
+        {
+          "file": "UCC_ECS.ts",
+          "symbol": "UCC_ECS",
+          "category": "UCC_ECS"
+        },
+        {
+          "file": "PCC_ECS.ts",
+          "symbol": "PCC_ECS",
+          "category": "PCC_ECS"
+        }
+      ],
+      "indexSource": "import { PCC } from './PCC';\r\nimport { UCC } from './UCC';\r\nimport { CON } from './FCON';\r\nimport { OE } from './OE';\r\nimport { PCC_ECS } from './PCC_ECS';\r\nimport { UCC_ECS } from './UCC_ECS';\r\n\r\n\r\nexport const SELECT_F = {\r\n  UniversityCoreCourses: UCC,\r\n  ProfessionalCoreCourses: PCC,\r\n  ConcentrationCourses: CON,\r\n  OpenElectiveCourses: OE,\r\n  'UCC_ECS' : UCC_ECS,\r\n  'PCC_ECS' : PCC_ECS,\r\n};\r\n"
+    },
+    {
+      "folder": "SENSE",
+      "symbol": "SENSE_LIST",
+      "label": "SENSE",
+      "files": [
+        {
+          "file": "FoundationCore.ts",
+          "symbol": "FoundationCore",
+          "category": "FoundationCore"
+        },
+        {
+          "file": "DisciplineCore.ts",
+          "symbol": "SenseDisciplineCore",
+          "category": "DisciplineCore"
+        },
+        {
+          "file": "DisciplineLinked.ts",
+          "symbol": "SenseDisciplineLinked",
+          "category": "DisciplineLinkedEngineeringSciences"
+        },
+        {
+          "file": "DisciplineElective.ts",
+          "symbol": "SenseDisciplineElective",
+          "category": "DisciplineElective"
+        },
+        {
+          "file": "OpenElective.ts",
+          "symbol": "SenseOpenElective",
+          "category": "openElective"
+        },
+        {
+          "file": "SE_BML.ts",
+          "symbol": "SE_BML",
+          "category": "SpecializationElective - BML"
+        },
+        {
+          "file": "SE_BVD.ts",
+          "symbol": "SE_BVD",
+          "category": "SpecializationElective - BVD"
+        },
+        {
+          "file": "SE_BEC.ts",
+          "symbol": "SE_BEC",
+          "category": "DisciplineElective - BEC"
+        }
+      ],
+      "indexSource": "import { FoundationCore } from './FoundationCore';\r\nimport { SenseDisciplineCore } from './DisciplineCore';\r\nimport { SenseDisciplineLinked } from './DisciplineLinked';\r\nimport { SenseDisciplineElective } from './DisciplineElective';\r\nimport { SenseOpenElective } from './OpenElective';\r\nimport { SE_BVD } from './SE_BVD';\r\nimport { SE_BML } from './SE_BML';\r\nimport { SE_BEC } from './SE_BEC';\r\n\r\nexport const SENSE_LIST = {\r\n  FoundationCore: FoundationCore,\r\n  DisciplineCore: SenseDisciplineCore,\r\n  DisciplineLinkedEngineeringSciences: SenseDisciplineLinked,\r\n  DisciplineElective: SenseDisciplineElective,\r\n  openElective: SenseOpenElective,\r\n  'SpecializationElective - BML': SE_BML,\r\n  'SpecializationElective - BVD': SE_BVD,\r\n  'DisciplineElective - BEC': SE_BEC,\r\n};\r\n"
+    },
+    {
+      "folder": "SENSE_F",
+      "symbol": "SENSE_F",
+      "label": "SENSE ('25 Batch)",
+      "files": [
+        {
+          "file": "UCC.ts",
+          "symbol": "UCC",
+          "category": "UniversityCoreCourses"
+        },
+        {
+          "file": "PCC.ts",
+          "symbol": "PCC",
+          "category": "ProfessionalCoreCourses"
+        },
+        {
+          "file": "OEC.ts",
+          "symbol": "OEC",
+          "category": "OpenElectiveCourses"
+        }
+      ],
+      "indexSource": "import { OEC } from './OEC';\nimport { PCC } from './PCC';\nimport { UCC } from './UCC';\n\nexport const SENSE_F = {\n  UniversityCoreCourses: UCC,\n  ProfessionalCoreCourses: PCC,\n  OpenElectiveCourses: OEC,\n};\n"
+    },
+    {
+      "folder": "SHINE",
+      "symbol": "SHINE_LIST",
+      "label": "SHINE",
+      "files": [
+        {
+          "file": "FC.ts",
+          "symbol": "FC",
+          "category": "FoundationCore"
+        },
+        {
+          "file": "DC.ts",
+          "symbol": "DC",
+          "category": "DisciplineCore"
+        },
+        {
+          "file": "DE.ts",
+          "symbol": "DE",
+          "category": "DisciplineElective"
+        },
+        {
+          "file": "OE.ts",
+          "symbol": "OE",
+          "category": "OpenElective"
+        },
+        {
+          "file": "NGCR.ts",
+          "symbol": "NGCR",
+          "category": "NGCR"
+        }
+      ],
+      "indexSource": "import { DC } from './DC';\nimport { DE } from './DE';\nimport { FC } from './FC';\nimport { NGCR } from './NGCR';\nimport { OE } from './OE';\n\nexport const SHINE_LIST = {\n  FoundationCore: FC,\n  DisciplineCore: DC,\n  DisciplineElective: DE,\n  OpenElective: OE,\n  NGCR: NGCR,\n};\n"
+    },
+    {
+      "folder": "SHINE_F",
+      "symbol": "SHINE_F",
+      "label": "SHINE ('25 Batch)",
+      "files": [
+        {
+          "file": "UCC.ts",
+          "symbol": "UCC",
+          "category": "UniversityCoreCourses"
+        },
+        {
+          "file": "PCC.ts",
+          "symbol": "PCC",
+          "category": "ProfessionalCoreCourses"
+        },
+        {
+          "file": "OEC.ts",
+          "symbol": "OEC",
+          "category": "OpenElectiveCourses"
+        }
+      ],
+      "indexSource": "import { PCC } from './PCC';\nimport { UCC } from './UCC';\nimport { OEC } from './OEC';\n\nexport const SHINE_F = {\n  UniversityCoreCourses: UCC,\n  ProfessionalCoreCourses: PCC,\n  OpenElectiveCourses: OEC,\n};\n"
+    },
+    {
+      "folder": "SMEC",
+      "symbol": "SMEC_LIST",
+      "label": "SMEC",
+      "files": [
+        {
+          "file": "FoundationCore.ts",
+          "symbol": "SmecFoundationCore",
+          "category": "FoundationCore"
+        },
+        {
+          "file": "DisciplineCore.ts",
+          "symbol": "SmecDisciplineCore",
+          "category": "DisciplineCore"
+        },
+        {
+          "file": "DisciplineElective.ts",
+          "symbol": "SmecDisciplineElective",
+          "category": "DisciplineElective"
+        },
+        {
+          "file": "DisciplineLinked.ts",
+          "symbol": "SmecDisciplineELinked",
+          "category": "DisciplineLinkedEngineeringSciences"
+        },
+        {
+          "file": "OpenElective.ts",
+          "symbol": "SmecOpenElective",
+          "category": "OpenElective"
+        },
+        {
+          "file": "SE_BMM.ts",
+          "symbol": "SE_BMM",
+          "category": "SpecializationElective - BMM"
+        },
+        {
+          "file": "SE_BMA.ts",
+          "symbol": "SE_BMA",
+          "category": "SpecializationElective - BMA"
+        },
+        {
+          "file": "SE_EV.ts",
+          "symbol": "SE_BMV",
+          "category": "SpecializationElective - BMV"
+        }
+      ],
+      "indexSource": "import { SmecDisciplineCore } from './DisciplineCore';\nimport { SmecDisciplineElective } from './DisciplineElective';\nimport { SmecDisciplineELinked } from './DisciplineLinked';\nimport { SmecFoundationCore } from './FoundationCore';\nimport { SmecOpenElective } from './OpenElective';\nimport { SE_BMM } from './SE_BMM';\nimport { SE_BMA } from './SE_BMA';\nimport { SE_BMV } from './SE_EV';\n\nexport const SMEC_LIST = {\n  FoundationCore: SmecFoundationCore,\n  DisciplineCore: SmecDisciplineCore,\n  DisciplineElective: SmecDisciplineElective,\n  DisciplineLinkedEngineeringSciences: SmecDisciplineELinked,\n  OpenElective: SmecOpenElective,\n  'SpecializationElective - BMM': SE_BMM,\n  'SpecializationElective - BMA': SE_BMA,\n  'SpecializationElective - BMV': SE_BMV,\n};\n"
+    },
+    {
+      "folder": "SMEC_F",
+      "symbol": "SMEC_F",
+      "label": "SMEC ('25 Batch)",
+      "files": [
+        {
+          "file": "UCC.ts",
+          "symbol": "UCC",
+          "category": "UniversityCoreCourses"
+        },
+        {
+          "file": "PCC.ts",
+          "symbol": "PCC",
+          "category": "ProfessionalCoreCourses"
+        },
+        {
+          "file": "OEC.ts",
+          "symbol": "OEC",
+          "category": "OpenElectiveCourses"
+        },
+        {
+          "file": "FCON.ts",
+          "symbol": "CON",
+          "category": "ConcentrationCourses"
+        }
+      ],
+      "indexSource": "import { CON } from './FCON';\nimport { OEC } from './OEC';\nimport { PCC } from './PCC';\nimport { UCC } from './UCC';\n\nexport const SMEC_F = {\n  UniversityCoreCourses: UCC,\n  ProfessionalCoreCourses: PCC,\n  OpenElectiveCourses: OEC,\n  ConcentrationCourses: CON,\n};\n"
+    }
+  ]
+}

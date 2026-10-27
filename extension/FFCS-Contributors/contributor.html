@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FFCS Contributors</title>
+    <link rel="stylesheet" href="contributor.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <span class="badge">CONTRIBUTOR TOOL</span>
+        <h1>FFCS Contributors</h1>
+        <p>VTOP courses, ready for your data folder.</p>
+      </header>
+      <div id="error" role="alert" hidden></div>
+      <section aria-labelledby="session-title">
+        <div class="heading">
+          <span class="step">1</span>
+          <div>
+            <h2 id="session-title">Connect your VTOP session</h2>
+            <p>Log in normally. This tool reads the course-allocation view in the background.</p>
+          </div>
+        </div>
+        <div class="row">
+          <label class="grow"
+            >VTOP tab<select id="vtop-tab">
+              <option value="">Looking for VTOP tabs...</option>
+            </select></label
+          ><button id="reload-tabs" class="light">Refresh tabs</button
+          ><button id="connect">Connect to VTOP</button
+          ><a
+            class="button light"
+            href="https://vtop.vit.ac.in/vtop/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Open VTOP</a
+          >
+        </div>
+        <p id="session-status" role="status">
+          Refresh VTOP after installing this extension, then connect.
+        </p>
+      </section>
+      <section aria-labelledby="folder-title">
+        <div class="heading">
+          <span class="step">2</span>
+          <div>
+            <h2 id="folder-title">Match the repository folder</h2>
+            <p>
+              Choose the matching branch/batch. This selects the output folder; it does not change
+              which account or courses VTOP provides.
+            </p>
+          </div>
+        </div>
+        <label
+          >Destination folder<select id="folder">
+            <option value="">Choose a branch / batch...</option>
+          </select></label
+        >
+        <p class="hint">
+          Category names, filenames and exported constants come from this repository's existing
+          <code>src/data</code> indexes.
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Export</th>
+                <th>VTOP category</th>
+                <th>Repository file</th>
+              </tr>
+            </thead>
+            <tbody id="mappings">
+              <tr>
+                <td colspan="3">Connect to VTOP to see available categories.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <label class="check"
+          ><input id="include-index" type="checkbox" checked /> Include the existing
+          <code>index.ts</code> unchanged</label
+        >
+        <p class="hint">
+          The ZIP is a drop-in update for this repository. Only selected category files are
+          refreshed; other files already in your data folder stay in place.
+        </p>
+        <ul id="preview" aria-label="Files to export"></ul>
+      </section>
+      <section class="export" aria-labelledby="export-title">
+        <div class="heading">
+          <span class="step">3</span>
+          <div>
+            <h2 id="export-title">Fetch &amp; download</h2>
+            <p>
+              Course keys and rows keep the app's format:
+              <code>'CODE - Title': [{ slot, venue, faculty }]</code>.
+            </p>
+          </div>
+        </div>
+        <p id="job-status" role="status" aria-live="polite">
+          Choose a folder and category mappings to start.
+        </p>
+        <progress id="progress" max="1" hidden aria-label="VTOP export progress"></progress>
+        <div class="row">
+          <button id="start" disabled>Fetch &amp; download ZIP</button
+          ><button id="cancel" class="light" hidden>Cancel capture</button
+          ><button id="download" class="yellow" hidden>Download ZIP again</button
+          ><button id="clear" class="light">Clear captured data</button>
+        </div>
+      </section>
+      <footer>
+        Standalone extension. Only the selected signed-in account's available courses are read. No
+        password, cookie, CSRF token or raw registration ID is stored or included in the ZIP.
+      </footer>
+    </main>
+    <script src="exporter.js"></script>
+    <script src="zip.js"></script>
+    <script src="contributor.js"></script>
+  </body>
+</html>

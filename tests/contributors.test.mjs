@@ -1,0 +1,660 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import os from 'node:os';
+import vm from 'node:vm';
+import http from 'node:http';
+import { spawn } from 'node:child_process';
+import { webcrypto } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+import ts from 'typescript';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const directory = path.join(root, 'public', 'extentions', 'FFCS-Contributors');
+const read = file => fs.readFileSync(path.join(directory, file), 'utf8');
+const catalogue = JSON.parse(read('catalogue.json'));
+const profile = folder => catalogue.profiles.find(item => item.folder === folder);
+const serial = value => JSON.parse(JSON.stringify(value));
+const pure = vm.createContext({ TextEncoder, Uint8Array, DataView });
+vm.runInContext(read('exporter.js'), pure);
+vm.runInContext(read('zip.js'), pure);
+const exporter = pure.FFCSContributorExport;
+const zip = pure.FFCSZip;
+const row = { slot: 'B1+TB1', venue: 'SJT522', faculty: "O'Brien \\ Faculty\nதமிழ்" };
+const groups = {
+  UCC: {
+    "BCSE202L - Compiler's Design": [row],
+    'BACSE291 - Project': [{ slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' }],
+  },
+  FCON: {},
+};
+
+function unzip(buffer) {
+  const bytes = Buffer.from(buffer),
+    result = new Map();
+  let offset = 0;
+  while (bytes.readUInt32LE(offset) === 0x04034b50) {
+    assert.equal(bytes.readUInt16LE(offset + 8), 0);
+    assert.equal(bytes.readUInt16LE(offset + 6) & 0x0800, 0x0800);
+    const size = bytes.readUInt32LE(offset + 18),
+      nameLength = bytes.readUInt16LE(offset + 26),
+      extra = bytes.readUInt16LE(offset + 28);
+    const name = bytes.subarray(offset + 30, offset + 30 + nameLength).toString('utf8');
+    const begin = offset + 30 + nameLength + extra,
+      data = bytes.subarray(begin, begin + size);
+    assert.equal(zip.crc32(new Uint8Array(data)), bytes.readUInt32LE(offset + 14));
+    result.set(name, data);
+    offset = begin + size;
+  }
+  assert.equal(bytes.readUInt32LE(offset), 0x02014b50);
+  assert.equal(bytes.readUInt32LE(bytes.length - 22), 0x06054b50);
+  assert.equal(bytes.readUInt16LE(bytes.length - 12), result.size);
+  return result;
+}
+
+test('repository catalogue keeps every configured filename, export and original index', () => {
+  const folders = fs
+    .readdirSync(path.join(root, 'src/data'), { withFileTypes: true })
+    .filter(
+      item =>
+        item.isDirectory() && fs.existsSync(path.join(root, 'src/data', item.name, 'index.ts'))
+    );
+  assert.equal(catalogue.profiles.length, folders.length);
+  for (const item of catalogue.profiles) {
+    assert.equal(
+      item.indexSource,
+      fs.readFileSync(path.join(root, 'src/data', item.folder, 'index.ts'), 'utf8')
+    );
+    for (const file of item.files)
+      assert.ok(
+        fs
+          .readFileSync(path.join(root, 'src/data', item.folder, file.file), 'utf8')
+          .includes(`export const ${file.symbol}`)
+      );
+  }
+  assert.equal(profile('SCOPE_F').files.find(item => item.file === 'FCON.ts').symbol, 'CON');
+  assert.equal(
+    profile('SELECT').files.find(item => item.category === 'DisciplineCore').file,
+    'DiscliplineCore.ts'
+  );
+  assert.equal(profile('MTech_SCORE').files.length, 0);
+  assert.equal(
+    exporter.suggestFile(profile('SCOPE_F'), { code: 'FCON', label: 'Concentration' }),
+    'FCON.ts'
+  );
+  assert.equal(
+    exporter.suggestFile(profile('SELECT_F'), { code: 'OEC', label: 'Open elective' }),
+    'OE.ts'
+  );
+  assert.equal(
+    exporter.suggestFile(profile('SCOPE'), { code: 'SPE', label: 'Specialization elective' }),
+    ''
+  );
+});
+
+test('course ZIP contains compilable repository exports, escaped values and unchanged index', () => {
+  const files = exporter.buildFiles(
+    profile('SCOPE_F'),
+    [
+      { code: 'UCC', file: 'UCC.ts' },
+      { code: 'FCON', file: 'FCON.ts' },
+    ],
+    groups
+  );
+  const archive = unzip(zip.createZip(files));
+  assert.deepEqual(
+    [...archive.keys()],
+    ['src/data/SCOPE_F/UCC.ts', 'src/data/SCOPE_F/FCON.ts', 'src/data/SCOPE_F/index.ts']
+  );
+  for (const [name, expected, symbol] of [
+    ['UCC.ts', groups.UCC, 'UCC'],
+    ['FCON.ts', {}, 'CON'],
+  ]) {
+    const code = archive.get(`src/data/SCOPE_F/${name}`).toString('utf8');
+    const compiled = ts.transpileModule(code, {
+      compilerOptions: { module: ts.ModuleKind.CommonJS },
+      reportDiagnostics: true,
+    });
+    assert.deepEqual(compiled.diagnostics, []);
+    const exports = {};
+    vm.runInNewContext(compiled.outputText, { exports });
+    assert.deepEqual(serial(exports[symbol]), expected);
+  }
+  assert.deepEqual(
+    archive.get('src/data/SCOPE_F/index.ts'),
+    fs.readFileSync(path.join(root, 'src/data/SCOPE_F/index.ts'))
+  );
+  const archiveUtf8 = unzip(zip.createZip([{ name: 'தமிழ்/courses.ts', text: 'தமிழ்' }]));
+  assert.equal(archiveUtf8.get('தமிழ்/courses.ts').toString('utf8'), 'தமிழ்');
+  assert.equal(zip.crc32(new TextEncoder().encode('123456789')), 0xcbf43926);
+  assert.throws(() => zip.createZip([{ name: '../outside.ts', text: '' }]));
+});
+
+test('export rejects unmatched/duplicate files and strips fields outside course rows', () => {
+  assert.throws(
+    () =>
+      exporter.buildFiles(
+        profile('SCOPE_F'),
+        [
+          { code: 'UCC', file: 'UCC.ts' },
+          { code: 'FCON', file: 'UCC.ts' },
+        ],
+        groups
+      ),
+    /different/
+  );
+  assert.throws(() =>
+    exporter.buildFiles(profile('SCOPE_F'), [{ code: 'UCC', file: '../outside.ts' }], groups)
+  );
+  assert.throws(
+    () => exporter.buildFiles(profile('SCOPE_F'), [{ code: 'PCC', file: 'PCC.ts' }], groups),
+    /Missing/
+  );
+  assert.throws(() =>
+    exporter.serializeGroup('UCC', { 'BCSE202L - Test': [{ ...row, slot: 'garbage' }] })
+  );
+  const source = exporter.serializeGroup('UCC', {
+    'BCSE202L - Test': [{ ...row, csrf: 'do-not-export' }],
+  });
+  assert.ok(!source.includes('do-not-export'));
+});
+
+test('extension package is self-contained and grants VTOP-only site access', () => {
+  const manifest = JSON.parse(read('manifest.json'));
+  assert.deepEqual(manifest.permissions, ['storage', 'downloads']);
+  assert.deepEqual(manifest.host_permissions, ['https://vtop.vit.ac.in/vtop/*']);
+  assert.equal(manifest.content_scripts.length, 1);
+  const archive = unzip(fs.readFileSync(path.join(directory, 'FFCS-Contributors.zip')));
+  assert.ok(archive.has('manifest.json'));
+  assert.ok(archive.has('contributor.html'));
+  assert.ok(!archive.has('app-bridge.js'));
+  for (const [name, bytes] of archive)
+    assert.deepEqual(bytes, fs.readFileSync(path.join(directory, name)));
+});
+
+function worker(
+  sendToVtop = async (_id, message) =>
+    message.type === 'ADMIN_INSPECT'
+      ? {
+          ok: true,
+          contextKey: 'a'.repeat(64),
+          term: 'Current term',
+          categories: [
+            { code: 'UCC', label: 'University Core' },
+            { code: 'FCON', label: 'Concentration' },
+          ],
+        }
+      : { ok: true }
+) {
+  const local = {},
+    listeners = {},
+    opened = [];
+  let receiver;
+  const sandbox = vm.createContext({
+    URL,
+    crypto: webcrypto,
+    console,
+    fetch: async () => ({ json: async () => catalogue }),
+    chrome: {
+      runtime: {
+        id: 'contributors-id',
+        getURL: file => `chrome-extension://contributors-id/${file}`,
+        onMessage: {
+          addListener: fn => {
+            receiver = fn;
+          },
+        },
+        onInstalled: {
+          addListener: fn => {
+            listeners.install = fn;
+          },
+        },
+      },
+      storage: {
+        local: {
+          setAccessLevel: async () => {},
+          get: async keys =>
+            Object.fromEntries((Array.isArray(keys) ? keys : [keys]).map(key => [key, local[key]])),
+          set: async values => Object.assign(local, serial(values)),
+          remove: async keys =>
+            (Array.isArray(keys) ? keys : [keys]).forEach(key => delete local[key]),
+        },
+      },
+      tabs: {
+        get: async id => ({ id, url: 'https://vtop.vit.ac.in/vtop/content' }),
+        query: async () => [{ id: 7, title: 'VTOP', lastAccessed: 1 }],
+        sendMessage: sendToVtop,
+        create: async data => {
+          opened.push(data.url);
+        },
+        onRemoved: {
+          addListener: fn => {
+            listeners.removed = fn;
+          },
+        },
+      },
+      action: {
+        onClicked: {
+          addListener: fn => {
+            listeners.action = fn;
+          },
+        },
+      },
+    },
+    importScripts: name => vm.runInContext(read(name), sandbox),
+  });
+  vm.runInContext(read('background.js'), sandbox);
+  const dashboard = {
+    id: 'contributors-id',
+    url: 'chrome-extension://contributors-id/contributor.html',
+    frameId: 0,
+  };
+  const vtop = {
+    id: 'contributors-id',
+    url: 'https://vtop.vit.ac.in/vtop/content',
+    frameId: 0,
+    tab: { id: 7 },
+  };
+  const send = (type, data = {}, sender = dashboard) =>
+    new Promise(resolve => receiver({ type, ...data }, sender, value => resolve(serial(value))));
+  return { local, listeners, opened, send, dashboard, vtop };
+}
+
+test('only the contributor dashboard can start exports or read downloaded file contents', async () => {
+  const w = worker();
+  for (const sender of [
+    { ...w.dashboard, id: 'another-extension' },
+    { ...w.dashboard, frameId: 1 },
+    { ...w.dashboard, url: 'https://ffcs.codechefvit.com/' },
+    w.vtop,
+  ])
+    assert.equal((await w.send('ADMIN_CONFIG', {}, sender)).ok, false);
+  w.listeners.action();
+  assert.deepEqual(w.opened, ['chrome-extension://contributors-id/contributor.html']);
+  await w.send('ADMIN_INSPECT_TAB', { tabId: 7 });
+  assert.equal(
+    (
+      await w.send('ADMIN_START', {
+        tabId: 7,
+        folder: 'SCOPE_F',
+        mappings: [{ code: 'OTHER', file: 'UCC.ts' }],
+      })
+    ).ok,
+    false
+  );
+  const started = await w.send('ADMIN_START', {
+    tabId: 7,
+    folder: 'SCOPE_F',
+    mappings: [{ code: 'UCC', file: 'UCC.ts' }],
+    includeIndex: true,
+  });
+  assert.equal(started.ok, true);
+  assert.equal(
+    (
+      await w.send(
+        'ADMIN_COMPLETE',
+        { jobId: started.job.id, groups: { UCC: groups.UCC } },
+        { ...w.vtop, tab: { id: 8 } }
+      )
+    ).ok,
+    false
+  );
+  assert.equal(
+    (await w.send('ADMIN_COMPLETE', { jobId: started.job.id, groups: { UCC: groups.UCC } }, w.vtop))
+      .ok,
+    true
+  );
+  assert.equal((await w.send('ADMIN_EXPORT', {}, w.vtop)).ok, false);
+  const output = await w.send('ADMIN_EXPORT');
+  assert.equal(output.ok, true);
+  assert.equal(output.result.files.length, 2);
+  assert.ok(!JSON.stringify(output.result).includes('contextKey'));
+});
+
+test('cancelled/failed/closed-tab captures cannot produce a partial ZIP', async () => {
+  const w = worker();
+  await w.send('ADMIN_INSPECT_TAB', { tabId: 7 });
+  const start = () =>
+    w.send('ADMIN_START', {
+      tabId: 7,
+      folder: 'SCOPE_F',
+      mappings: [{ code: 'UCC', file: 'UCC.ts' }],
+      includeIndex: true,
+    });
+  let run = await start();
+  await w.send('ADMIN_CANCEL');
+  assert.equal(
+    (await w.send('ADMIN_COMPLETE', { jobId: run.job.id, groups: { UCC: groups.UCC } }, w.vtop)).ok,
+    false
+  );
+  assert.equal((await w.send('ADMIN_EXPORT')).ok, false);
+  run = await start();
+  await w.send('ADMIN_FAILED', { jobId: run.job.id, error: 'Session expired' }, w.vtop);
+  assert.equal((await w.send('ADMIN_STATE')).job.state, 'error');
+  assert.equal((await w.send('ADMIN_EXPORT')).ok, false);
+  await start();
+  w.listeners.removed(7);
+  assert.equal((await w.send('ADMIN_STATE')).job.state, 'error');
+  assert.equal((await w.send('ADMIN_EXPORT')).ok, false);
+});
+
+const browserPath =
+  process.env.FFCS_TEST_BROWSER ||
+  [
+    'C:/Program Files/Google/Chrome/Application/chrome.exe',
+    'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
+    '/usr/bin/chromium',
+    '/usr/bin/google-chrome',
+  ].find(file => fs.existsSync(file));
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+async function browser(t) {
+  const profileDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ffcs-contributors-test-'));
+  const process = spawn(
+    browserPath,
+    [
+      '--headless=new',
+      '--no-sandbox',
+      '--disable-gpu',
+      '--disable-background-networking',
+      '--disable-component-update',
+      '--disable-sync',
+      '--no-first-run',
+      '--no-default-browser-check',
+      '--remote-debugging-port=0',
+      `--user-data-dir=${profileDir}`,
+      'about:blank',
+    ],
+    { windowsHide: true, stdio: 'ignore' }
+  );
+  t.after(async () => {
+    process.kill();
+    await delay(500);
+    const target = path.resolve(profileDir),
+      parent = path.resolve(os.tmpdir());
+    if (
+      path.dirname(target) === parent &&
+      path.basename(target).startsWith('ffcs-contributors-test-')
+    )
+      fs.rmSync(target, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+  });
+  let port;
+  for (let i = 0; i < 200; i++) {
+    try {
+      port = fs.readFileSync(path.join(profileDir, 'DevToolsActivePort'), 'utf8').split('\n')[0];
+      break;
+    } catch {
+      await delay(50);
+    }
+  }
+  assert.ok(port, 'Headless browser started');
+  return async function newPage(dispatch) {
+    const target = await (
+      await fetch(`http://127.0.0.1:${port}/json/new?about:blank`, { method: 'PUT' })
+    ).json();
+    const socket = new WebSocket(target.webSocketDebuggerUrl);
+    await new Promise((resolve, reject) => {
+      socket.onopen = resolve;
+      socket.onerror = reject;
+    });
+    t.after(() => socket.close());
+    let sequence = 0;
+    const pending = new Map();
+    const call = (method, params = {}) =>
+      new Promise((resolve, reject) => {
+        const id = ++sequence;
+        const timer = setTimeout(() => {
+          pending.delete(id);
+          reject(new Error(`CDP timeout: ${method}`));
+        }, 15000);
+        pending.set(id, { resolve, reject, timer });
+        socket.send(JSON.stringify({ id, method, params }));
+      });
+    socket.onmessage = event => {
+      const message = JSON.parse(event.data);
+      const item = pending.get(message.id);
+      if (item) {
+        clearTimeout(item.timer);
+        pending.delete(message.id);
+        if (message.error) item.reject(new Error(JSON.stringify(message.error)));
+        else item.resolve(message.result);
+      }
+      if (message.method === 'Runtime.bindingCalled' && message.params.name === '__ffcsTestCall') {
+        const request = JSON.parse(message.params.payload);
+        Promise.resolve()
+          .then(() => dispatch(request.message))
+          .catch(error => ({ ok: false, error: error.message }))
+          .then(result =>
+            call('Runtime.evaluate', {
+              expression: `window.__resolveTestCall(${request.id}, ${JSON.stringify(result)})`,
+            })
+          )
+          .catch(() => {});
+      }
+    };
+    await call('Page.enable');
+    await call('Runtime.enable');
+    await call('Runtime.addBinding', { name: '__ffcsTestCall' });
+    const evaluate = async expression => {
+      const result = await call('Runtime.evaluate', {
+        expression,
+        returnByValue: true,
+        awaitPromise: true,
+      });
+      assert.ok(!result.exceptionDetails, JSON.stringify(result.exceptionDetails));
+      return result.result.value;
+    };
+    await call('Page.addScriptToEvaluateOnNewDocument', {
+      source: `
+      window.__requests = new Map(); window.__requestId = 0;
+      window.__resolveTestCall = (id, result) => { window.__requests.get(id)?.(result); window.__requests.delete(id); };
+      const rpc = message => new Promise(resolve => { const id=++window.__requestId; window.__requests.set(id,resolve); window.__ffcsTestCall(JSON.stringify({id,message})); });
+      const listeners = new Set();
+      window.chrome = {
+        runtime: { id: 'contributors-id', sendMessage: rpc, onMessage: { addListener: fn => { window.__contributorListener=fn; } } },
+        downloads: { download: async ({url,filename}) => {
+          const bytes = new Uint8Array(await (await fetch(url)).arrayBuffer());
+          let binary=''; for(const byte of bytes) binary+=String.fromCharCode(byte);
+          await rpc({type:'TEST_DOWNLOAD',filename,base64:btoa(binary)});
+          setTimeout(() => { for(const listener of listeners) listener({id:1,state:{current:'complete'}}); },25);
+          return 1;
+        }, onChanged: { addListener: fn=>listeners.add(fn), removeListener: fn=>listeners.delete(fn) } }
+      };
+    `,
+    });
+    return {
+      call,
+      evaluate,
+      navigate: async url => {
+        await call('Page.navigate', { url });
+      },
+    };
+  };
+}
+
+test(
+  'browser: standalone dashboard fetches VTOP, maps repository files and downloads a valid data ZIP',
+  { skip: !browserPath, timeout: 45000 },
+  async t => {
+    const newPage = await browser(t);
+    const calls = [],
+      downloads = [];
+    let account = 'CURRENT-ACCOUNT';
+    const server = http.createServer(async (request, response) => {
+      const url = new URL(request.url, 'http://fixture');
+      response.setHeader('Cache-Control', 'no-store');
+      if (url.pathname === '/vtop/content') {
+        response.setHeader('Content-Type', 'text/html; charset=utf-8');
+        response.end(
+          `<html><body><input name="_csrf" value="ephemeral-token"><input id="authorizedID" value="${account}"><nav><a data-url="academics/common/StudentCourseAllocation">Course Registration Allocation</a></nav><main id="dashboard">VTOP dashboard</main></body></html>`
+        );
+        return;
+      }
+      if (url.pathname.startsWith('/vtop/academics/')) {
+        const parts = [];
+        for await (const chunk of request) parts.push(chunk);
+        const body = Object.fromEntries(new URLSearchParams(Buffer.concat(parts).toString()));
+        calls.push({ path: url.pathname, body });
+        assert.equal(body.authorizedID, account);
+        assert.equal(body._csrf, 'ephemeral-token');
+        response.setHeader('Content-Type', 'text/html; charset=utf-8');
+        let html;
+        if (url.pathname.endsWith('/StudentCourseAllocation'))
+          html =
+            '<select id="semesterSubId" name="semesterSubId"><option value="CURRENT">Current Term</option></select><select id="cccategory"><option value="UCC">University Core Courses</option><option value="PCC">Professional Core Courses</option><option value="FCON">Concentration Courses</option><option value="OEC">Open Elective Courses</option><option disabled value="OTHER">Other branch</option></select>';
+        else if (url.pathname.endsWith('/getCoursesListForCurriculmCategory')) {
+          const options = {
+            UCC: '<option value="BCSE202L">BCSE202L - Compiler&#39;s Design</option><option value="BCSE202P">BCSE202P - Compiler Lab</option>',
+            PCC: '<option value="BCSE202L">BCSE202L - Compiler&#39;s Design</option>',
+            FCON: '<option value="BACSE291">BACSE291 - Design Project</option>',
+            OEC: '<option value="">No courses</option>',
+          };
+          assert.ok(Object.prototype.hasOwnProperty.call(options, body.cccategory));
+          html = `<select>${options[body.cccategory]}</select>`;
+        } else {
+          const slot =
+            body.courseCode === 'BCSE202P'
+              ? 'L43+L44'
+              : body.courseCode === 'BACSE291'
+                ? 'NIL'
+                : 'B1+TB1';
+          html = `<table><tr><th>Slot</th><th>Venue</th><th>Faculty</th><th>Seats</th></tr><tr><td>${slot}</td><td>${slot === 'NIL' ? 'NIL' : 'SJT522'}</td><td>O&#39;Brien Faculty</td><td>60</td></tr></table>`;
+        }
+        response.end(html);
+        return;
+      }
+      const file = url.pathname === '/' ? 'contributor.html' : url.pathname.slice(1);
+      if (
+        ![
+          'contributor.html',
+          'contributor.css',
+          'contributor.js',
+          'exporter.js',
+          'zip.js',
+        ].includes(file)
+      ) {
+        response.writeHead(404).end();
+        return;
+      }
+      response.setHeader(
+        'Content-Type',
+        file.endsWith('.js')
+          ? 'text/javascript; charset=utf-8'
+          : file.endsWith('.css')
+            ? 'text/css'
+            : 'text/html; charset=utf-8'
+      );
+      response.end(read(file));
+    });
+    await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+    t.after(() => {
+      server.closeAllConnections();
+      server.close();
+    });
+    const origin = `http://127.0.0.1:${server.address().port}`;
+    let w;
+    const vtop = await newPage(message => w.send(message.type, message, w.vtop));
+    await vtop.navigate(origin + '/vtop/content');
+    const waitFor = async (page, expression) => {
+      for (let i = 0; i < 150; i++) {
+        try {
+          if (await page.evaluate(expression)) return;
+        } catch {
+          /* Navigation changes the execution context. */
+        }
+        await delay(50);
+      }
+      assert.fail(`Browser condition did not become true: ${expression}`);
+    };
+    await waitFor(vtop, 'Boolean(document.querySelector("#authorizedID"))');
+    await vtop.evaluate(read('parser.js'));
+    await vtop.evaluate(read('vtop.js'));
+    w = worker(async (_id, message) =>
+      vtop.evaluate(
+        `new Promise(resolve => window.__contributorListener(${JSON.stringify(message)}, {id:'contributors-id'}, resolve))`
+      )
+    );
+    const ui = await newPage(message => {
+      if (message.type === 'TEST_DOWNLOAD') {
+        downloads.push({
+          filename: message.filename,
+          bytes: Buffer.from(message.base64, 'base64'),
+        });
+        return { ok: true };
+      }
+      return w.send(message.type, message);
+    });
+    await ui.call('Emulation.setDeviceMetricsOverride', {
+      width: 1200,
+      height: 1050,
+      deviceScaleFactor: 1,
+      mobile: false,
+    });
+    await ui.navigate(origin);
+    await waitFor(ui, 'document.querySelector("#vtop-tab")?.value === "7"');
+    await ui.evaluate('document.querySelector("#connect").click()');
+    await waitFor(ui, 'document.querySelectorAll("#mappings input[type=checkbox]").length === 4');
+    await ui.evaluate(
+      `const folder = document.querySelector('#folder'); folder.value='SCOPE_F'; folder.dispatchEvent(new Event('change',{bubbles:true}));`
+    );
+    await waitFor(ui, '!document.querySelector("#start").disabled');
+    assert.equal(
+      await ui.evaluate(`document.querySelector('select[aria-label="File for FCON"]').value`),
+      'FCON.ts'
+    );
+    assert.equal(
+      await ui.evaluate(`document.querySelector('select[aria-label="File for OEC"]').value`),
+      'OEC.ts'
+    );
+    await ui.evaluate('document.querySelector("#start").click()');
+    await waitFor(ui, '!document.querySelector("#progress").hidden');
+    await waitFor(ui, '!document.querySelector("#download").hidden');
+    for (let i = 0; i < 100 && !downloads.length; i++) await delay(50);
+    assert.equal(downloads.length, 1);
+    const archive = unzip(downloads[0].bytes);
+    assert.deepEqual(
+      [...archive.keys()],
+      [
+        'src/data/SCOPE_F/UCC.ts',
+        'src/data/SCOPE_F/PCC.ts',
+        'src/data/SCOPE_F/FCON.ts',
+        'src/data/SCOPE_F/OEC.ts',
+        'src/data/SCOPE_F/index.ts',
+      ]
+    );
+    assert.deepEqual(
+      archive.get('src/data/SCOPE_F/index.ts'),
+      fs.readFileSync(path.join(root, 'src/data/SCOPE_F/index.ts'))
+    );
+    assert.match(archive.get('src/data/SCOPE_F/FCON.ts').toString(), /^export const CON =/);
+    assert.match(archive.get('src/data/SCOPE_F/FCON.ts').toString(), /slot: 'NIL'/);
+    assert.equal(archive.get('src/data/SCOPE_F/OEC.ts').toString(), 'export const OEC = {\n};\n');
+    assert.equal(calls.filter(call => call.body.courseCode === 'BCSE202L').length, 1);
+    for (const bytes of archive.values()) {
+      assert.ok(!bytes.toString().includes('CURRENT-ACCOUNT'));
+      assert.ok(!bytes.toString().includes('ephemeral-token'));
+    }
+    assert.equal(await vtop.evaluate('Boolean(document.querySelector("#cccategory"))'), false);
+    assert.equal(
+      await vtop.evaluate('document.querySelector("#dashboard").textContent'),
+      'VTOP dashboard'
+    );
+    if (process.env.FFCS_CONTRIBUTOR_SCREENSHOT) {
+      const screenshot = await ui.call('Page.captureScreenshot', { format: 'png' });
+      fs.writeFileSync(
+        process.env.FFCS_CONTRIBUTOR_SCREENSHOT,
+        Buffer.from(screenshot.data, 'base64')
+      );
+    }
+    // A different signed-in account must not reuse the previous inspection.
+    account = 'OTHER-ACCOUNT';
+    await vtop.evaluate('document.querySelector("#authorizedID").value="OTHER-ACCOUNT"');
+    await ui.evaluate('document.querySelector("#start").click()');
+    await waitFor(
+      ui,
+      'document.querySelector("#job-status").textContent.includes("account, semester")'
+    );
+    assert.equal((await w.send('ADMIN_EXPORT')).ok, false);
+    assert.equal(downloads.length, 1);
+  }
+);

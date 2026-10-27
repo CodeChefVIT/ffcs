@@ -119,3 +119,9 @@ npm run extension:package
 ```
 
 The tests check storage and origin boundaries, catalogue validation, and the real DOM parser/capture flow using local HTML fixtures. The DOM test uses a local Chrome/Edge installation (or `FFCS_TEST_BROWSER`) and is skipped if neither is found. To also run the planner UI test against a running app, set `FFCS_TEST_APP_URL` to its local URL before running `npm run extension:test`. A signed-in VTOP smoke test is still needed after installation.
+
+## Contributor data exporter
+
+A separate contributor/admin browser extension lives in [public/extentions/FFCS-Contributors](public/extentions/FFCS-Contributors). Install [FFCS-Contributors.zip](public/extentions/FFCS-Contributors/FFCS-Contributors.zip), connect a signed-in VTOP tab, choose the matching branch/batch folder and review the category mappings. It downloads a ZIP of repository-ready `src/data/<folder>/*.ts` replacements with the existing filenames/export names and optional unchanged `index.ts`. It works independently of the personal My VTOP extension and does not require the app to be running.
+
+See its [installation and export instructions](public/extentions/FFCS-Contributors/README.md). Rebuild its repository mapping and downloadable package with `npm run contributors:package`; verify it with `npm run contributors:test`.
