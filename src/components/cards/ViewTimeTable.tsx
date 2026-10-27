@@ -621,12 +621,19 @@ export default function ViewTimeTable() {
       label: 'Download',
       color: 'green',
       icon: '/icons/download.svg',
-      onClick: () => {
+      onClick: async () => {
         if (!selectedData || selectedData.length === 0) {
           showAlert('No Timetables generated');
           return;
         }
-        exportToPDF();
+        try {
+          await exportToPDF();
+        } catch (err: unknown) {
+          console.error('PDF export failed:', err);
+          const message =
+            err instanceof Error ? err.message : 'Failed to export PDF. Please try again.';
+          showAlert(message);
+        }
       },
     },
     {
