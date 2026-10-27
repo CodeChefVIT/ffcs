@@ -7,8 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "node --test tests/*.test.cjs",
     "format": "prettier --write .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "extension:package": "node scripts/package-extension.mjs",
+    "extension:test": "node --test tests/vtop-extension.test.mjs"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,css,md,json}": "prettier --write"

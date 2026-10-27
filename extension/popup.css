@@ -1,0 +1,51 @@
+body {
+  width: 330px;
+  margin: 0;
+  padding: 22px;
+  box-sizing: border-box;
+  font:
+    14px/1.5 system-ui,
+    sans-serif;
+  color: #17242c;
+  background: #cee4e5;
+}
+h1 {
+  font-size: 22px;
+  margin: 0 0 12px;
+}
+button,
+a {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 12px;
+  border: 2px solid #17242c;
+  border-radius: 10px;
+  padding: 10px;
+  font: inherit;
+  font-weight: 650;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  background: #c1ff83;
+}
+a {
+  background: #ffea79;
+}
+.secondary {
+  background: #fff;
+}
+button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+#status {
+  border-radius: 8px;
+  background: #fff9;
+  padding: 12px;
+  white-space: pre-line;
+}
+.note {
+  font-size: 12px;
+}
