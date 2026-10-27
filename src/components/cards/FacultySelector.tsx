@@ -27,6 +27,7 @@ const schools = [
   "SMEC ('25 Batch)",
   "SBST ('25 Batch)",
   "SENSE ('25 Batch)",
+  "SCE ('25 Batch)",
   "SHINE ('25 Batch)",
 ];
 

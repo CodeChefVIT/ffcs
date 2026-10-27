@@ -1,0 +1,40 @@
+export const PCC = {
+  'BACLE102 - Environmental Engineering': [
+    { slot: 'F1+TF1', venue: 'CDMM104', faculty: 'SARAVANA KUMAR M P' },
+    { slot: 'F2+TF2', venue: 'CDMM104', faculty: 'VELVIZHI G' },
+    { slot: 'L31+L32', venue: 'GDN142', faculty: 'SARAVANA KUMAR M P' },
+    { slot: 'L55+L56', venue: 'GDN142', faculty: 'SARAVANA KUMAR M P' },
+    { slot: 'L19+L20', venue: 'GDN142', faculty: 'VELVIZHI G' },
+    { slot: 'L3+L4', venue: 'GDN142', faculty: 'VELVIZHI G' },
+  ],
+  'BACLE103 - Mechanics of Solids': [
+    { slot: 'L51+L52', venue: 'CTSG01', faculty: 'ABDUL RAHIM  A' },
+    { slot: 'G1+TG1', venue: 'CDMM401', faculty: 'ABDUL RAHIM  A' },
+    { slot: 'L11+L12', venue: 'GDNG10A', faculty: 'MEENA T' },
+    { slot: 'L13+L14', venue: 'GDNG10A', faculty: 'MEENA T' },
+    { slot: 'G2+TG2', venue: 'CDMM401', faculty: 'MEENA T' },
+    { slot: 'L33+L34', venue: 'CTSG01', faculty: 'ABDUL RAHIM  A' },
+  ],
+  'BACLE202 - Soil Mechanics and Foundation Engineering': [
+    { slot: 'L15+L16', venue: 'CTSG04', faculty: 'MUTHUKUMAR M' },
+    { slot: 'G2+TG2', venue: 'CDMM104', faculty: 'MUTHUKUMAR M' },
+    { slot: 'L39+L40', venue: 'CTSG04', faculty: 'VISUVASAM J' },
+    { slot: 'L27+L28', venue: 'CTSG04', faculty: 'MUTHUKUMAR M' },
+    { slot: 'L45+L46', venue: 'CTSG04', faculty: 'VISUVASAM J' },
+    { slot: 'G1+TG1', venue: 'CDMM103', faculty: 'VISUVASAM J' },
+  ],
+  'BACLE204 - Transportation Engineering': [
+    { slot: 'D1+TD1', venue: 'CDMM103', faculty: 'SASANKA BHUSHAN PULIPATI' },
+    { slot: 'L3+L4', venue: 'GDNG28', faculty: 'VASANTHA KUMAR S' },
+    { slot: 'D2+TD2', venue: 'CDMM103', faculty: 'VASANTHA KUMAR S' },
+    { slot: 'L31+L32', venue: 'GDNG28', faculty: 'SASANKA BHUSHAN PULIPATI' },
+    { slot: 'L55+L56', venue: 'GDNG28', faculty: 'SASANKA BHUSHAN PULIPATI' },
+    { slot: 'L19+L20', venue: 'GDNG28', faculty: 'VASANTHA KUMAR S' },
+  ],
+  'BACLE207 - Artificial Intelligence and Machine Learning in Civil Engineering': [
+    { slot: 'L43+L44', venue: 'GDN153', faculty: 'VAANI N' },
+    { slot: 'F1+TF1', venue: 'CDMM103', faculty: 'VAANI N' },
+    { slot: 'L29+L30', venue: 'GDN153', faculty: 'APOORVA K V' },
+    { slot: 'F2+TF2', venue: 'CDMM401', faculty: 'APOORVA K V' },
+  ],
+};
