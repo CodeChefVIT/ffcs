@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import useScreenSize from '@/hooks/useScreenSize';
 import Saved from './saved';
 import SavedMobile from './saved-mobile';
-import Loader from '@/components/ui/Loader';
+import SavedPageSkeleton from './saved-skeleton';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import AlertModal from '@/components/ui/AlertModal';
@@ -27,7 +27,7 @@ export default function View() {
     router.push('/');
   };
 
-  if (status === 'loading' || size === null) return <Loader />;
+  if (status === 'loading' || size === null) return <SavedPageSkeleton />;
 
   if (status !== 'authenticated') {
     return (

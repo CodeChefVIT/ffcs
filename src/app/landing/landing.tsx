@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 
 import Hero from '@/components/ui/Hero';
@@ -13,13 +13,30 @@ import CourseCard from '@/components/cards/CourseCard';
 import ViewTimeTable from '@/components/cards/ViewTimeTable';
 import { TimetableProvider } from '@/lib/TimeTableContext';
 import { fullCourseData } from '@/lib/type';
-const LOCAL_STORAGE_KEY = 'selectedCourses';
+import { data as bundledData } from '@/data/faculty';
+import { FacultyData } from '@/lib/vtopCatalogue';
+import useVtopCatalogue from '@/hooks/useVtopCatalogue';
+import VtopExtensionModal from '@/components/cards/VtopExtensionModal';
 
-export default function View() {
+function Planner({
+  facultyData,
+  storageKey,
+  school,
+  onSchoolChange,
+  onMyVtopClick,
+  vtop,
+}: {
+  facultyData: FacultyData;
+  storageKey: string;
+  school: string;
+  onSchoolChange: (school: string) => void;
+  onMyVtopClick: () => void;
+  vtop: ReturnType<typeof useVtopCatalogue>;
+}) {
   const [selectedCourses, setSelectedCourses] = useState<fullCourseData[]>(() => {
     if (typeof window === 'undefined') return [];
     try {
-      const saved = localStorage.getItem('selectedCourses');
+      const saved = localStorage.getItem(storageKey);
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -73,12 +90,86 @@ export default function View() {
     if (typeof window === 'undefined') return;
 
     try {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(selectedCourses));
+      localStorage.setItem(storageKey, JSON.stringify(selectedCourses));
     } catch (e) {
       console.error('Failed to save courses to localStorage', e);
     }
-  }, [selectedCourses]);
+  }, [selectedCourses, storageKey]);
 
+  return (
+    <>
+      <div className="w-4xl mx-4">
+        <FacultySelector
+          selectedSchool={school}
+          onSchoolChange={onSchoolChange}
+          onMyVtopClick={onMyVtopClick}
+          myVtopBusy={vtop.busy}
+          vtopStatus={
+            <div className="flex flex-wrap items-center justify-center gap-3 text-xs pb-2">
+              <span>
+                {vtop.catalogue
+                  ? new Set(
+                      Object.values(vtop.catalogue.categories).flatMap(group => Object.keys(group))
+                    ).size
+                  : 0}{' '}
+                courses saved in this browser
+              </span>
+              <button
+                className="underline cursor-pointer"
+                disabled={vtop.busy}
+                onClick={onMyVtopClick}
+              >
+                Refresh My VTOP
+              </button>
+              <button
+                className="underline cursor-pointer"
+                disabled={vtop.busy}
+                onClick={() => void vtop.clear()}
+              >
+                Delete VTOP data
+              </button>
+            </div>
+          }
+          dataOverride={facultyData}
+          storageKey={storageKey}
+          onConfirm={facultySelectorOnConfirm}
+        />
+      </div>
+      <TimetableProvider>
+        <div className="w-full px-8">
+          <CourseCard
+            selectedCourses={selectedCourses}
+            onDelete={id => setSelectedCourses(prev => prev.filter(c => c.id !== id))}
+            onUpdate={updatedCourses => setSelectedCourses(updatedCourses)}
+          />
+        </div>
+
+        <div className="w-screen p-0 m-0">
+          <ViewTimeTable />
+        </div>
+      </TimetableProvider>
+    </>
+  );
+}
+
+export default function View() {
+  const vtop = useVtopCatalogue();
+  const [school, setSchool] = useState('SCOPE');
+  const personal = school === 'My VTOP' ? vtop.catalogue : null;
+  const selectVtop = async () => {
+    if (await vtop.select()) setSchool('My VTOP');
+  };
+  useEffect(() => {
+    if (school === 'My VTOP' && !vtop.catalogue) setSchool('SCOPE');
+  }, [school, vtop.catalogue]);
+  useEffect(() => {
+    if (vtop.readySelection && vtop.modal === 'progress') setSchool('My VTOP');
+  }, [vtop.readySelection, vtop.modal]);
+  const facultyData = useMemo<FacultyData>(
+    () => ({ ...bundledData, 'My VTOP': personal?.categories || {} }),
+    [personal]
+  );
+  const storageKey = personal ? `selectedCourses:vtop:${personal.catalogueId}` : 'selectedCourses';
   return (
     <div className="flex flex-col min-h-screen relative w-full items-center justify-center overflow-x-hidden">
       <div className="absolute mt-4 inset-0 -z-10 bg-[#CEE4E5]">
@@ -98,23 +189,18 @@ export default function View() {
 
       <Hero />
 
-      <div className="w-4xl mx-4 pt-12" id="start">
-        <FacultySelector onConfirm={facultySelectorOnConfirm} />
+      <div className="w-full flex flex-col items-center pt-12" id="start">
+        <Planner
+          key={`${storageKey}:${personal?.capturedAt || ''}`}
+          school={school}
+          onSchoolChange={setSchool}
+          onMyVtopClick={() => void selectVtop()}
+          vtop={vtop}
+          facultyData={facultyData}
+          storageKey={storageKey}
+        />
       </div>
-
-      <TimetableProvider>
-        <div className="w-full px-8">
-          <CourseCard
-            selectedCourses={selectedCourses}
-            onDelete={id => setSelectedCourses(prev => prev.filter(c => c.id !== id))}
-            onUpdate={updatedCourses => setSelectedCourses(updatedCourses)}
-          />
-        </div>
-
-        <div className="w-screen p-0 m-0">
-          <ViewTimeTable />
-        </div>
-      </TimetableProvider>
+      <VtopExtensionModal {...vtop} onReady={() => setSchool('My VTOP')} />
       <div className="mt-12" />
       <Accordion />
 

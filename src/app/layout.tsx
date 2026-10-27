@@ -79,6 +79,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </Script>
       </head>
       <body
+        suppressHydrationWarning
         className={`${pangolin.variable} ${poppins.variable} ${inter.variable} ${plusJakartaSans.variable} antialiased bg-[#CEE4E5] select-none`}
       >
         <SessionProviderWrapper>{children}</SessionProviderWrapper>
