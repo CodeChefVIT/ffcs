@@ -108,3 +108,14 @@ Before getting started, please ensure that the .env file is properly configured.
 <p align="center">
 	Made with :heart: by <a href="https://www.codechefvit.com" target="_blank">CodeChef-VIT</a>
 </p>
+
+## Personal VTOP catalogue
+
+Use the browser extension to plan from the courses offered to your own VTOP account without maintaining data files for every branch. Download it from the alert shown by the highlighted **My VTOP** button or use [public/extensions/ffcs-vtop.zip](public/extensions/ffcs-vtop.zip). Installation, storage/deletion behavior and limitations are documented in [extension/README.md](extension/README.md).
+
+```bash
+npm run extension:test
+npm run extension:package
+```
+
+The tests check storage and origin boundaries, catalogue validation, and the real DOM parser/capture flow using local HTML fixtures. The DOM test uses a local Chrome/Edge installation (or `FFCS_TEST_BROWSER`) and is skipped if neither is found. To also run the planner UI test against a running app, set `FFCS_TEST_APP_URL` to its local URL before running `npm run extension:test`. A signed-in VTOP smoke test is still needed after installation.
