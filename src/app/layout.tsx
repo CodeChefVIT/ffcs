@@ -7,28 +7,28 @@ import Script from 'next/script';
 const pangolin = Pangolin({
   weight: '400',
   subsets: ['latin'],
-  variable: '--font-pangolin',
+  variable: '--next-font-pangolin',
   display: 'swap',
 });
 
 const poppins = Poppins({
   weight: ['400', '500', '600', '700'],
   subsets: ['latin'],
-  variable: '--font-poppins',
+  variable: '--next-font-poppins',
   display: 'swap',
 });
 
 const inter = Inter({
   weight: ['400', '500', '600', '700'],
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--next-font-inter',
   display: 'swap',
 });
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   weight: ['500'],
   subsets: ['latin'],
-  variable: '--font-plus-jakarta-sans',
+  variable: '--next-font-jakarta',
   display: 'swap',
 });
 

@@ -184,7 +184,7 @@ export function SlotToggleButton({ onToggle }: SlotToggleButtonProps) {
   return (
     <div
       style={{
-        fontFamily: 'Poppins, sans-serif',
+        fontFamily: 'var(--next-font-poppins), sans-serif',
         height: '56px',
         borderRadius: '18px',
         userSelect: 'none',
@@ -235,7 +235,7 @@ export function SlotToggleButton({ onToggle }: SlotToggleButtonProps) {
           }}
           className="relative z-10 px-4 py-0 text-base font-semibold transition-colors duration-200"
           style={{
-            fontFamily: 'Poppins, sans-serif',
+            fontFamily: 'var(--next-font-poppins), sans-serif',
             fontWeight: '700',
             background: 'none',
             border: 'none',
@@ -317,7 +317,7 @@ export function GoogleLoginButton({ onClick }: { onClick?: () => void }) {
       onClick={onClick}
       style={{
         backgroundColor: buttonColor,
-        fontFamily: 'Poppins, sans-serif',
+        fontFamily: 'var(--next-font-poppins), sans-serif',
         height: '48px',
         borderRadius: '16px',
         userSelect: 'none',

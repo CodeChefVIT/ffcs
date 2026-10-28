@@ -74,7 +74,7 @@ export default function Navbar({ page }: NavbarProps) {
                 <FFCSButton />
 
                 <div
-                  className="text-4xl font-[pangolin] cursor-pointer"
+                  className="text-4xl font-pangolin cursor-pointer"
                   onClick={() => router.push('/')}
                 >
                   FFCS-inator
@@ -84,7 +84,7 @@ export default function Navbar({ page }: NavbarProps) {
 
             {page === 'mobile' && (
               <div
-                className="text-3xl font-[pangolin] cursor-pointer"
+                className="text-3xl font-pangolin cursor-pointer"
                 onClick={() => router.push('/')}
               >
                 FFCS-inator
