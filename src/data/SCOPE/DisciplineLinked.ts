@@ -1,25 +1,27 @@
 export const ScopeDisciplineLinked = {
   'BECE102L - Digital Systems Design': [
-    { slot: 'E2+TE2', venue: 'SJT709', faculty: 'ARUN DEV DHAR DWIVEDI' },
-    { slot: 'E1+TE1', venue: 'SJT709', faculty: 'SUKANTA KUMAR TULO' },
+    { slot: 'A1+TA1', venue: 'PRP128', faculty: 'SHILPI RUCHI KERKETTA' },
+    { slot: 'A2+TA2', venue: 'PRP127', faculty: 'SHILPI RUCHI KERKETTA' },
   ],
   'BECE102P - Digital Systems Design Lab': [
-    { slot: 'L15+L16', venue: 'SJT203', faculty: 'ARUN DEV DHAR DWIVEDI' },
-    { slot: 'L41+L42', venue: 'SJT203', faculty: 'SUKANTA KUMAR TULO' },
-    { slot: 'L49+L50', venue: 'SJT203', faculty: 'SUKANTA KUMAR TULO' },
-    { slot: 'L5+L6', venue: 'SJT203', faculty: 'ARUN DEV DHAR DWIVEDI' },
+    { slot: 'L9+L10', venue: 'SJT516', faculty: 'SHILPI RUCHI KERKETTA' },
+    { slot: 'L51+L52', venue: 'SJT516', faculty: 'SHILPI RUCHI KERKETTA' },
   ],
   'BECE204L - Microprocessors and Microcontrollers': [
-    { slot: 'D1+TD1', venue: 'SJT709', faculty: 'KARTHIKEYAN A' },
-    { slot: 'D2+TD2', venue: 'SJT709', faculty: 'ABDUL RAHIM  VC' },
+    { slot: 'F1+TF1', venue: 'PRP238', faculty: 'ABDUL RAHIM  VC' },
+    { slot: 'F2+TF2', venue: 'PRP134', faculty: 'ABDUL RAHIM  VC' },
+    { slot: 'F1+TF1', venue: 'PRP134', faculty: 'PRIYANKA S' },
   ],
   'BECE204P - Microprocessors and Microcontrollers Lab': [
-    { slot: 'L5+L6', venue: 'PRP108', faculty: 'ABDUL RAHIM  VC' },
-    { slot: 'L35+L36', venue: 'PRP108', faculty: 'KARTHIKEYAN A' },
-    { slot: 'L37+L38', venue: 'PRP108', faculty: 'KARTHIKEYAN A' },
-    { slot: 'L13+L14', venue: 'PRP108', faculty: 'ABDUL RAHIM  VC' },
+    { slot: 'L11+L12', venue: 'PRP108', faculty: 'ABDUL RAHIM  VC' },
+    { slot: 'L41+L42', venue: 'PRP108', faculty: 'PRIYANKA S' },
+    { slot: 'L43+L44', venue: 'PRP108', faculty: 'PRIYANKA S' },
+    { slot: 'L51+L52', venue: 'PRP108', faculty: 'ABDUL RAHIM  VC' },
+    { slot: 'L23+L24', venue: 'PRP108', faculty: 'ABDUL RAHIM  VC' },
+    { slot: 'L55+L56', venue: 'PRP108', faculty: 'ABDUL RAHIM  VC' },
   ],
   'BMAT205L - Discrete Mathematics and Graph Theory': [
-    { slot: 'C1+TC1+TCC1', venue: 'PRP632', faculty: 'EASWARAMOORTHY' },
+    { slot: 'A2+TA2+TAA2', venue: 'SJT707', faculty: 'NANDHINI S' },
+    { slot: 'A1+TA1+TAA1', venue: 'SJT709', faculty: 'EASWARAMOORTHY' },
   ],
 };
