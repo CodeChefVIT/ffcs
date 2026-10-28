@@ -16,7 +16,7 @@ type SchoolPopupProps = {
   onClose: () => void;
 };
 
-const labelClass = 'mb-2 text-[11px] font-bold uppercase text-ffcs-muted';
+const labelClass = 'mb-1.5 text-[11px] font-bold uppercase text-ffcs-muted';
 
 function Toggle({
   label,
