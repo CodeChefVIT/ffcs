@@ -674,7 +674,7 @@ export default function FacultySelector({
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-4 m-4 px-4">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-4 m-4 px-4 pt-2">
             <div className="col-span-2">
               <ComboBox
                 label="Select or search subject"
