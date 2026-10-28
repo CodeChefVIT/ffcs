@@ -80,7 +80,7 @@ export default function Navbar({ page, school, vtopOn, onSchoolClick }: NavbarPr
                       className="whitespace-nowrap"
                     />
                     {vtopOn && (
-                      <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full border-2 border-black bg-ffcs-purple" />
+                      <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full border-2 border-black bg-[#CDB1FF]" />
                     )}
                   </div>
                 )}
