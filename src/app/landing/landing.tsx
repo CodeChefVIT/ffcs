@@ -121,10 +121,19 @@ function Planner({
 
 export default function View() {
   const vtop = useVtopCatalogue();
-  const [savedSchool, setSavedSchool] = useState('SCOPE');
+  // The school saved on this device, or '' when none is saved yet.
+  const [savedSchool, setSavedSchool] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    try {
+      const saved = localStorage.getItem('school');
+      return saved && Object.keys(bundledData).includes(saved) ? saved : '';
+    } catch {
+      return '';
+    }
+  });
   const [vtopOn, setVtopOn] = useState(false);
-  const [showSchoolPopup, setShowSchoolPopup] = useState(false);
-  const school = vtopOn ? 'My VTOP' : savedSchool;
+  const [showSchoolPopup, setShowSchoolPopup] = useState(!savedSchool);
+  const school = vtopOn ? 'My VTOP' : savedSchool || 'SCOPE';
   const personal = vtopOn ? vtop.catalogue : null;
   const selectVtop = async () => {
     if (await vtop.select()) setVtopOn(true);
@@ -156,11 +165,6 @@ export default function View() {
     </div>
   );
 
-  useEffect(() => {
-    const saved = localStorage.getItem('school');
-    if (saved && Object.keys(bundledData).includes(saved)) setSavedSchool(saved);
-    else setShowSchoolPopup(true);
-  }, []);
   useEffect(() => {
     if (vtopOn && !vtop.catalogue) setVtopOn(false);
   }, [vtopOn, vtop.catalogue]);
