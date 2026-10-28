@@ -4,6 +4,7 @@ import { OEC } from './OEC';
 import { PCC_BYB } from './PCC_BYB';
 import { UCC_BDE } from './UCC_BDE';
 import { UCC_BYB } from './UCC_BYB';
+import { FCON } from './FCON';
 
 export const SCORE_F = {
   UniversityCoreCourses: UCC,
@@ -12,4 +13,5 @@ export const SCORE_F = {
   ProfessionalCoreCoursesCSE: PCC_BYB,
   UniversityCoreCoursesBDE: UCC_BDE,
   UniversityCoreCoursesBYB: UCC_BYB,
+  ConcentrationCourses: FCON,
 };
