@@ -39,6 +39,7 @@ export default function ComboBox({ label, value, options, onChange, renderOption
 
   useEffect(() => {
     if (value) setInputValue(renderOption ? renderOption(value) : value);
+    else setInputValue('');
   }, [value, renderOption]);
 
   return (

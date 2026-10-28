@@ -7,16 +7,17 @@ type dataProps = {
   code: string;
   slot: string;
   name: string;
-  venue?: string;
+  subject?: string;
 };
 
 type groupedDataProps = {
-  [name: string]: { code: string; slot: string; venue?: string }[];
+  [name: string]: { code: string; slot: string }[];
 };
 
 type CompoundTableProps = {
   data: dataProps[];
   large?: boolean;
+  sidePanelFooter?: React.ReactNode;
 };
 
 const sortData = (data: dataProps[]): dataProps[] => {
@@ -24,19 +25,47 @@ const sortData = (data: dataProps[]): dataProps[] => {
 };
 
 const getGroupedData = (data: dataProps[]): groupedDataProps => {
-  return sortData(data).reduce((acc, { code, slot, name, venue }) => {
+  return sortData(data).reduce((acc, { code, slot, name }) => {
     const codePrefix = code.slice(0, -1);
     const groupKey = `${name}__${codePrefix}`;
-    (acc[groupKey] ||= []).push({ code, slot, venue });
+    (acc[groupKey] ||= []).push({ code, slot });
     return acc;
   }, {} as groupedDataProps);
 };
 
-export default function CompoundTable({ data, large }: CompoundTableProps) {
+export default function CompoundTable({ data, large, sidePanelFooter }: CompoundTableProps) {
   const groupedData = getGroupedData(data);
 
-  const tfs = data.map(d => {
-    return { slotName: d.slot, showName: true };
+  const tfs = data.map(d => ({
+    slotName: d.slot,
+    showName: true,
+    code: d.code,
+    subject: d.subject,
+    faculty: d.name,
+  }));
+
+  const courseRows = Object.entries(groupedData).map(([groupKey, entries], idx) => {
+    const displayName = groupKey.split('__')[0];
+    return (
+      <div key={idx} className="border-b-1 border-black last:border-b-0 pb-2">
+        <div className="space-y-1">
+          {entries.map((entry, i) => (
+            <div key={i} className="flex px-2 min-w-0 justify-between items-start gap-2 md:gap-4">
+              <div className="flex-shrink-0 w-20 md:w-[80px] min-w-0 text-left">
+                <div className="truncate">{entry.code}</div>
+              </div>
+
+              <div className="flex-1 min-w-[90px] md:min-w-[80px] lg:min-w-[120px] text-left ml-1 md:ml-4 mr-1 md:mr-4">
+                <div className="truncate">{entry.slot.replace(/\+/g, '+\u200B')}</div>
+              </div>
+              <div className="w-[160px] shrink-0 break-words whitespace-normal text-right pr-4">
+                {i === 0 ? displayName : ''}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   });
 
   return (
@@ -59,51 +88,19 @@ export default function CompoundTable({ data, large }: CompoundTableProps) {
 
         bg-[#ffffff]/60 p-4
         border-3 border-black
-        rounded-2xl space-y-2
-        overflow-y-auto
+        rounded-2xl
+        ${sidePanelFooter ? 'flex flex-col' : 'space-y-2 overflow-y-auto'}
       `}
         >
-          {Object.entries(groupedData).map(([groupKey, entries], idx) => {
-            const displayName = groupKey.split('__')[0];
-            //console.log(displayName)
-            // let initials = "";
-            // const parts = displayName.split(" ");
-
-            // if (displayName.length > 12) {
-            //   initials = parts[0];
-            //   if (parts.length > 1) {
-            //     initials += " " + parts[1].charAt(0);
-            //   }
-            //   initials += " " + parts[parts.length - 1].charAt(0);
-            // } else {
-            //   initials = displayName;
-            // }
-            const initials =
-              displayName.length > 12 ? displayName.slice(0, 12) + '...' : displayName;
-            return (
-              <div key={idx} className="border-b-1 border-black last:border-b-0 pb-2">
-                <div className="space-y-1">
-                  {entries.map((entry, i) => (
-                    <div
-                      key={i}
-                      className="flex px-2 min-w-0 justify-between items-start gap-2 md:gap-4"
-                    >
-                      <div className="flex-shrink-0 w-20 md:w-[80px] min-w-0 text-left">
-                        <div className="truncate">{entry.code}</div>
-                      </div>
-
-                      <div className="flex-1 min-w-[90px] md:min-w-[80px] lg:min-w-[120px] text-left ml-1 md:ml-4 mr-1 md:mr-4">
-                        <div className="truncate">{entry.slot.replace(/\+/g, '+\u200B')}</div>
-                      </div>
-                      <div className="w-[160px] shrink-0 break-words whitespace-normal text-right pr-4">
-                        {i === 0 ? initials : ''}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+          {sidePanelFooter ? (
+            <>
+              {/* Rows scroll; the footer stays pinned to the bottom of the panel */}
+              <div className="flex-1 min-h-0 overflow-y-auto space-y-2">{courseRows}</div>
+              {sidePanelFooter}
+            </>
+          ) : (
+            courseRows
+          )}
         </div>
       </div>
     </div>

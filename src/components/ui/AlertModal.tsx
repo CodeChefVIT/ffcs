@@ -5,6 +5,8 @@ import { ZButton } from './Buttons';
 
 type AlertModalProps = {
   open: boolean;
+  title?: string;
+  children?: React.ReactNode;
   message: string;
   onClose: () => void;
   color: 'red' | 'yellow' | 'green' | 'blue' | 'purple' | string;
@@ -31,7 +33,14 @@ function parseMessage(message: string) {
   ));
 }
 
-export default function AlertModal({ open, message, onClose, color }: AlertModalProps) {
+export default function AlertModal({
+  open,
+  message,
+  onClose,
+  color,
+  title = 'Alert',
+  children,
+}: AlertModalProps) {
   useEffect(() => {
     if (open) document.body.style.overflow = 'hidden';
     else document.body.style.overflow = '';
@@ -48,6 +57,9 @@ export default function AlertModal({ open, message, onClose, color }: AlertModal
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[#425D5F]/75 backdrop-blur-sm z-50 p-4">
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
         style={{ backgroundColor: theme[0] }}
         className="rounded-3xl shadow-[10px_10px_0_0_black] outline-4 outline-black
                    flex flex-col items-stretch w-full max-w-screen-sm max-h-[85vh] overflow-hidden"
@@ -65,13 +77,14 @@ export default function AlertModal({ open, message, onClose, color }: AlertModal
 
           {/* Title */}
           <div className="absolute left-1/2 -translate-x-1/2 text-2xl font-bold font-poppins">
-            Alert
+            {title}
           </div>
         </div>
 
         {/* Content */}
         <div className="p-6 text-center text-base sm:text-lg font-poppins font-medium leading-relaxed text-black whitespace-pre-wrap overflow-auto flex-1">
           {typeof message === 'string' ? parseMessage(message) : message}
+          {children}
         </div>
 
         {/* Footer */}

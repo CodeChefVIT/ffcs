@@ -4,31 +4,11 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { ZButton } from '../ui/Buttons';
 
-import { data } from '@/data/faculty';
+import { data as bundledData } from '@/data/faculty';
 import { fullCourseData } from '@/lib/type';
 import AlertModal from '../ui/AlertModal';
 import { course_type_map } from '@/lib/course_codes_map';
 import ComboBox from '@/components/ui/ComboBox';
-const schools = [
-  'SCOPE',
-  'SCORE',
-  'SELECT',
-  'SMEC',
-  'SBST',
-  'SCHEME',
-  'SENSE',
-  'SCE',
-  'SHINE',
-  'MTech',
-  "MTech ('25 Batch)",
-  "SCOPE ('25 Batch)",
-  "SCORE ('25 Batch)",
-  "SELECT ('25 Batch)",
-  "SMEC ('25 Batch)",
-  "SBST ('25 Batch)",
-  "SENSE ('25 Batch)",
-  "SHINE ('25 Batch)",
-];
 
 type SubjectEntry = {
   slot: string;
@@ -165,7 +145,7 @@ function generateCourseSlotsBoth({
   } else {
     const labEntryKey = Object.keys(data[selectedSchool][selectedDomain]).find(key => {
       const code = key.split(' - ')[0];
-      const type = getCourseType(code);
+      const type = getCourseType(code, data[selectedSchool][selectedDomain][key]);
       return code.slice(0, -1) === baseCode && (type === 'P' || type === 'E');
     });
     if (labEntryKey) {
@@ -197,27 +177,25 @@ function generateCourseSlotsBoth({
       )
       .map(entry => entry.slot);
 
-    // try to find a venue for this faculty: prefer labData entry, otherwise try theory entry
-    let venue: string | undefined;
-    const labEntryForVenue = labData.find(
-      entry =>
-        entry.faculty === facultyName && entry.slot.startsWith('L') && isValidLabSlot(entry.slot)
+    const theoryEntries = data[selectedSchool][selectedDomain][selectedSubject];
+    const theoryEntry = theoryEntries.find(
+      entry => entry.faculty === facultyName && entry.slot === selectedSlot
     );
-    if (labEntryForVenue && labEntryForVenue.venue) {
-      venue = labEntryForVenue.venue;
-    } else {
-      // try to find theory entry
-      const theoryEntries = data[selectedSchool][selectedDomain][selectedSubject];
-      const thEntry = theoryEntries.find(
-        (e: SubjectEntry) => e.faculty === facultyName && e.slot === selectedSlot
-      );
-      if (thEntry && thEntry.venue) venue = thEntry.venue;
+    const venue = theoryEntry?.venue?.trim();
+
+    const labVenues: Record<string, string> = {};
+
+    for (const entry of labData) {
+      if (entry.faculty === facultyName && labSlots.includes(entry.slot) && entry.venue?.trim()) {
+        labVenues[entry.slot] = entry.venue.trim();
+      }
     }
 
     return {
       facultyName,
       facultyLabSlot: labSlots.length > 0 ? labSlots.join(', ') : courseCode,
       ...(venue ? { venue } : {}),
+      labVenues,
     };
   });
 
@@ -239,7 +217,11 @@ const prettifyDomain = (domain: string) => {
     .trim();
 };
 
-const getCourseType = (courseCode: string): 'L' | 'P' | 'E' | undefined => {
+const getCourseType = (
+  courseCode: string,
+  entries?: SubjectEntry[]
+): 'L' | 'P' | 'E' | undefined => {
+  if (entries?.length && entries.every(entry => entry.slot === 'NIL')) return 'L';
   if (course_type_map[courseCode]) {
     return course_type_map[courseCode] as 'L' | 'P' | 'E';
   }
@@ -247,21 +229,40 @@ const getCourseType = (courseCode: string): 'L' | 'P' | 'E' | undefined => {
   if (['L', 'P', 'E'].includes(lastChar)) {
     return lastChar as 'L' | 'P' | 'E';
   }
+  if (entries?.length) {
+    const hasLab = entries.some(entry => /^L\d/.test(entry.slot));
+    const hasTheory = entries.some(entry => !/^L\d/.test(entry.slot));
+    return hasLab ? (hasTheory ? 'E' : 'P') : 'L';
+  }
   return undefined;
 };
 
 type ShiftKey = 'morning' | 'evening';
 export default function FacultySelector({
   onConfirm,
+  dataOverride: data = bundledData,
+  storageKey = 'selectedCourses',
+  selectedSchool,
+  onSchoolChange,
+  onMyVtopClick,
+  myVtopBusy = false,
+  vtopStatus,
 }: {
   onConfirm: (course: fullCourseData) => void;
+  dataOverride?: FacultyData;
+  storageKey?: string;
+  selectedSchool: string;
+  onSchoolChange: (school: string) => void;
+  onMyVtopClick: () => void;
+  myVtopBusy?: boolean;
+  vtopStatus?: React.ReactNode;
 }) {
+  const schools = Object.keys(data);
   const [selectedLabShift, setSelectedLabShift] = useState<'' | ShiftKey>('');
   const [labShiftOptions, setLabShiftOptions] = useState<Record<ShiftKey, string[]>>({
     morning: [],
     evening: [],
   });
-  const [selectedSchool, setSelectedSchool] = useState('SCOPE');
   const [selectedFaculties, setSelectedFaculties] = useState<string[]>([]);
   const [priorityList, setPriorityList] = useState<string[]>([]);
   const [selectedDomain, setSelectedDomain] = useState('');
@@ -273,7 +274,7 @@ export default function FacultySelector({
   const [faculties, setFaculties] = useState<string[]>([]);
   const [popup, setPopup] = useState({ showPopup: false, message: '' });
 
-  const LOCAL_STORAGE_KEY = 'selectedCourses';
+  const LOCAL_STORAGE_KEY = storageKey;
 
   const handleReset = () => {
     setSelectedDomain('');
@@ -299,7 +300,10 @@ export default function FacultySelector({
       return;
     }
     const courseCode = selectedSubject.split(' - ')[0];
-    const courseCodeType = getCourseType(courseCode);
+    const courseCodeType = getCourseType(
+      courseCode,
+      data[selectedSchool]?.[selectedDomain]?.[selectedSubject]
+    );
 
     if (!selectedLabShift && courseCodeType === 'P' && !courseCode.startsWith('BSTS')) {
       setPopup({ showPopup: true, message: 'Please select a lab slot.' });
@@ -327,7 +331,7 @@ export default function FacultySelector({
 
     const labSubject = Object.keys(data[selectedSchool][selectedDomain]).filter(subject => {
       const subjectCode = subject.split(' - ')[0];
-      const subjectType = getCourseType(subjectCode);
+      const subjectType = getCourseType(subjectCode, data[selectedSchool][selectedDomain][subject]);
       return (
         subjectCode.slice(0, -1) === courseCode.slice(0, -1) &&
         (subjectType === 'P' || subjectType === 'E') &&
@@ -456,11 +460,12 @@ export default function FacultySelector({
 
     if (selectedDomain) {
       const domainData = schoolData[selectedDomain];
+      if (!domainData) return;
       const allSubjects = Object.keys(domainData);
 
       const filteredSubjects = allSubjects.filter(subject => {
         const code = subject.split(' - ')[0];
-        const type = getCourseType(code);
+        const type = getCourseType(code, domainData[subject]);
         if (type === 'P') {
           const theoryCode = code.slice(0, -1) + 'L';
           return !allSubjects.some(s => s.startsWith(theoryCode));
@@ -472,8 +477,9 @@ export default function FacultySelector({
 
       if (selectedSubject) {
         const subjectData = domainData[selectedSubject];
+        if (!subjectData) return;
         const courseCode = selectedSubject.split(' - ')[0];
-        const courseType = getCourseType(courseCode);
+        const courseType = getCourseType(courseCode, subjectData);
 
         if (courseType === 'P' && !courseCode.startsWith('BSTS')) {
           const allLabSlots = [...new Set(subjectData.map(entry => entry.slot))];
@@ -519,7 +525,7 @@ export default function FacultySelector({
         }
       }
     }
-  }, [selectedSchool, selectedDomain, selectedSubject, selectedSlot, selectedLabShift]);
+  }, [data, selectedSchool, selectedDomain, selectedSubject, selectedSlot, selectedLabShift]);
 
   useEffect(() => {
     if (!selectedSubject || !selectedLabShift) return;
@@ -535,10 +541,14 @@ export default function FacultySelector({
       .map(entry => entry.faculty);
 
     setFaculties([...new Set(facultiesInSelectedShift)]);
-  }, [selectedLabShift, labShiftOptions, selectedSubject, selectedDomain, selectedSchool]);
+  }, [data, selectedLabShift, labShiftOptions, selectedSubject, selectedDomain, selectedSchool]);
 
   const handleSchoolChange = (school: string) => {
-    setSelectedSchool(school);
+    if (school === 'My VTOP') {
+      onMyVtopClick();
+      return;
+    }
+    onSchoolChange(school);
     setSelectedDomain('');
     setSelectedSubject('');
     setSelectedSlot('');
@@ -614,7 +624,7 @@ export default function FacultySelector({
     } catch (err) {
       console.error('Error restoring faculties from localStorage', err);
     }
-  }, [selectedSubject, selectedSlot, selectedLabShift, labShiftOptions]);
+  }, [LOCAL_STORAGE_KEY, selectedSubject, selectedSlot, selectedLabShift, labShiftOptions]);
 
   const [tooltipFacultyIndex, setTooltipFacultyIndex] = React.useState<number | null>(null);
 
@@ -629,14 +639,28 @@ export default function FacultySelector({
                 <button
                   key={school}
                   onClick={() => handleSchoolChange(school)}
+                  aria-pressed={selectedSchool === school}
+                  aria-label={school}
+                  disabled={school === 'My VTOP' && myVtopBusy}
                   className={`px-3 py-1 rounded-full text-sm font-bold border-2 shadow-[2px_2px_0_0_black] border-black cursor-pointer transition duration-100 active:shadow-[1px_1px_0_0_black] active:translate-x-[1px] active:translate-y-[1px] ${
-                    selectedSchool === school ? 'bg-[#FFEA79]' : 'bg-white'
+                    school === 'My VTOP'
+                      ? selectedSchool === school
+                        ? 'bg-[#C4AFF3] ring-2 ring-[#7954BA] ring-offset-2'
+                        : 'bg-[#E0D4FF]'
+                      : selectedSchool === school
+                        ? 'bg-[#FFEA79]'
+                        : 'bg-white'
                   }`}
                 >
-                  {school == 'MID_5YEAR' ? 'SCOPE (MID)' : school}
+                  {school === 'My VTOP' && myVtopBusy
+                    ? 'Checking My VTOP...'
+                    : school == 'MID_5YEAR'
+                      ? 'SCOPE (MID)'
+                      : school}
                 </button>
               ))}
             </div>
+            {selectedSchool === 'My VTOP' && vtopStatus}
           </div>
 
           <div className="grid grid-cols-3 gap-4 m-4 px-4">
@@ -648,14 +672,18 @@ export default function FacultySelector({
               renderOption={prettifyDomain}
             />
             <ComboBox
+              key={`subject-${selectedDomain}`}
               label="Subject"
               value={selectedSubject}
               options={subjects}
               onChange={handleSubjectChange}
             />
-            {getCourseType(selectedSubject.split(' - ')[0]) === 'P' &&
-            !selectedSubject.split(' - ')[0].startsWith('BSTS') ? (
+            {getCourseType(
+              selectedSubject.split(' - ')[0],
+              data[selectedSchool]?.[selectedDomain]?.[selectedSubject]
+            ) === 'P' && !selectedSubject.split(' - ')[0].startsWith('BSTS') ? (
               <ComboBox
+                key={`lab-${selectedDomain}-${selectedSubject}`}
                 label="Slot"
                 value={selectedLabShift}
                 onChange={e => {
@@ -671,6 +699,7 @@ export default function FacultySelector({
               />
             ) : (
               <ComboBox
+                key={`slot-${selectedDomain}-${selectedSubject}`}
                 label="Slot"
                 value={selectedSlot}
                 options={[...slots].sort((a, b) => a.localeCompare(b))}

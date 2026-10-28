@@ -12,6 +12,7 @@ export type timetableDisplayData = {
   slotName: string;
   facultyName: string;
   venue?: string;
+  labVenue?: string;
   _id?: string;
 };
 
@@ -28,6 +29,7 @@ export type fullCourseData = {
       facultyName: string;
       facultyLabSlot?: string;
       venue?: string;
+      labVenues?: Record<string, string>;
     }[];
   }[];
 };
