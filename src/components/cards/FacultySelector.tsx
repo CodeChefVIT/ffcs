@@ -666,7 +666,7 @@ export default function FacultySelector({
           </div>
         )}
         <div className="font-poppins relative bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[4px_4px_0_0_black] mx-auto overflow-hidden">
-          <div className="grid grid-cols-2 gap-x-3 gap-y-4 m-4 px-4 pt-2">
+          <div className="grid grid-cols-2 gap-x-5 gap-y-4 m-4 px-4 pt-2">
             <ComboBox
               label="Select domain"
               value={selectedDomain}
