@@ -1,3 +1,1 @@
-export const FC_SPEC = {
-  
-};
+export const FC_SPEC = {};

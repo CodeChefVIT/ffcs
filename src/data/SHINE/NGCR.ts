@@ -1,2 +1,1 @@
-export const NGCR = {
-};
+export const NGCR = {};

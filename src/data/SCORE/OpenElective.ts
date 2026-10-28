@@ -1,3 +1,1 @@
-export const ScoreOpenElective = {
-
-};
+export const ScoreOpenElective = {};

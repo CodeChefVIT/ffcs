@@ -1,2 +1,1 @@
-export const PCC = {
-};
+export const PCC = {};

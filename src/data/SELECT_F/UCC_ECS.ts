@@ -1,3 +1,1 @@
-export const UCC_ECS = {
-  
-};
+export const UCC_ECS = {};

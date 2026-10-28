@@ -1,2 +1,1 @@
-export const disciplineCore = {
-};
+export const disciplineCore = {};

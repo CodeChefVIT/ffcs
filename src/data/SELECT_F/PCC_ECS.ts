@@ -1,3 +1,1 @@
-export const PCC_ECS = {
-  
-};
+export const PCC_ECS = {};

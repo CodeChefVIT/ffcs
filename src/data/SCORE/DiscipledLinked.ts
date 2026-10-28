@@ -1,2 +1,1 @@
-export const ScoreDisciplineLinked = {
-};
+export const ScoreDisciplineLinked = {};

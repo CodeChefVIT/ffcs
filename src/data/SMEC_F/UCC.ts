@@ -1,3 +1,1 @@
-export const UCC = {
- 
-};
+export const UCC = {};

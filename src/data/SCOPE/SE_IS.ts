@@ -1,2 +1,1 @@
-export const SE_IS = {
-};
+export const SE_IS = {};

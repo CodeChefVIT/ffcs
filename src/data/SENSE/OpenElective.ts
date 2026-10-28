@@ -1,2 +1,1 @@
-export const SenseOpenElective = {
-};
+export const SenseOpenElective = {};
