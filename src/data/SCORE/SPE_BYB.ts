@@ -1,2 +1,1 @@
-export const SPE_BYB = {
-};
+export const SPE_BYB = {};

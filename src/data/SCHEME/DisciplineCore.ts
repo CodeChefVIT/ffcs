@@ -1,2 +1,1 @@
-export const SchemeDisciplineCore = {
-};
+export const SchemeDisciplineCore = {};

@@ -1,2 +1,1 @@
-export const SE_BCB = {
-};
+export const SE_BCB = {};

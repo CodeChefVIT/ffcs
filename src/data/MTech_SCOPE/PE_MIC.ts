@@ -1,3 +1,1 @@
-export const PE_MIC = {
-  
-};
+export const PE_MIC = {};

@@ -1,2 +1,1 @@
-export const SmecDisciplineCore = {
-};
+export const SmecDisciplineCore = {};

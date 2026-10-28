@@ -1,3 +1,1 @@
-export const OEC_MIC = {
-
-};
+export const OEC_MIC = {};

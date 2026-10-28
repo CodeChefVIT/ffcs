@@ -1,3 +1,1 @@
-export const OEC = {
-  
-};
+export const OEC = {};

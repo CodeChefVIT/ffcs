@@ -1,2 +1,1 @@
-export const FoundationCore = {
-};
+export const FoundationCore = {};

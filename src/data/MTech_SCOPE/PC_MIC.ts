@@ -1,3 +1,1 @@
-export const PC_MIC = {
-  
-};
+export const PC_MIC = {};

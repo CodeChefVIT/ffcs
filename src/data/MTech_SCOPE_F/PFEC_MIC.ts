@@ -1,2 +1,1 @@
-export const PFEC_MIC = {
-};
+export const PFEC_MIC = {};

@@ -1,2 +1,1 @@
-export const SmecDisciplineELinked = {
-};
+export const SmecDisciplineELinked = {};

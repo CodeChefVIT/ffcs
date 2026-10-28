@@ -1,3 +1,1 @@
-export const UE_MIC = {
-  
-};
+export const UE_MIC = {};

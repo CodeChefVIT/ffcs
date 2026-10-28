@@ -1,2 +1,1 @@
-export const openElective = {
-};
+export const openElective = {};

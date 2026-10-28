@@ -1,3 +1,1 @@
-export const foundationCore = {
- 
-};
+export const foundationCore = {};

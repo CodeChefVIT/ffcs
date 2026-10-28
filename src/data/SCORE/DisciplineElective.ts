@@ -1,2 +1,1 @@
-export const ScoreDisciplinedElective = {
-};
+export const ScoreDisciplinedElective = {};

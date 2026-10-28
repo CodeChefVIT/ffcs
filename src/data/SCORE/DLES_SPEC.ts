@@ -1,3 +1,1 @@
-export const DLES_SPEC = {
-
-};
+export const DLES_SPEC = {};

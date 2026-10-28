@@ -1,3 +1,1 @@
-export const CON = {
-  
-};
+export const CON = {};

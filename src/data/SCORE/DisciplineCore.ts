@@ -1,2 +1,1 @@
-export const ScoreDisciplineCore = {
-};
+export const ScoreDisciplineCore = {};

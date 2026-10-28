@@ -1,3 +1,1 @@
-export const SenseDisciplineCore = {
-  
-};
+export const SenseDisciplineCore = {};

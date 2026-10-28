@@ -1,3 +1,1 @@
-export const SelectFoundationCore = {
-
-};
+export const SelectFoundationCore = {};
