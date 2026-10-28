@@ -779,7 +779,7 @@ export default function ViewTimeTable() {
       className="w-screen mt-12 bg-[#A7D5D7] font-poppins flex items-center justify-center flex-col border-black border-3"
     >
       <div className="flex flex-col h-full p-12 overflow-hidden">
-        <div className="flex flex-row flex-wrap gap-4 mb-4 justify-between w-full px-4 items-center">
+        <div className="flex flex-row flex-wrap gap-4 mb-4 justify-between w-full px-2 items-center">
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
             <div className="text-5xl font-pangolin">Your Timetables</div>
             <div className="flex flex-wrap gap-2">
@@ -936,7 +936,7 @@ export default function ViewTimeTable() {
         </div>
 
         <div className="w-full max-w-[95vw] my-2">
-          <div className="text-xl font-poppins mb-3">
+          <div className="text-xl font-poppins mb-3 px-2">
             {timetableCount === 0
               ? '(Empty List)'
               : timetableCount === 1
@@ -959,7 +959,7 @@ export default function ViewTimeTable() {
           />
         </div>
 
-        <div className="flex flex-row items-center justify-between px-16 pt-4 gap-8">
+        <div className="flex flex-row items-center justify-between px-2 pt-4 gap-8">
           <div className="w-auto">
             <div className="w-full flex justify-center">
               <button
