@@ -92,30 +92,30 @@ function Planner({
   }, [selectedCourses, storageKey]);
 
   return (
-    <>
-      <div className="w-4xl max-w-[calc(100%-2rem)] mx-4">
-        <FacultySelector
-          key={school}
-          selectedSchool={school}
-          dataOverride={facultyData}
-          storageKey={storageKey}
-          onConfirm={facultySelectorOnConfirm}
-        />
-      </div>
-      <TimetableProvider>
-        <div className="w-full px-8">
+    <TimetableProvider>
+      <div className="relative z-10 w-full max-w-[1827px] px-8 mb-16 flex flex-col items-center gap-10 min-[1440px]:flex-row min-[1440px]:items-stretch min-[1440px]:gap-12 2xl:gap-[68px]">
+        <div className="w-full max-w-[943px] min-[1440px]:flex-[943_1_0%]">
+          <FacultySelector
+            key={school}
+            selectedSchool={school}
+            dataOverride={facultyData}
+            storageKey={storageKey}
+            onConfirm={facultySelectorOnConfirm}
+          />
+        </div>
+        <div className="w-full max-w-[943px] min-[1440px]:max-w-[752px] min-[1440px]:min-w-[640px] min-[1440px]:flex-[752_1_0%]">
           <CourseCard
             selectedCourses={selectedCourses}
             onDelete={id => setSelectedCourses(prev => prev.filter(c => c.id !== id))}
             onUpdate={updatedCourses => setSelectedCourses(updatedCourses)}
           />
         </div>
+      </div>
 
-        <div className="w-screen p-0 m-0">
-          <ViewTimeTable />
-        </div>
-      </TimetableProvider>
-    </>
+      <div className="w-screen p-0 m-0">
+        <ViewTimeTable />
+      </div>
+    </TimetableProvider>
   );
 }
 
