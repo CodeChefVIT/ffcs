@@ -43,7 +43,10 @@ export default function Navbar({ page }: NavbarProps) {
         <Popup
           type="logout"
           closeLink={() => setShowLogoutPopup(false)}
-          action={() => signOut({ callbackUrl: '/' })}
+          action={() => {
+            localStorage.removeItem('school');
+            signOut({ callbackUrl: '/' });
+          }}
         />
       )}
 
@@ -138,7 +141,10 @@ export default function Navbar({ page }: NavbarProps) {
                 type="regular"
                 text="Log Out"
                 color="purple"
-                onClick={() => signOut({ callbackUrl: '/' })}
+                onClick={() => {
+                  localStorage.removeItem('school');
+                  signOut({ callbackUrl: '/' });
+                }}
               />
             )}
           </div>
