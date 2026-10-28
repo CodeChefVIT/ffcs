@@ -659,7 +659,7 @@ export default function FacultySelector({
 
   return (
     <div>
-      <div className="relative inline-block mb-20">
+      <div className="relative mb-20">
         {selectedSchool === 'My VTOP' && (
           <div className="absolute -top-8 left-8 z-10 flex h-10 items-center rounded-2xl border-2 border-black bg-[#CDB1FF] px-5 font-poppins text-base font-semibold shadow-[3px_3px_0_0_black]">
             My VTOP
