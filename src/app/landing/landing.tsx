@@ -17,19 +17,18 @@ import { data as bundledData } from '@/data/faculty';
 import { FacultyData } from '@/lib/vtopCatalogue';
 import useVtopCatalogue from '@/hooks/useVtopCatalogue';
 import VtopExtensionModal from '@/components/cards/VtopExtensionModal';
+import SchoolPopup from '@/components/ui/SchoolPopup';
 
 function Planner({
   facultyData,
   storageKey,
   school,
-  onSchoolChange,
   onMyVtopClick,
   vtop,
 }: {
   facultyData: FacultyData;
   storageKey: string;
   school: string;
-  onSchoolChange: (school: string) => void;
   onMyVtopClick: () => void;
   vtop: ReturnType<typeof useVtopCatalogue>;
 }) {
@@ -100,10 +99,8 @@ function Planner({
     <>
       <div className="w-4xl mx-4">
         <FacultySelector
+          key={school}
           selectedSchool={school}
-          onSchoolChange={onSchoolChange}
-          onMyVtopClick={onMyVtopClick}
-          myVtopBusy={vtop.busy}
           vtopStatus={
             <div className="flex flex-wrap items-center justify-center gap-3 text-xs pb-2">
               <span>
@@ -154,16 +151,24 @@ function Planner({
 
 export default function View() {
   const vtop = useVtopCatalogue();
-  const [school, setSchool] = useState('SCOPE');
-  const personal = school === 'My VTOP' ? vtop.catalogue : null;
+  const [savedSchool, setSavedSchool] = useState('SCOPE');
+  const [vtopOn, setVtopOn] = useState(false);
+  const [showSchoolPopup, setShowSchoolPopup] = useState(false);
+  const school = vtopOn ? 'My VTOP' : savedSchool;
+  const personal = vtopOn ? vtop.catalogue : null;
   const selectVtop = async () => {
-    if (await vtop.select()) setSchool('My VTOP');
+    if (await vtop.select()) setVtopOn(true);
   };
   useEffect(() => {
-    if (school === 'My VTOP' && !vtop.catalogue) setSchool('SCOPE');
-  }, [school, vtop.catalogue]);
+    const saved = localStorage.getItem('school');
+    if (saved && saved in bundledData) setSavedSchool(saved);
+    else setShowSchoolPopup(true);
+  }, []);
   useEffect(() => {
-    if (vtop.readySelection && vtop.modal === 'progress') setSchool('My VTOP');
+    if (vtopOn && !vtop.catalogue) setVtopOn(false);
+  }, [vtopOn, vtop.catalogue]);
+  useEffect(() => {
+    if (vtop.readySelection && vtop.modal === 'progress') setVtopOn(true);
   }, [vtop.readySelection, vtop.modal]);
   const facultyData = useMemo<FacultyData>(
     () => ({ ...bundledData, 'My VTOP': personal?.categories || {} }),
@@ -193,14 +198,28 @@ export default function View() {
         <Planner
           key={`${storageKey}:${personal?.capturedAt || ''}`}
           school={school}
-          onSchoolChange={setSchool}
           onMyVtopClick={() => void selectVtop()}
           vtop={vtop}
           facultyData={facultyData}
           storageKey={storageKey}
         />
       </div>
-      <VtopExtensionModal {...vtop} onReady={() => setSchool('My VTOP')} />
+      {showSchoolPopup && (
+        <SchoolPopup
+          schools={Object.keys(bundledData)}
+          school={savedSchool}
+          vtopOn={vtopOn}
+          vtopBusy={vtop.busy}
+          onVtopChange={on => (on ? void selectVtop() : setVtopOn(false))}
+          onConfirm={picked => {
+            localStorage.setItem('school', picked);
+            setSavedSchool(picked);
+            setShowSchoolPopup(false);
+          }}
+          onClose={() => setShowSchoolPopup(false)}
+        />
+      )}
+      <VtopExtensionModal {...vtop} onReady={() => setVtopOn(true)} />
       <div className="mt-12" />
       <Accordion />
 
