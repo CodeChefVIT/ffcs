@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FFCS Contributors</title>
+    <link rel="stylesheet" href="contributor.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <span class="badge">CONTRIBUTOR TOOL</span>
+        <h1>FFCS Contributors</h1>
+        <p>VTOP courses, ready for your data folder.</p>
+      </header>
+      <div id="error" role="alert" hidden></div>
+      <section aria-labelledby="session-title">
+        <div class="heading">
+          <span class="step">1</span>
+          <div>
+            <h2 id="session-title">Connect your VTOP session</h2>
+            <p>Log in normally. Your available courses are read in the background.</p>
+          </div>
+        </div>
+        <div class="row">
+          <label class="grow"
+            >VTOP tab<select id="vtop-tab">
+              <option value="">Looking for VTOP tabs...</option>
+            </select></label
+          ><button id="reload-tabs" class="light">Refresh tabs</button
+          ><button id="connect">Connect to VTOP</button
+          ><a
+            class="button light"
+            href="https://vtop.vit.ac.in/vtop/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Open VTOP</a
+          >
+        </div>
+        <p id="session-status" role="status">
+          Refresh VTOP after installing this extension, then connect.
+        </p>
+      </section>
+      <section aria-labelledby="details-title">
+        <div class="heading">
+          <span class="step">2</span>
+          <div>
+            <h2 id="details-title">School and branch</h2>
+            <p>Enter the school and branch for this export.</p>
+          </div>
+        </div>
+        <div class="row">
+          <label class="grow"
+            >School<select id="school">
+              <option value="">Choose your school...</option>
+            </select></label
+          ><label class="grow"
+            >Branch<input
+              id="branch"
+              type="text"
+              placeholder="e.g. BCI or BCE"
+              maxlength="80"
+              autocomplete="off"
+              spellcheck="false"
+          /></label>
+        </div>
+        <p id="destination" class="hint">Choose a school and enter your branch.</p>
+        <p class="hint">
+          Every available VTOP category becomes its own file automatically, for example
+          <code>FC.ts</code>, <code>DLES.ts</code> and <code>SPE.ts</code>. An
+          <code>index.ts</code> is generated for the exported files.
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>VTOP category</th>
+                <th>File</th>
+              </tr>
+            </thead>
+            <tbody id="categories">
+              <tr>
+                <td colspan="2">Connect to VTOP to see the files that will be exported.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="export" aria-labelledby="export-title">
+        <div class="heading">
+          <span class="step">3</span>
+          <div>
+            <h2 id="export-title">Fetch &amp; download</h2>
+            <p>Download all available categories as TypeScript course data in one ZIP.</p>
+          </div>
+        </div>
+        <p id="job-status" role="status" aria-live="polite">
+          Connect to VTOP and enter your school and branch to start.
+        </p>
+        <progress id="progress" max="1" hidden aria-label="VTOP export progress"></progress>
+        <div class="row">
+          <button id="start" disabled>Fetch &amp; download ZIP</button
+          ><button id="cancel" class="light" hidden>Cancel capture</button
+          ><button id="download" class="yellow" hidden>Download ZIP again</button
+          ><button id="clear" class="light">Clear captured data</button>
+        </div>
+      </section>
+      <footer>
+        Standalone extension. Your school and branch label the export. Courses come from the
+        selected signed-in VTOP account. No password, cookie, CSRF token or raw registration ID is
+        included in the ZIP.
+      </footer>
+    </main>
+    <script src="exporter.js"></script>
+    <script src="zip.js"></script>
+    <script src="contributor.js"></script>
+  </body>
+</html>

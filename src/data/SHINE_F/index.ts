@@ -1,9 +1,13 @@
-import { PCC } from './PCC';
+import { NC } from './NC';
 import { UCC } from './UCC';
+import { PCC } from './PCC';
+import { CON } from './FCON';
 import { OEC } from './OEC';
 
-export const SHINE_F = {
-  UniversityCoreCourses: UCC,
-  ProfessionalCoreCourses: PCC,
-  OpenElectiveCourses: OEC,
+export const SHINE_BHT = {
+  'NC': NC,
+  'UCC': UCC,
+  'PCC': PCC,
+  'FCON': CON,
+  'OEC': OEC,
 };
