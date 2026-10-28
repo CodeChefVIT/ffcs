@@ -397,9 +397,16 @@ export default function FacultySelector({
                 : entry.faculty) === name
           )
         );
-      const slotsWithFaculties = selectedSlots.filter(slot => facultiesInSlot(slot).length > 0);
+      const emptySlot = selectedSlots.find(slot => facultiesInSlot(slot).length === 0);
+      if (emptySlot) {
+        setPopup({
+          showPopup: true,
+          message: `Please select a faculty for slot ${emptySlot}.`,
+        });
+        return;
+      }
       if (courseType == 'both' || courseCodeType === 'E') {
-        courseSlots = slotsWithFaculties.flatMap(slot =>
+        courseSlots = selectedSlots.flatMap(slot =>
           generateCourseSlotsBoth({
             data,
             selectedSchool,
@@ -411,7 +418,7 @@ export default function FacultySelector({
           })
         );
       } else if (courseType == 'th') {
-        courseSlots = slotsWithFaculties.flatMap(slot =>
+        courseSlots = selectedSlots.flatMap(slot =>
           generateCourseSlotsSingle({
             subjectData,
             selectedFaculties: facultiesInSlot(slot),
