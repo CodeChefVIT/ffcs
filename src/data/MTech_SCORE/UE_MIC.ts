@@ -1,0 +1,117 @@
+export const UE_MIC = {
+  'CSE1031 - Web Technologies': [
+    { slot: 'L43+L44', venue: 'PRP445', faculty: 'SUGAPRIYA G' },
+    { slot: 'E1', venue: 'PRP534', faculty: 'SUGAPRIYA G' },
+    { slot: 'E2', venue: 'PRP534', faculty: 'DARSHINI VIPINCHANDRAN' },
+    { slot: 'L21+L22', venue: 'PRP119', faculty: 'DARSHINI VIPINCHANDRAN' },
+  ],
+  'CSE1032 - Cloud Computing Techniques': [
+    { slot: 'A1+TA1+TAA1+V1', venue: 'PRP530', faculty: 'JANANI P' },
+    { slot: 'A2+TA2+TAA2+V3', venue: 'PRP426', faculty: 'DURGADEVI U' },
+  ],
+  'CSI1006 - Mini Project': [
+    { slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' },
+  ],
+  'CSI3023 - Advanced Server Side Programming': [
+    { slot: 'B1', venue: 'SJT324', faculty: 'JUSTUS RAJU KARACKATTUVILAYIL' },
+    { slot: 'L37+L38', venue: 'SJT416', faculty: 'JUSTUS RAJU KARACKATTUVILAYIL' },
+  ],
+  'CSI3024 - Software Application Architecture': [
+    { slot: 'G1+TG1', venue: 'PRP219', faculty: 'KASPAR S' },
+    { slot: 'G2+TG2', venue: 'PRP220', faculty: 'POOJA CHAUDHARY' },
+  ],
+  'CSI3025 - Application Development and Deployment Architecture': [
+    { slot: 'F2', venue: 'PRP210', faculty: 'DEEPALAKSHMI G' },
+    { slot: 'F1', venue: 'PRP210', faculty: 'MANISHA KHANRA' },
+    { slot: 'L19+L20', venue: 'PRP352', faculty: 'DEEPALAKSHMI G' },
+    { slot: 'L43+L44', venue: 'PRP352', faculty: 'MANISHA KHANRA' },
+  ],
+  'CSI3026 - Machine Learning': [
+    { slot: 'B1', venue: 'PRP210', faculty: 'JEEVANANTHAM A K' },
+    { slot: 'B2', venue: 'PRP210', faculty: 'SAIRABANU J' },
+    { slot: 'B1', venue: 'PRP219', faculty: 'KAPIL KUMAR SHARMA' },
+    { slot: 'L3+L4', venue: 'SJT515', faculty: 'SAIRABANU J' },
+    { slot: 'L31+L32', venue: 'SJT515', faculty: 'JEEVANANTHAM A K' },
+    { slot: 'L45+L46', venue: 'SJT515', faculty: 'KAPIL KUMAR SHARMA' },
+  ],
+  'CSI3028 - Deep Learning': [
+    { slot: 'F2+TF2', venue: 'SJT401', faculty: 'BIJI C L' },
+    { slot: 'F1+TF1', venue: 'SJT402', faculty: 'SUDHAKAR P' },
+  ],
+  'CSI3029 - Front End Design and Testing': [
+    { slot: 'A2', venue: 'SJT311A', faculty: 'JUSTUS RAJU KARACKATTUVILAYIL' },
+    { slot: 'L1+L2', venue: 'SJT416', faculty: 'JUSTUS RAJU KARACKATTUVILAYIL' },
+  ],
+  'MAT1023 - Computational Thinking for Data Analytics': [
+    { slot: 'E1+TE1', venue: 'PRP633', faculty: 'GOWSALYA M' },
+    { slot: 'B1+TB1', venue: 'PRP632', faculty: 'SRINIVASA MURTHY T' },
+    { slot: 'B2+TB2', venue: 'PRP632', faculty: 'LAKSHMI NARAYAN MISHRA' },
+  ],
+  'MAT3011 - Non Parametric Tests': [
+    { slot: 'B1+TB1', venue: 'PRP731', faculty: 'MOKESHRAYALU G' },
+    { slot: 'L31+L32', venue: 'PRP445', faculty: 'MOKESHRAYALU G' },
+    { slot: 'B2+TB2', venue: 'PRP633', faculty: 'JISHA FRANCIS' },
+    { slot: 'L15+L16', venue: 'SJT620A', faculty: 'JISHA FRANCIS' },
+  ],
+  'MAT3012 - Data Warehousing and Data Mining': [
+    { slot: 'C1+TC1', venue: 'PRP731', faculty: 'NIRANJAN HARI' },
+    { slot: 'C2+TC2', venue: 'PRP633', faculty: 'ASHISH BHATT' },
+  ],
+  'MAT5016 - Time Series Analysis and Forecasting': [
+    { slot: 'E1+TE1', venue: 'PRP632', faculty: 'RAJESH MOHARANA' },
+    { slot: 'E2+TE2', venue: 'PRP632', faculty: 'SOMENATH KUIRY' },
+    { slot: 'L27+L28', venue: 'PRP119', faculty: 'SOMENATH KUIRY' },
+    { slot: 'L45+L46', venue: 'PRP450', faculty: 'RAJESH MOHARANA' },
+    { slot: 'B1+TB1', venue: 'PRP633', faculty: 'MAHAMOOD USMAN' },
+    { slot: 'L41+L42', venue: 'PRP550', faculty: 'MAHAMOOD USMAN' },
+  ],
+  'MAT5017 - Multivariate Data Analysis': [
+    { slot: 'C1+TC1', venue: 'PRP632', faculty: 'MEENAKSHI GAUTAM' },
+    { slot: 'L31+L32', venue: 'PRP119', faculty: 'MEENAKSHI GAUTAM' },
+    { slot: 'A1+TA1', venue: 'PRP633', faculty: 'SHUBHANGI DWIVEDI' },
+    { slot: 'L51+L52', venue: 'PRP550', faculty: 'SHUBHANGI DWIVEDI' },
+    { slot: 'C2+TC2', venue: 'PRP632', faculty: 'SHUBHANGI DWIVEDI' },
+    { slot: 'L11+L12', venue: 'PRP119', faculty: 'SHUBHANGI DWIVEDI' },
+  ],
+  'MAT6004 - Computational Statistics for Data Science': [
+    { slot: 'L31+L32+L55+L56', venue: 'SJT620', faculty: 'YOGALAKSHMI T' },
+    { slot: 'L43+L44+L59+L60', venue: 'PRP550', faculty: 'ARUN KUMAR BADAJENA' },
+    { slot: 'L23+L24+L29+L30', venue: 'PRP445', faculty: 'ARUN KUMAR BADAJENA' },
+    { slot: 'L37+L38+L49+L50', venue: 'PRP550', faculty: 'CLEMENT J' },
+    { slot: 'L7+L8+L15+L16', venue: 'PRP119', faculty: 'YOGALAKSHMI T' },
+  ],
+  'MAT6005 - Machine learning for Data Science': [
+    { slot: 'A1+TA1', venue: 'PRP632', faculty: 'VEERAMANI S' },
+    { slot: 'A2+TA2', venue: 'PRP632', faculty: 'VEERAMANI S' },
+    { slot: 'C1+TC1', venue: 'PRP633', faculty: 'RAJESH BHATT' },
+    { slot: 'L53+L54', venue: 'PRP119', faculty: 'RAJESH BHATT' },
+    { slot: 'L23+L24', venue: 'PRP550', faculty: 'VEERAMANI S' },
+    { slot: 'L39+L40', venue: 'PRP445', faculty: 'VEERAMANI S' },
+  ],
+  'MAT6008 - Artificial Intelligence for Data Science': [
+    { slot: 'G1', venue: 'PRP531', faculty: 'SUBHABRATA RATH' },
+    { slot: 'L39+L40', venue: 'PRP450', faculty: 'SUBHABRATA RATH' },
+    { slot: 'F2', venue: 'PRP633', faculty: 'SUBHABRATA RATH' },
+    { slot: 'L25+L26', venue: 'PRP450', faculty: 'SUBHABRATA RATH' },
+  ],
+  'MAT6012 - Programming for Data Analysis': [
+    { slot: 'G1', venue: 'PRP632', faculty: 'GOURANGA MALLIK' },
+    { slot: 'L47+L48+L55+L56', venue: 'PRP550', faculty: 'GOURANGA MALLIK' },
+    { slot: 'F1', venue: 'PRP632', faculty: 'ARUN KUMAR BADAJENA' },
+    { slot: 'L35+L36+L39+L40', venue: 'PRP550', faculty: 'ARUN KUMAR BADAJENA' },
+    { slot: 'F2', venue: 'PRP632', faculty: 'JAGADEESWARI M' },
+    { slot: 'L21+L22+L29+L30', venue: 'PRP550', faculty: 'JAGADEESWARI M' },
+  ],
+  'MAT6015 - Big Data Analytics and Visualization': [
+    { slot: 'F1', venue: 'PRP633', faculty: 'SOMENATH KUIRY' },
+    { slot: 'G1', venue: 'PRP633', faculty: 'MEENAKSHI GAUTAM' },
+    { slot: 'G2', venue: 'PRP632', faculty: 'SOMENATH KUIRY' },
+    { slot: 'L31+L32', venue: 'PRP446', faculty: 'SOMENATH KUIRY' },
+    { slot: 'L9+L10', venue: 'PRP450', faculty: 'SOMENATH KUIRY' },
+    { slot: 'L57+L58', venue: 'PRP550', faculty: 'MEENAKSHI GAUTAM' },
+  ],
+  'SWE1904 - Capstone Project': [
+    { slot: 'NIL', venue: 'NIL', faculty: 'PLACEMENT AND TRAINING' },
+    { slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' },
+  ],
+};
