@@ -8,9 +8,12 @@ import Popup from './Popup';
 
 type NavbarProps = {
   page: 'landing' | '404' | 'slots' | 'saved' | 'shared' | 'mobile' | 'placeholder';
+  school?: string;
+  vtopOn?: boolean;
+  onSchoolClick?: () => void;
 };
 
-export default function Navbar({ page }: NavbarProps) {
+export default function Navbar({ page, school, vtopOn, onSchoolClick }: NavbarProps) {
   const router = useRouter();
   const { data: session } = useSession();
   const loggedin = !!session;
@@ -63,6 +66,22 @@ export default function Navbar({ page }: NavbarProps) {
                   color="yellow"
                   onClick={() => router.push('/slots')}
                 />
+
+                {onSchoolClick && (
+                  <div className="relative">
+                    <ZButton
+                      type="long"
+                      text={school}
+                      color="blue"
+                      forceColor="#FFFFFF"
+                      image="/icons/chevron_down.svg"
+                      onClick={onSchoolClick}
+                    />
+                    {vtopOn && (
+                      <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full border-2 border-black bg-[#C4AFF3]" />
+                    )}
+                  </div>
+                )}
               </>
             )}
             <div className="flex gap-4 mx-5 items-center">
