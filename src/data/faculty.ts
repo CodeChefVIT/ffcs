@@ -14,7 +14,7 @@ import { SCORE_F } from './SCORE_F';
 import { SELECT_F } from './SELECT_F';
 import { SENSE_F } from './SENSE_F';
 import { SMEC_F } from './SMEC_F';
-import { SHINE_F } from './SHINE_F';
+import { SHINE_BHTF } from './SHINE_F';
 import { SBST_F } from './SBST_F';
 import { SCE_F } from './SCE_F';
 import { MTech_SCOPE_F } from './MTech_SCOPE_F';
@@ -58,7 +58,7 @@ export const data: Schools = {
   "SELECT ('25 Batch)": SELECT_F,
   "SENSE ('25 Batch)": SENSE_F,
   "SMEC ('25 Batch)": SMEC_F,
-  "SHINE ('25 Batch)": SHINE_F,
+  "SHINE ('25 Batch)": SHINE_BHTF,
   "SBST ('25 Batch)": SBST_F,
   "SCE ('25 Batch)": SCE_F,
 };
