@@ -8,9 +8,12 @@ import Popup from './Popup';
 
 type NavbarProps = {
   page: 'landing' | '404' | 'slots' | 'saved' | 'shared' | 'mobile' | 'placeholder';
+  school?: string;
+  vtopOn?: boolean;
+  onSchoolClick?: () => void;
 };
 
-export default function Navbar({ page }: NavbarProps) {
+export default function Navbar({ page, school, vtopOn, onSchoolClick }: NavbarProps) {
   const router = useRouter();
   const { data: session } = useSession();
   const loggedin = !!session;
@@ -43,7 +46,14 @@ export default function Navbar({ page }: NavbarProps) {
         <Popup
           type="logout"
           closeLink={() => setShowLogoutPopup(false)}
-          action={() => signOut({ callbackUrl: '/' })}
+          action={() => {
+            try {
+              localStorage.removeItem('school');
+            } catch {
+              // Storage is blocked, so there is nothing to forget.
+            }
+            signOut({ callbackUrl: '/' });
+          }}
         />
       )}
 
@@ -60,6 +70,23 @@ export default function Navbar({ page }: NavbarProps) {
                   color="yellow"
                   onClick={() => router.push('/slots')}
                 />
+
+                {onSchoolClick && (
+                  <div className="relative">
+                    <ZButton
+                      type="long"
+                      text={school}
+                      forceColor="#FFFFFF"
+                      image="/icons/chevron_down.svg"
+                      imageSize={10}
+                      onClick={onSchoolClick}
+                      className="whitespace-nowrap"
+                    />
+                    {vtopOn && (
+                      <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full border-2 border-black bg-ffcs-violet" />
+                    )}
+                  </div>
+                )}
               </>
             )}
             <div className="flex gap-4 mx-5 items-center">
@@ -74,7 +101,7 @@ export default function Navbar({ page }: NavbarProps) {
                 <FFCSButton />
 
                 <div
-                  className="text-4xl font-[pangolin] cursor-pointer"
+                  className="text-4xl font-pangolin cursor-pointer"
                   onClick={() => router.push('/')}
                 >
                   FFCS-inator
@@ -84,7 +111,7 @@ export default function Navbar({ page }: NavbarProps) {
 
             {page === 'mobile' && (
               <div
-                className="text-3xl font-[pangolin] cursor-pointer"
+                className="text-3xl font-pangolin cursor-pointer"
                 onClick={() => router.push('/')}
               >
                 FFCS-inator
@@ -139,7 +166,14 @@ export default function Navbar({ page }: NavbarProps) {
                 type="regular"
                 text="Log Out"
                 color="purple"
-                onClick={() => signOut({ callbackUrl: '/' })}
+                onClick={() => {
+                  try {
+                    localStorage.removeItem('school');
+                  } catch {
+                    // Storage is blocked, so there is nothing to forget.
+                  }
+                  signOut({ callbackUrl: '/' });
+                }}
               />
             )}
           </div>

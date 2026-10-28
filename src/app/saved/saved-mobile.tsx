@@ -7,6 +7,7 @@ import Footer from '@/components/ui/Footer';
 import Image from 'next/image';
 import axios from 'axios';
 import { PopupViewTT } from '@/components/ui/PopupMobile';
+import AlertModal from '@/components/ui/AlertModal';
 import { SavedTimetablesSkeleton } from './saved-skeleton';
 
 async function fetchTimetablesByOwner(owner: string) {
@@ -46,6 +47,17 @@ export default function SavedMobile() {
   const [selectedTT, setSelectedTT] = useState<TimetableEntry | null>(null);
   const [publicToggle, setPublicToggle] = useState(true);
 
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMsg, setAlertMsg] = useState('');
+  const [alertColor, setAlertColor] = useState<'green' | 'red' | 'purple'>('purple');
+  const [isCopying, setIsCopying] = useState(false);
+
+  function showAlert(message: string, color: 'green' | 'red' | 'purple' = 'purple') {
+    setAlertMsg(message);
+    setAlertColor(color);
+    setAlertOpen(true);
+  }
+
   useEffect(() => {
     if (!userEmail) return;
     setLoading(true);
@@ -73,27 +85,60 @@ export default function SavedMobile() {
   }
 
   async function handleCopyLink(tt: TimetableEntry) {
+    if (isCopying) return;
+    setIsCopying(true);
     try {
-      await axios.patch(`/api/timetables/${tt._id}`, {
-        isPublic: publicToggle,
-      });
+      if (!publicToggle) {
+        await axios.patch(`/api/timetables/${tt._id}`, {
+          isPublic: true,
+        });
+        setPublicToggle(true);
+        setTimetables(prev => prev.map(t => (t._id === tt._id ? { ...t, isPublic: true } : t)));
+      }
       const res = await axios.get(`/api/timetables/${tt._id}`);
       const updated = res.data;
-      if (!updated.shareId) throw new Error('No shareId found');
+      if (!updated?.shareId) throw new Error('No shareId found');
       const url = `${window.location.origin}/share/${updated.shareId}`;
-      await navigator.clipboard.writeText(url);
-    } catch {}
+
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        const textArea = document.createElement('textarea');
+        textArea.value = url;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      }
+
+      showAlert('Link copied to clipboard!', 'green');
+    } catch (err: unknown) {
+      console.error('Failed to copy share link:', err);
+      showAlert('Failed to copy link. Please try again.', 'red');
+    } finally {
+      setIsCopying(false);
+    }
   }
 
   async function handleTogglePublic(state: 'on' | 'off') {
     if (!selectedTT) return;
-    setPublicToggle(state === 'on');
-    await axios.patch(`/api/timetables/${selectedTT._id}`, {
-      isPublic: state === 'on',
-    });
-    setTimetables(prev =>
-      prev.map(tt => (tt._id === selectedTT._id ? { ...tt, isPublic: state === 'on' } : tt))
-    );
+    const isPub = state === 'on';
+    setPublicToggle(isPub);
+    try {
+      await axios.patch(`/api/timetables/${selectedTT._id}`, {
+        isPublic: isPub,
+      });
+      setTimetables(prev =>
+        prev.map(tt => (tt._id === selectedTT._id ? { ...tt, isPublic: isPub } : tt))
+      );
+    } catch (err: unknown) {
+      console.error('Failed to toggle public status:', err);
+      setPublicToggle(!isPub);
+      showAlert('Failed to update visibility. Please try again.', 'red');
+    }
   }
 
   return (
@@ -171,6 +216,13 @@ export default function SavedMobile() {
           }
         />
       )}
+
+      <AlertModal
+        open={alertOpen}
+        message={alertMsg}
+        onClose={() => setAlertOpen(false)}
+        color={alertColor}
+      />
     </div>
   );
 }

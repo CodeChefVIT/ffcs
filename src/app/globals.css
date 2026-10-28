@@ -1,6 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Pangolin&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
@@ -11,9 +8,10 @@ html {
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-inter: var(--font-inter);
-  --font-poppins: var(--font-poppins);
-  --font-pangolin: var(--font-pangolin);
+  --font-inter: var(--next-font-inter);
+  --font-poppins: var(--next-font-poppins);
+  --font-pangolin: var(--next-font-pangolin);
+  --font-jakarta: var(--next-font-jakarta);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -50,6 +48,65 @@ html {
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* FFCS tokens, taken from the existing components (Figma frames are drawn at 1.5x). */
+/* prettier-ignore */
+@theme {
+  /* Surfaces */
+  --color-ffcs-page: #CEE4E5;
+  --color-ffcs-card: #A7D5D7;
+  --color-ffcs-card-light: #C9E5E6;
+  --color-ffcs-overlay: #425D5F;
+
+  /* Button fills */
+  --color-ffcs-red: #FFAD93;
+  --color-ffcs-yellow: #FFEA79;
+  --color-ffcs-green: #C1FF83;
+  --color-ffcs-green-bright: #59FF56;
+  --color-ffcs-green-muted: #B8E07A;
+  --color-ffcs-blue: #75E5EA;
+  --color-ffcs-blue-pressed: #6CC0C5;
+  --color-ffcs-purple: #90BDFF;
+  --color-ffcs-gray: #969696;
+
+  /* Faculty selection */
+  --color-ffcs-violet: #C4AFF3;
+  --color-ffcs-violet-light: #E0D4FF;
+  --color-ffcs-violet-ring: #7954BA;
+
+  /* Timetable slots */
+  --color-ffcs-theory: #86D7FF;
+  --color-ffcs-lab: #96FFCA;
+
+  /* Popup and alert pairs */
+  --color-ffcs-popup-red: #FFD3D3;
+  --color-ffcs-popup-red-accent: #FF8C8C;
+  --color-ffcs-popup-yellow: #FFF8D1;
+  --color-ffcs-popup-yellow-accent: #FFEA79;
+  --color-ffcs-popup-green: #E5FFDE;
+  --color-ffcs-popup-green-accent: #ABDE9F;
+  --color-ffcs-popup-blue: #E2F2F9;
+  --color-ffcs-popup-blue-accent: #8BD5FF;
+  --color-ffcs-popup-purple: #E4E9FC;
+  --color-ffcs-popup-purple-accent: #94ACFF;
+
+  /* Close and delete actions */
+  --color-ffcs-close: #FF9A9A;
+  --color-ffcs-delete: #F08585;
+
+  /* Error text */
+  --color-ffcs-error: #CC3312;
+  --color-ffcs-error-dark: #B93C21;
+
+  /* Secondary text: labels, placeholders, hints */
+  --color-ffcs-muted: #000000B2;
+
+  /* Hard offset shadows */
+  --shadow-hard-xs: 1px 1px 0 0 #000;
+  --shadow-hard-sm: 2px 2px 0 0 #000;
+  --shadow-hard: 4px 4px 0 0 #000;
+  --shadow-hard-lg: 10px 10px 0 0 #000;
 }
 
 :root {
