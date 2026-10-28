@@ -628,12 +628,12 @@ export default function FacultySelector({
     setLabShiftOptions({ morning: [], evening: [] });
   };
 
-  // Only slots added since the last run are restored, so an unticked faculty stays unticked.
+  // Saved picks are restored when the first slot is picked, so an unticked faculty stays unticked.
   const previousSlots = useRef<string[]>([]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const addedSlots = selectedSlots.filter(slot => !previousSlots.current.includes(slot));
+    const isFirstSlot = previousSlots.current.length === 0;
     previousSlots.current = selectedSlots;
     if (!selectedSubject || (selectedSlots.length === 0 && !selectedLabShift)) return;
 
@@ -650,7 +650,7 @@ export default function FacultySelector({
           const shiftSlots = labShiftOptions[selectedLabShift] || [];
           return shiftSlots.includes(slot.slotName);
         }
-        return addedSlots.includes(slot.slotName);
+        return isFirstSlot && selectedSlots.includes(slot.slotName);
       });
       if (matchingSlots.length > 0) {
         const allFaculties = matchingSlots.flatMap(slot =>
