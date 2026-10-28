@@ -84,6 +84,26 @@ export default function SchoolPopup({
         className="font-poppins bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[10px_10px_0_0_black] w-full max-w-4xl p-8 flex flex-col gap-6"
       >
         <div className="text-xl font-semibold">Your school &amp; batch</div>
+        <div className="flex items-center gap-4 rounded-2xl border-2 border-black bg-[#E0D4FF] p-4 text-left">
+          <div className="flex-1">
+            <div className="font-bold">My VTOP</div>
+            <div className="text-sm">
+              Use the courses from your VTOP account instead of a school list.
+            </div>
+          </div>
+          <button
+            role="switch"
+            aria-checked={vtopOn}
+            aria-label="My VTOP"
+            disabled={vtopBusy}
+            onClick={() => onVtopChange(!vtopOn)}
+            className={`flex w-14 h-8 p-0.5 items-center rounded-full border-2 border-black cursor-pointer ${
+              vtopOn ? 'bg-[#7954BA] justify-end' : 'bg-white'
+            }`}
+          >
+            <span className="w-6 h-6 rounded-full border-2 border-black bg-white" />
+          </button>
+        </div>
         <div
           className={`flex flex-wrap items-end gap-4 ${vtopOn ? 'opacity-40 pointer-events-none' : ''}`}
         >
@@ -106,26 +126,6 @@ export default function SchoolPopup({
             onChange={change(setProgramme)}
           />
           <Toggle label="Batch" options={BATCHES} value={batch} onChange={change(setBatch)} />
-        </div>
-        <div className="flex items-center gap-4 rounded-2xl border-2 border-black bg-[#E0D4FF] p-4 text-left">
-          <div className="flex-1">
-            <div className="font-bold">My VTOP</div>
-            <div className="text-sm">
-              Use the courses from your VTOP account instead of a school list.
-            </div>
-          </div>
-          <button
-            role="switch"
-            aria-checked={vtopOn}
-            aria-label="My VTOP"
-            disabled={vtopBusy}
-            onClick={() => onVtopChange(!vtopOn)}
-            className={`flex w-14 h-8 p-0.5 items-center rounded-full border-2 border-black cursor-pointer ${
-              vtopOn ? 'bg-[#7954BA] justify-end' : 'bg-white'
-            }`}
-          >
-            <span className="w-6 h-6 rounded-full border-2 border-black bg-white" />
-          </button>
         </div>
         <div className="flex justify-end">
           <ZButton

@@ -607,7 +607,7 @@ export default function FacultySelector({
     <div>
       <div className="relative inline-block mb-20">
         {selectedSchool === 'My VTOP' && (
-          <div className="absolute -top-5 left-12 z-10 rounded-2xl border-2 border-black bg-[#C4AFF3] px-8 py-1 font-poppins font-semibold shadow-[3px_3px_0_0_black]">
+          <div className="absolute -top-6 left-8 z-10 rounded-lg border-2 border-black bg-[#C4AFF3] px-4 py-0.5 font-poppins text-sm font-semibold">
             My VTOP
           </div>
         )}
