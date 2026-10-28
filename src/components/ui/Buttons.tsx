@@ -11,6 +11,7 @@ type ZButtonProps = {
   text?: string;
   color: 'red' | 'yellow' | 'green' | 'green_2' | 'blue' | 'purple' | 'gray' | string;
   image?: string;
+  imageSize?: number;
   onClick?: () => void;
   disabled?: boolean;
   clicked?: boolean;
@@ -44,6 +45,7 @@ export function ZButton({
   text,
   color,
   image,
+  imageSize = type === 'large' ? 28 : 24,
   onClick,
   forceColor,
   disabled = false,
@@ -57,8 +59,6 @@ export function ZButton({
     long: 'h-12 rounded-xl px-8 text-base gap-2.5',
     large: 'h-[60px] rounded-[20px] px-8 text-2xl gap-6',
   };
-
-  const imageSize = type === 'large' ? 28 : 24;
 
   const backgroundColor = forceColor
     ? disabled
