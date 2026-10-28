@@ -460,7 +460,7 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
           type="rem_course"
           dataBody={
             courseToDelete.courseName +
-            (courseToDelete.courseType === 'both' ? ` & ${courseToDelete.courseNameLab}` : '')
+            (courseToDelete.courseNameLab ? ` & ${courseToDelete.courseNameLab}` : '')
           }
           action={confirmDeleteCourse}
           closeLink={() => {
