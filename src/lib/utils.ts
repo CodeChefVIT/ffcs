@@ -33,8 +33,10 @@ export function generateTT(
               const labSlots = faculty.facultyLabSlot.split(', ');
               for (const labSlot of labSlots) {
                 subjectOptions.push({
-                  courseCode: course.courseCode + '__' + course.courseCodeLab,
-                  courseName: course.courseName + '__' + course.courseNameLab,
+                  courseCode:
+                    course.courseCode + '__' + (course.courseCodeLab || course.courseCode),
+                  courseName:
+                    course.courseName + '__' + (course.courseNameLab || course.courseName),
                   slotName: slot.slotName + '__' + labSlot,
                   facultyName: faculty.facultyName,
                   labVenue: faculty.labVenues?.[labSlot],
