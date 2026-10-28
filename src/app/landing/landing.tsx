@@ -161,7 +161,7 @@ export default function View() {
   };
   useEffect(() => {
     const saved = localStorage.getItem('school');
-    if (saved && saved in bundledData) setSavedSchool(saved);
+    if (saved && Object.keys(bundledData).includes(saved)) setSavedSchool(saved);
     else setShowSchoolPopup(true);
   }, []);
   useEffect(() => {
@@ -216,7 +216,10 @@ export default function View() {
             setSavedSchool(picked);
             setShowSchoolPopup(false);
           }}
-          onClose={() => setShowSchoolPopup(false)}
+          onClose={() => {
+            localStorage.setItem('school', savedSchool);
+            setShowSchoolPopup(false);
+          }}
         />
       )}
       <VtopExtensionModal {...vtop} onReady={() => setVtopOn(true)} />
