@@ -155,9 +155,9 @@ function SmartFilterCheckbox({
 function SmartFilterPill({ label, selected, disabled, onClick, title }: SmartFilterPillProps) {
   const stateCls =
     selected && !disabled
-      ? 'bg-ffcs-green font-semibold text-black'
+      ? 'bg-ffcs-yellow font-semibold text-black'
       : selected && disabled
-        ? 'bg-ffcs-green-muted font-semibold text-gray-600 cursor-not-allowed'
+        ? 'bg-ffcs-yellow/60 font-semibold text-gray-600 cursor-not-allowed'
         : disabled
           ? 'text-gray-400 cursor-not-allowed'
           : 'text-ffcs-muted cursor-pointer hover:bg-ffcs-yellow hover:text-black';
@@ -782,22 +782,24 @@ export default function ViewTimeTable() {
         <div className="flex flex-row flex-wrap gap-4 mb-4 justify-between w-full px-4 items-center">
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
             <div className="text-5xl font-pangolin">Your Timetables</div>
-            {filterTags.map(tag => (
-              <span
-                key={tag.label}
-                className="flex items-center gap-1 shrink-0 h-6 pl-2 pr-1 rounded-md border-2 border-black bg-ffcs-yellow text-sm"
-              >
-                {tag.label}
-                <button
-                  type="button"
-                  aria-label={`Remove ${tag.label}`}
-                  onClick={tag.remove}
-                  className="cursor-pointer"
+            <div className="flex flex-wrap gap-2">
+              {filterTags.map(tag => (
+                <span
+                  key={tag.label}
+                  className="flex items-center gap-1.5 h-7 pl-2.5 pr-1.5 rounded-lg border-2 border-black bg-ffcs-yellow text-sm font-medium"
                 >
-                  <Image src="/icons/cross.svg" alt="" width={12} height={12} draggable={false} />
-                </button>
-              </span>
-            ))}
+                  {tag.label}
+                  <button
+                    type="button"
+                    aria-label={`Remove ${tag.label}`}
+                    onClick={tag.remove}
+                    className="cursor-pointer"
+                  >
+                    <Image src="/icons/cross.svg" alt="" width={14} height={14} draggable={false} />
+                  </button>
+                </span>
+              ))}
+            </div>
           </div>
 
           <div className="flex items-center gap-6 ml-auto">
@@ -813,7 +815,7 @@ export default function ViewTimeTable() {
                 {showFilterInfo && (
                   <>
                     <div className="fixed inset-0 z-10" onClick={() => setShowFilterInfo(false)} />
-                    <div className="absolute top-full left-0 mt-2 z-20 bg-white border-2 border-black rounded-xl shadow-[4px_4px_0px_0px_black] p-4 w-72 font-poppins">
+                    <div className="absolute top-full right-0 mt-2 z-20 bg-white border-2 border-black rounded-xl shadow-[4px_4px_0px_0px_black] p-4 w-72 font-poppins">
                       <p className="font-semibold text-xs text-black mb-3">Smart Filters</p>
                       <div className="flex flex-col gap-3">
                         <div>
@@ -860,11 +862,11 @@ export default function ViewTimeTable() {
                 {showFilters && (
                   <>
                     <div className="fixed inset-0 z-10" onClick={() => setShowFilters(false)} />
-                    <div className="absolute top-full right-0 mt-3 z-20 w-[560px] max-w-[calc(100vw-8rem)] bg-ffcs-card border-3 border-black rounded-3xl shadow-hard p-6 flex flex-col gap-5">
+                    <div className="absolute top-full right-0 mt-3 z-20 w-[420px] max-w-[calc(100vw-8rem)] bg-ffcs-card border-3 border-black rounded-3xl shadow-hard p-5 flex flex-col gap-4">
                       <div className="font-semibold">Filters</div>
                       <div>
                         <div className={filterLabelClass}>Theory time</div>
-                        <div className="grid grid-cols-3 h-12 p-1 gap-1 bg-white/70 rounded-2xl border-[2.5px] border-black">
+                        <div className="grid grid-cols-3 h-10.5 p-1 gap-1 bg-white/70 rounded-2xl border-[2.5px] border-black">
                           <SmartFilterPill
                             label="Morning"
                             selected={effectiveActiveFilters.has('morningOnly')}
@@ -909,7 +911,6 @@ export default function ViewTimeTable() {
                         />
                       </div>
                       <div>
-                        <div className={filterLabelClass}>Faculty</div>
                         <ComboBox
                           label="Filter by Faculty"
                           value={filterFaculty}
