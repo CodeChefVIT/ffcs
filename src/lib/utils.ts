@@ -1,12 +1,33 @@
 import { clashMap } from './slots';
 import { fullCourseData, timetableDisplayData } from './type';
 
+function getComboKey(combo: timetableDisplayData[]): string {
+  return combo
+    .map(c => `${c.courseCode}#${c.slotName}#${c.facultyName}`)
+    .sort()
+    .join('||');
+}
+
+function deduplicateCombinations(combos: timetableDisplayData[][]): timetableDisplayData[][] {
+  const seen = new Set<string>();
+  const unique: timetableDisplayData[][] = [];
+  for (const combo of combos) {
+    const key = getComboKey(combo);
+    if (!seen.has(key)) {
+      seen.add(key);
+      unique.push(combo);
+    }
+  }
+  return unique;
+}
+
 export function generateTT(
   courseData: fullCourseData[],
   discardClashCombinations: boolean = true
 ): {
   result: timetableDisplayData[][];
   clashes: string | null;
+  skippedCourses: string[];
 } {
   function simplify(data: fullCourseData[]): timetableDisplayData[][] {
     const coursesSimple: timetableDisplayData[][] = [];
@@ -60,9 +81,51 @@ export function generateTT(
   const clashGroups: Map<string, Set<string>> = new Map();
   const seenPairs: Set<string> = new Set();
 
+  function recordClash(partial: timetableDisplayData[], item: timetableDisplayData) {
+    partial.forEach(p => {
+      const slotsA = p.slotName.split(/\+|__/);
+      const slotsB = item.slotName.split(/\+|__/);
+
+      const expandedA = new Set<string>();
+      const expandedB = new Set<string>();
+
+      slotsA.forEach(s => {
+        expandedA.add(s);
+        if (clashMap[s]) clashMap[s].forEach(x => expandedA.add(x));
+      });
+
+      slotsB.forEach(s => {
+        expandedB.add(s);
+        if (clashMap[s]) clashMap[s].forEach(x => expandedB.add(x));
+      });
+
+      for (const slotA of expandedA) {
+        if (expandedB.has(slotA)) {
+          const msg1 = `${p.facultyName} for (${p.courseName})`;
+          const msg2 = `${item.facultyName} for (${item.courseName})`;
+
+          const key = [p.facultyName, item.facultyName].sort().join('|');
+          if (seenPairs.has(key)) continue;
+
+          seenPairs.add(key);
+
+          if (!clashGroups.has(slotA)) {
+            clashGroups.set(slotA, new Set());
+          }
+
+          clashGroups.get(slotA)!.add(msg1);
+          clashGroups.get(slotA)!.add(msg2);
+        }
+      }
+    });
+  }
+
   for (const subject of subjectList) {
     const temp: timetableDisplayData[][] = [];
     for (const partial of combinations) {
+      let addedForPartial = 0;
+      let hadClashForPartial = false;
+
       for (const item of subject) {
         const includedSlots: string[] = [];
 
@@ -79,52 +142,33 @@ export function generateTT(
 
         if (!hasClash) {
           temp.push([...partial, item]);
-        } else if (!discardClashCombinations) {
-          temp.push([...partial]);
+          addedForPartial++;
         } else {
-          partial.forEach(p => {
-            const slotsA = p.slotName.split(/\+|__/);
-            const slotsB = item.slotName.split(/\+|__/);
-
-            const expandedA = new Set<string>();
-            const expandedB = new Set<string>();
-
-            slotsA.forEach(s => {
-              expandedA.add(s);
-              if (clashMap[s]) clashMap[s].forEach(x => expandedA.add(x));
-            });
-
-            slotsB.forEach(s => {
-              expandedB.add(s);
-              if (clashMap[s]) clashMap[s].forEach(x => expandedB.add(x));
-            });
-
-            for (const slotA of expandedA) {
-              if (expandedB.has(slotA)) {
-                const msg1 = `${p.facultyName} for (${p.courseName})`;
-                const msg2 = `${item.facultyName} for (${item.courseName})`;
-
-                const key = [p.facultyName, item.facultyName].sort().join('|');
-                if (seenPairs.has(key)) continue;
-
-                seenPairs.add(key);
-
-                if (!clashGroups.has(slotA)) {
-                  clashGroups.set(slotA, new Set());
-                }
-
-                clashGroups.get(slotA)!.add(msg1);
-                clashGroups.get(slotA)!.add(msg2);
-              }
-            }
-          });
+          hadClashForPartial = true;
+          recordClash(partial, item);
         }
       }
+
+      if (!discardClashCombinations && (hadClashForPartial || addedForPartial === 0)) {
+        temp.push([...partial]);
+      }
     }
-    combinations = temp;
+    combinations = deduplicateCombinations(temp);
   }
 
-  const final = breakClubbed(combinations);
+  const final = deduplicateCombinations(breakClubbed(combinations)).filter(
+    combo => combo.length > 0
+  );
+
+  const skippedCourses: string[] = [];
+  for (const course of courseData) {
+    const isMissingFromAny =
+      final.length === 0 ||
+      final.some(combo => !combo.some(item => item.courseCode === course.courseCode));
+    if (isMissingFromAny) {
+      skippedCourses.push(course.courseCode);
+    }
+  }
 
   let clashMessage: string | null = null;
 
@@ -141,11 +185,18 @@ export function generateTT(
     }
 
     clashMessage = clashMessage.trim();
+  } else if (!discardClashCombinations && skippedCourses.length > 0 && final.length > 0) {
+    const skippedNames = courseData
+      .filter(c => skippedCourses.includes(c.courseCode))
+      .map(c => `${c.courseName} (${c.courseCode})`)
+      .join(', ');
+    clashMessage = `Some courses could not be included in all combinations due to clashes: ${skippedNames}`;
   }
 
   return {
     result: final,
     clashes: clashMessage,
+    skippedCourses,
   };
 }
 
