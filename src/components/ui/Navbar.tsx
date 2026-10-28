@@ -44,7 +44,11 @@ export default function Navbar({ page }: NavbarProps) {
           type="logout"
           closeLink={() => setShowLogoutPopup(false)}
           action={() => {
-            localStorage.removeItem('school');
+            try {
+              localStorage.removeItem('school');
+            } catch {
+              // Storage is blocked, so there is nothing to forget.
+            }
             signOut({ callbackUrl: '/' });
           }}
         />
@@ -143,7 +147,11 @@ export default function Navbar({ page }: NavbarProps) {
                 text="Log Out"
                 color="purple"
                 onClick={() => {
-                  localStorage.removeItem('school');
+                  try {
+                    localStorage.removeItem('school');
+                  } catch {
+                    // Storage is blocked, so there is nothing to forget.
+                  }
                   signOut({ callbackUrl: '/' });
                 }}
               />

@@ -213,7 +213,11 @@ export default function View() {
           onVtopChange={on => (on ? void selectVtop() : setVtopOn(false))}
           onConfirm={picked => {
             if (picked) {
-              localStorage.setItem('school', picked);
+              try {
+                localStorage.setItem('school', picked);
+              } catch {
+                // Storage is blocked, so the pick lasts only for this visit.
+              }
               setSavedSchool(picked);
             }
             setShowSchoolPopup(false);
