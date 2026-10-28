@@ -25,7 +25,8 @@ const boxClass =
   'flex w-full h-10.5 bg-white/70 rounded-2xl border-[2.5px] border-black overflow-hidden';
 const listClass =
   'absolute left-0 z-20 w-full mt-2 p-1 bg-white border-[2.5px] border-black rounded-2xl max-h-80 overflow-y-auto';
-const rowClass = 'flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#FFEA79]';
+const rowClass =
+  'flex items-center gap-3 px-3 py-2 rounded-[9.5px] cursor-pointer hover:bg-[#FFEA79]';
 const icon = (src: string, size: string) => (
   <Image src={src} alt="icon" width={20} height={20} className={size} draggable={false} />
 );
