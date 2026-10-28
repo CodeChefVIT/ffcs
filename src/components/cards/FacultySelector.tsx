@@ -675,24 +675,6 @@ export default function FacultySelector({
           )}
 
           <div className="grid grid-cols-2 gap-x-3 gap-y-4 m-4 px-4 pt-2">
-            <div className="col-span-2">
-              <ComboBox
-                label="Select or search subject"
-                value={selectedSubject ? toSubjectKey(selectedDomain, selectedSubject) : ''}
-                options={
-                  selectedDomain
-                    ? subjects.map(subject => toSubjectKey(selectedDomain, subject))
-                    : schoolSubjectKeys
-                }
-                searchOptions={schoolSubjectKeys}
-                onChange={handleSubjectPick}
-                renderOption={key => fromSubjectKey(key)[1]}
-                renderHint={key => {
-                  const domain = fromSubjectKey(key)[0];
-                  return domain === selectedDomain ? '' : prettifyDomain(domain);
-                }}
-              />
-            </div>
             <ComboBox
               label="Select domain"
               value={selectedDomain}
@@ -728,6 +710,24 @@ export default function FacultySelector({
                 onChange={handleSlotChange}
               />
             )}
+            <div className="col-span-2">
+              <ComboBox
+                label="Select or search subject"
+                value={selectedSubject ? toSubjectKey(selectedDomain, selectedSubject) : ''}
+                options={
+                  selectedDomain
+                    ? subjects.map(subject => toSubjectKey(selectedDomain, subject))
+                    : schoolSubjectKeys
+                }
+                searchOptions={schoolSubjectKeys}
+                onChange={handleSubjectPick}
+                renderOption={key => fromSubjectKey(key)[1]}
+                renderHint={key => {
+                  const domain = fromSubjectKey(key)[0];
+                  return domain === selectedDomain ? '' : prettifyDomain(domain);
+                }}
+              />
+            </div>
           </div>
 
           <div className="w-full h-[2px] bg-black mt-6 mb-6" />
