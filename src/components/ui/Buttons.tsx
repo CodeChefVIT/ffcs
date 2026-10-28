@@ -9,7 +9,7 @@ type ButtonVariant = 'regular' | 'image' | 'long' | 'large' | 'small';
 type ZButtonProps = {
   type: ButtonVariant;
   text?: string;
-  color: 'red' | 'yellow' | 'green' | 'green_2' | 'blue' | 'purple' | 'gray' | string;
+  color?: 'red' | 'yellow' | 'green' | 'green_2' | 'blue' | 'purple' | 'gray' | string;
   image?: string;
   imageSize?: number;
   onClick?: () => void;
@@ -43,7 +43,7 @@ const slotToggleOptions = ['Theory', 'Lab'];
 export function ZButton({
   type,
   text,
-  color,
+  color = '',
   image,
   imageSize = type === 'large' ? 28 : 24,
   onClick,

@@ -76,7 +76,6 @@ export default function Navbar({ page, school, vtopOn, onSchoolClick }: NavbarPr
                     <ZButton
                       type="long"
                       text={school}
-                      color="blue"
                       forceColor="#FFFFFF"
                       image="/icons/chevron_down.svg"
                       imageSize={10}
