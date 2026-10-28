@@ -17,21 +17,16 @@ import { data as bundledData } from '@/data/faculty';
 import { FacultyData } from '@/lib/vtopCatalogue';
 import useVtopCatalogue from '@/hooks/useVtopCatalogue';
 import VtopExtensionModal from '@/components/cards/VtopExtensionModal';
+import SchoolPopup from '@/components/ui/SchoolPopup';
 
 function Planner({
   facultyData,
   storageKey,
   school,
-  onSchoolChange,
-  onMyVtopClick,
-  vtop,
 }: {
   facultyData: FacultyData;
   storageKey: string;
   school: string;
-  onSchoolChange: (school: string) => void;
-  onMyVtopClick: () => void;
-  vtop: ReturnType<typeof useVtopCatalogue>;
 }) {
   const [selectedCourses, setSelectedCourses] = useState<fullCourseData[]>(() => {
     if (typeof window === 'undefined') return [];
@@ -100,36 +95,8 @@ function Planner({
     <>
       <div className="w-4xl mx-4">
         <FacultySelector
+          key={school}
           selectedSchool={school}
-          onSchoolChange={onSchoolChange}
-          onMyVtopClick={onMyVtopClick}
-          myVtopBusy={vtop.busy}
-          vtopStatus={
-            <div className="flex flex-wrap items-center justify-center gap-3 text-xs pb-2">
-              <span>
-                {vtop.catalogue
-                  ? new Set(
-                      Object.values(vtop.catalogue.categories).flatMap(group => Object.keys(group))
-                    ).size
-                  : 0}{' '}
-                courses saved in this browser
-              </span>
-              <button
-                className="underline cursor-pointer"
-                disabled={vtop.busy}
-                onClick={onMyVtopClick}
-              >
-                Refresh My VTOP
-              </button>
-              <button
-                className="underline cursor-pointer"
-                disabled={vtop.busy}
-                onClick={() => void vtop.clear()}
-              >
-                Delete VTOP data
-              </button>
-            </div>
-          }
           dataOverride={facultyData}
           storageKey={storageKey}
           onConfirm={facultySelectorOnConfirm}
@@ -154,16 +121,55 @@ function Planner({
 
 export default function View() {
   const vtop = useVtopCatalogue();
-  const [school, setSchool] = useState('SCOPE');
-  const personal = school === 'My VTOP' ? vtop.catalogue : null;
+  // The school saved on this device, or '' when none is saved yet.
+  const [savedSchool, setSavedSchool] = useState(() => {
+    if (typeof window === 'undefined') return '';
+    try {
+      const saved = localStorage.getItem('school');
+      return saved && Object.keys(bundledData).includes(saved) ? saved : '';
+    } catch {
+      return '';
+    }
+  });
+  const [vtopOn, setVtopOn] = useState(false);
+  const [showSchoolPopup, setShowSchoolPopup] = useState(!savedSchool);
+  const school = vtopOn ? 'My VTOP' : savedSchool || 'SCOPE';
+  const personal = vtopOn ? vtop.catalogue : null;
   const selectVtop = async () => {
-    if (await vtop.select()) setSchool('My VTOP');
+    if (await vtop.select()) setVtopOn(true);
   };
+
+  const vtopStatus = (
+    <div className="flex flex-wrap items-center gap-3 text-xs">
+      <span>
+        {vtop.catalogue
+          ? new Set(Object.values(vtop.catalogue.categories).flatMap(group => Object.keys(group)))
+              .size
+          : 0}{' '}
+        courses saved in this browser
+      </span>
+      <button
+        className="underline cursor-pointer"
+        disabled={vtop.busy}
+        onClick={() => void selectVtop()}
+      >
+        Refresh My VTOP
+      </button>
+      <button
+        className="underline cursor-pointer"
+        disabled={vtop.busy}
+        onClick={() => void vtop.clear()}
+      >
+        Delete VTOP data
+      </button>
+    </div>
+  );
+
   useEffect(() => {
-    if (school === 'My VTOP' && !vtop.catalogue) setSchool('SCOPE');
-  }, [school, vtop.catalogue]);
+    if (vtopOn && !vtop.catalogue) setVtopOn(false);
+  }, [vtopOn, vtop.catalogue]);
   useEffect(() => {
-    if (vtop.readySelection && vtop.modal === 'progress') setSchool('My VTOP');
+    if (vtop.readySelection && vtop.modal === 'progress') setVtopOn(true);
   }, [vtop.readySelection, vtop.modal]);
   const facultyData = useMemo<FacultyData>(
     () => ({ ...bundledData, 'My VTOP': personal?.categories || {} }),
@@ -193,14 +199,33 @@ export default function View() {
         <Planner
           key={`${storageKey}:${personal?.capturedAt || ''}`}
           school={school}
-          onSchoolChange={setSchool}
-          onMyVtopClick={() => void selectVtop()}
-          vtop={vtop}
           facultyData={facultyData}
           storageKey={storageKey}
         />
       </div>
-      <VtopExtensionModal {...vtop} onReady={() => setSchool('My VTOP')} />
+      {showSchoolPopup && (
+        <SchoolPopup
+          schools={Object.keys(bundledData)}
+          school={savedSchool}
+          vtopOn={vtopOn}
+          vtopBusy={vtop.busy}
+          vtopStatus={vtopStatus}
+          onVtopChange={on => (on ? void selectVtop() : setVtopOn(false))}
+          onConfirm={picked => {
+            if (picked) {
+              try {
+                localStorage.setItem('school', picked);
+              } catch {
+                // Storage is blocked, so the pick lasts only for this visit.
+              }
+              setSavedSchool(picked);
+            }
+            setShowSchoolPopup(false);
+          }}
+          onClose={() => setShowSchoolPopup(false)}
+        />
+      )}
+      <VtopExtensionModal {...vtop} onReady={() => setVtopOn(true)} />
       <div className="mt-12" />
       <Accordion />
 

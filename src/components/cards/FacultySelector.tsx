@@ -262,21 +262,12 @@ export default function FacultySelector({
   dataOverride: data = bundledData,
   storageKey = 'selectedCourses',
   selectedSchool,
-  onSchoolChange,
-  onMyVtopClick,
-  myVtopBusy = false,
-  vtopStatus,
 }: {
   onConfirm: (course: fullCourseData) => void;
   dataOverride?: FacultyData;
   storageKey?: string;
   selectedSchool: string;
-  onSchoolChange: (school: string) => void;
-  onMyVtopClick: () => void;
-  myVtopBusy?: boolean;
-  vtopStatus?: React.ReactNode;
 }) {
-  const schools = Object.keys(data);
   const [selectedLabShift, setSelectedLabShift] = useState<'' | ShiftKey>('');
   const [labShiftOptions, setLabShiftOptions] = useState<Record<ShiftKey, string[]>>({
     morning: [],
@@ -581,24 +572,6 @@ export default function FacultySelector({
     setFaculties([...new Set(facultiesInSelectedShift)]);
   }, [data, selectedLabShift, labShiftOptions, selectedSubject, selectedDomain, selectedSchool]);
 
-  const handleSchoolChange = (school: string) => {
-    if (school === 'My VTOP') {
-      onMyVtopClick();
-      return;
-    }
-    onSchoolChange(school);
-    setSelectedDomain('');
-    setSelectedSubject('');
-    setSelectedSlots([]);
-    setSubjects([]);
-    setSlots([]);
-    setFaculties([]);
-    setSelectedFaculties([]);
-    setPriorityList([]);
-    setSelectedLabShift('');
-    setLabShiftOptions({ morning: [], evening: [] });
-  };
-
   const handleDomainChange = (domain: string) => {
     setSelectedDomain(domain);
     setSelectedSubject('');
@@ -687,38 +660,12 @@ export default function FacultySelector({
   return (
     <div>
       <div className="relative mb-20">
-        <div className="font-poppins relative bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[4px_4px_0_0_black] mx-auto overflow-hidden">
-          <div className="flex flex-col items-center justify-center gap-4 pt-4 px-4 m-4 text-center">
-            {/* <span className="font-semibold text-lg">Select School:</span> */}
-            <div className="flex flex-wrap justify-center items-center gap-2 mb-4">
-              {schools.map(school => (
-                <button
-                  key={school}
-                  onClick={() => handleSchoolChange(school)}
-                  aria-pressed={selectedSchool === school}
-                  aria-label={school}
-                  disabled={school === 'My VTOP' && myVtopBusy}
-                  className={`px-3 py-1 rounded-full text-sm font-bold border-2 shadow-[2px_2px_0_0_black] border-black cursor-pointer transition duration-100 active:shadow-[1px_1px_0_0_black] active:translate-x-[1px] active:translate-y-[1px] ${
-                    school === 'My VTOP'
-                      ? selectedSchool === school
-                        ? 'bg-[#C4AFF3] ring-2 ring-[#7954BA] ring-offset-2'
-                        : 'bg-[#E0D4FF]'
-                      : selectedSchool === school
-                        ? 'bg-[#FFEA79]'
-                        : 'bg-white'
-                  }`}
-                >
-                  {school === 'My VTOP' && myVtopBusy
-                    ? 'Checking My VTOP...'
-                    : school == 'MID_5YEAR'
-                      ? 'SCOPE (MID)'
-                      : school}
-                </button>
-              ))}
-            </div>
-            {selectedSchool === 'My VTOP' && vtopStatus}
+        {selectedSchool === 'My VTOP' && (
+          <div className="absolute -top-8 left-8 z-10 flex h-10 items-center rounded-2xl border-3 border-black bg-ffcs-violet px-5 font-poppins text-base font-semibold shadow-hard">
+            My VTOP
           </div>
-
+        )}
+        <div className="font-poppins relative bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[4px_4px_0_0_black] mx-auto overflow-hidden">
           <div className="grid grid-cols-2 gap-x-5 gap-y-4 m-4 px-4 pt-2">
             <ComboBox
               label="Select domain"

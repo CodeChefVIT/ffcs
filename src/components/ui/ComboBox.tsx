@@ -21,10 +21,12 @@ type MultiSelectorProps = {
   onChange: (vals: string[]) => void;
 };
 
-const boxClass = 'flex w-full h-9 bg-white/70 rounded-xl border-2 border-black overflow-hidden';
+const boxClass =
+  'flex w-full h-10.5 bg-white/70 rounded-2xl border-[2.5px] border-black overflow-hidden';
 const listClass =
-  'absolute left-0 z-20 w-full mt-2 p-1 bg-white border-2 border-black rounded-xl max-h-80 overflow-y-auto';
-const rowClass = 'flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#FFEA79]';
+  'absolute left-0 z-20 w-full mt-2 p-1 bg-white border-[2.5px] border-black rounded-2xl max-h-80 overflow-y-auto';
+const rowClass =
+  'flex items-center gap-3 px-3 py-2 rounded-[9.5px] cursor-pointer hover:bg-[#FFEA79]';
 const icon = (src: string, size: string) => (
   <Image src={src} alt="icon" width={20} height={20} className={size} draggable={false} />
 );
@@ -33,7 +35,7 @@ function Chevron({ open, onClick }: { open: boolean; onClick?: () => void }) {
   return (
     <span
       onClick={onClick}
-      className="flex items-center justify-center w-10 shrink-0 border-l-2 border-black bg-white/35 cursor-pointer"
+      className="flex items-center justify-center w-12 shrink-0 border-l-[2.5px] border-black bg-white/35 cursor-pointer"
     >
       {icon('/icons/chevron_down.svg', `w-3 h-3 ${open ? 'rotate-180' : ''}`)}
     </span>
@@ -99,7 +101,7 @@ export default function ComboBox({
             setQuery(e.target.value);
             setIsOpen(true);
           }}
-          className="flex-1 min-w-0 px-3 bg-transparent font-medium text-black placeholder:text-[#000000B2] truncate outline-none"
+          className="flex-1 min-w-0 px-4 bg-transparent text-lg font-medium text-black placeholder:text-ffcs-muted truncate outline-none"
         />
 
         {value && !isOpen && (
@@ -131,12 +133,12 @@ export default function ComboBox({
               onClick={() => handleSelect(option)}
               className={`
                 ${rowClass} justify-between
-                ${value === option ? 'bg-[#FFEA79] font-bold' : ''}
+                ${value === option ? 'bg-ffcs-yellow font-bold' : ''}
               `}
             >
               <span className="truncate">{renderOption(option)}</span>
               {renderHint && (
-                <span className="shrink-0 text-xs text-[#000000B2]">{renderHint(option)}</span>
+                <span className="shrink-0 text-xs text-ffcs-muted">{renderHint(option)}</span>
               )}
             </li>
           ))}
@@ -156,8 +158,10 @@ export function MultiSelector({ label, values, options, onChange }: MultiSelecto
   return (
     <div ref={ref} className="relative w-full font-semibold">
       <div className={`${boxClass} cursor-pointer`} onClick={() => setIsOpen(!isOpen)}>
-        <div className="flex flex-1 min-w-0 items-center gap-1 px-2">
-          {values.length === 0 && <span className="px-1 truncate text-[#000000B2]">{label}</span>}
+        <div className="flex flex-1 min-w-0 items-center gap-1 px-3">
+          {values.length === 0 && (
+            <span className="px-1 truncate text-lg font-medium text-ffcs-muted">{label}</span>
+          )}
           {shown.map(slot => (
             <span
               key={slot}
