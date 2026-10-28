@@ -6,7 +6,7 @@ import { SELECT_LIST } from './SELECT';
 import { SENSE_LIST } from './SENSE';
 import { SMEC_LIST } from './SMEC';
 import { SCE_LIST } from './SCE';
-import { SHINE_LIST } from './SHINE';
+import { SHINE_BHT } from './SHINE';
 import { MTech_SCOPE } from './MTech_SCOPE';
 import { MIS_LIST } from './MTech_SCORE';
 import { SCOPE_F } from './SCOPE_F';
@@ -49,7 +49,7 @@ export const data: Schools = {
   SCHEME: SCHEME_LIST,
   SELECT: SELECT_LIST,
   SCE: SCE_LIST,
-  SHINE: SHINE_LIST,
+  SHINE: SHINE_BHT,
   "MTech ('25 Batch)": MTech_SCOPE_F,
   "MIS ('25 Batch)": MIS_LIST,
   MTech: MTech_SCOPE,
