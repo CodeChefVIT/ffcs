@@ -1,15 +1,14 @@
 /* global chrome */
 (() => {
   const $ = id => document.getElementById(id);
-  let profiles = [],
+  let schools = [],
     inspection = null,
     job = null,
-    rows = [],
     working = false,
     polling = false;
   let autoDownload = null,
     downloading = false;
-  const currentProfile = () => profiles.find(profile => profile.folder === $('folder').value);
+  const destination = () => ({ school: $('school').value, branch: $('branch').value });
   function error(message = '') {
     $('error').textContent = message;
     $('error').hidden = !message;
@@ -20,115 +19,54 @@
       throw new Error(result?.error || 'The extension did not respond. Reload it and try again.');
     return result;
   }
-  function mappings() {
-    return rows
-      .filter(row => row.check.checked)
-      .map(row => ({ code: row.category.code, file: row.select.value }));
-  }
-  function validMappings() {
-    const selected = mappings();
-    return (
-      selected.length > 0 &&
-      selected.every(item => item.file) &&
-      new Set(selected.map(item => item.file)).size === selected.length
-    );
-  }
   function syncControls() {
     const running = job?.state === 'running';
+    let folder = '';
+    try {
+      if (schools.includes($('school').value))
+        folder = globalThis.FFCSContributorExport.destinationPath(destination());
+    } catch {
+      /* A partially entered branch is not ready yet. */
+    }
+    $('destination').textContent = folder
+      ? `ZIP folder: ${folder}/`
+      : 'Choose a school and enter your branch.';
     $('connect').disabled = working || running || !$('vtop-tab').value;
     $('reload-tabs').disabled = working || running;
     $('vtop-tab').disabled = working || running;
-    $('folder').disabled = working || running;
-    $('include-index').disabled = working || running;
+    $('school').disabled = working || running;
+    $('branch').disabled = working || running;
     $('start').disabled =
       working ||
       running ||
+      !folder ||
       !inspection ||
-      inspection.tabId !== Number($('vtop-tab').value) ||
-      !currentProfile() ||
-      !validMappings();
+      inspection.tabId !== Number($('vtop-tab').value);
     $('cancel').hidden = !running;
     $('download').hidden = job?.state !== 'ready';
     $('download').disabled = downloading;
     $('clear').disabled = working;
-    for (const row of rows) {
-      row.check.disabled = working || running;
-      row.select.disabled = working || running || !row.check.checked;
-    }
-    const preview = $('preview');
-    preview.replaceChildren();
-    const profile = currentProfile();
-    if (profile) {
-      for (const item of mappings())
-        if (item.file) {
-          const li = document.createElement('li');
-          li.textContent = `src/data/${profile.folder}/${item.file}`;
-          preview.appendChild(li);
-        }
-      if ($('include-index').checked && mappings().length) {
-        const li = document.createElement('li');
-        li.textContent = `src/data/${profile.folder}/index.ts (unchanged)`;
-        preview.appendChild(li);
-      }
-    }
   }
-  function renderMappings(previous = []) {
-    rows = [];
-    const body = $('mappings');
+  function renderCategories() {
+    const body = $('categories');
     body.replaceChildren();
     if (!inspection) {
       const row = document.createElement('tr'),
         cell = document.createElement('td');
-      cell.colSpan = 3;
-      cell.textContent = 'Connect to VTOP to see available categories.';
+      cell.colSpan = 2;
+      cell.textContent = 'Connect to VTOP to see the files that will be exported.';
       row.appendChild(cell);
       body.appendChild(row);
-      syncControls();
-      return;
-    }
-    const profile = currentProfile();
-    for (const category of inspection.categories) {
-      const tr = document.createElement('tr'),
-        choose = document.createElement('td'),
-        label = document.createElement('td'),
-        target = document.createElement('td');
-      const check = document.createElement('input');
-      check.type = 'checkbox';
-      check.checked = true;
-      check.setAttribute('aria-label', `Export ${category.code}`);
-      choose.appendChild(check);
-      label.textContent = category.label;
-      const code = document.createElement('small');
-      code.textContent = category.code;
-      label.appendChild(code);
-      const select = document.createElement('select');
-      select.setAttribute('aria-label', `File for ${category.code}`);
-      const empty = document.createElement('option');
-      empty.value = '';
-      empty.textContent = profile
-        ? 'Choose a file or uncheck this category'
-        : 'Choose a destination folder first';
-      select.appendChild(empty);
-      for (const file of profile?.files || []) {
-        const option = document.createElement('option');
-        option.value = file.file;
-        option.textContent = `${file.file} - export ${file.symbol}`;
-        select.appendChild(option);
+    } else
+      for (const category of inspection.categories) {
+        const row = document.createElement('tr'),
+          label = document.createElement('td'),
+          filename = document.createElement('td');
+        label.textContent = category.label;
+        filename.textContent = globalThis.FFCSContributorExport.categoryFile(category);
+        row.append(label, filename);
+        body.appendChild(row);
       }
-      const saved = previous.find(item => item.code === category.code);
-      select.value =
-        saved && profile?.files.some(file => file.file === saved.file)
-          ? saved.file
-          : profile
-            ? globalThis.FFCSContributorExport.suggestFile(profile, category)
-            : '';
-      target.appendChild(select);
-      tr.append(choose, label, target);
-      body.appendChild(tr);
-      rows.push({ category, check, select });
-      check.addEventListener('change', syncControls);
-      select.addEventListener('change', syncControls);
-    }
     syncControls();
   }
   function renderJob() {
@@ -138,7 +76,7 @@
     if (job?.total) progress.value = job.completed;
     else progress.removeAttribute('value');
     const status = $('job-status');
-    if (!job) status.textContent = 'Choose a folder and category mappings to start.';
+    if (!job) status.textContent = 'Connect to VTOP and enter your school and branch to start.';
     else if (job.state === 'running')
       status.textContent = `${job.detail} - ${job.completed} / ${job.total || '...'} ${job.stage === 'categories' ? 'categories' : 'courses'}`;
     else if (job.state === 'ready')
@@ -172,9 +110,10 @@
     error();
     try {
       const { result } = await send('ADMIN_EXPORT');
-      const bytes = globalThis.FFCSZip.createZip(result.files);
-      const url = URL.createObjectURL(new Blob([bytes], { type: 'application/zip' }));
-      let timeout;
+      const url = URL.createObjectURL(
+        new Blob([globalThis.FFCSZip.createZip(result.files)], { type: 'application/zip' })
+      );
+      let timeout, id;
       const release = () => {
         clearTimeout(timeout);
         URL.revokeObjectURL(url);
@@ -184,7 +123,6 @@
         if (delta.id === id && ['complete', 'interrupted'].includes(delta.state?.current))
           release();
       };
-      let id;
       try {
         id = await chrome.downloads.download({ url, filename: result.filename, saveAs: false });
       } catch (err) {
@@ -217,12 +155,12 @@
       polling = false;
     }
   }
-  $('folder').addEventListener('change', () => renderMappings());
-  $('include-index').addEventListener('change', syncControls);
+  $('school').addEventListener('change', syncControls);
+  $('branch').addEventListener('input', syncControls);
   $('vtop-tab').addEventListener('change', () => {
     inspection = null;
     $('session-status').textContent = 'Connect to the selected VTOP tab.';
-    renderMappings();
+    renderCategories();
   });
   $('reload-tabs').addEventListener(
     'click',
@@ -237,12 +175,12 @@
       const response = await send('ADMIN_INSPECT_TAB', { tabId: Number($('vtop-tab').value) });
       inspection = response.inspection;
       $('session-status').textContent =
-        `${inspection.categories.length} available categories${inspection.term ? ` - ${inspection.term}` : ''}.`;
-      renderMappings();
+        `${inspection.categories.length} categories will be exported${inspection.term ? ` - ${inspection.term}` : ''}.`;
+      renderCategories();
     } catch (err) {
       inspection = null;
       $('session-status').textContent = 'Connection failed. Log in, refresh VTOP and reconnect.';
-      renderMappings();
+      renderCategories();
       error(err.message);
     } finally {
       working = false;
@@ -254,12 +192,7 @@
     error();
     syncControls();
     try {
-      const response = await send('ADMIN_START', {
-        tabId: inspection.tabId,
-        folder: $('folder').value,
-        mappings: mappings(),
-        includeIndex: $('include-index').checked,
-      });
+      const response = await send('ADMIN_START', { tabId: inspection.tabId, ...destination() });
       job = response.job;
       autoDownload = job.id;
       renderJob();
@@ -290,7 +223,7 @@
       job = null;
       error();
       $('session-status').textContent = 'Captured data cleared. Connect to VTOP to start again.';
-      renderMappings();
+      renderCategories();
       renderJob();
     } catch (err) {
       error(err.message);
@@ -302,23 +235,19 @@
   async function init() {
     try {
       const config = await send('ADMIN_CONFIG');
-      profiles = config.profiles;
-      for (const profile of profiles) {
+      schools = config.schools;
+      for (const school of schools) {
         const option = document.createElement('option');
-        option.value = profile.folder;
-        option.textContent = `${profile.label} / ${profile.folder}${profile.files.length ? '' : ' (no configured data files)'}`;
-        option.disabled = !profile.files.length;
-        $('folder').appendChild(option);
+        option.value = school;
+        option.textContent = school;
+        $('school').appendChild(option);
       }
       await reloadTabs();
       const state = await send('ADMIN_STATE');
       job = state.job;
-      if (
-        state.settings &&
-        profiles.some(profile => profile.folder === state.settings.folder && profile.files.length)
-      ) {
-        $('folder').value = state.settings.folder;
-        $('include-index').checked = state.settings.includeIndex;
+      if (state.settings && schools.includes(state.settings.school)) {
+        $('school').value = state.settings.school;
+        $('branch').value = state.settings.branch || '';
       }
       if (
         state.inspection &&
@@ -327,9 +256,9 @@
         inspection = state.inspection;
         $('vtop-tab').value = String(inspection.tabId);
         $('session-status').textContent =
-          `${inspection.categories.length} categories${inspection.term ? ` - ${inspection.term}` : ''}. Reconnect after changing VTOP account or semester.`;
+          `${inspection.categories.length} available categories${inspection.term ? ` - ${inspection.term}` : ''}.`;
       }
-      renderMappings(state.settings?.mappings);
+      renderCategories();
       renderJob();
       setInterval(() => void poll(), 750);
     } catch (err) {

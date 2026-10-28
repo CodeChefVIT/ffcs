@@ -122,6 +122,6 @@ The tests check storage and origin boundaries, catalogue validation, and the rea
 
 ## Contributor data exporter
 
-A separate contributor/admin browser extension lives in [public/extentions/FFCS-Contributors](public/extentions/FFCS-Contributors). Install [FFCS-Contributors.zip](public/extentions/FFCS-Contributors/FFCS-Contributors.zip), connect a signed-in VTOP tab, choose the matching branch/batch folder and review the category mappings. It downloads a ZIP of repository-ready `src/data/<folder>/*.ts` replacements with the existing filenames/export names and optional unchanged `index.ts`. It works independently of the personal My VTOP extension and does not require the app to be running.
+The standalone extension lives in [extension/FFCS-Contributors](extension/FFCS-Contributors). Install [FFCS-Contributors.zip](public/extensions/FFCS-Contributors.zip), connect a signed-in VTOP tab, select a school and enter a branch. It exports every available category automatically as `src/data/<school>/<branch>/<VTOP-category>.ts`, plus a generated `index.ts`. No category-to-file mappings are needed.
 
-See its [installation and export instructions](public/extentions/FFCS-Contributors/README.md). Rebuild its repository mapping and downloadable package with `npm run contributors:package`; verify it with `npm run contributors:test`.
+See its [instructions](extension/FFCS-Contributors/README.md). Build the package with `npm run contributors:package` and verify it with `npm run contributors:test`.

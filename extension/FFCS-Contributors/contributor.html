@@ -19,7 +19,7 @@
           <span class="step">1</span>
           <div>
             <h2 id="session-title">Connect your VTOP session</h2>
-            <p>Log in normally. This tool reads the course-allocation view in the background.</p>
+            <p>Log in normally. Your available courses are read in the background.</p>
           </div>
         </div>
         <div class="row">
@@ -41,65 +41,61 @@
           Refresh VTOP after installing this extension, then connect.
         </p>
       </section>
-      <section aria-labelledby="folder-title">
+      <section aria-labelledby="details-title">
         <div class="heading">
           <span class="step">2</span>
           <div>
-            <h2 id="folder-title">Match the repository folder</h2>
-            <p>
-              Choose the matching branch/batch. This selects the output folder; it does not change
-              which account or courses VTOP provides.
-            </p>
+            <h2 id="details-title">School and branch</h2>
+            <p>Enter the school and branch for this export.</p>
           </div>
         </div>
-        <label
-          >Destination folder<select id="folder">
-            <option value="">Choose a branch / batch...</option>
-          </select></label
-        >
+        <div class="row">
+          <label class="grow"
+            >School<select id="school">
+              <option value="">Choose your school...</option>
+            </select></label
+          ><label class="grow"
+            >Branch<input
+              id="branch"
+              type="text"
+              placeholder="e.g. BCI or BCE"
+              maxlength="80"
+              autocomplete="off"
+              spellcheck="false"
+          /></label>
+        </div>
+        <p id="destination" class="hint">Choose a school and enter your branch.</p>
         <p class="hint">
-          Category names, filenames and exported constants come from this repository's existing
-          <code>src/data</code> indexes.
+          Every available VTOP category becomes its own file automatically, for example
+          <code>FC.ts</code>, <code>DLES.ts</code> and <code>SPE.ts</code>. An
+          <code>index.ts</code> is generated for the exported files.
         </p>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>Export</th>
                 <th>VTOP category</th>
-                <th>Repository file</th>
+                <th>File</th>
               </tr>
             </thead>
-            <tbody id="mappings">
+            <tbody id="categories">
               <tr>
-                <td colspan="3">Connect to VTOP to see available categories.</td>
+                <td colspan="2">Connect to VTOP to see the files that will be exported.</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <label class="check"
-          ><input id="include-index" type="checkbox" checked /> Include the existing
-          <code>index.ts</code> unchanged</label
-        >
-        <p class="hint">
-          The ZIP is a drop-in update for this repository. Only selected category files are
-          refreshed; other files already in your data folder stay in place.
-        </p>
-        <ul id="preview" aria-label="Files to export"></ul>
       </section>
       <section class="export" aria-labelledby="export-title">
         <div class="heading">
           <span class="step">3</span>
           <div>
             <h2 id="export-title">Fetch &amp; download</h2>
-            <p>
-              Course keys and rows keep the app's format:
-              <code>'CODE - Title': [{ slot, venue, faculty }]</code>.
-            </p>
+            <p>Download all available categories as TypeScript course data in one ZIP.</p>
           </div>
         </div>
         <p id="job-status" role="status" aria-live="polite">
-          Choose a folder and category mappings to start.
+          Connect to VTOP and enter your school and branch to start.
         </p>
         <progress id="progress" max="1" hidden aria-label="VTOP export progress"></progress>
         <div class="row">
@@ -110,8 +106,9 @@
         </div>
       </section>
       <footer>
-        Standalone extension. Only the selected signed-in account's available courses are read. No
-        password, cookie, CSRF token or raw registration ID is stored or included in the ZIP.
+        Standalone extension. Your school and branch label the export. Courses come from the
+        selected signed-in VTOP account. No password, cookie, CSRF token or raw registration ID is
+        included in the ZIP.
       </footer>
     </main>
     <script src="exporter.js"></script>

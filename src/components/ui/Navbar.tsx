@@ -64,7 +64,8 @@ export default function Navbar({ page }: NavbarProps) {
             )}
             <div className="flex gap-4 mx-5 items-center">
               <div className="rounded-xl bg-[#ffea79] text-black outline-2 outline-black px-6 py-2 text-sm font-medium">
-                Can&apos;t find faculty for your branch? Remaining Faculty lists will be updated soon.
+                Can&apos;t find faculty for your branch? Use the my VTOP option to diretly fetch
+                faculties from your VTOP.
               </div>
             </div>
 

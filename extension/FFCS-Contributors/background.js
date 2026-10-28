@@ -4,6 +4,13 @@ const page = chrome.runtime.getURL('contributor.html');
 const ready = Promise.all([
   chrome.storage.local.setAccessLevel({ accessLevel: 'TRUSTED_CONTEXTS' }),
   fetch(chrome.runtime.getURL('catalogue.json')).then(response => response.json()),
+  (async () => {
+    const { exportSchemaVersion } = await chrome.storage.local.get('exportSchemaVersion');
+    if (exportSchemaVersion !== 2) {
+      await chrome.storage.local.remove(['job', 'result', 'inspection', 'settings']);
+      await chrome.storage.local.set({ exportSchemaVersion: 2 });
+    }
+  })(),
 ]);
 let queue = Promise.resolve();
 function kind(sender) {
@@ -60,7 +67,7 @@ async function handle(request, sender) {
   if (!who) throw new Error('This page cannot access the contributor exporter.');
   const job = await loadJob();
   if (who === 'dashboard') {
-    if (request.type === 'ADMIN_CONFIG') return { profiles: catalogue.profiles };
+    if (request.type === 'ADMIN_CONFIG') return { schools: catalogue.schools };
     if (request.type === 'ADMIN_STATE') {
       const { inspection, settings } = await chrome.storage.local.get(['inspection', 'settings']);
       return { job, inspection: inspection || null, settings: settings || null };
@@ -108,29 +115,22 @@ async function handle(request, sender) {
       if (!inspection || inspection.tabId !== request.tabId)
         throw new Error('Connect to the VTOP tab before exporting.');
       await tab(request.tabId);
-      const profile = catalogue.profiles.find(item => item.folder === request.folder);
-      const mappings = Array.isArray(request.mappings)
-        ? request.mappings.map(item => ({ code: item.code, file: item.file }))
-        : [];
-      if (
-        mappings.some(item => !inspection.categories.some(category => category.code === item.code))
-      )
-        throw new Error('Only inspected VTOP categories can be exported.');
-      const empty = Object.create(null);
-      for (const item of mappings) empty[item.code] = {};
-      globalThis.FFCSContributorExport.buildFiles(
-        profile,
-        mappings,
-        empty,
-        Boolean(request.includeIndex)
-      );
+      if (!catalogue.schools.includes(request.school)) throw new Error('Choose a school.');
+      const destination = { school: request.school, branch: request.branch };
+      const categories = inspection.categories.map(item => ({
+        code: item.code,
+        label: item.label,
+      }));
+      const empty = Object.fromEntries(categories.map(item => [item.code, {}]));
+      globalThis.FFCSContributorExport.buildFiles(destination, categories, empty);
+      const folder = globalThis.FFCSContributorExport.destinationPath(destination);
       const id = crypto.randomUUID();
       const next = {
         id,
         tabId: request.tabId,
-        folder: profile.folder,
-        mappings,
-        includeIndex: Boolean(request.includeIndex),
+        folder,
+        destination,
+        categories,
         state: 'running',
         stage: 'preparing',
         completed: 0,
@@ -142,13 +142,13 @@ async function handle(request, sender) {
       await chrome.storage.local.remove('result');
       await chrome.storage.local.set({
         job: next,
-        settings: { folder: profile.folder, mappings, includeIndex: next.includeIndex },
+        settings: destination,
       });
       try {
         await sendToTab(request.tabId, {
           type: 'ADMIN_CAPTURE',
           jobId: id,
-          codes: mappings.map(item => item.code),
+          codes: categories.map(item => item.code),
           contextKey: inspection.contextKey,
         });
       } catch (error) {
@@ -221,17 +221,15 @@ async function handle(request, sender) {
     return {};
   }
   if (request.type === 'ADMIN_COMPLETE') {
-    const profile = catalogue.profiles.find(item => item.folder === job.folder);
     const files = globalThis.FFCSContributorExport.buildFiles(
-      profile,
-      job.mappings,
-      request.groups,
-      job.includeIndex
+      job.destination,
+      job.categories,
+      request.groups
     );
     const courses = new Set(Object.values(request.groups).flatMap(group => Object.keys(group)))
       .size;
     const capturedAt = new Date().toISOString();
-    const filename = `FFCS-${job.folder}-${capturedAt.slice(0, 10)}.zip`;
+    const filename = `FFCS-${job.folder.slice('src/data/'.length).replaceAll('/', '-')}-${capturedAt.slice(0, 10)}.zip`;
     const result = { jobId: job.id, files, filename, capturedAt, courses };
     await chrome.storage.local.set({
       result,

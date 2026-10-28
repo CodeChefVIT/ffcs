@@ -228,3 +228,16 @@ footer {
     text-align: center;
   }
 }
+
+input[type='text'] {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  border: 2px solid #17242c;
+  border-radius: 9px;
+  padding: 10px 12px;
+  background: white;
+  font: inherit;
+  color: inherit;
+  min-width: 130px;
+}

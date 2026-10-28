@@ -11,24 +11,28 @@ import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const directory = path.join(root, 'public', 'extentions', 'FFCS-Contributors');
+const directory = path.join(root, 'extension', 'FFCS-Contributors');
 const read = file => fs.readFileSync(path.join(directory, file), 'utf8');
 const catalogue = JSON.parse(read('catalogue.json'));
-const profile = folder => catalogue.profiles.find(item => item.folder === folder);
 const serial = value => JSON.parse(JSON.stringify(value));
 const pure = vm.createContext({ TextEncoder, Uint8Array, DataView });
 vm.runInContext(read('exporter.js'), pure);
 vm.runInContext(read('zip.js'), pure);
 const exporter = pure.FFCSContributorExport;
 const zip = pure.FFCSZip;
-const row = { slot: 'B1+TB1', venue: 'SJT522', faculty: "O'Brien \\ Faculty\nதமிழ்" };
-const groups = {
-  UCC: {
-    "BCSE202L - Compiler's Design": [row],
-    'BACSE291 - Project': [{ slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' }],
-  },
-  FCON: {},
+const destination = { school: 'SCOPE', branch: 'BCI' };
+const categories = ['FC', 'DLES', 'DC', 'SPE', 'PI', 'OE', 'BC', 'NGCR'].map(code => ({
+  code,
+  label: code,
+}));
+const row = {
+  slot: 'B1+TB1',
+  venue: 'SJT522',
+  faculty: "O'Brien \\ Faculty\n\u0ba4\u0bae\u0bbf\u0bb4\u0bcd",
 };
+const groups = Object.fromEntries(categories.map(item => [item.code, {}]));
+groups.FC = { "BCSE202L - Compiler's Design": [row] };
+groups.PI = { 'BACSE291 - Project': [{ slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' }] };
 
 function unzip(buffer) {
   const bytes = Buffer.from(buffer),
@@ -53,126 +57,87 @@ function unzip(buffer) {
   return result;
 }
 
-test('repository catalogue keeps every configured filename, export and original index', () => {
-  const folders = fs
-    .readdirSync(path.join(root, 'src/data'), { withFileTypes: true })
-    .filter(
-      item =>
-        item.isDirectory() && fs.existsSync(path.join(root, 'src/data', item.name, 'index.ts'))
-    );
-  assert.equal(catalogue.profiles.length, folders.length);
-  for (const item of catalogue.profiles) {
-    assert.equal(
-      item.indexSource,
-      fs.readFileSync(path.join(root, 'src/data', item.folder, 'index.ts'), 'utf8')
-    );
-    for (const file of item.files)
-      assert.ok(
-        fs
-          .readFileSync(path.join(root, 'src/data', item.folder, file.file), 'utf8')
-          .includes(`export const ${file.symbol}`)
-      );
-  }
-  assert.equal(profile('SCOPE_F').files.find(item => item.file === 'FCON.ts').symbol, 'CON');
-  assert.equal(
-    profile('SELECT').files.find(item => item.category === 'DisciplineCore').file,
-    'DiscliplineCore.ts'
-  );
-  assert.equal(profile('MTech_SCORE').files.length, 0);
-  assert.equal(
-    exporter.suggestFile(profile('SCOPE_F'), { code: 'FCON', label: 'Concentration' }),
-    'FCON.ts'
-  );
-  assert.equal(
-    exporter.suggestFile(profile('SELECT_F'), { code: 'OEC', label: 'Open elective' }),
-    'OE.ts'
-  );
-  assert.equal(
-    exporter.suggestFile(profile('SCOPE'), { code: 'SPE', label: 'Specialization elective' }),
-    ''
-  );
+test('school list has no branch-folder or repository-file mapping requirements', () => {
+  assert.equal(catalogue.schemaVersion, 2);
+  assert.ok(catalogue.schools.includes('SCOPE'));
+  assert.ok(catalogue.schools.includes('SMEC'));
+  assert.equal(new Set(catalogue.schools).size, catalogue.schools.length);
+  assert.equal(catalogue.profiles, undefined);
 });
 
-test('course ZIP contains compilable repository exports, escaped values and unchanged index', () => {
-  const files = exporter.buildFiles(
-    profile('SCOPE_F'),
-    [
-      { code: 'UCC', file: 'UCC.ts' },
-      { code: 'FCON', file: 'FCON.ts' },
-    ],
-    groups
-  );
-  const archive = unzip(zip.createZip(files));
+test('every VTOP category gets its own compilable file and generated index', () => {
+  const archive = unzip(zip.createZip(exporter.buildFiles(destination, categories, groups)));
   assert.deepEqual(
     [...archive.keys()],
-    ['src/data/SCOPE_F/UCC.ts', 'src/data/SCOPE_F/FCON.ts', 'src/data/SCOPE_F/index.ts']
+    [...categories.map(item => `src/data/SCOPE/BCI/${item.code}.ts`), 'src/data/SCOPE/BCI/index.ts']
   );
-  for (const [name, expected, symbol] of [
-    ['UCC.ts', groups.UCC, 'UCC'],
-    ['FCON.ts', {}, 'CON'],
-  ]) {
-    const code = archive.get(`src/data/SCOPE_F/${name}`).toString('utf8');
-    const compiled = ts.transpileModule(code, {
+  const modules = {};
+  for (const category of categories) {
+    const source = archive.get(`src/data/SCOPE/BCI/${category.code}.ts`).toString('utf8');
+    const compiled = ts.transpileModule(source, {
       compilerOptions: { module: ts.ModuleKind.CommonJS },
       reportDiagnostics: true,
     });
     assert.deepEqual(compiled.diagnostics, []);
     const exports = {};
     vm.runInNewContext(compiled.outputText, { exports });
-    assert.deepEqual(serial(exports[symbol]), expected);
+    assert.deepEqual(serial(exports[category.code]), groups[category.code]);
+    modules[`./${category.code}`] = exports;
   }
-  assert.deepEqual(
-    archive.get('src/data/SCOPE_F/index.ts'),
-    fs.readFileSync(path.join(root, 'src/data/SCOPE_F/index.ts'))
-  );
-  const archiveUtf8 = unzip(zip.createZip([{ name: 'தமிழ்/courses.ts', text: 'தமிழ்' }]));
-  assert.equal(archiveUtf8.get('தமிழ்/courses.ts').toString('utf8'), 'தமிழ்');
+  const index = ts.transpileModule(archive.get('src/data/SCOPE/BCI/index.ts').toString('utf8'), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS },
+  }).outputText;
+  const exports = {};
+  vm.runInNewContext(index, {
+    exports,
+    require: name => {
+      assert.ok(modules[name]);
+      return modules[name];
+    },
+  });
+  assert.deepEqual(serial(exports.SCOPE_BCI), groups);
   assert.equal(zip.crc32(new TextEncoder().encode('123456789')), 0xcbf43926);
   assert.throws(() => zip.createZip([{ name: '../outside.ts', text: '' }]));
 });
 
-test('export rejects unmatched/duplicate files and strips fields outside course rows', () => {
+test('school/branch and category names are safe, and rows omit unrelated fields', () => {
+  assert.equal(
+    exporter.destinationPath({ school: 'scope', branch: 'bci 2025' }),
+    'src/data/SCOPE/BCI_2025'
+  );
+  for (const branch of ['', '../BCI', 'BCI/OTHER', 'CON'])
+    assert.throws(() => exporter.buildFiles({ school: 'SCOPE', branch }, categories, groups));
+  assert.throws(() => exporter.buildFiles(destination, [{ code: '../FC' }], groups));
   assert.throws(
-    () =>
-      exporter.buildFiles(
-        profile('SCOPE_F'),
-        [
-          { code: 'UCC', file: 'UCC.ts' },
-          { code: 'FCON', file: 'UCC.ts' },
-        ],
-        groups
-      ),
-    /different/
+    () => exporter.buildFiles(destination, [categories[0], categories[0]], groups),
+    /repeated/
   );
+  assert.throws(() => exporter.buildFiles(destination, categories, {}), /Missing/);
   assert.throws(() =>
-    exporter.buildFiles(profile('SCOPE_F'), [{ code: 'UCC', file: '../outside.ts' }], groups)
+    exporter.serializeGroup('FC', { 'BCSE202L - Test': [{ ...row, slot: 'garbage' }] })
   );
-  assert.throws(
-    () => exporter.buildFiles(profile('SCOPE_F'), [{ code: 'PCC', file: 'PCC.ts' }], groups),
-    /Missing/
+  assert.ok(
+    !exporter
+      .serializeGroup('FC', { 'BCSE202L - Test': [{ ...row, csrf: 'do-not-export' }] })
+      .includes('do-not-export')
   );
-  assert.throws(() =>
-    exporter.serializeGroup('UCC', { 'BCSE202L - Test': [{ ...row, slot: 'garbage' }] })
-  );
-  const source = exporter.serializeGroup('UCC', {
-    'BCSE202L - Test': [{ ...row, csrf: 'do-not-export' }],
-  });
-  assert.ok(!source.includes('do-not-export'));
 });
 
-test('extension package is self-contained and grants VTOP-only site access', () => {
+test('extension ZIP is self-contained, updated and limited to VTOP access', () => {
   const manifest = JSON.parse(read('manifest.json'));
+  assert.equal(manifest.version, '1.1.0');
   assert.deepEqual(manifest.permissions, ['storage', 'downloads']);
   assert.deepEqual(manifest.host_permissions, ['https://vtop.vit.ac.in/vtop/*']);
   assert.equal(manifest.content_scripts.length, 1);
-  const archive = unzip(fs.readFileSync(path.join(directory, 'FFCS-Contributors.zip')));
+  const archive = unzip(
+    fs.readFileSync(path.join(root, 'public/extensions/FFCS-Contributors.zip'))
+  );
   assert.ok(archive.has('manifest.json'));
   assert.ok(archive.has('contributor.html'));
   assert.ok(!archive.has('app-bridge.js'));
   for (const [name, bytes] of archive)
     assert.deepEqual(bytes, fs.readFileSync(path.join(directory, name)));
 });
-
 function worker(
   sendToVtop = async (_id, message) =>
     message.type === 'ADMIN_INSPECT'
@@ -261,7 +226,7 @@ function worker(
   return { local, listeners, opened, send, dashboard, vtop };
 }
 
-test('only the contributor dashboard can start exports or read downloaded file contents', async () => {
+test('only the dashboard can export, and all inspected categories are captured automatically', async () => {
   const w = worker();
   for (const sender of [
     { ...w.dashboard, id: 'another-extension' },
@@ -274,58 +239,53 @@ test('only the contributor dashboard can start exports or read downloaded file c
   assert.deepEqual(w.opened, ['chrome-extension://contributors-id/contributor.html']);
   await w.send('ADMIN_INSPECT_TAB', { tabId: 7 });
   assert.equal(
-    (
-      await w.send('ADMIN_START', {
-        tabId: 7,
-        folder: 'SCOPE_F',
-        mappings: [{ code: 'OTHER', file: 'UCC.ts' }],
-      })
-    ).ok,
+    (await w.send('ADMIN_START', { tabId: 7, school: 'OTHER', branch: 'BCI' })).ok,
     false
   );
-  const started = await w.send('ADMIN_START', {
-    tabId: 7,
-    folder: 'SCOPE_F',
-    mappings: [{ code: 'UCC', file: 'UCC.ts' }],
-    includeIndex: true,
-  });
+  const started = await w.send('ADMIN_START', { tabId: 7, ...destination });
   assert.equal(started.ok, true);
+  assert.deepEqual(
+    started.job.categories.map(item => item.code),
+    ['UCC', 'FCON']
+  );
+  const data = { UCC: groups.FC, FCON: groups.PI };
   assert.equal(
     (
       await w.send(
         'ADMIN_COMPLETE',
-        { jobId: started.job.id, groups: { UCC: groups.UCC } },
+        { jobId: started.job.id, groups: data },
         { ...w.vtop, tab: { id: 8 } }
       )
     ).ok,
     false
   );
   assert.equal(
-    (await w.send('ADMIN_COMPLETE', { jobId: started.job.id, groups: { UCC: groups.UCC } }, w.vtop))
-      .ok,
+    (await w.send('ADMIN_COMPLETE', { jobId: started.job.id, groups: data }, w.vtop)).ok,
     true
   );
   assert.equal((await w.send('ADMIN_EXPORT', {}, w.vtop)).ok, false);
   const output = await w.send('ADMIN_EXPORT');
   assert.equal(output.ok, true);
-  assert.equal(output.result.files.length, 2);
+  assert.equal(output.result.files.length, 3);
+  assert.ok(output.result.files[1].name.endsWith('/FCON.ts'));
+  assert.ok(output.result.files[1].text.startsWith('export const FCON ='));
   assert.ok(!JSON.stringify(output.result).includes('contextKey'));
 });
 
 test('cancelled/failed/closed-tab captures cannot produce a partial ZIP', async () => {
   const w = worker();
   await w.send('ADMIN_INSPECT_TAB', { tabId: 7 });
-  const start = () =>
-    w.send('ADMIN_START', {
-      tabId: 7,
-      folder: 'SCOPE_F',
-      mappings: [{ code: 'UCC', file: 'UCC.ts' }],
-      includeIndex: true,
-    });
+  const start = () => w.send('ADMIN_START', { tabId: 7, ...destination });
   let run = await start();
   await w.send('ADMIN_CANCEL');
   assert.equal(
-    (await w.send('ADMIN_COMPLETE', { jobId: run.job.id, groups: { UCC: groups.UCC } }, w.vtop)).ok,
+    (
+      await w.send(
+        'ADMIN_COMPLETE',
+        { jobId: run.job.id, groups: { UCC: groups.FC, FCON: {} } },
+        w.vtop
+      )
+    ).ok,
     false
   );
   assert.equal((await w.send('ADMIN_EXPORT')).ok, false);
@@ -338,7 +298,6 @@ test('cancelled/failed/closed-tab captures cannot produce a partial ZIP', async 
   assert.equal((await w.send('ADMIN_STATE')).job.state, 'error');
   assert.equal((await w.send('ADMIN_EXPORT')).ok, false);
 });
-
 const browserPath =
   process.env.FFCS_TEST_BROWSER ||
   [
@@ -357,6 +316,8 @@ async function browser(t) {
       '--no-sandbox',
       '--disable-gpu',
       '--disable-background-networking',
+      '--disable-background-timer-throttling',
+      '--disable-renderer-backgrounding',
       '--disable-component-update',
       '--disable-sync',
       '--no-first-run',
@@ -473,7 +434,7 @@ async function browser(t) {
 }
 
 test(
-  'browser: standalone dashboard fetches VTOP, maps repository files and downloads a valid data ZIP',
+  'browser: school and branch export all VTOP categories without mapping choices',
   { skip: !browserPath, timeout: 45000 },
   async t => {
     const newPage = await browser(t);
@@ -501,13 +462,17 @@ test(
         let html;
         if (url.pathname.endsWith('/StudentCourseAllocation'))
           html =
-            '<select id="semesterSubId" name="semesterSubId"><option value="CURRENT">Current Term</option></select><select id="cccategory"><option value="UCC">University Core Courses</option><option value="PCC">Professional Core Courses</option><option value="FCON">Concentration Courses</option><option value="OEC">Open Elective Courses</option><option disabled value="OTHER">Other branch</option></select>';
+            '<select id="semesterSubId" name="semesterSubId"><option value="CURRENT">Current Term</option></select><select id="cccategory"><option value="FC">FC - Foundation Core</option><option value="DLES">DLES - Discipline-linked Engineering Sciences</option><option value="DC">DC - Discipline Core</option><option value="SPE">SPE - Specialization Elective</option><option value="PI">PI - Projects and Internship</option><option value="OE">OE - Open Elective</option><option value="BC">BC - Bridge Course</option><option value="NGCR">NGCR - Non-graded Core Requirement</option><option disabled value="OTHER">Other branch</option></select>';
         else if (url.pathname.endsWith('/getCoursesListForCurriculmCategory')) {
           const options = {
-            UCC: '<option value="BCSE202L">BCSE202L - Compiler&#39;s Design</option><option value="BCSE202P">BCSE202P - Compiler Lab</option>',
-            PCC: '<option value="BCSE202L">BCSE202L - Compiler&#39;s Design</option>',
-            FCON: '<option value="BACSE291">BACSE291 - Design Project</option>',
-            OEC: '<option value="">No courses</option>',
+            FC: '<option value="BCSE202L">BCSE202L - Compiler&#39;s Design</option><option value="BCSE202P">BCSE202P - Compiler Lab</option>',
+            DLES: '<option value="BCSE202L">BCSE202L - Compiler&#39;s Design</option>',
+            PI: '<option value="BACSE291">BACSE291 - Design Project</option>',
+            OE: '<option value="">No courses</option>',
+            DC: '<option value="BCSE202L">BCSE202L - Compiler&#39;s Design</option>',
+            SPE: '<option value="BCSE202P">BCSE202P - Compiler Lab</option>',
+            BC: '<option value="">No courses</option>',
+            NGCR: '<option value="">No courses</option>',
           };
           assert.ok(Object.prototype.hasOwnProperty.call(options, body.cccategory));
           html = `<select>${options[body.cccategory]}</select>`;
@@ -556,7 +521,7 @@ test(
     const vtop = await newPage(message => w.send(message.type, message, w.vtop));
     await vtop.navigate(origin + '/vtop/content');
     const waitFor = async (page, expression) => {
-      for (let i = 0; i < 150; i++) {
+      for (let i = 0; i < 300; i++) {
         try {
           if (await page.evaluate(expression)) return;
         } catch {
@@ -564,7 +529,10 @@ test(
         }
         await delay(50);
       }
-      assert.fail(`Browser condition did not become true: ${expression}`);
+      const state = await page.evaluate(
+        `JSON.stringify({error:document.querySelector("#error")?.textContent,status:document.querySelector("#job-status")?.textContent})`
+      );
+      assert.fail(`Browser condition did not become true: ${expression}; ${state}`);
     };
     await waitFor(vtop, 'Boolean(document.querySelector("#authorizedID"))');
     await vtop.evaluate(read('parser.js'));
@@ -593,18 +561,22 @@ test(
     await ui.navigate(origin);
     await waitFor(ui, 'document.querySelector("#vtop-tab")?.value === "7"');
     await ui.evaluate('document.querySelector("#connect").click()');
-    await waitFor(ui, 'document.querySelectorAll("#mappings input[type=checkbox]").length === 4');
+    await waitFor(ui, 'document.querySelectorAll("#categories tr").length === 8');
+    assert.equal(
+      await ui.evaluate(
+        'document.querySelectorAll("#categories select, #categories input").length'
+      ),
+      0
+    );
+    assert.equal(await ui.evaluate('Boolean(document.querySelector("#folder"))'), false);
     await ui.evaluate(
-      `const folder = document.querySelector('#folder'); folder.value='SCOPE_F'; folder.dispatchEvent(new Event('change',{bubbles:true}));`
+      `document.querySelector('#school').value='SCOPE'; document.querySelector('#school').dispatchEvent(new Event('change',{bubbles:true})); document.querySelector('#branch').value='BCI'; document.querySelector('#branch').dispatchEvent(new Event('input',{bubbles:true}));`
     );
     await waitFor(ui, '!document.querySelector("#start").disabled');
-    assert.equal(
-      await ui.evaluate(`document.querySelector('select[aria-label="File for FCON"]').value`),
-      'FCON.ts'
-    );
-    assert.equal(
-      await ui.evaluate(`document.querySelector('select[aria-label="File for OEC"]').value`),
-      'OEC.ts'
+    assert.ok(
+      (await ui.evaluate('document.querySelector("#destination").textContent')).includes(
+        'src/data/SCOPE/BCI/'
+      )
     );
     await ui.evaluate('document.querySelector("#start").click()');
     await waitFor(ui, '!document.querySelector("#progress").hidden');
@@ -615,20 +587,25 @@ test(
     assert.deepEqual(
       [...archive.keys()],
       [
-        'src/data/SCOPE_F/UCC.ts',
-        'src/data/SCOPE_F/PCC.ts',
-        'src/data/SCOPE_F/FCON.ts',
-        'src/data/SCOPE_F/OEC.ts',
-        'src/data/SCOPE_F/index.ts',
+        ...categories.map(item => `src/data/SCOPE/BCI/${item.code}.ts`),
+        'src/data/SCOPE/BCI/index.ts',
       ]
     );
-    assert.deepEqual(
-      archive.get('src/data/SCOPE_F/index.ts'),
-      fs.readFileSync(path.join(root, 'src/data/SCOPE_F/index.ts'))
+    assert.match(
+      archive.get('src/data/SCOPE/BCI/index.ts').toString(),
+      /import { SPE } from '.\/SPE'/
     );
-    assert.match(archive.get('src/data/SCOPE_F/FCON.ts').toString(), /^export const CON =/);
-    assert.match(archive.get('src/data/SCOPE_F/FCON.ts').toString(), /slot: 'NIL'/);
-    assert.equal(archive.get('src/data/SCOPE_F/OEC.ts').toString(), 'export const OEC = {\n};\n');
+    assert.match(archive.get('src/data/SCOPE/BCI/SPE.ts').toString(), /^export const SPE =/);
+    assert.match(archive.get('src/data/SCOPE/BCI/PI.ts').toString(), /slot: 'NIL'/);
+    for (const code of ['OE', 'BC', 'NGCR'])
+      assert.equal(
+        archive.get(`src/data/SCOPE/BCI/${code}.ts`).toString(),
+        `export const ${code} = {\n};\n`
+      );
+    assert.deepEqual(
+      calls.filter(call => call.body.cccategory).map(call => call.body.cccategory),
+      categories.map(item => item.code)
+    );
     assert.equal(calls.filter(call => call.body.courseCode === 'BCSE202L').length, 1);
     for (const bytes of archive.values()) {
       assert.ok(!bytes.toString().includes('CURRENT-ACCOUNT'));

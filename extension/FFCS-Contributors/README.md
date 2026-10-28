@@ -1,60 +1,62 @@
-# FFCS Contributors - standalone VTOP exporter
+# FFCS Contributors
 
-This is a separate contributor/admin extension. It does not need the personal My VTOP extension or a running FFCS-inator app.
+Standalone VTOP course-data exporter. It does not need the personal My VTOP extension or a running FFCS-inator app.
 
-## Install and export
+## Use
 
-1. Download `FFCS-Contributors.zip`, extract it, and load the extracted folder through Chrome/Edge Extensions > Developer mode > Load unpacked. Select the folder containing `manifest.json`.
-2. Refresh VTOP after installing, then log in normally at https://vtop.vit.ac.in/vtop/.
-3. Click the extension's toolbar action to open the contributor page. Choose the signed-in VTOP tab and click **Connect to VTOP**. The tool reads the allocation view in the background; you do not have to navigate there.
-4. Choose the matching repository branch/batch folder. Review each available category's destination file. Recognized categories are suggested automatically; choose a file for unmatched categories or uncheck them. Each selected category needs a different file.
-5. Click **Fetch & download ZIP**. Progress shows category/course requests. Keep the VTOP tab open until capture finishes. The contributor page can be closed and reopened; a completed export can be downloaded using **Download ZIP again**.
-6. Extract the downloaded **data ZIP over this existing repository root**, so its `src/data/<folder>/...` paths replace the selected data files. Review the diff before contributing it.
+1. Download `public/extensions/FFCS-Contributors.zip`, extract it, and load its folder through Chrome/Edge Extensions > Developer mode > Load unpacked. When upgrading, replace the extracted files and reload the extension.
+2. Refresh VTOP after installation and log in normally. Click the extension toolbar action to open FFCS Contributors.
+3. Choose the signed-in VTOP tab and click **Connect to VTOP**. The allocation view is fetched in the background.
+4. Choose your **School** and enter your **Branch** (for example SCOPE and BCI).
+5. Click **Fetch & download ZIP**. Every category offered by VTOP is included automatically. Keep VTOP open until capture finishes.
 
-## Exact repository format
+There are no repository-file mappings or category selection checkboxes. The category list is a read-only preview. Your school and branch identify the export; they do not change the account's available courses.
 
-The extension ships a catalogue generated from the current `src/data/*/index.ts` imports and exports. It preserves folder names, filenames, named export identifiers and category labels, including existing spellings such as `DiscliplineCore.ts`. For example, `SCOPE_F/FCON.ts` correctly exports `CON`.
+## Files
 
-A data archive contains:
+Category filenames and exported constants use VTOP's category codes. For SCOPE / BCI:
 
 ```text
-src/data/<selected-folder>/<selected-category>.ts
-src/data/<selected-folder>/index.ts     # existing source, unchanged; optional
+src/data/SCOPE/BCI/FC.ts
+src/data/SCOPE/BCI/DLES.ts
+src/data/SCOPE/BCI/DC.ts
+src/data/SCOPE/BCI/SPE.ts
+src/data/SCOPE/BCI/PI.ts
+src/data/SCOPE/BCI/OE.ts
+src/data/SCOPE/BCI/BC.ts
+src/data/SCOPE/BCI/NGCR.ts
+src/data/SCOPE/BCI/index.ts
 ```
 
-Category files use the existing structure:
+Each file keeps the course data format:
 
 ```ts
-export const UCC = {
+export const FC = {
   'BCSE202L - Data Structures': [{ slot: 'B1+TB1', venue: 'SJT522', faculty: 'FACULTY NAME' }],
 };
 ```
 
-Apostrophes, backslashes, Unicode and line breaks are escaped as TypeScript strings. NIL/project slots and theory/lab sections are retained. Duplicate identical rows are deduplicated. The layout and exported values match the repository format; formatting is generated and is not intended to be a byte-for-byte copy of old course data.
+`index.ts` is generated to import these category files and export `SCOPE_BCI`, with VTOP category codes as keys. It is not copied from the legacy repository index. This category-based layout follows school/branch folders; it does not replace legacy `FoundationCore.ts` files automatically. Import the generated branch index where needed when integrating the data into the app.
 
-The archive is a **drop-in update for the existing repository**, not a full standalone replacement for all branch folders. Only selected categories are fetched and refreshed. The optional `index.ts` is copied unchanged from this repository; its other imports continue using files already in your data folder. Existing `faculty.ts`, FAQ data and unselected branch/category files are not replaced. A category with no offered course sections produces an empty exported object, reflecting VTOP's current availability.
+School and branch folder names are uppercase; spaces and hyphens become underscores. A category with no offered sections still gets a file exporting an empty object. NIL/project slots, theory/lab rows, Unicode and escaped apostrophes are supported. Identical rows are deduplicated.
 
-The empty `MTech_SCORE` index has no configured category files and is shown disabled rather than inventing a new layout. Repackage the extension after adding or changing repository folders/index mappings.
+## Capture and privacy
 
-## Scope, storage and cancellation
+All courses are read from the selected signed-in account. No other branches/accounts are enumerated. The account, semester and available category scope are checked again when a fetch begins, and account changes interrupt the job.
 
-Selecting a folder chooses a destination for contributions; it does not impersonate another VTOP account or unlock all branches. Only categories offered to the selected signed-in account are requested. To collect another branch, use a legitimate session for that branch and export its matching folder. The VTOP account/semester/category scope is checked again when fetching starts, and account changes interrupt the capture.
+Password, cookie, CSRF token, raw registration ID and fetched HTML are not persisted or included in the ZIP. Requests use the browser's VTOP session and the downloader's read endpoints; no course enrolment or app/server upload occurs.
 
-All requests use the browser's existing VTOP session on the VTOP origin. No passwords, cookies, CSRF tokens, raw registration IDs, fetched HTML or executed remote scripts are saved or exported. No registration/enrolment operation runs, and no app/server upload occurs.
+The latest complete export and progress use extension-local storage. You can close and reopen the contributor page and use **Download ZIP again**. **Clear captured data** removes stored results and session metadata; downloaded files remain in Downloads. **Cancel capture**, failed sessions and closed VTOP tabs do not produce partial ZIPs. Updating from the old file-mapping version clears its stored jobs/settings so they cannot be mistaken for the new export format.
 
-The last complete export and progress are stored in extension-local storage so the contributor page can be reopened. **Clear captured data** removes this local result and session metadata. Already-downloaded files stay in your browser's Downloads folder. **Cancel capture** stops the job and does not produce a partial ZIP. Failed requests, expired sessions, closed VTOP tabs and unrecognized responses produce an error rather than a successful partial export.
+Only the contributor page can start jobs or download output. VTOP content scripts can report results only for the assigned active tab/job. Site access is limited to VTOP, plus local storage/download permissions. This extension has no FFCS/Perry app bridge.
 
-Only the extension's contributor page can start jobs or read output. VTOP content scripts can report progress/results only for the assigned tab and active job. The manifest requests VTOP-only site access, local storage and downloads; it has no FFCS/Perry app bridge.
-
-## Build and verify
-
-From the repository root:
+## Development
 
 ```bash
 npm run contributors:package
 npm run contributors:test
 ```
 
-The package command regenerates `catalogue.json` from repository indexes, copies the course HTML parser into this standalone bundle and rebuilds `public/extentions/FFCS-Contributors/FFCS-Contributors.zip`. The extension ZIP has `manifest.json` at its root. Course ZIPs have `src/data/...` at their root.
+Source: `extension/FFCS-Contributors`. Download: `public/extensions/FFCS-Contributors.zip`.
 
-Automated tests cover repository naming, compilable exports, ZIP CRC/UTF-8 paths/content, contributor-only message access, capture/cancellation, and browser fixtures of signed-in VTOP. Private VTOP HTML can change independently; a live account smoke test is still needed after installation.
+Packaging regenerates the school list from the repository's data folders and bundles the parser. Tests cover category-based exports, index imports, TypeScript string escaping, ZIP contents, origin/job boundaries, cancellation and the complete browser fetch/download flow using VTOP fixtures. A private signed-in VTOP smoke test is still needed after installation.

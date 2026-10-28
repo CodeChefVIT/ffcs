@@ -62,82 +62,71 @@
     lines.push('};', '');
     return lines.join('\n');
   }
-  function buildFiles(profile, mappings, groups, includeIndex = true) {
+
+  function segment(value, label) {
     if (
-      !profile ||
-      !/^[A-Za-z0-9_]+$/.test(profile.folder) ||
-      !Array.isArray(profile.files) ||
-      !Array.isArray(mappings) ||
-      !mappings.length ||
+      typeof value !== 'string' ||
+      !value.trim() ||
+      value.length > 80 ||
+      /[\\/<>:"|?*\x00-\x1f]/.test(value)
+    )
+      throw new Error(`Enter a valid ${label}.`);
+    const result = value.trim().toUpperCase().replace(/[ -]+/g, '_');
+    if (!/^[A-Z0-9_]+$/.test(result) || /^(?:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])$/.test(result))
+      throw new Error(`Use letters, numbers, spaces or underscores for ${label}.`);
+    return result;
+  }
+  function destinationPath(destination) {
+    return `src/data/${segment(destination?.school, 'school')}/${segment(destination?.branch, 'branch')}`;
+  }
+  function categoryFile(category) {
+    const code = category?.code;
+    if (
+      typeof code !== 'string' ||
+      !/^[A-Z][A-Z0-9_]{0,63}$/.test(code) ||
+      code.toLowerCase() === 'index'
+    )
+      throw new Error('VTOP returned an unsupported category code.');
+    return code + '.ts';
+  }
+  function buildFiles(destination, categories, groups) {
+    const folder = destinationPath(destination);
+    if (
+      !Array.isArray(categories) ||
+      !categories.length ||
+      categories.length > 100 ||
       !object(groups)
     )
-      throw new Error('Select a repository folder and at least one category.');
-    const used = new Set(),
-      codes = new Set(),
-      files = [];
-    for (const mapping of mappings) {
-      const target = profile.files.find(file => file.file === mapping.file);
-      if (
-        !target ||
-        !/^[A-Za-z0-9_]+\.ts$/.test(target.file) ||
-        target.file === 'index.ts' ||
-        used.has(target.file) ||
-        codes.has(mapping.code)
-      )
-        throw new Error('Each category must map to a different existing data file.');
-      if (!Object.prototype.hasOwnProperty.call(groups, mapping.code))
-        throw new Error(`Missing captured category: ${mapping.code}`);
-      used.add(target.file);
-      codes.add(mapping.code);
+      throw new Error('Connect to VTOP to load its course categories.');
+    const seen = new Set(),
+      files = [],
+      imports = [],
+      entries = [];
+    for (const category of categories) {
+      const file = categoryFile(category);
+      if (seen.has(file.toLowerCase())) throw new Error('VTOP returned repeated category codes.');
+      seen.add(file.toLowerCase());
+      if (!Object.prototype.hasOwnProperty.call(groups, category.code))
+        throw new Error(`Missing captured category: ${category.code}`);
       files.push({
-        name: `src/data/${profile.folder}/${target.file}`,
-        text: serializeGroup(target.symbol, groups[mapping.code]),
+        name: `${folder}/${file}`,
+        text: serializeGroup(category.code, groups[category.code]),
       });
+      imports.push(`import { ${category.code} } from './${category.code}';`);
+      entries.push(`  ${quote(category.code)}: ${category.code},`);
     }
-    if (includeIndex) {
-      if (typeof profile.indexSource !== 'string') throw new Error('Missing repository index.');
-      files.push({ name: `src/data/${profile.folder}/index.ts`, text: profile.indexSource });
-    }
+    const symbol = `${segment(destination.school, 'school')}_${segment(destination.branch, 'branch')}`;
+    files.push({
+      name: `${folder}/index.ts`,
+      text: [...imports, '', `export const ${symbol} = {`, ...entries, '};', ''].join('\n'),
+    });
     return files;
-  }
-  const aliases = {
-    FC: ['foundationcore'],
-    DC: ['disciplinecore'],
-    DE: ['disciplineelective'],
-    DLES: ['disciplinelinkedengineeringsciences'],
-    DL: ['disciplinelinkedengineeringsciences'],
-    OE: ['openelective', 'openelectivecourses'],
-    OEC: ['openelective', 'openelectivecourses'],
-    UCC: ['universitycorecourses', 'universitycoremic'],
-    UC: ['universitycoremic'],
-    PCC: ['professionalcorecourses'],
-    PC: ['programmecoremic'],
-    PE: ['programmeelectivemic'],
-    UE: ['universityelectivemic'],
-    FCON: ['concentrationcourses'],
-    CON: ['concentrationcourses'],
-    PFCC: ['programmefoundationcoremic'],
-    PFEC: ['programmefreeelectivemic'],
-    ME: ['multidisciplinaryelective'],
-    NGCR: ['ngcr'],
-  };
-  const normalize = value => value.toLowerCase().replace(/[^a-z0-9]/g, '');
-  function suggestFile(profile, category) {
-    const code = category.code.toUpperCase();
-    let options = profile.files.filter(
-      file => normalize(file.file.replace(/\.ts$/, '')) === normalize(code)
-    );
-    if (options.length === 1) return options[0].file;
-    const keys = aliases[code] || [];
-    options = profile.files.filter(file => keys.includes(normalize(file.category)));
-    if (options.length === 1) return options[0].file;
-    options = profile.files.filter(file => normalize(file.category) === normalize(category.label));
-    return options.length === 1 ? options[0].file : '';
   }
   globalThis.FFCSContributorExport = Object.freeze({
     buildFiles,
     serializeGroup,
     validateGroup,
-    suggestFile,
+    destinationPath,
+    categoryFile,
   });
 })();
