@@ -130,7 +130,7 @@ export default function SchoolPopup({
         </div>
         <div className="flex gap-5 text-left">
           <div
-            className={`flex flex-col w-[520px] h-[448px] shrink-0 p-2.5 bg-white/70 rounded-2xl border-[2.5px] border-black shadow-hard ${locked}`}
+            className={`flex flex-col w-[520px] h-[448px] shrink-0 p-1 bg-white/70 rounded-2xl border-[2.5px] border-black shadow-hard ${locked}`}
           >
             <input
               id="school-search"
@@ -138,14 +138,14 @@ export default function SchoolPopup({
               value={query}
               onChange={e => setQuery(e.target.value)}
               placeholder={'Search by code or name, e.g. "comp", "mech"…'}
-              className="h-10 shrink-0 px-3 rounded-[3.5px] bg-ffcs-page text-sm font-medium outline-none placeholder:text-ffcs-muted"
+              className="h-10 shrink-0 px-3 rounded-[9.5px] bg-ffcs-page text-sm font-medium outline-none placeholder:text-ffcs-muted"
             />
             <ul className="flex-1 mt-0.5 space-y-0.5 overflow-y-auto">
               {options.map(key => (
                 <li
                   key={key}
                   onClick={() => setPicked(key)}
-                  className={`flex items-center gap-3 h-10 px-3 rounded-[3.5px] text-sm cursor-pointer hover:bg-ffcs-yellow ${
+                  className={`flex items-center gap-3 h-10 px-3 rounded-[9.5px] text-sm cursor-pointer hover:bg-ffcs-yellow ${
                     picked === key ? 'bg-ffcs-yellow' : ''
                   }`}
                 >
