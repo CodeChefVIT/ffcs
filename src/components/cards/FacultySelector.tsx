@@ -719,7 +719,7 @@ export default function FacultySelector({
             {selectedSchool === 'My VTOP' && vtopStatus}
           </div>
 
-          <div className="grid grid-cols-2 gap-x-3 gap-y-4 m-4 px-4 pt-2">
+          <div className="grid grid-cols-2 gap-x-5 gap-y-4 m-4 px-4 pt-2">
             <ComboBox
               label="Select domain"
               value={selectedDomain}
