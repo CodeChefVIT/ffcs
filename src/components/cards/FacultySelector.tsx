@@ -947,7 +947,7 @@ export default function FacultySelector({
                 </div>
               </div>
 
-              <div className="flex flex-row justify-center gap-4">
+              <div className="flex flex-row flex-wrap justify-center gap-4">
                 <ZButton
                   type="long"
                   text="Reset"

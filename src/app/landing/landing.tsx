@@ -93,7 +93,7 @@ function Planner({
 
   return (
     <>
-      <div className="w-4xl mx-4">
+      <div className="w-4xl max-w-[calc(100%-2rem)] mx-4">
         <FacultySelector
           key={school}
           selectedSchool={school}
