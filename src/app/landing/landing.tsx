@@ -193,7 +193,7 @@ export default function View() {
 
       <Navbar
         page="landing"
-        school={savedSchool}
+        school={savedSchool || 'SCOPE'}
         vtopOn={vtopOn}
         onSchoolClick={() => setShowSchoolPopup(true)}
       />
