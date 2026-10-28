@@ -76,6 +76,7 @@ export default function Navbar({ page, school, vtopOn, onSchoolClick }: NavbarPr
                       forceColor="#FFFFFF"
                       image="/icons/chevron_down.svg"
                       onClick={onSchoolClick}
+                      className="whitespace-nowrap"
                     />
                     {vtopOn && (
                       <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full border-2 border-black bg-[#C4AFF3]" />
