@@ -191,7 +191,12 @@ export default function View() {
         />
       </div>
 
-      <Navbar page="landing" />
+      <Navbar
+        page="landing"
+        school={savedSchool || 'SCOPE'}
+        vtopOn={vtopOn}
+        onSchoolClick={() => setShowSchoolPopup(true)}
+      />
 
       <Hero />
 
