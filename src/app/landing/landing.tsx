@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 
 import Hero from '@/components/ui/Hero';
@@ -81,6 +81,30 @@ function Planner({
     });
   };
 
+  // The course whose pencil was pressed, if any.
+  const [editingCourseId, setEditingCourseId] = useState<string | null>(null);
+  const editingCourse = selectedCourses.find(course => course.id === editingCourseId) ?? null;
+  const [regenerateKey, setRegenerateKey] = useState(0);
+
+  const cancelEdit = useCallback(() => setEditingCourseId(null), []);
+
+  // Saving replaces the course's slots and faculties, keeping its place in Your Courses.
+  const saveEdit = (editedCourse: fullCourseData) => {
+    setSelectedCourses(prevCourses =>
+      prevCourses.map(course => (course.id === editedCourse.id ? editedCourse : course))
+    );
+    setEditingCourseId(null);
+    setRegenerateKey(key => key + 1);
+  };
+
+  // Deleting the course being edited, on its own or with Remove all, cancels the edit.
+  const updateCourses = (updatedCourses: fullCourseData[]) => {
+    setSelectedCourses(updatedCourses);
+    if (editingCourseId && !updatedCourses.some(course => course.id === editingCourseId)) {
+      setEditingCourseId(null);
+    }
+  };
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -101,13 +125,23 @@ function Planner({
             dataOverride={facultyData}
             storageKey={storageKey}
             onConfirm={facultySelectorOnConfirm}
+            courses={selectedCourses}
+            editingCourse={editingCourse}
+            onSaveEdit={saveEdit}
+            onCancelEdit={cancelEdit}
           />
         </div>
         <div className="w-full max-w-[943px] min-[1440px]:max-w-[752px] min-[1440px]:min-w-[640px] min-[1440px]:flex-[752_1_0%]">
           <CourseCard
             selectedCourses={selectedCourses}
-            onDelete={id => setSelectedCourses(prev => prev.filter(c => c.id !== id))}
-            onUpdate={updatedCourses => setSelectedCourses(updatedCourses)}
+            onDelete={id => {
+              setSelectedCourses(prev => prev.filter(c => c.id !== id));
+              if (id === editingCourseId) setEditingCourseId(null);
+            }}
+            onUpdate={updateCourses}
+            editingCourseId={editingCourseId}
+            onEdit={course => setEditingCourseId(course.id)}
+            regenerateKey={regenerateKey}
           />
         </div>
       </div>

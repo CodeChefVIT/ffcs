@@ -23,6 +23,10 @@ export type fullCourseData = {
   courseName: string;
   courseCodeLab?: string;
   courseNameLab?: string;
+  // The faculty data key (school, programme and batch) and domain the course was added under.
+  // Courses saved before these were stored don't have them.
+  school?: string;
+  domain?: string;
   courseSlots: {
     slotName: string;
     slotFaculties: {
