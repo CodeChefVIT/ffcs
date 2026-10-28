@@ -262,13 +262,11 @@ export default function FacultySelector({
   dataOverride: data = bundledData,
   storageKey = 'selectedCourses',
   selectedSchool,
-  vtopStatus,
 }: {
   onConfirm: (course: fullCourseData) => void;
   dataOverride?: FacultyData;
   storageKey?: string;
   selectedSchool: string;
-  vtopStatus?: React.ReactNode;
 }) {
   const [selectedLabShift, setSelectedLabShift] = useState<'' | ShiftKey>('');
   const [labShiftOptions, setLabShiftOptions] = useState<Record<ShiftKey, string[]>>({
@@ -663,17 +661,11 @@ export default function FacultySelector({
     <div>
       <div className="relative inline-block mb-20">
         {selectedSchool === 'My VTOP' && (
-          <div className="absolute -top-6 left-8 z-10 rounded-lg border-2 border-black bg-ffcs-purple px-4 py-0.5 font-poppins text-sm font-semibold">
+          <div className="absolute -top-8 left-8 z-10 flex h-10 items-center rounded-2xl border-2 border-black bg-[#CDB1FF] px-5 font-poppins text-base font-semibold shadow-[3px_3px_0_0_black]">
             My VTOP
           </div>
         )}
         <div className="font-poppins relative bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[4px_4px_0_0_black] mx-auto overflow-hidden">
-          {selectedSchool === 'My VTOP' && (
-            <div className="flex flex-col items-center justify-center gap-4 pt-4 px-4 m-4 text-center">
-              {vtopStatus}
-            </div>
-          )}
-
           <div className="grid grid-cols-2 gap-x-3 gap-y-4 m-4 px-4 pt-2">
             <ComboBox
               label="Select domain"
