@@ -84,7 +84,9 @@ export default function SchoolPopup({
         className="font-poppins bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[10px_10px_0_0_black] w-full max-w-4xl p-8 flex flex-col gap-6"
       >
         <div className="text-xl font-semibold">Your school &amp; batch</div>
-        <div className={`flex flex-wrap items-end gap-4 ${vtopOn ? 'opacity-40' : ''}`}>
+        <div
+          className={`flex flex-wrap items-end gap-4 ${vtopOn ? 'opacity-40 pointer-events-none' : ''}`}
+        >
           <div className="flex-1 min-w-64 text-left font-semibold text-sm">
             School
             <div className="mt-1">
@@ -130,8 +132,8 @@ export default function SchoolPopup({
             type="long"
             text="Continue"
             color="green"
-            disabled={!picked}
-            onClick={() => onConfirm(picked)}
+            disabled={!picked && !vtopOn}
+            onClick={() => onConfirm(picked || school)}
           />
         </div>
       </div>
