@@ -53,12 +53,29 @@ type SmartFilterPillProps = {
   title?: string;
 };
 
+const filterLabels = {
+  sameBuilding: 'Same building',
+  morningOnly: 'Morning theory',
+  eveningOnly: 'Evening theory',
+  mixOnly: 'Mixed theory',
+};
+
+const filterLabelClass = 'mb-1.5 text-[11px] font-bold uppercase text-ffcs-muted';
+
 // Hover/focus tooltip wrapper shared by the smart-filter controls
-function WithTooltip({ text, children }: { text?: string; children: React.ReactNode }) {
+function WithTooltip({
+  text,
+  children,
+  className = 'inline-flex items-center',
+}: {
+  text?: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
   const [show, setShow] = useState(false);
   return (
     <div
-      className="relative inline-flex items-center"
+      className={`relative ${className}`}
       onMouseEnter={() => text && setShow(true)}
       onMouseLeave={() => setShow(false)}
       onFocus={() => text && setShow(true)}
@@ -98,7 +115,7 @@ function SmartFilterCheckbox({
         className={`flex items-center gap-2 ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
       >
         <div
-          className={`w-5 h-5 flex items-center justify-center shrink-0 border-2 rounded-sm transition-colors ${
+          className={`w-6 h-6 flex items-center justify-center shrink-0 border-[2.5px] rounded-md transition-colors ${
             disabled && checked
               ? 'bg-[#B8E07A] border-gray-500'
               : disabled
@@ -116,14 +133,14 @@ function SmartFilterCheckbox({
               strokeWidth="4"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="w-3 h-3"
+              className="w-3.5 h-3.5"
             >
               <polyline points="20 6 9 17 4 12" />
             </svg>
           )}
         </div>
         <span
-          className={`font-poppins font-semibold text-sm leading-none ${
+          className={`font-poppins font-medium text-sm leading-none whitespace-nowrap ${
             disabled && !checked ? 'text-gray-400' : disabled ? 'text-gray-500' : 'text-black'
           }`}
         >
@@ -134,23 +151,23 @@ function SmartFilterCheckbox({
   );
 }
 
-// Single-select pill used for the mutually-exclusive time-period group
+// Single-select segment used for the mutually-exclusive time-period group
 function SmartFilterPill({ label, selected, disabled, onClick, title }: SmartFilterPillProps) {
   const stateCls =
     selected && !disabled
-      ? 'bg-[#C1FF83] border-black text-black shadow-[2px_2px_0_0_black]'
+      ? 'bg-ffcs-green font-semibold text-black'
       : selected && disabled
-        ? 'bg-[#B8E07A] border-gray-500 text-gray-600 cursor-not-allowed'
+        ? 'bg-ffcs-green-muted font-semibold text-gray-600 cursor-not-allowed'
         : disabled
-          ? 'bg-gray-200 border-gray-400 text-gray-400 cursor-not-allowed'
-          : 'bg-white border-black text-black cursor-pointer hover:shadow-[2px_2px_0_0_black]';
+          ? 'text-gray-400 cursor-not-allowed'
+          : 'text-ffcs-muted cursor-pointer hover:bg-ffcs-yellow hover:text-black';
   return (
-    <WithTooltip text={title}>
+    <WithTooltip text={title} className="flex">
       <button
         onClick={disabled ? undefined : onClick}
         aria-pressed={selected}
         aria-disabled={disabled}
-        className={`px-3 py-1.5 rounded-full border-2 font-poppins font-semibold text-sm leading-none transition ${stateCls}`}
+        className={`flex-1 px-2 rounded-[9.5px] font-poppins font-medium text-sm leading-none transition ${stateCls}`}
       >
         {label}
       </button>
@@ -179,6 +196,7 @@ export default function ViewTimeTable() {
   const [isSaving, setIsSaving] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [showFilterInfo, setShowFilterInfo] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
   const { data: session } = useSession();
   const owner = session?.user?.email || null;
@@ -718,6 +736,27 @@ export default function ViewTimeTable() {
           ? 'Show mixed morning/evening timetables — click to switch'
           : 'Show timetables with both morning and evening theory slots';
 
+  // Filters the student turned on; forced ones can't be removed, so they get no tag
+  const filterTags = [
+    ...(Object.keys(filterLabels) as (keyof typeof filterLabels)[])
+      .filter(key => activeFilters.has(key) && !forcedFilters.has(key))
+      .map(key => ({
+        label: filterLabels[key],
+        remove: () =>
+          setActiveFilters(prev => {
+            const next = new Set(prev);
+            next.delete(key);
+            return next;
+          }),
+      })),
+    ...(filterFaculty ? [{ label: filterFaculty, remove: () => setFilterFaculty('') }] : []),
+  ];
+
+  function clearFilters() {
+    setActiveFilters(new Set());
+    setFilterFaculty('');
+  }
+
   // === Time group: single-select; click the active one to deselect ===
   const timeForced = isMorningOnlyForced || isEveningOnlyForced || isMixOnlyForced;
 
@@ -740,10 +779,28 @@ export default function ViewTimeTable() {
       className="w-screen mt-12 bg-[#A7D5D7] font-poppins flex items-center justify-center flex-col border-black border-3"
     >
       <div className="flex flex-col h-full p-12 overflow-hidden">
-        <div className="flex flex-row mb-4 justify-between w-full px-4 items-center">
-          <div className="text-5xl font-pangolin">Your Timetables</div>
+        <div className="flex flex-row flex-wrap gap-4 mb-4 justify-between w-full px-4 items-center">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <div className="text-5xl font-pangolin">Your Timetables</div>
+            {filterTags.map(tag => (
+              <span
+                key={tag.label}
+                className="flex items-center gap-1 shrink-0 h-6 pl-2 pr-1 rounded-md border-2 border-black bg-ffcs-yellow text-sm"
+              >
+                {tag.label}
+                <button
+                  type="button"
+                  aria-label={`Remove ${tag.label}`}
+                  onClick={tag.remove}
+                  className="cursor-pointer"
+                >
+                  <Image src="/icons/cross.svg" alt="" width={12} height={12} draggable={false} />
+                </button>
+              </span>
+            ))}
+          </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 ml-auto">
             <div className="flex gap-5 items-center">
               <div className="relative shrink-0">
                 <button
@@ -785,60 +842,94 @@ export default function ViewTimeTable() {
                   </>
                 )}
               </div>
-              <SmartFilterCheckbox
-                label="Group by Slot"
-                checked={groupBySlot}
-                disabled={false}
-                onClick={() => setGroupBySlot(prev => !prev)}
-                title={
-                  groupBySlot
-                    ? 'Showing one timetable per slot layout — click to show every faculty combination as its own timetable'
-                    : 'Show one timetable per slot layout and switch faculty with the arrows'
-                }
-              />
-              <SmartFilterCheckbox
-                label="Same Building"
-                checked={effectiveActiveFilters.has('sameBuilding')}
-                disabled={sameBuildingDisabled}
-                onClick={toggleSameBuilding}
-                title={sameBuildingTitle}
-              />
-              <div className="w-px h-7 bg-black/30" />
-              <div className="flex items-center gap-2">
-                <span className="font-poppins font-semibold text-sm text-black/60 select-none">
-                  Time
-                </span>
-                <SmartFilterPill
-                  label="Morning"
-                  selected={effectiveActiveFilters.has('morningOnly')}
-                  disabled={morningOnlyDisabled}
-                  onClick={() => toggleTime('morningOnly')}
-                  title={morningOnlyTitle}
-                />
-                <SmartFilterPill
-                  label="Evening"
-                  selected={effectiveActiveFilters.has('eveningOnly')}
-                  disabled={eveningOnlyDisabled}
-                  onClick={() => toggleTime('eveningOnly')}
-                  title={eveningOnlyTitle}
-                />
-                <SmartFilterPill
-                  label="Mixed"
-                  selected={effectiveActiveFilters.has('mixOnly')}
-                  disabled={mixOnlyDisabled}
-                  onClick={() => toggleTime('mixOnly')}
-                  title={mixOnlyTitle}
-                />
+              <div className="relative">
+                <button
+                  onClick={() => setShowFilters(prev => !prev)}
+                  aria-expanded={showFilters}
+                  className={`flex items-center gap-2.5 h-12 px-5 rounded-xl border-3 border-black shadow-hard font-semibold cursor-pointer transition duration-100 active:shadow-hard-sm active:translate-x-[2px] active:translate-y-[2px] ${
+                    showFilters ? 'bg-ffcs-blue-pressed' : 'bg-ffcs-blue'
+                  }`}
+                >
+                  Filters
+                  {filterTags.length > 0 && (
+                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-black text-white text-xs">
+                      {filterTags.length}
+                    </span>
+                  )}
+                </button>
+                {showFilters && (
+                  <>
+                    <div className="fixed inset-0 z-10" onClick={() => setShowFilters(false)} />
+                    <div className="absolute top-full right-0 mt-3 z-20 w-[560px] max-w-[calc(100vw-8rem)] bg-ffcs-card border-3 border-black rounded-3xl shadow-hard p-6 flex flex-col gap-5">
+                      <div className="font-semibold">Filters</div>
+                      <div>
+                        <div className={filterLabelClass}>Theory time</div>
+                        <div className="grid grid-cols-3 h-12 p-1 gap-1 bg-white/70 rounded-2xl border-[2.5px] border-black">
+                          <SmartFilterPill
+                            label="Morning"
+                            selected={effectiveActiveFilters.has('morningOnly')}
+                            disabled={morningOnlyDisabled}
+                            onClick={() => toggleTime('morningOnly')}
+                            title={morningOnlyTitle}
+                          />
+                          <SmartFilterPill
+                            label="Evening"
+                            selected={effectiveActiveFilters.has('eveningOnly')}
+                            disabled={eveningOnlyDisabled}
+                            onClick={() => toggleTime('eveningOnly')}
+                            title={eveningOnlyTitle}
+                          />
+                          <SmartFilterPill
+                            label="Mixed"
+                            selected={effectiveActiveFilters.has('mixOnly')}
+                            disabled={mixOnlyDisabled}
+                            onClick={() => toggleTime('mixOnly')}
+                            title={mixOnlyTitle}
+                          />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <SmartFilterCheckbox
+                          label="Same Building"
+                          checked={effectiveActiveFilters.has('sameBuilding')}
+                          disabled={sameBuildingDisabled}
+                          onClick={toggleSameBuilding}
+                          title={sameBuildingTitle}
+                        />
+                        <SmartFilterCheckbox
+                          label="Group by Slot"
+                          checked={groupBySlot}
+                          disabled={false}
+                          onClick={() => setGroupBySlot(prev => !prev)}
+                          title={
+                            groupBySlot
+                              ? 'Showing one timetable per slot layout — click to show every faculty combination as its own timetable'
+                              : 'Show one timetable per slot layout and switch faculty with the arrows'
+                          }
+                        />
+                      </div>
+                      <div>
+                        <div className={filterLabelClass}>Faculty</div>
+                        <ComboBox
+                          label="Filter by Faculty"
+                          value={filterFaculty}
+                          options={facultyList}
+                          onChange={setFilterFaculty}
+                        />
+                      </div>
+                      <div className="flex justify-end">
+                        <ZButton
+                          type="regular"
+                          text="Clear all"
+                          color="red"
+                          disabled={filterTags.length === 0}
+                          onClick={clearFilters}
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
-            </div>
-
-            <div className="w-[400px]">
-              <ComboBox
-                label="Filter by Faculty"
-                value={filterFaculty}
-                options={facultyList}
-                onChange={setFilterFaculty}
-              />
             </div>
           </div>
         </div>
