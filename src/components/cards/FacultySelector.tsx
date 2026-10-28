@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { ZButton } from '../ui/Buttons';
 
@@ -8,7 +8,7 @@ import { data as bundledData } from '@/data/faculty';
 import { fullCourseData } from '@/lib/type';
 import AlertModal from '../ui/AlertModal';
 import { course_type_map } from '@/lib/course_codes_map';
-import ComboBox from '@/components/ui/ComboBox';
+import ComboBox, { MultiSelector } from '@/components/ui/ComboBox';
 
 type SubjectEntry = {
   slot: string;
@@ -207,6 +207,25 @@ function generateCourseSlotsBoth({
   ];
 }
 
+const visibleSubjects = (domainData: Record<string, SubjectEntry[]>) => {
+  const allSubjects = Object.keys(domainData);
+  return allSubjects.filter(subject => {
+    const code = subject.split(' - ')[0];
+    const type = getCourseType(code, domainData[subject]);
+    if (type === 'P') {
+      const theoryCode = code.slice(0, -1) + 'L';
+      return !allSubjects.some(s => s.startsWith(theoryCode));
+    }
+    return true;
+  });
+};
+
+// Subject options carry their domain so a search across domains can fill both fields.
+const SUBJECT_KEY_SEPARATOR = '||';
+const toSubjectKey = (domain: string, subject: string) =>
+  `${domain}${SUBJECT_KEY_SEPARATOR}${subject}`;
+const fromSubjectKey = (key: string) => key.split(SUBJECT_KEY_SEPARATOR) as [string, string];
+
 const prettifyDomain = (domain: string) => {
   return domain
     .replace(/([a-z])([A-Z])/g, '$1 $2')
@@ -267,7 +286,7 @@ export default function FacultySelector({
   const [priorityList, setPriorityList] = useState<string[]>([]);
   const [selectedDomain, setSelectedDomain] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
-  const [selectedSlot, setSelectedSlot] = useState('');
+  const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
   const [domains, setDomains] = useState<string[]>([]);
   const [subjects, setSubjects] = useState<string[]>([]);
   const [slots, setSlots] = useState<string[]>([]);
@@ -279,7 +298,7 @@ export default function FacultySelector({
   const handleReset = () => {
     setSelectedDomain('');
     setSelectedSubject('');
-    setSelectedSlot('');
+    setSelectedSlots([]);
     setSubjects([]);
     setSlots([]);
     setFaculties([]);
@@ -310,7 +329,7 @@ export default function FacultySelector({
       return;
     }
     if (
-      !selectedSlot &&
+      selectedSlots.length === 0 &&
       (courseCodeType === 'L' || courseCodeType === 'E' || courseCode.startsWith('BSTS'))
     ) {
       setPopup({ showPopup: true, message: 'Please select a theory slot.' });
@@ -366,28 +385,45 @@ export default function FacultySelector({
         labShift: selectedLabShift,
       });
     } else {
+      // One course slot per picked theory slot, each with the picked faculties who teach in it.
+      const subjectData = data[selectedSchool][selectedDomain][selectedSubject];
+      const facultiesInSlot = (slot: string) =>
+        priorityList.filter(name =>
+          subjectData.some(
+            entry =>
+              entry.slot === slot &&
+              (courseCode.startsWith('BSTS')
+                ? `${entry.faculty} (${entry.venue})`
+                : entry.faculty) === name
+          )
+        );
+      const slotsWithFaculties = selectedSlots.filter(slot => facultiesInSlot(slot).length > 0);
       if (courseType == 'both' || courseCodeType === 'E') {
-        courseSlots = generateCourseSlotsBoth({
-          data,
-          selectedSchool,
-          selectedDomain,
-          selectedSubject,
-          selectedSlot,
-          selectedFaculties: priorityList,
-          courseCodeType,
-        });
+        courseSlots = slotsWithFaculties.flatMap(slot =>
+          generateCourseSlotsBoth({
+            data,
+            selectedSchool,
+            selectedDomain,
+            selectedSubject,
+            selectedSlot: slot,
+            selectedFaculties: facultiesInSlot(slot),
+            courseCodeType,
+          })
+        );
       } else if (courseType == 'th') {
-        courseSlots = generateCourseSlotsSingle({
-          subjectData: data[selectedSchool][selectedDomain][selectedSubject],
-          selectedFaculties: priorityList,
-          selectedSlot,
-          courseType: 'th',
-        });
+        courseSlots = slotsWithFaculties.flatMap(slot =>
+          generateCourseSlotsSingle({
+            subjectData,
+            selectedFaculties: facultiesInSlot(slot),
+            selectedSlot: slot,
+            courseType: 'th',
+          })
+        );
       } else {
         courseSlots = generateCourseSlotsSingle({
           subjectData: data[selectedSchool][selectedDomain][selectedSubject],
           selectedFaculties: priorityList,
-          selectedSlot,
+          selectedSlot: '',
           courseType: 'lab',
         });
       }
@@ -461,19 +497,8 @@ export default function FacultySelector({
     if (selectedDomain) {
       const domainData = schoolData[selectedDomain];
       if (!domainData) return;
-      const allSubjects = Object.keys(domainData);
 
-      const filteredSubjects = allSubjects.filter(subject => {
-        const code = subject.split(' - ')[0];
-        const type = getCourseType(code, domainData[subject]);
-        if (type === 'P') {
-          const theoryCode = code.slice(0, -1) + 'L';
-          return !allSubjects.some(s => s.startsWith(theoryCode));
-        }
-        return true;
-      });
-
-      setSubjects(filteredSubjects);
+      setSubjects(visibleSubjects(domainData));
 
       if (selectedSubject) {
         const subjectData = domainData[selectedSubject];
@@ -512,20 +537,26 @@ export default function FacultySelector({
           setSlots(uniqueSlots);
         }
 
-        if (selectedSlot) {
-          const facultiesForSlot = subjectData
-            .filter(entry => entry.slot === selectedSlot)
-            .map(entry =>
-              courseCode.startsWith('BSTS') ? `${entry.faculty} (${entry.venue})` : entry.faculty
-            );
+        // For lab courses the lab shift effect below owns the faculty list.
+        if (selectedLabShift) return;
 
-          setSelectedFaculties([]);
-          setPriorityList([]);
-          setFaculties([...new Set(facultiesForSlot)]);
-        }
+        const facultiesForSlots = [
+          ...new Set(
+            subjectData
+              .filter(entry => selectedSlots.includes(entry.slot))
+              .map(entry =>
+                courseCode.startsWith('BSTS') ? `${entry.faculty} (${entry.venue})` : entry.faculty
+              )
+          ),
+        ];
+
+        // Adding or removing a slot keeps the picks that are still on offer.
+        setSelectedFaculties(prev => prev.filter(f => facultiesForSlots.includes(f)));
+        setPriorityList(prev => prev.filter(f => facultiesForSlots.includes(f)));
+        setFaculties(facultiesForSlots);
       }
     }
-  }, [data, selectedSchool, selectedDomain, selectedSubject, selectedSlot, selectedLabShift]);
+  }, [data, selectedSchool, selectedDomain, selectedSubject, selectedSlots, selectedLabShift]);
 
   useEffect(() => {
     if (!selectedSubject || !selectedLabShift) return;
@@ -551,7 +582,7 @@ export default function FacultySelector({
     onSchoolChange(school);
     setSelectedDomain('');
     setSelectedSubject('');
-    setSelectedSlot('');
+    setSelectedSlots([]);
     setSubjects([]);
     setSlots([]);
     setFaculties([]);
@@ -564,7 +595,7 @@ export default function FacultySelector({
   const handleDomainChange = (domain: string) => {
     setSelectedDomain(domain);
     setSelectedSubject('');
-    setSelectedSlot('');
+    setSelectedSlots([]);
     setSubjects([]);
     setSlots([]);
     setFaculties([]);
@@ -574,9 +605,16 @@ export default function FacultySelector({
     setLabShiftOptions({ morning: [], evening: [] });
   };
 
+  const handleSubjectPick = (key: string) => {
+    if (!key) return handleSubjectChange('');
+    const [domain, subject] = fromSubjectKey(key);
+    if (domain !== selectedDomain) handleDomainChange(domain);
+    handleSubjectChange(subject);
+  };
+
   const handleSubjectChange = (subject: string) => {
     setSelectedSubject(subject);
-    setSelectedSlot('');
+    setSelectedSlots([]);
     setFaculties([]);
     setSelectedFaculties([]);
     setPriorityList([]);
@@ -584,17 +622,20 @@ export default function FacultySelector({
     setLabShiftOptions({ morning: [], evening: [] });
   };
 
-  const handleSlotChange = (slot: string) => {
-    setSelectedSlot(slot);
-    setSelectedFaculties([]);
-    setPriorityList([]);
+  const handleSlotChange = (slots: string[]) => {
+    setSelectedSlots(slots);
     setSelectedLabShift('');
     setLabShiftOptions({ morning: [], evening: [] });
   };
 
+  // Only slots added since the last run are restored, so an unticked faculty stays unticked.
+  const previousSlots = useRef<string[]>([]);
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    if (!selectedSubject || (!selectedSlot && !selectedLabShift)) return;
+    const addedSlots = selectedSlots.filter(slot => !previousSlots.current.includes(slot));
+    previousSlots.current = selectedSlots;
+    if (!selectedSubject || (selectedSlots.length === 0 && !selectedLabShift)) return;
 
     try {
       const savedCoursesJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -609,7 +650,7 @@ export default function FacultySelector({
           const shiftSlots = labShiftOptions[selectedLabShift] || [];
           return shiftSlots.includes(slot.slotName);
         }
-        return slot.slotName === selectedSlot;
+        return addedSlots.includes(slot.slotName);
       });
       if (matchingSlots.length > 0) {
         const allFaculties = matchingSlots.flatMap(slot =>
@@ -618,19 +659,27 @@ export default function FacultySelector({
 
         const uniqueFaculties = Array.from(new Set(allFaculties));
 
-        setSelectedFaculties(uniqueFaculties);
-        setPriorityList(uniqueFaculties);
+        setSelectedFaculties(prev => Array.from(new Set([...prev, ...uniqueFaculties])));
+        setPriorityList(prev => Array.from(new Set([...prev, ...uniqueFaculties])));
       }
     } catch (err) {
       console.error('Error restoring faculties from localStorage', err);
     }
-  }, [LOCAL_STORAGE_KEY, selectedSubject, selectedSlot, selectedLabShift, labShiftOptions]);
+  }, [LOCAL_STORAGE_KEY, selectedSubject, selectedSlots, selectedLabShift, labShiftOptions]);
 
   const [tooltipFacultyIndex, setTooltipFacultyIndex] = React.useState<number | null>(null);
 
+  const schoolSubjectKeys = React.useMemo(
+    () =>
+      Object.entries(data[selectedSchool] ?? {}).flatMap(([domain, domainData]) =>
+        visibleSubjects(domainData).map(subject => toSubjectKey(domain, subject))
+      ),
+    [data, selectedSchool]
+  );
+
   return (
     <div>
-      <div className="relative inline-block mb-20">
+      <div className="relative mb-20">
         <div className="font-poppins relative bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[4px_4px_0_0_black] mx-auto overflow-hidden">
           <div className="flex flex-col items-center justify-center gap-4 pt-4 px-4 m-4 text-center">
             {/* <span className="font-semibold text-lg">Select School:</span> */}
@@ -663,20 +712,31 @@ export default function FacultySelector({
             {selectedSchool === 'My VTOP' && vtopStatus}
           </div>
 
-          <div className="grid grid-cols-3 gap-4 m-4 px-4">
+          <div className="grid grid-cols-2 gap-4 m-4 px-4">
+            <div className="col-span-2">
+              <ComboBox
+                label="Select or search subject"
+                value={selectedSubject ? toSubjectKey(selectedDomain, selectedSubject) : ''}
+                options={
+                  selectedDomain
+                    ? subjects.map(subject => toSubjectKey(selectedDomain, subject))
+                    : schoolSubjectKeys
+                }
+                searchOptions={schoolSubjectKeys}
+                onChange={handleSubjectPick}
+                renderOption={key => fromSubjectKey(key)[1]}
+                renderHint={key => {
+                  const domain = fromSubjectKey(key)[0];
+                  return domain === selectedDomain ? '' : prettifyDomain(domain);
+                }}
+              />
+            </div>
             <ComboBox
-              label={'Domain'}
+              label="Select domain"
               value={selectedDomain}
               options={domains}
               onChange={handleDomainChange}
               renderOption={prettifyDomain}
-            />
-            <ComboBox
-              key={`subject-${selectedDomain}`}
-              label="Subject"
-              value={selectedSubject}
-              options={subjects}
-              onChange={handleSubjectChange}
             />
             {getCourseType(
               selectedSubject.split(' - ')[0],
@@ -684,7 +744,7 @@ export default function FacultySelector({
             ) === 'P' && !selectedSubject.split(' - ')[0].startsWith('BSTS') ? (
               <ComboBox
                 key={`lab-${selectedDomain}-${selectedSubject}`}
-                label="Slot"
+                label="Select lab shift"
                 value={selectedLabShift}
                 onChange={e => {
                   if (e === 'morning' || e === 'evening') {
@@ -698,14 +758,12 @@ export default function FacultySelector({
                 )}
               />
             ) : (
-              <ComboBox
+              <MultiSelector
                 key={`slot-${selectedDomain}-${selectedSubject}`}
-                label="Slot"
-                value={selectedSlot}
+                label="Select slots"
+                values={selectedSlots}
                 options={[...slots].sort((a, b) => a.localeCompare(b))}
                 onChange={handleSlotChange}
-                renderOption={option => option}
-                aria-label="Select slot"
               />
             )}
           </div>
@@ -753,8 +811,8 @@ export default function FacultySelector({
                             slot.split('+').every(s => parseInt(s.replace('L', ''), 10) >= 31)
                           );
                       } else {
-                        const isMorningSelected = selectedSlot.endsWith('1');
-                        const isEveningSelected = selectedSlot.endsWith('2');
+                        const isMorningSelected = selectedSlots.some(s => s.endsWith('1'));
+                        const isEveningSelected = selectedSlots.some(s => s.endsWith('2'));
 
                         shiftSlots = labEntries
                           .map(entry => entry.slot)
