@@ -12,8 +12,6 @@ type ComboBoxProps = {
   renderHint?: (val: string) => string;
   // Options searched once the student types. Defaults to `options`.
   searchOptions?: string[];
-  // Taller box, for the school popup.
-  tall?: boolean;
 };
 
 type MultiSelectorProps = {
@@ -23,7 +21,7 @@ type MultiSelectorProps = {
   onChange: (vals: string[]) => void;
 };
 
-const boxClass = 'flex w-full bg-white/70 rounded-xl border-2 border-black overflow-hidden';
+const boxClass = 'flex w-full h-9 bg-white/70 rounded-xl border-2 border-black overflow-hidden';
 const listClass =
   'absolute left-0 z-20 w-full mt-2 p-1 bg-white border-2 border-black rounded-xl max-h-80 overflow-y-auto';
 const rowClass = 'flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#FFEA79]';
@@ -66,7 +64,6 @@ export default function ComboBox({
   renderOption = option => option,
   renderHint,
   searchOptions = options,
-  tall,
 }: ComboBoxProps) {
   const { isOpen, setIsOpen, ref } = useOpen();
   const [query, setQuery] = useState('');
@@ -91,7 +88,7 @@ export default function ComboBox({
 
   return (
     <div ref={ref} className="relative w-full font-semibold">
-      <div className={`${boxClass} ${tall ? 'h-12' : 'h-9'}`}>
+      <div className={boxClass}>
         <input
           ref={inputRef}
           type="text"
@@ -102,7 +99,7 @@ export default function ComboBox({
             setQuery(e.target.value);
             setIsOpen(true);
           }}
-          className="flex-1 min-w-0 px-3 bg-transparent font-medium text-black placeholder:text-[#000000B2] truncate outline-none"
+          className="flex-1 min-w-0 px-3 bg-transparent font-medium text-black placeholder:text-ffcs-muted truncate outline-none"
         />
 
         {value && !isOpen && (
@@ -134,12 +131,12 @@ export default function ComboBox({
               onClick={() => handleSelect(option)}
               className={`
                 ${rowClass} justify-between
-                ${value === option ? 'bg-[#C1FF83] font-bold' : ''}
+                ${value === option ? 'bg-ffcs-yellow font-bold' : ''}
               `}
             >
               <span className="truncate">{renderOption(option)}</span>
               {renderHint && (
-                <span className="shrink-0 text-xs text-[#000000B2]">{renderHint(option)}</span>
+                <span className="shrink-0 text-xs text-ffcs-muted">{renderHint(option)}</span>
               )}
             </li>
           ))}
@@ -158,9 +155,9 @@ export function MultiSelector({ label, values, options, onChange }: MultiSelecto
 
   return (
     <div ref={ref} className="relative w-full font-semibold">
-      <div className={`${boxClass} h-9 cursor-pointer`} onClick={() => setIsOpen(!isOpen)}>
+      <div className={`${boxClass} cursor-pointer`} onClick={() => setIsOpen(!isOpen)}>
         <div className="flex flex-1 min-w-0 items-center gap-1 px-2">
-          {values.length === 0 && <span className="px-1 truncate text-[#000000B2]">{label}</span>}
+          {values.length === 0 && <span className="px-1 truncate text-ffcs-muted">{label}</span>}
           {shown.map(slot => (
             <span
               key={slot}
