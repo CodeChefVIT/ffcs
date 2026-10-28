@@ -1,13 +1,19 @@
+import { FC } from './FC';
+import { DLES } from './DLES';
 import { DC } from './DC';
 import { DE } from './DE';
-import { FC } from './FC';
-import { NGCR } from './NGCR';
+import { PI } from './PI';
 import { OE } from './OE';
+import { BC } from './BC';
+import { NGCR } from './NGCR';
 
-export const SHINE_LIST = {
-  FoundationCore: FC,
-  DisciplineCore: DC,
-  DisciplineElective: DE,
-  OpenElective: OE,
-  NGCR: NGCR,
+export const SHINE_BHT = {
+  'FC': FC,
+  'DLES': DLES,
+  'DC': DC,
+  'DE': DE,
+  'PI': PI,
+  'OE': OE,
+  'BC': BC,
+  'NGCR': NGCR,
 };
