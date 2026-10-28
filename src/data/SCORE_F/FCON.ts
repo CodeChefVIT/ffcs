@@ -1,4 +1,4 @@
-export const CON = {
+export const FCON = {
   "BAITE302 - Foundations of Data Science": [
     { slot: "A1+TA1+TAA1", venue: "SJT112", faculty: "VANMATHI C" },
     { slot: "A2+TA2+TAA2", venue: "SJT112", faculty: "VANMATHI C" },
