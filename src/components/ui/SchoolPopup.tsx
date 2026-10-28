@@ -27,17 +27,17 @@ function Toggle({
   onChange: (val: string) => void;
 }) {
   return (
-    <div className="text-left font-semibold text-sm">
-      {label}
-      <div className="flex mt-1 p-1.5 gap-1 bg-white rounded-xl border-3 border-black">
+    <div className="text-left">
+      <div className="mb-2 text-[11px] font-bold uppercase text-[#5E6E6F]">{label}</div>
+      <div className="flex h-12 p-1 gap-1 bg-white rounded-xl border-2 border-black">
         {options.map(option => (
           <button
             key={option}
             onClick={() => onChange(option)}
-            className={`px-4 py-1 rounded-lg cursor-pointer font-semibold ${
+            className={`flex-1 px-4 rounded-lg text-sm cursor-pointer border-[1.5px] ${
               value === option
-                ? 'bg-[#FFEA79] border-2 border-black'
-                : 'border-2 border-transparent'
+                ? 'bg-ffcs-yellow border-black font-semibold'
+                : 'border-transparent text-[#6B7B7C] font-medium'
             }`}
           >
             {option}
@@ -112,12 +112,13 @@ export default function SchoolPopup({
           </button>
         </div>
         <div
-          className={`flex flex-wrap items-end gap-4 ${vtopOn ? 'opacity-40 pointer-events-none' : ''}`}
+          className={`grid grid-cols-[378fr_181fr_232fr] gap-5 items-end ${vtopOn ? 'opacity-40 pointer-events-none' : ''}`}
         >
-          <div className="flex-1 min-w-64 text-left font-semibold text-sm">
-            School
-            <div className="mt-1">
+          <div className="text-left">
+            <div className="mb-2 text-[11px] font-bold uppercase text-[#5E6E6F]">School</div>
+            <div>
               <ComboBox
+                tall
                 label="Select school"
                 value={picked}
                 options={options}
