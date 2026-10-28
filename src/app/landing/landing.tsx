@@ -212,14 +212,13 @@ export default function View() {
           vtopStatus={vtopStatus}
           onVtopChange={on => (on ? void selectVtop() : setVtopOn(false))}
           onConfirm={picked => {
-            localStorage.setItem('school', picked);
-            setSavedSchool(picked);
+            if (picked) {
+              localStorage.setItem('school', picked);
+              setSavedSchool(picked);
+            }
             setShowSchoolPopup(false);
           }}
-          onClose={() => {
-            localStorage.setItem('school', savedSchool);
-            setShowSchoolPopup(false);
-          }}
+          onClose={() => setShowSchoolPopup(false)}
         />
       )}
       <VtopExtensionModal {...vtop} onReady={() => setVtopOn(true)} />

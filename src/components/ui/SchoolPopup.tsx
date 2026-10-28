@@ -184,7 +184,7 @@ export default function SchoolPopup({
               text="Continue"
               color="green"
               disabled={!picked && !vtopOn}
-              onClick={() => onConfirm(picked || school)}
+              onClick={() => onConfirm(picked)}
             />
           </div>
         </div>
