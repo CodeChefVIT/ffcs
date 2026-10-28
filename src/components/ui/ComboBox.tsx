@@ -134,7 +134,7 @@ export default function ComboBox({
               onClick={() => handleSelect(option)}
               className={`
                 ${rowClass} justify-between
-                ${value === option ? 'bg-[#C1FF83] font-bold' : ''}
+                ${value === option ? 'bg-ffcs-yellow font-bold' : ''}
               `}
             >
               <span className="truncate">{renderOption(option)}</span>
