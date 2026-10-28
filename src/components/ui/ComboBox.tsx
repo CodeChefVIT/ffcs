@@ -8,13 +8,42 @@ type ComboBoxProps = {
   options: string[];
   onChange: (val: string) => void;
   renderOption?: (val: string) => string;
+  // Grey text at the right of an option, e.g. a subject's domain.
+  renderHint?: (val: string) => string;
+  // Options searched once the student types. Defaults to `options`.
+  searchOptions?: string[];
 };
 
-export default function ComboBox({ label, value, options, onChange, renderOption }: ComboBoxProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [inputValue, setInputValue] = useState('');
-  const ref = useRef<HTMLDivElement>(null);
+type MultiSelectorProps = {
+  label: string;
+  values: string[];
+  options: string[];
+  onChange: (vals: string[]) => void;
+};
 
+const boxClass = 'flex w-full h-9 bg-white/70 rounded-xl border-2 border-black overflow-hidden';
+const listClass =
+  'absolute left-0 z-20 w-full mt-2 p-1 bg-white border-2 border-black rounded-xl max-h-80 overflow-y-auto';
+const rowClass = 'flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-[#FFEA79]';
+const icon = (src: string, size: string) => (
+  <Image src={src} alt="icon" width={20} height={20} className={size} draggable={false} />
+);
+
+function Chevron({ open, onClick }: { open: boolean; onClick?: () => void }) {
+  return (
+    <span
+      onClick={onClick}
+      className="flex items-center justify-center w-10 shrink-0 border-l-2 border-black bg-white/35 cursor-pointer"
+    >
+      {icon('/icons/chevron_down.svg', `w-3 h-3 ${open ? 'rotate-180' : ''}`)}
+    </span>
+  );
+}
+
+// Open state that closes on a click outside the box.
+function useOpen() {
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -24,79 +53,147 @@ export default function ComboBox({ label, value, options, onChange, renderOption
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+  return { isOpen, setIsOpen, ref };
+}
 
-  const filteredOptions = options.filter(option => {
-    const label = renderOption ? renderOption(option) : option;
-    return label.toLowerCase().includes(inputValue.toLowerCase());
-  });
+export default function ComboBox({
+  label,
+  value,
+  options,
+  onChange,
+  renderOption = option => option,
+  renderHint,
+  searchOptions = options,
+}: ComboBoxProps) {
+  const { isOpen, setIsOpen, ref } = useOpen();
+  const [query, setQuery] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleSelect = (option: string) => {
-    const renderedOption = renderOption ? renderOption(option) : option;
-    onChange(option);
-    setInputValue(renderedOption);
-    setIsOpen(false);
+  // Opening lists every option; only text typed after opening narrows the list.
+  const filteredOptions = (query ? searchOptions : options).filter(option =>
+    renderOption(option).toLowerCase().includes(query.trim().toLowerCase())
+  );
+
+  const open = () => {
+    if (isOpen) return;
+    setQuery('');
+    setIsOpen(true);
   };
 
-  useEffect(() => {
-    if (value) setInputValue(renderOption ? renderOption(value) : value);
-    else setInputValue('');
-  }, [value, renderOption]);
+  const handleSelect = (option: string) => {
+    onChange(option);
+    setIsOpen(false);
+    inputRef.current?.blur();
+  };
 
   return (
-    <div ref={ref} className="relative w-full font-semibold text-[#000000B2]">
-      <div className="relative">
+    <div ref={ref} className="relative w-full font-semibold">
+      <div className={boxClass}>
         <input
+          ref={inputRef}
           type="text"
-          value={inputValue}
-          placeholder={label}
-          onClick={() => setIsOpen(true)}
+          value={isOpen ? query : value && renderOption(value)}
+          placeholder={(isOpen && value && renderOption(value)) || label}
+          onClick={open}
           onChange={e => {
-            setInputValue(e.target.value);
+            setQuery(e.target.value);
             setIsOpen(true);
           }}
-          className={`
-            w-full h-10 pl-3 pr-12 bg-white rounded-xl border-3 border-black
-            text-black truncate whitespace-nowrap overflow-hidden
-          `}
+          className="flex-1 min-w-0 px-3 bg-transparent font-medium text-black placeholder:text-[#000000B2] truncate outline-none"
         />
 
-        {inputValue && (
+        {value && !isOpen && (
           <button
             type="button"
             aria-label="Clear"
-            onClick={() => {
-              setInputValue('');
-              onChange('');
-            }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+            onClick={() => onChange('')}
+            className="px-2 cursor-pointer"
             tabIndex={-1}
           >
-            <Image
-              src="/icons/cross.svg"
-              alt="icon"
-              className="w-5 h-5"
-              width={20}
-              height={20}
-              unselectable="on"
-              draggable={false}
-              priority
-            />
+            {icon('/icons/cross.svg', 'w-4 h-4')}
           </button>
         )}
+        <Chevron
+          open={isOpen}
+          onClick={() => {
+            if (isOpen) return setIsOpen(false);
+            open();
+            inputRef.current?.focus();
+          }}
+        />
       </div>
 
       {isOpen && (
-        <ul className="absolute -left-2 -right-2 z-10 bg-white border-3 border-black rounded-xl mt-1 max-h-120 overflow-y-auto shadow-lg">
-          {filteredOptions.map((option, index) => (
+        <ul className={listClass}>
+          {filteredOptions.map(option => (
             <li
-              key={index}
+              key={option}
               onClick={() => handleSelect(option)}
               className={`
-                px-4 py-2 cursor-pointer hover:bg-[#FFEA79]
-                ${value === option ? 'bg-[#C1FF83] font-bold' : ''}
+                ${rowClass} justify-between
+                ${value === option ? 'bg-[#FFEA79] font-bold' : ''}
               `}
             >
-              {renderOption ? renderOption(option) : option}
+              <span className="truncate">{renderOption(option)}</span>
+              {renderHint && (
+                <span className="shrink-0 text-xs text-[#000000B2]">{renderHint(option)}</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+export function MultiSelector({ label, values, options, onChange }: MultiSelectorProps) {
+  const { isOpen, setIsOpen, ref } = useOpen();
+  const toggle = (option: string) =>
+    onChange(values.includes(option) ? values.filter(v => v !== option) : [...values, option]);
+  // Every pick is a tag when they fit, otherwise the first one and a count.
+  const shown = values.join('').length <= 10 ? values : values.slice(0, 1);
+
+  return (
+    <div ref={ref} className="relative w-full font-semibold">
+      <div className={`${boxClass} cursor-pointer`} onClick={() => setIsOpen(!isOpen)}>
+        <div className="flex flex-1 min-w-0 items-center gap-1 px-2">
+          {values.length === 0 && <span className="px-1 truncate text-[#000000B2]">{label}</span>}
+          {shown.map(slot => (
+            <span
+              key={slot}
+              className="flex items-center gap-1 shrink-0 h-6 pl-2 pr-1 rounded-md border-2 border-black bg-[#FFEA79] text-sm"
+            >
+              {slot}
+              <button
+                type="button"
+                onClick={e => {
+                  e.stopPropagation();
+                  toggle(slot);
+                }}
+                className="cursor-pointer"
+                tabIndex={-1}
+              >
+                {icon('/icons/cross.svg', 'w-3 h-3')}
+              </button>
+            </span>
+          ))}
+          {values.length > shown.length && (
+            <span className="shrink-0 text-sm">+{values.length - shown.length}</span>
+          )}
+        </div>
+        <Chevron open={isOpen} />
+      </div>
+
+      {isOpen && (
+        <ul className={listClass}>
+          {options.map(option => (
+            <li key={option} onClick={() => toggle(option)} className={`${rowClass} font-medium`}>
+              <span
+                className={`flex items-center justify-center w-5 h-5 rounded-md border-2 border-black ${values.includes(option) ? 'bg-[#C1FF83]' : 'bg-white'}`}
+              >
+                {values.includes(option) && icon('/icons/check.svg', 'w-4 h-4')}
+              </span>
+              {option}
             </li>
           ))}
         </ul>
