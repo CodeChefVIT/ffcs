@@ -4,7 +4,7 @@ import { PCC } from './PCC';
 import { CON } from './FCON';
 import { OEC } from './OEC';
 
-export const SHINE_BHT = {
+export const SHINE_BHTF = {
   'NC': NC,
   'UCC': UCC,
   'PCC': PCC,
