@@ -16,6 +16,7 @@ import { SENSE_F } from './SENSE_F';
 import { SMEC_F } from './SMEC_F';
 import { SHINE_F } from './SHINE_F';
 import { SBST_F } from './SBST_F';
+import { SCE_F } from './SCE_F';
 import { MTech_SCOPE_F } from './MTech_SCOPE_F';
 
 type FacultyEntry = {
@@ -59,4 +60,5 @@ export const data: Schools = {
   "SMEC ('25 Batch)": SMEC_F,
   "SHINE ('25 Batch)": SHINE_F,
   "SBST ('25 Batch)": SBST_F,
+  "SCE ('25 Batch)": SCE_F,
 };
