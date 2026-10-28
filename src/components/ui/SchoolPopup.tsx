@@ -84,24 +84,31 @@ export default function SchoolPopup({
         className="font-poppins bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[10px_10px_0_0_black] w-full max-w-4xl p-8 flex flex-col gap-6"
       >
         <div className="text-xl font-semibold">Your school &amp; batch</div>
-        <div className="flex items-center gap-4 rounded-2xl border-2 border-black bg-[#E0D4FF] p-4 text-left">
+        <div className="flex items-center gap-4 rounded-2xl border-2 border-black bg-ffcs-popup-purple p-4 text-left">
           <div className="flex-1">
             <div className="font-bold">My VTOP</div>
             <div className="text-sm">
-              Use the courses from your VTOP account instead of a school list.
+              {vtopBusy
+                ? 'Checking My VTOP...'
+                : 'Use the courses from your VTOP account instead of a school list.'}
             </div>
           </div>
+          <span className="font-semibold">{vtopOn || vtopBusy ? 'ON' : 'OFF'}</span>
           <button
             role="switch"
             aria-checked={vtopOn}
             aria-label="My VTOP"
             disabled={vtopBusy}
             onClick={() => onVtopChange(!vtopOn)}
-            className={`flex w-14 h-8 p-0.5 items-center rounded-full border-2 border-black cursor-pointer ${
-              vtopOn ? 'bg-[#7954BA] justify-end' : 'bg-white'
-            }`}
+            className={`relative w-[60px] h-[36px] rounded-[12px] border-[3px] border-black shadow-hard transition-all duration-100 active:shadow-hard-sm active:translate-x-[2px] active:translate-y-[2px] ${
+              vtopBusy ? 'cursor-wait opacity-60' : 'cursor-pointer'
+            } ${vtopOn || vtopBusy ? 'bg-ffcs-blue' : 'bg-ffcs-red'}`}
           >
-            <span className="w-6 h-6 rounded-full border-2 border-black bg-white" />
+            <span
+              className={`absolute top-1/2 -translate-y-1/2 h-[24px] w-[24px] rounded-[8px] border border-black bg-white transition-all duration-100 ${
+                vtopOn || vtopBusy ? 'right-1' : 'left-1'
+              }`}
+            />
           </button>
         </div>
         <div
