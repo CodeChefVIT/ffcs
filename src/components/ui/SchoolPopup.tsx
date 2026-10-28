@@ -16,7 +16,7 @@ type SchoolPopupProps = {
   onClose: () => void;
 };
 
-const labelClass = 'mb-2 text-[11px] font-bold uppercase text-ffcs-muted';
+const labelClass = 'mb-1.5 text-[11px] font-bold uppercase text-ffcs-muted';
 
 function Toggle({
   label,
@@ -32,15 +32,13 @@ function Toggle({
   return (
     <div className="text-left">
       <div className={labelClass}>{label}</div>
-      <div className="grid grid-cols-2 h-12 p-1 gap-1 bg-white/70 rounded-xl border-2 border-black">
+      <div className="grid grid-cols-2 h-12 p-1 gap-1 bg-white/70 rounded-2xl border-[2.5px] border-black">
         {options.map(option => (
           <button
             key={option}
             onClick={() => onChange(option)}
-            className={`px-4 rounded-lg text-sm whitespace-nowrap cursor-pointer border-[1.5px] ${
-              value === option
-                ? 'bg-ffcs-yellow border-black font-semibold'
-                : 'border-transparent text-ffcs-muted font-medium'
+            className={`px-4 rounded-[9.5px] text-sm whitespace-nowrap cursor-pointer ${
+              value === option ? 'bg-ffcs-yellow font-semibold' : 'text-ffcs-muted font-medium'
             }`}
           >
             {option}
@@ -64,7 +62,6 @@ export default function SchoolPopup({
   const [programme, setProgramme] = useState(schoolInfo(school).programme);
   const [batch, setBatch] = useState(schoolInfo(school).batch);
   const [picked, setPicked] = useState(school);
-  const [query, setQuery] = useState('');
 
   const order = Object.keys(NAMES);
   const options = schools
@@ -72,11 +69,6 @@ export default function SchoolPopup({
       const info = schoolInfo(key);
       return info.programme === programme && info.batch === batch;
     })
-    .filter(key =>
-      `${schoolInfo(key).code} ${schoolInfo(key).name}`
-        .toLowerCase()
-        .includes(query.trim().toLowerCase())
-    )
     .sort((a, b) => order.indexOf(schoolInfo(a).code) - order.indexOf(schoolInfo(b).code));
 
   // Where else a school has a list, e.g. "B.Tech · M.Tech · '25".
@@ -111,16 +103,13 @@ export default function SchoolPopup({
         <div className={`flex gap-5 items-end ${locked}`}>
           <div className="flex-1 min-w-0 text-left">
             <div className={labelClass}>School</div>
-            <label
-              htmlFor="school-search"
-              className="flex items-center h-12 px-3 bg-white/70 rounded-xl border-2 border-black font-medium"
-            >
+            <div className="flex items-center h-12 px-4 bg-white/70 rounded-2xl border-[2.5px] border-black font-medium">
               <span className={`truncate ${picked ? '' : 'text-ffcs-muted'}`}>
                 {picked
                   ? `${schoolInfo(picked).code} — ${schoolInfo(picked).name}`
                   : 'Select school'}
               </span>
-            </label>
+            </div>
           </div>
           <Toggle
             label="Programme"
@@ -132,22 +121,14 @@ export default function SchoolPopup({
         </div>
         <div className="flex gap-5 text-left">
           <div
-            className={`flex flex-col w-[520px] h-[448px] shrink-0 p-2.5 bg-white/70 rounded-xl border-2 border-black shadow-hard ${locked}`}
+            className={`flex flex-col w-[520px] h-[389px] shrink-0 p-1 bg-white/70 rounded-2xl border-[2.5px] border-black shadow-hard ${locked}`}
           >
-            <input
-              id="school-search"
-              type="text"
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              placeholder={'Search by code or name, e.g. "comp", "mech"…'}
-              className="h-10 shrink-0 px-3 rounded-lg bg-ffcs-page text-sm font-medium outline-none placeholder:text-ffcs-muted"
-            />
-            <ul className="flex-1 mt-0.5 space-y-0.5 overflow-y-auto">
+            <ul className="flex-1 space-y-0.5 overflow-y-auto">
               {options.map(key => (
                 <li
                   key={key}
                   onClick={() => setPicked(key)}
-                  className={`flex items-center gap-3 h-10 px-3 rounded-lg text-sm cursor-pointer hover:bg-ffcs-yellow ${
+                  className={`flex items-center gap-3 h-10 px-3 rounded-[9.5px] text-sm cursor-pointer hover:bg-ffcs-yellow ${
                     picked === key ? 'bg-ffcs-yellow' : ''
                   }`}
                 >
@@ -168,9 +149,6 @@ export default function SchoolPopup({
                   )}
                 </li>
               ))}
-              {options.length === 0 && (
-                <li className="px-3 py-2 text-sm text-ffcs-muted">No school matches “{query}”</li>
-              )}
             </ul>
           </div>
           <div className="flex-1 flex flex-col items-end justify-between">
@@ -188,7 +166,7 @@ export default function SchoolPopup({
                   } ${vtopOn || vtopBusy ? 'bg-ffcs-blue' : 'bg-ffcs-red'}`}
                 >
                   <span
-                    className={`absolute top-1/2 -translate-y-1/2 h-[24px] w-[24px] rounded-[8px] border border-black bg-white transition-all duration-100 ${
+                    className={`absolute top-1/2 -translate-y-1/2 h-[24px] w-[24px] rounded-[6px] border border-black bg-white transition-all duration-100 ${
                       vtopOn || vtopBusy ? 'right-1' : 'left-1'
                     }`}
                   />

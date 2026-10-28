@@ -1,3 +1,1 @@
-export const PCC_BYB = {
-
-};
+export const PCC_BYB = {};

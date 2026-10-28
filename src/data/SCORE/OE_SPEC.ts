@@ -1,3 +1,1 @@
-export const OE_SPEC = {
-
-};
+export const OE_SPEC = {};

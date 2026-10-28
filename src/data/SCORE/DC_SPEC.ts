@@ -1,3 +1,1 @@
-export const DC_SPEC = {
-  
-};
+export const DC_SPEC = {};

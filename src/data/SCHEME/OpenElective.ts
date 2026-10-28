@@ -1,3 +1,1 @@
-export const SchemeOpenElective = {
-  
-};
+export const SchemeOpenElective = {};

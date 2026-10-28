@@ -1,3 +1,1 @@
-export const disciplineLinked = {
- 
-};
+export const disciplineLinked = {};

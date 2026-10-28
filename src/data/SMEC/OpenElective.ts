@@ -1,2 +1,1 @@
-export const SmecOpenElective = {
-};
+export const SmecOpenElective = {};

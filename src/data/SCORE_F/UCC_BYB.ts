@@ -1,3 +1,1 @@
-export const UCC_BYB = {
-
-};
+export const UCC_BYB = {};

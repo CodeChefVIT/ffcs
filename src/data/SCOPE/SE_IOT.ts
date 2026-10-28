@@ -1,2 +1,1 @@
-export const SE_IOT = {
-};
+export const SE_IOT = {};

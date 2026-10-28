@@ -1,3 +1,1 @@
-export const SchemeFoundationCore = {
-  
-};
+export const SchemeFoundationCore = {};

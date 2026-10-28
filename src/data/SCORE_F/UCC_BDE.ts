@@ -1,3 +1,1 @@
-export const UCC_BDE = {
-
-};
+export const UCC_BDE = {};
