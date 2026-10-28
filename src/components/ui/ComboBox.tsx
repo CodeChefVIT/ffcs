@@ -12,6 +12,8 @@ type ComboBoxProps = {
   renderHint?: (val: string) => string;
   // Options searched once the student types. Defaults to `options`.
   searchOptions?: string[];
+  // Shows the value but can't be opened, changed or cleared.
+  disabled?: boolean;
 };
 
 type MultiSelectorProps = {
@@ -31,11 +33,21 @@ const icon = (src: string, size: string) => (
   <Image src={src} alt="icon" width={20} height={20} className={size} draggable={false} />
 );
 
-function Chevron({ open, onClick }: { open: boolean; onClick?: () => void }) {
+function Chevron({
+  open,
+  onClick,
+  disabled = false,
+}: {
+  open: boolean;
+  onClick?: () => void;
+  disabled?: boolean;
+}) {
   return (
     <span
-      onClick={onClick}
-      className="flex items-center justify-center w-12 shrink-0 border-l-[2.5px] border-black bg-white/35 cursor-pointer"
+      onClick={disabled ? undefined : onClick}
+      className={`flex items-center justify-center w-12 shrink-0 border-l-[2.5px] border-black bg-white/35 ${
+        disabled ? 'cursor-not-allowed' : 'cursor-pointer'
+      }`}
     >
       {icon('/icons/chevron_down.svg', `w-3 h-3 ${open ? 'rotate-180' : ''}`)}
     </span>
@@ -66,6 +78,7 @@ export default function ComboBox({
   renderOption = option => option,
   renderHint,
   searchOptions = options,
+  disabled = false,
 }: ComboBoxProps) {
   const { isOpen, setIsOpen, ref } = useOpen();
   const [query, setQuery] = useState('');
@@ -77,7 +90,7 @@ export default function ComboBox({
   );
 
   const open = () => {
-    if (isOpen) return;
+    if (isOpen || disabled) return;
     setQuery('');
     setIsOpen(true);
   };
@@ -101,10 +114,11 @@ export default function ComboBox({
             setQuery(e.target.value);
             setIsOpen(true);
           }}
-          className="flex-1 min-w-0 px-4 bg-transparent text-lg font-medium text-black placeholder:text-ffcs-muted truncate outline-none"
+          disabled={disabled}
+          className="flex-1 min-w-0 px-4 bg-transparent text-lg font-medium text-black placeholder:text-ffcs-muted truncate outline-none disabled:cursor-not-allowed"
         />
 
-        {value && !isOpen && (
+        {value && !isOpen && !disabled && (
           <button
             type="button"
             aria-label="Clear"
@@ -117,6 +131,7 @@ export default function ComboBox({
         )}
         <Chevron
           open={isOpen}
+          disabled={disabled}
           onClick={() => {
             if (isOpen) return setIsOpen(false);
             open();
