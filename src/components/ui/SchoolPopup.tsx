@@ -10,6 +10,7 @@ type SchoolPopupProps = {
   school: string;
   vtopOn: boolean;
   vtopBusy: boolean;
+  vtopStatus: React.ReactNode;
   onVtopChange: (on: boolean) => void;
   onConfirm: (school: string) => void;
   onClose: () => void;
@@ -29,12 +30,12 @@ function Toggle({
   return (
     <div className="text-left">
       <div className="mb-2 text-[11px] font-bold uppercase text-[#5E6E6F]">{label}</div>
-      <div className="flex h-12 p-1 gap-1 bg-white rounded-xl border-2 border-black">
+      <div className="grid grid-cols-2 h-12 p-1 gap-1 bg-white/70 rounded-xl border-2 border-black">
         {options.map(option => (
           <button
             key={option}
             onClick={() => onChange(option)}
-            className={`flex-1 px-4 rounded-lg text-sm cursor-pointer border-[1.5px] ${
+            className={`px-4 rounded-lg text-sm whitespace-nowrap cursor-pointer border-[1.5px] ${
               value === option
                 ? 'bg-ffcs-yellow border-black font-semibold'
                 : 'border-transparent text-[#6B7B7C] font-medium'
@@ -53,6 +54,7 @@ export default function SchoolPopup({
   school,
   vtopOn,
   vtopBusy,
+  vtopStatus,
   onVtopChange,
   onConfirm,
   onClose,
@@ -81,10 +83,10 @@ export default function SchoolPopup({
         aria-modal="true"
         aria-label="Your school & batch"
         onClick={e => e.stopPropagation()}
-        className="font-poppins bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[10px_10px_0_0_black] w-full max-w-4xl p-8 flex flex-col gap-6"
+        className="font-poppins bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[10px_10px_0_0_black] w-full max-w-5xl p-8 flex flex-col gap-6"
       >
         <div className="text-xl font-semibold">Your school &amp; batch</div>
-        <div className="flex items-center gap-4 rounded-2xl border-2 border-black bg-ffcs-popup-purple p-4 text-left">
+        <div className="flex items-center gap-4 rounded-2xl border-2 border-black bg-[#CDB1FF] p-4 text-left">
           <div className="flex-1">
             <div className="font-bold">My VTOP</div>
             <div className="text-sm">
@@ -92,6 +94,7 @@ export default function SchoolPopup({
                 ? 'Checking My VTOP...'
                 : 'Use the courses from your VTOP account instead of a school list.'}
             </div>
+            {vtopOn && <div className="mt-2">{vtopStatus}</div>}
           </div>
           <span className="font-semibold">{vtopOn || vtopBusy ? 'ON' : 'OFF'}</span>
           <button
@@ -112,7 +115,7 @@ export default function SchoolPopup({
           </button>
         </div>
         <div
-          className={`grid grid-cols-[378fr_181fr_232fr] gap-5 items-end ${vtopOn ? 'opacity-40 pointer-events-none' : ''}`}
+          className={`grid grid-cols-[1fr_auto_auto] gap-5 items-end ${vtopOn ? 'opacity-40 pointer-events-none' : ''}`}
         >
           <div className="text-left">
             <div className="mb-2 text-[11px] font-bold uppercase text-[#5E6E6F]">School</div>

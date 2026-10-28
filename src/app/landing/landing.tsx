@@ -23,14 +23,10 @@ function Planner({
   facultyData,
   storageKey,
   school,
-  onMyVtopClick,
-  vtop,
 }: {
   facultyData: FacultyData;
   storageKey: string;
   school: string;
-  onMyVtopClick: () => void;
-  vtop: ReturnType<typeof useVtopCatalogue>;
 }) {
   const [selectedCourses, setSelectedCourses] = useState<fullCourseData[]>(() => {
     if (typeof window === 'undefined') return [];
@@ -101,32 +97,6 @@ function Planner({
         <FacultySelector
           key={school}
           selectedSchool={school}
-          vtopStatus={
-            <div className="flex flex-wrap items-center justify-center gap-3 text-xs pb-2">
-              <span>
-                {vtop.catalogue
-                  ? new Set(
-                      Object.values(vtop.catalogue.categories).flatMap(group => Object.keys(group))
-                    ).size
-                  : 0}{' '}
-                courses saved in this browser
-              </span>
-              <button
-                className="underline cursor-pointer"
-                disabled={vtop.busy}
-                onClick={onMyVtopClick}
-              >
-                Refresh My VTOP
-              </button>
-              <button
-                className="underline cursor-pointer"
-                disabled={vtop.busy}
-                onClick={() => void vtop.clear()}
-              >
-                Delete VTOP data
-              </button>
-            </div>
-          }
           dataOverride={facultyData}
           storageKey={storageKey}
           onConfirm={facultySelectorOnConfirm}
@@ -159,6 +129,33 @@ export default function View() {
   const selectVtop = async () => {
     if (await vtop.select()) setVtopOn(true);
   };
+
+  const vtopStatus = (
+    <div className="flex flex-wrap items-center gap-3 text-xs">
+      <span>
+        {vtop.catalogue
+          ? new Set(Object.values(vtop.catalogue.categories).flatMap(group => Object.keys(group)))
+              .size
+          : 0}{' '}
+        courses saved in this browser
+      </span>
+      <button
+        className="underline cursor-pointer"
+        disabled={vtop.busy}
+        onClick={() => void selectVtop()}
+      >
+        Refresh My VTOP
+      </button>
+      <button
+        className="underline cursor-pointer"
+        disabled={vtop.busy}
+        onClick={() => void vtop.clear()}
+      >
+        Delete VTOP data
+      </button>
+    </div>
+  );
+
   useEffect(() => {
     const saved = localStorage.getItem('school');
     if (saved && Object.keys(bundledData).includes(saved)) setSavedSchool(saved);
@@ -203,8 +200,6 @@ export default function View() {
         <Planner
           key={`${storageKey}:${personal?.capturedAt || ''}`}
           school={school}
-          onMyVtopClick={() => void selectVtop()}
-          vtop={vtop}
           facultyData={facultyData}
           storageKey={storageKey}
         />
@@ -215,6 +210,7 @@ export default function View() {
           school={savedSchool}
           vtopOn={vtopOn}
           vtopBusy={vtop.busy}
+          vtopStatus={vtopStatus}
           onVtopChange={on => (on ? void selectVtop() : setVtopOn(false))}
           onConfirm={picked => {
             localStorage.setItem('school', picked);
