@@ -81,7 +81,7 @@ export default function SchoolPopup({
         aria-modal="true"
         aria-label="Your school & batch"
         onClick={e => e.stopPropagation()}
-        className="font-poppins bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[10px_10px_0_0_black] w-full max-w-3xl p-8 flex flex-col gap-6"
+        className="font-poppins bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[10px_10px_0_0_black] w-full max-w-4xl p-8 flex flex-col gap-6"
       >
         <div className="text-xl font-semibold">Your school &amp; batch</div>
         <div className={`flex flex-wrap items-end gap-4 ${vtopOn ? 'opacity-40' : ''}`}>
