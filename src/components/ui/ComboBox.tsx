@@ -102,7 +102,7 @@ export default function ComboBox({
             setQuery(e.target.value);
             setIsOpen(true);
           }}
-          className="flex-1 min-w-0 px-3 bg-transparent font-medium text-black placeholder:text-[#000000B2] truncate outline-none"
+          className="flex-1 min-w-0 px-3 bg-transparent font-medium text-black placeholder:text-ffcs-muted truncate outline-none"
         />
 
         {value && !isOpen && (
@@ -139,7 +139,7 @@ export default function ComboBox({
             >
               <span className="truncate">{renderOption(option)}</span>
               {renderHint && (
-                <span className="shrink-0 text-xs text-[#000000B2]">{renderHint(option)}</span>
+                <span className="shrink-0 text-xs text-ffcs-muted">{renderHint(option)}</span>
               )}
             </li>
           ))}
@@ -160,7 +160,7 @@ export function MultiSelector({ label, values, options, onChange }: MultiSelecto
     <div ref={ref} className="relative w-full font-semibold">
       <div className={`${boxClass} h-9 cursor-pointer`} onClick={() => setIsOpen(!isOpen)}>
         <div className="flex flex-1 min-w-0 items-center gap-1 px-2">
-          {values.length === 0 && <span className="px-1 truncate text-[#000000B2]">{label}</span>}
+          {values.length === 0 && <span className="px-1 truncate text-ffcs-muted">{label}</span>}
           {shown.map(slot => (
             <span
               key={slot}

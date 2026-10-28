@@ -99,6 +99,9 @@ html {
   --color-ffcs-error: #CC3312;
   --color-ffcs-error-dark: #B93C21;
 
+  /* Secondary text: labels, placeholders, hints */
+  --color-ffcs-muted: #000000B2;
+
   /* Hard offset shadows */
   --shadow-hard-xs: 1px 1px 0 0 #000;
   --shadow-hard-sm: 2px 2px 0 0 #000;

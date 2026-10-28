@@ -29,7 +29,7 @@ function Toggle({
 }) {
   return (
     <div className="text-left">
-      <div className="mb-2 text-[11px] font-bold uppercase text-[#5E6E6F]">{label}</div>
+      <div className="mb-2 text-[11px] font-bold uppercase text-ffcs-muted">{label}</div>
       <div className="grid grid-cols-2 h-12 p-1 gap-1 bg-white/70 rounded-xl border-2 border-black">
         {options.map(option => (
           <button
@@ -38,7 +38,7 @@ function Toggle({
             className={`px-4 rounded-lg text-sm whitespace-nowrap cursor-pointer border-[1.5px] ${
               value === option
                 ? 'bg-ffcs-yellow border-black font-semibold'
-                : 'border-transparent text-[#6B7B7C] font-medium'
+                : 'border-transparent text-ffcs-muted font-medium'
             }`}
           >
             {option}
@@ -118,7 +118,7 @@ export default function SchoolPopup({
           className={`grid grid-cols-[1fr_auto_auto] gap-5 items-end ${vtopOn ? 'opacity-40 pointer-events-none' : ''}`}
         >
           <div className="text-left">
-            <div className="mb-2 text-[11px] font-bold uppercase text-[#5E6E6F]">School</div>
+            <div className="mb-2 text-[11px] font-bold uppercase text-ffcs-muted">School</div>
             <div>
               <ComboBox
                 tall
