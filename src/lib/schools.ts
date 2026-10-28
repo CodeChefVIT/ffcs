@@ -1,7 +1,7 @@
 export const PROGRAMMES = ['B.Tech', 'M.Tech'];
 export const BATCHES = ["'24 & earlier", "'25 & '26"];
 
-const NAMES: Record<string, string> = {
+export const NAMES: Record<string, string> = {
   SCOPE: 'Computer Science & Engineering',
   SCORE: 'Computer Sci. Engg. & Information Systems',
   MIS: 'Computer Sci. Engg. & Information Systems',
