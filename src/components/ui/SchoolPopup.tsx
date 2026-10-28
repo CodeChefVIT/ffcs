@@ -37,10 +37,8 @@ function Toggle({
           <button
             key={option}
             onClick={() => onChange(option)}
-            className={`px-4 rounded-[9.5px] text-sm whitespace-nowrap cursor-pointer border-[1.5px] ${
-              value === option
-                ? 'bg-ffcs-yellow border-black font-semibold'
-                : 'border-transparent text-ffcs-muted font-medium'
+            className={`px-4 rounded-[9.5px] text-sm whitespace-nowrap cursor-pointer ${
+              value === option ? 'bg-ffcs-yellow font-semibold' : 'text-ffcs-muted font-medium'
             }`}
           >
             {option}
