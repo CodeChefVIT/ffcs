@@ -65,5 +65,8 @@ export function evaluateGroupFilters(group: timetableGroup): FilterEvalResult {
     morningOnly: results[0].morningOnly,
     eveningOnly: results[0].eveningOnly,
     mixOnly: results[0].mixOnly,
+    start: results[0].start,
+    end: results[0].end,
+    labDays: results[0].labDays,
   };
 }
