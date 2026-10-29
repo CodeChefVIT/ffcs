@@ -19,7 +19,7 @@
     "*.{js,jsx,ts,tsx,css,md,json}": "prettier --write"
   },
   "dependencies": {
-    "@auth/mongodb-adapter": "^3.9.1",
+    "@auth/mongodb-adapter": "^3.11.3",
     "@vercel/analytics": "^2.0.1",
     "axios": "^1.20.0",
     "class-variance-authority": "^0.7.1",
