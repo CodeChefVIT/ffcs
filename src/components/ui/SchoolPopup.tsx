@@ -97,11 +97,11 @@ export default function SchoolPopup({
         aria-modal="true"
         aria-label="Your school & batch"
         onClick={e => e.stopPropagation()}
-        className="font-poppins bg-ffcs-card rounded-4xl border-3 border-black shadow-hard-lg w-full max-w-[900px] p-8 flex flex-col gap-6"
+        className="font-poppins bg-ffcs-card rounded-4xl border-3 border-black shadow-hard-lg w-full max-w-[900px] max-h-full overflow-y-auto p-8 flex flex-col gap-6"
       >
         <div className="text-xl font-semibold">Your school &amp; batch</div>
-        <div className={`flex gap-5 items-end ${locked}`}>
-          <div className="flex-1 min-w-0 text-left">
+        <div className={`flex flex-wrap gap-5 items-end ${locked}`}>
+          <div className="flex-1 min-w-60 text-left">
             <div className={labelClass}>School</div>
             <div className="flex items-center h-12 px-4 bg-white/70 rounded-2xl border-[2.5px] border-black font-medium">
               <span className={`truncate ${picked ? '' : 'text-ffcs-muted'}`}>
@@ -119,9 +119,9 @@ export default function SchoolPopup({
           />
           <Toggle label="Batch" options={BATCHES} value={batch} onChange={change(setBatch)} />
         </div>
-        <div className="flex gap-5 text-left">
+        <div className="flex flex-wrap gap-5 text-left">
           <div
-            className={`flex flex-col w-[520px] h-[389px] shrink-0 p-1 bg-white/70 rounded-2xl border-[2.5px] border-black shadow-hard ${locked}`}
+            className={`flex flex-col w-[520px] max-w-full h-[389px] max-h-[50vh] shrink-0 p-1 bg-white/70 rounded-2xl border-[2.5px] border-black shadow-hard ${locked}`}
           >
             <ul className="flex-1 space-y-0.5 overflow-y-auto">
               {options.map(key => (
@@ -151,7 +151,7 @@ export default function SchoolPopup({
               ))}
             </ul>
           </div>
-          <div className="flex-1 flex flex-col items-end justify-between">
+          <div className="flex-1 min-w-56 flex flex-col items-end justify-between gap-4">
             <div className="w-full rounded-2xl border-2 border-black bg-ffcs-violet-light p-4 shadow-hard">
               <div className="flex items-center justify-between gap-4">
                 <div className="font-bold">My VTOP</div>
