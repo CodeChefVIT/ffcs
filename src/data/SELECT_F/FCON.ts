@@ -1,7 +1,5 @@
 export const CON = {
-  'BAEIE102 - Sensors and Signal Conditioning': [
-    { slot: 'L23+L24', venue: 'TT514', faculty: 'VIVEKANANDAN S' },
-    { slot: 'B2+TB2', venue: 'TT201', faculty: 'VIVEKANANDAN S' },
-    { slot: 'L7+L8', venue: 'TT514', faculty: 'VIVEKANANDAN S' },
+  'BAEEE208 - Probability and Stochastic Processes': [
+    { slot: 'A2+TA2+TAA2', venue: 'TT415', faculty: 'MATHEW M. NOEL' },
   ],
 };

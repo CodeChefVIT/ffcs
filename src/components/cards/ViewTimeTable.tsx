@@ -621,12 +621,19 @@ export default function ViewTimeTable() {
       label: 'Download',
       color: 'green',
       icon: '/icons/download.svg',
-      onClick: () => {
+      onClick: async () => {
         if (!selectedData || selectedData.length === 0) {
           showAlert('No Timetables generated');
           return;
         }
-        exportToPDF();
+        try {
+          await exportToPDF();
+        } catch (err: unknown) {
+          console.error('PDF export failed:', err);
+          const message =
+            err instanceof Error ? err.message : 'Failed to export PDF. Please try again.';
+          showAlert(message);
+        }
       },
     },
     {
@@ -742,7 +749,7 @@ export default function ViewTimeTable() {
                 <button
                   onClick={() => setShowFilterInfo(prev => !prev)}
                   aria-label="Smart filter info"
-                  className="w-8 h-8 rounded-full bg-[#FFEA79] border-2 border-black shadow-[2px_2px_0px_0px_black] flex items-center justify-center font-[var(--font-plus-jakarta-sans)] font-medium text-sm leading-none select-none"
+                  className="w-8 h-8 rounded-full bg-[#FFEA79] border-2 border-black shadow-[2px_2px_0px_0px_black] flex items-center justify-center font-jakarta font-medium text-sm leading-none select-none"
                 >
                   ?
                 </button>

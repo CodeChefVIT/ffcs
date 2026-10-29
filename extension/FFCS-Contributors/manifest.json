@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "FFCS Contributors - VTOP data exporter",
+  "version": "1.1.0",
+  "minimum_chrome_version": "111",
+  "description": "Contributor tool: export your available VTOP courses as repository-ready TypeScript files in a ZIP.",
+  "permissions": ["storage", "downloads"],
+  "host_permissions": ["https://vtop.vit.ac.in/vtop/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Open FFCS Contributors"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://vtop.vit.ac.in/vtop/*"],
+      "js": ["parser.js", "vtop.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

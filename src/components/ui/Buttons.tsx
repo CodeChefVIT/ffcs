@@ -9,8 +9,9 @@ type ButtonVariant = 'regular' | 'image' | 'long' | 'large' | 'small';
 type ZButtonProps = {
   type: ButtonVariant;
   text?: string;
-  color: 'red' | 'yellow' | 'green' | 'green_2' | 'blue' | 'purple' | 'gray' | string;
+  color?: 'red' | 'yellow' | 'green' | 'green_2' | 'blue' | 'purple' | 'gray' | string;
   image?: string;
+  imageSize?: number;
   onClick?: () => void;
   disabled?: boolean;
   clicked?: boolean;
@@ -42,8 +43,9 @@ const slotToggleOptions = ['Theory', 'Lab'];
 export function ZButton({
   type,
   text,
-  color,
+  color = '',
   image,
+  imageSize = type === 'large' ? 28 : 24,
   onClick,
   forceColor,
   disabled = false,
@@ -57,8 +59,6 @@ export function ZButton({
     long: 'h-12 rounded-xl px-8 text-base gap-2.5',
     large: 'h-[60px] rounded-[20px] px-8 text-2xl gap-6',
   };
-
-  const imageSize = type === 'large' ? 28 : 24;
 
   const backgroundColor = forceColor
     ? disabled
@@ -184,7 +184,7 @@ export function SlotToggleButton({ onToggle }: SlotToggleButtonProps) {
   return (
     <div
       style={{
-        fontFamily: 'Poppins, sans-serif',
+        fontFamily: 'var(--next-font-poppins), sans-serif',
         height: '56px',
         borderRadius: '18px',
         userSelect: 'none',
@@ -235,7 +235,7 @@ export function SlotToggleButton({ onToggle }: SlotToggleButtonProps) {
           }}
           className="relative z-10 px-4 py-0 text-base font-semibold transition-colors duration-200"
           style={{
-            fontFamily: 'Poppins, sans-serif',
+            fontFamily: 'var(--next-font-poppins), sans-serif',
             fontWeight: '700',
             background: 'none',
             border: 'none',
@@ -317,7 +317,7 @@ export function GoogleLoginButton({ onClick }: { onClick?: () => void }) {
       onClick={onClick}
       style={{
         backgroundColor: buttonColor,
-        fontFamily: 'Poppins, sans-serif',
+        fontFamily: 'var(--next-font-poppins), sans-serif',
         height: '48px',
         borderRadius: '16px',
         userSelect: 'none',

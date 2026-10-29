@@ -1,14 +1,22 @@
 export const PCC = {
-  'BAHST103 - Diagnostics, Therapeutic and Surgical Equipments': [
-    { slot: 'A2+TA2', venue: 'PRP250', faculty: 'SRIDHARAN GANESAN' },
-    { slot: 'L53+L54', venue: 'PRP407', faculty: 'SRIDHARAN GANESAN' },
-    { slot: 'L27+L28', venue: 'PRP407', faculty: 'SRIDHARAN GANESAN' },
+  'BAHST101 - Applied Human Anatomy and Physiology': [
+    { slot: 'L29+L30', venue: 'PRP247', faculty: 'ARUN KUMAR RAJENDRAN' },
+    { slot: 'L11+L12', venue: 'PRP247', faculty: 'ARUN KUMAR RAJENDRAN' },
+    { slot: 'E2+TE2', venue: 'PRP250', faculty: 'ARUN KUMAR RAJENDRAN' },
   ],
-  'BAHST201 - Bio-Medical Imaging and Image Processing': [
-    { slot: 'C2+TC2', venue: 'PRP250', faculty: 'RAJARATHINAM THENMOZHI' },
-    { slot: 'L11+L12', venue: 'PRP550', faculty: 'RAJARATHINAM THENMOZHI' },
+  'BAHST102 - Fundamentals of Artificial Intelligence for Healthcare': [
+    { slot: 'C1+TC1+TCC1', venue: 'PRP250', faculty: 'SRIDHARAN GANESAN' },
   ],
-  'BAHST304 - Biosensors, Wearable Devices, and Internet of Medical Things': [
-    { slot: 'D2+TD2+TDD2', venue: 'PRP250', faculty: 'RAJARATHINAM THENMOZHI' },
+  'BAHST203 - Molecular and Cellular Biology for Health Sciences': [
+    { slot: 'L47+L48', venue: 'PRP150', faculty: 'SRIDHARAN GANESAN' },
+    { slot: 'L37+L38', venue: 'PRP150', faculty: 'SRIDHARAN GANESAN' },
+    { slot: 'D1+TD1', venue: 'PRP250', faculty: 'SRIDHARAN GANESAN' },
+  ],
+  'BAHST206 - Biomechanics': [
+    { slot: 'D2+TD2+TDD2', venue: 'PRP250', faculty: 'HOSSEIN MOHAMMADI' },
+  ],
+  'BAHST301 - Biofabrication Technologies': [
+    { slot: 'E1+TE1', venue: 'PRP250', faculty: 'ARUN KUMAR RAJENDRAN' },
+    { slot: 'L35+L36', venue: 'PRP150', faculty: 'ARUN KUMAR RAJENDRAN' },
   ],
 };

@@ -4,7 +4,7 @@ import { ZButton } from '../ui/Buttons';
 
 export default function Hero() {
   return (
-    <div className="relative w-320 h-150 md:h-180 flex justify-center items-center font-pangolin text-black isolate">
+    <div className="relative w-320 h-150 md:h-180 max-xl:mt-10 flex justify-center items-center font-pangolin text-black isolate">
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="w-16 h-16 left-100 top-108 md:w-24 md:h-24 md:left-80 md:top-115 absolute rotate-[-60deg]">
           <Image
