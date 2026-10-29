@@ -345,15 +345,17 @@ export default function CourseCard({
           ))}
         </div>
 
-        <div className="flex justify-end mt-6">
-          <ZButton
-            type="regular"
-            text="Remove all"
-            image="/icons/trash.svg"
-            color="red"
-            onClick={() => setDeleteAllPopupOpen(true)}
-          />
-        </div>
+        {selectedCourses.length > 0 && (
+          <div className="flex justify-end mt-6">
+            <ZButton
+              type="regular"
+              text="Remove all"
+              image="/icons/trash.svg"
+              color="red"
+              onClick={() => setDeleteAllPopupOpen(true)}
+            />
+          </div>
+        )}
 
         <div className="flex justify-center mt-auto pt-8">
           <ZButton

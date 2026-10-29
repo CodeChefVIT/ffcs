@@ -173,14 +173,18 @@ export function MultiSelector({ label, values, options, onChange }: MultiSelecto
   return (
     <div ref={ref} className="relative w-full font-semibold">
       <div className={`${boxClass} cursor-pointer`} onClick={() => setIsOpen(!isOpen)}>
-        <div className="flex flex-1 min-w-0 items-center gap-1 px-3">
+        {/* Tags sit 5px from the box's top, bottom and left. Their radius is the box's inner
+            radius (16px corner - 2.5px border) minus that 5px, so the corners stay parallel. */}
+        <div className="flex flex-1 min-w-0 items-center gap-1 pl-[5px] pr-3">
           {values.length === 0 && (
-            <span className="px-1 truncate text-lg font-medium text-ffcs-muted">{label}</span>
+            <span className="pl-[11px] pr-1 truncate text-lg font-medium text-ffcs-muted">
+              {label}
+            </span>
           )}
           {shown.map(slot => (
             <span
               key={slot}
-              className="flex items-center gap-1 shrink-0 h-6 pl-2 pr-1 rounded-md border-2 border-black bg-[#FFEA79] text-sm"
+              className="flex items-center gap-1 shrink-0 h-[calc(100%-10px)] px-2 rounded-[8.5px] bg-ffcs-yellow text-sm"
             >
               {slot}
               <button
