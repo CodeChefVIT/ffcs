@@ -8,9 +8,15 @@ import Popup from './Popup';
 
 type NavbarProps = {
   page: 'landing' | '404' | 'slots' | 'saved' | 'shared' | 'mobile' | 'placeholder';
+  school?: string;
+  vtopOn?: boolean;
+  onSchoolClick?: () => void;
 };
 
-export default function Navbar({ page }: NavbarProps) {
+// Navbar buttons get smaller below xl so the row fits.
+const navButton = 'shrink-0 whitespace-nowrap max-xl:h-10 max-xl:px-3 max-xl:text-sm';
+
+export default function Navbar({ page, school, vtopOn, onSchoolClick }: NavbarProps) {
   const router = useRouter();
   const { data: session } = useSession();
   const loggedin = !!session;
@@ -43,28 +49,55 @@ export default function Navbar({ page }: NavbarProps) {
         <Popup
           type="logout"
           closeLink={() => setShowLogoutPopup(false)}
-          action={() => signOut({ callbackUrl: '/' })}
+          action={() => {
+            try {
+              localStorage.removeItem('school');
+            } catch {
+              // Storage is blocked, so there is nothing to forget.
+            }
+            signOut({ callbackUrl: '/' });
+          }}
         />
       )}
 
       <div className="absolute top-0 left-0 w-full z-10 select-none">
-        <div className="flex justify-between items-center p-4">
-          <div className="flex gap-4 items-center">
+        <div className="flex flex-wrap justify-between max-xl:justify-start items-center gap-4 max-xl:gap-2 p-4">
+          <div className="flex flex-1 gap-4 items-center max-xl:contents">
             {(page === 'landing' || page === '404' || page === 'placeholder') && (
               <>
-                <CCButton />
+                <span className="shrink-0 max-xl:[&_img]:w-14">
+                  <CCButton />
+                </span>
 
                 <ZButton
                   type="long"
+                  className={navButton}
                   text="Slot View"
                   color="yellow"
                   onClick={() => router.push('/slots')}
                 />
+
+                {onSchoolClick && (
+                  <div className="relative shrink-0">
+                    <ZButton
+                      type="long"
+                      text={school}
+                      forceColor="#FFFFFF"
+                      image="/icons/chevron_down.svg"
+                      imageSize={10}
+                      onClick={onSchoolClick}
+                      className={navButton}
+                    />
+                    {vtopOn && (
+                      <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full border-2 border-black bg-ffcs-violet" />
+                    )}
+                  </div>
+                )}
               </>
             )}
-            <div className="flex gap-4 mx-5 items-center">
-              <div className="rounded-xl bg-[#ffea79] text-black outline-2 outline-black px-6 py-2 text-sm font-medium">
-                Can&apos;t find faculty for your branch? Use the my VTOP option to diretly fetch
+            <div className="flex gap-4 mx-5 items-center max-xl:order-first max-xl:basis-full max-xl:justify-center max-xl:mx-0">
+              <div className="rounded-xl bg-[#FFEA79] text-black border-3 border-black shadow-[4px_4px_0_0_black] px-6 py-2 text-sm font-medium">
+                Can&apos;t find faculty for your branch? Use the My VTOP option to directly fetch
                 faculties from your VTOP.
               </div>
             </div>
@@ -74,7 +107,7 @@ export default function Navbar({ page }: NavbarProps) {
                 <FFCSButton />
 
                 <div
-                  className="text-4xl font-[pangolin] cursor-pointer"
+                  className="text-4xl font-pangolin cursor-pointer"
                   onClick={() => router.push('/')}
                 >
                   FFCS-inator
@@ -84,7 +117,7 @@ export default function Navbar({ page }: NavbarProps) {
 
             {page === 'mobile' && (
               <div
-                className="text-3xl font-[pangolin] cursor-pointer"
+                className="text-3xl font-pangolin cursor-pointer"
                 onClick={() => router.push('/')}
               >
                 FFCS-inator
@@ -92,10 +125,11 @@ export default function Navbar({ page }: NavbarProps) {
             )}
           </div>
 
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-4 max-xl:gap-2 items-center max-xl:ml-auto">
             {(page === 'landing' || page === '404' || page === 'shared' || page === 'slots') && (
               <ZButton
                 type="long"
+                className={navButton}
                 text="Saved Timetables"
                 color="blue"
                 onClick={
@@ -107,6 +141,7 @@ export default function Navbar({ page }: NavbarProps) {
             {page === 'saved' && (
               <ZButton
                 type="long"
+                className={navButton}
                 text="Slot View"
                 color="yellow"
                 onClick={() => router.push('/slots')}
@@ -121,6 +156,7 @@ export default function Navbar({ page }: NavbarProps) {
               (!loggedin ? (
                 <ZButton
                   type="long"
+                  className={navButton}
                   text="Log In"
                   color="green"
                   onClick={() => setShowLoginPopup(true)}
@@ -128,6 +164,7 @@ export default function Navbar({ page }: NavbarProps) {
               ) : (
                 <ZButton
                   type="long"
+                  className={navButton}
                   text={userName}
                   color="purple"
                   onClick={() => setShowLogoutPopup(true)}
@@ -139,7 +176,14 @@ export default function Navbar({ page }: NavbarProps) {
                 type="regular"
                 text="Log Out"
                 color="purple"
-                onClick={() => signOut({ callbackUrl: '/' })}
+                onClick={() => {
+                  try {
+                    localStorage.removeItem('school');
+                  } catch {
+                    // Storage is blocked, so there is nothing to forget.
+                  }
+                  signOut({ callbackUrl: '/' });
+                }}
               />
             )}
           </div>

@@ -1,1 +1,74 @@
-export const SE_DS = {};
+export const SE_DS = {
+  'BCSE206L - Foundations of Data Science': [
+    { slot: 'C2+TC2', venue: 'SJT521', faculty: 'SATHISH KUMAR D' },
+    { slot: 'C1+TC1', venue: 'SJT604', faculty: 'GUNASEKAR M' },
+    { slot: 'C1+TC1', venue: 'SJT602', faculty: 'RAJASEKAR V R' },
+    { slot: 'C1+TC1', venue: 'SJT521', faculty: 'SASIKALA .R' },
+    { slot: 'C2+TC2', venue: 'SJT304', faculty: 'KALYANARAMAN P' },
+    { slot: 'C2+TC2', venue: 'SJT504', faculty: 'LOKESH KUMAR R' },
+    { slot: 'C1+TC1', venue: 'SJT607', faculty: 'SUBRAMANIYASWAMY V' },
+  ],
+  'BCSE207L - Programming for Data Science': [
+    { slot: 'D1', venue: 'SJT513', faculty: 'KANAGARAJ R' },
+    { slot: 'D2', venue: 'SJT522', faculty: 'GOUTAM MAJUMDER' },
+    { slot: 'D2', venue: 'SJT513', faculty: 'KANAGARAJ R' },
+    { slot: 'D1', venue: 'SJT521', faculty: 'GOUTAM MAJUMDER' },
+    { slot: 'D1', venue: 'SJT601', faculty: 'KARTHIKA M S' },
+    { slot: 'D2', venue: 'SJT601', faculty: 'KARTHIKA M S' },
+    { slot: 'D1', venue: 'SJT602', faculty: 'KAVITHA G' },
+    { slot: 'D2', venue: 'SJT603', faculty: 'AVISHEK NANDI' },
+  ],
+  'BCSE207P - Programming for Data Science Lab': [
+    { slot: 'L53+L54', venue: 'SJT419', faculty: 'KANAGARAJ R' },
+    { slot: 'L11+L12', venue: 'SJT621', faculty: 'KANAGARAJ R' },
+    { slot: 'L13+L14', venue: 'SJT622', faculty: 'GOUTAM MAJUMDER' },
+    { slot: 'L29+L30', venue: 'SJT622', faculty: 'KARTHIKA M S' },
+    { slot: 'L13+L14', venue: 'SJT417', faculty: 'AVISHEK NANDI' },
+    { slot: 'L49+L50', venue: 'SJT622', faculty: 'KAVITHA G' },
+    { slot: 'L37+L38', venue: 'SJT622', faculty: 'KARTHIKA M S' },
+    { slot: 'L41+L42', venue: 'SJT621', faculty: 'GOUTAM MAJUMDER' },
+  ],
+  'BCSE208L - Data Mining': [
+    { slot: 'B2', venue: 'SJT522', faculty: 'SUGANTHINI C' },
+    { slot: 'B2', venue: 'SJT521', faculty: 'GEETHA MARY A' },
+    { slot: 'B1', venue: 'SJT522', faculty: 'SUGANTHINI C' },
+    { slot: 'B1', venue: 'SJT521', faculty: 'SIVARANJANI A' },
+    { slot: 'B1', venue: 'SJT602', faculty: 'POOJA CHAUDHARY' },
+    { slot: 'B1', venue: 'SJT602A', faculty: 'ANTONY SEBA P' },
+    { slot: 'B2', venue: 'SJT601', faculty: 'POOJA CHAUDHARY' },
+  ],
+  'BCSE208P - Data Mining Lab': [
+    { slot: 'L33+L34', venue: 'SJT622', faculty: 'SIVARANJANI A' },
+    { slot: 'L23+L24', venue: 'SJT621', faculty: 'GEETHA MARY A' },
+    { slot: 'L15+L16', venue: 'PRP231', faculty: 'SUGANTHINI C' },
+    { slot: 'L3+L4', venue: 'SJT622', faculty: 'POOJA CHAUDHARY' },
+    { slot: 'L55+L56', venue: 'SJT418', faculty: 'SUGANTHINI C' },
+    { slot: 'L57+L58', venue: 'SJT419', faculty: 'POOJA CHAUDHARY' },
+    { slot: 'L45+L46', venue: 'SJT622', faculty: 'ANTONY SEBA P' },
+  ],
+  'BCSE209L - Machine Learning': [
+    { slot: 'E1+TE1', venue: 'SJT324', faculty: 'SAYAN SIKDER' },
+    { slot: 'B1+TB1', venue: 'SJT308', faculty: 'GAYATHRI S' },
+    { slot: 'C1+TC1', venue: 'SJT324', faculty: 'MANJULA R' },
+  ],
+  'BCSE209P - Machine Learning Lab': [
+    { slot: 'L39+L40', venue: 'SJT418', faculty: 'GAYATHRI S' },
+    { slot: 'L33+L34', venue: 'SJT515', faculty: 'MANJULA R' },
+    { slot: 'L47+L48', venue: 'SJT416', faculty: 'SAYAN SIKDER' },
+  ],
+  'BCSE331L - Exploratory Data Analysis': [{ slot: 'A2', venue: 'SJT408', faculty: 'SANGEETHA S' }],
+  'BCSE331P - Exploratory Data Analysis Lab': [
+    { slot: 'L27+L28', venue: 'SJT419', faculty: 'SANGEETHA S' },
+  ],
+  'BCSE332L - Deep Learning': [
+    { slot: 'G2+TG2', venue: 'SJT324', faculty: 'MALATHI M' },
+    { slot: 'F1+TF1', venue: 'SJT324', faculty: 'MAHESWARI B' },
+  ],
+  'BCSE332P - Deep Learning Lab': [
+    { slot: 'L53+L54', venue: 'SJT418', faculty: 'MAHESWARI B' },
+    { slot: 'L5+L6', venue: 'SJT621', faculty: 'MALATHI M' },
+  ],
+  'BCSE334L - Predictive Analytics': [
+    { slot: 'F2+TF2', venue: 'SJT324', faculty: 'CHELLATAMILAN T' },
+  ],
+};

@@ -1,0 +1,48 @@
+export const SPE = {
+  'CSE2010 - Advanced C Programming': [
+    { slot: 'C2', venue: 'SJT315', faculty: 'PADMA PRIYA M' },
+    { slot: 'L1+L2', venue: 'SJT318', faculty: 'PADMA PRIYA M' },
+  ],
+  'CSI3017 - Business Intelligence': [
+    { slot: 'A1+TA1+TAA1', venue: 'PRP219', faculty: 'PEREPI RAJARAJESWARI' },
+    { slot: 'A1+TA1+TAA1', venue: 'PRP210', faculty: 'JAFAR ALI IBRAHIM S' },
+    { slot: 'A2+TA2+TAA2', venue: 'PRP220', faculty: 'KARTHIKA M S' },
+    { slot: 'A2+TA2+TAA2', venue: 'PRP210', faculty: 'BALA KRISHNAN R' },
+    { slot: 'A1+TA1+TAA1', venue: 'PRP220', faculty: 'KUMARESAN A' },
+  ],
+  'MDI3003 - Advanced Predictive Analytics': [
+    { slot: 'B1+TB1', venue: 'SJT401', faculty: 'KRISHNA RANI SAMAL K' },
+    { slot: 'B1+TB1', venue: 'SJT402', faculty: 'VANI RAJASEKAR' },
+    { slot: 'B2+TB2', venue: 'SJT402', faculty: 'VANI RAJASEKAR' },
+    { slot: 'B2+TB2', venue: 'SJT401', faculty: 'KRISHNA RANI SAMAL K' },
+    { slot: 'B1+TB1', venue: 'SJT403', faculty: 'RAGHUL J' },
+    { slot: 'L15+L16', venue: 'SJT622', faculty: 'VANI RAJASEKAR' },
+    { slot: 'L25+L26', venue: 'SJT622', faculty: 'KRISHNA RANI SAMAL K' },
+    { slot: 'L57+L58', venue: 'SJT622', faculty: 'RAGHUL J' },
+    { slot: 'L47+L48', venue: 'SJT417', faculty: 'KRISHNA RANI SAMAL K' },
+    { slot: 'L43+L44', venue: 'SJT622', faculty: 'VANI RAJASEKAR' },
+  ],
+  'MDI3004 - Intelligent Database Systems': [
+    { slot: 'B1+TB1', venue: 'PRP214', faculty: 'SOUMYAJYOTI DEY' },
+    { slot: 'B1+TB1', venue: 'NIL', faculty: 'SOUMYAJYOTI DEY' },
+    { slot: 'B2+TB2', venue: 'PRP214', faculty: 'GANESH SHAMRAO KHEKARE' },
+    { slot: 'B2+TB2', venue: 'NIL', faculty: 'GANESH SHAMRAO KHEKARE' },
+    { slot: 'B1+TB1', venue: 'PRP221', faculty: 'SMRITHI PRAKASH' },
+    { slot: 'B1+TB1', venue: 'PRP220', faculty: 'KANAGARAJ R' },
+    { slot: 'B1+TB1', venue: 'NIL', faculty: 'KANAGARAJ R' },
+    { slot: 'B2+TB2', venue: 'PRP219', faculty: 'SIVA SANKARI S' },
+    { slot: 'B2+TB2', venue: 'NIL', faculty: 'SIVA SANKARI S' },
+    { slot: 'B1+TB1', venue: 'NIL', faculty: 'SMRITHI PRAKASH' },
+  ],
+  'MDI3005 - Advances in Data Engineering': [
+    { slot: 'E2+TE2', venue: 'SJT402', faculty: 'SIVAGAMI R' },
+    { slot: 'E2+TE2', venue: 'NIL', faculty: 'SIVAGAMI R' },
+    { slot: 'E1+TE1', venue: 'SJT402', faculty: 'ARULKUMAR V' },
+    { slot: 'E1+TE1', venue: 'NIL', faculty: 'ARULKUMAR V' },
+  ],
+  'MDI4009 - Neural Networks and Deep Learning': [
+    { slot: 'F2+TF2', venue: 'SJT404', faculty: 'RAJAY VEDARAJ I S' },
+    { slot: 'F1+TF1', venue: 'SJT405', faculty: 'VENKATA LAKSHMI NARAYANA K' },
+    { slot: 'F1+TF1', venue: 'SJT407', faculty: 'BRISILLA R M' },
+  ],
+};

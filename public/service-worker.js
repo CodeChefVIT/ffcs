@@ -29,11 +29,21 @@ const CORE_ASSETS = [
   '/logo_ffcs.webp',
 ];
 
+const isCoreAsset = request => {
+  try {
+    const url = new URL(request.url);
+    return CORE_ASSETS.includes(url.pathname);
+  } catch {
+    return false;
+  }
+};
+
 const limitCacheSize = (name, maxItems) => {
   caches.open(name).then(cache =>
     cache.keys().then(keys => {
-      if (keys.length > maxItems) {
-        cache.delete(keys[0]).then(() => limitCacheSize(name, maxItems));
+      const dynamicKeys = keys.filter(req => !isCoreAsset(req));
+      if (dynamicKeys.length > maxItems) {
+        cache.delete(dynamicKeys[0]).then(() => limitCacheSize(name, maxItems));
       }
     })
   );
