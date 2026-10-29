@@ -57,7 +57,8 @@ export function ZButton({
     small: 'h-10 w-10 rounded-full p-1 text-base gap-2.5',
     image: 'h-13 w-13 rounded-xl text-base gap-2.5',
     long: 'h-12 rounded-xl px-8 text-base gap-2.5',
-    wide: 'h-[50px] flex-1 max-w-[208px] rounded-[17px] px-4 text-xl gap-3',
+    // Sized by its label, so a pair fits a narrow column and wraps instead of squashing.
+    wide: 'h-[50px] rounded-[17px] px-3 text-base gap-1.5 whitespace-nowrap md:px-4 md:text-lg md:gap-2 2xl:px-5 2xl:text-xl',
     large: 'h-[60px] rounded-[20px] px-8 text-2xl gap-6',
   };
 
@@ -99,7 +100,7 @@ export function ZButton({
     >
       {text}
       {image && (
-        <span style={{ pointerEvents: 'none', display: 'flex' }}>
+        <span style={{ pointerEvents: 'none', display: 'flex', flexShrink: 0 }}>
           <Image
             src={image}
             alt=""
