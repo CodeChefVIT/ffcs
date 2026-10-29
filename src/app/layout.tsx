@@ -3,6 +3,7 @@ import './globals.css';
 import SessionProviderWrapper from './SessionProvider';
 import ServiceWorkerRegister from '../components/ServiceWorkerRegister/ServiceWorkerRegister';
 import Script from 'next/script';
+import { Analytics } from '@vercel/analytics/next';
 
 const pangolin = Pangolin({
   weight: '400',
@@ -84,6 +85,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       >
         <SessionProviderWrapper>{children}</SessionProviderWrapper>
         <ServiceWorkerRegister />
+        <Analytics />
       </body>
     </html>
   );
