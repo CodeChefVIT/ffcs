@@ -96,12 +96,8 @@ export const FC = {
     { slot: 'A2', venue: 'SJT405', faculty: 'KHANJAN' },
     { slot: 'C2', venue: 'SMV214', faculty: 'HIYA MUKHERJEE' },
   ],
-  'BMAT101L - Calculus': [
-    { slot: 'D2+TD2', venue: 'SJT223', faculty: 'GORINTLA SUCHARITHA' },
-  ],
-  'BMAT101P - Calculus Lab': [
-    { slot: 'L3+L4', venue: 'PRP447', faculty: 'GORINTLA SUCHARITHA' },
-  ],
+  'BMAT101L - Calculus': [{ slot: 'D2+TD2', venue: 'SJT223', faculty: 'GORINTLA SUCHARITHA' }],
+  'BMAT101P - Calculus Lab': [{ slot: 'L3+L4', venue: 'PRP447', faculty: 'GORINTLA SUCHARITHA' }],
   'BMAT102L - Differential Equations and Transforms': [
     { slot: 'C1+TC1+TCC1', venue: 'SJT617', faculty: 'INDHIRA K' },
     { slot: 'B2+TB2+TBB2', venue: 'SJT407', faculty: 'AKELLA VENKATA SURYANARAYANA MURTY' },
@@ -117,12 +113,8 @@ export const FC = {
   'BMAT202P - Probability and Statistics Lab': [
     { slot: 'L55+L56', venue: 'PRP119', faculty: 'DINESH KUMAR S' },
   ],
-  'BMGT101L - Principles of Management': [
-    { slot: 'C1+TC1', venue: 'MB229', faculty: 'NATARAJ G' },
-  ],
-  'BPHY101L - Engineering Physics': [
-    { slot: 'B2+TB2', venue: 'TT413', faculty: 'RAJAN BABU D' },
-  ],
+  'BMGT101L - Principles of Management': [{ slot: 'C1+TC1', venue: 'MB229', faculty: 'NATARAJ G' }],
+  'BPHY101L - Engineering Physics': [{ slot: 'B2+TB2', venue: 'TT413', faculty: 'RAJAN BABU D' }],
   'BPHY101P - Engineering Physics Lab': [
     { slot: 'L23+L24', venue: 'TT420', faculty: 'RAJAN BABU D' },
   ],

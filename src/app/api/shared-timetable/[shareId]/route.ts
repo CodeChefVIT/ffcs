@@ -37,7 +37,6 @@ export async function GET(req: NextRequest) {
         timetable: {
           title: timetable.title,
           slots: timetable.slots,
-          owner: timetable.owner,
           shareId: timetable.shareId,
         },
       },

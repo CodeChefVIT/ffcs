@@ -86,9 +86,7 @@ export const OEC = {
     { slot: 'E1', venue: 'TT332', faculty: 'ADAIKALAM ARULANANDAM' },
     { slot: 'L39+L40', venue: 'PRP555', faculty: 'ADAIKALAM ARULANANDAM' },
   ],
-  'BAHIN101 - Prathamik Hindi': [
-    { slot: 'D1+TD1', venue: 'TT334', faculty: 'JAYALAKSHMI K' },
-  ],
+  'BAHIN101 - Prathamik Hindi': [{ slot: 'D1+TD1', venue: 'TT334', faculty: 'JAYALAKSHMI K' }],
   'BAHIN102 - Prayojanmulak Hindi': [
     { slot: 'L11+L12', venue: 'TT432', faculty: 'JAYALAKSHMI K' },
     { slot: 'E2', venue: 'SMV104', faculty: 'JAYALAKSHMI K' },
@@ -107,9 +105,7 @@ export const OEC = {
     { slot: 'B2+TB2+TBB2', venue: 'SJT602', faculty: 'PRASANNA S' },
     { slot: 'B2+TB2+TBB2', venue: 'SJT405', faculty: 'THAYYIB P V' },
   ],
-  'BAJAP201 - Japanese Level II': [
-    { slot: 'C2', venue: 'SJT522', faculty: 'SHILPI GUPTA' },
-  ],
+  'BAJAP201 - Japanese Level II': [{ slot: 'C2', venue: 'SJT522', faculty: 'SHILPI GUPTA' }],
   'BAMAT208 - Operations Research': [
     { slot: 'B1+TB1', venue: 'SJT604', faculty: 'MUBASHIR UNNISSA M' },
     { slot: 'L45+L46', venue: 'PRP119', faculty: 'MUBASHIR UNNISSA M' },

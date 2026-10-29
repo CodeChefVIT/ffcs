@@ -8,12 +8,12 @@ import { BC } from './BC';
 import { NGCR } from './NGCR';
 
 export const SHINE_BHT = {
-  'FC': FC,
-  'DLES': DLES,
-  'DC': DC,
-  'DE': DE,
-  'PI': PI,
-  'OE': OE,
-  'BC': BC,
-  'NGCR': NGCR,
+  FC: FC,
+  DLES: DLES,
+  DC: DC,
+  DE: DE,
+  PI: PI,
+  OE: OE,
+  BC: BC,
+  NGCR: NGCR,
 };

@@ -1,2 +1,1 @@
-export const BC = {
-};
+export const BC = {};

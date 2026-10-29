@@ -667,12 +667,30 @@ export default function FacultySelector({
         )}
         <div className="font-poppins relative bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[4px_4px_0_0_black] mx-auto overflow-hidden">
           <div className="grid grid-cols-2 gap-x-5 gap-y-4 m-4 px-4 pt-2">
+            <div className="col-span-2">
+              <ComboBox
+                label="Select domain"
+                value={selectedDomain}
+                options={domains}
+                onChange={handleDomainChange}
+                renderOption={prettifyDomain}
+              />
+            </div>
             <ComboBox
-              label="Select domain"
-              value={selectedDomain}
-              options={domains}
-              onChange={handleDomainChange}
-              renderOption={prettifyDomain}
+              label="Select or search subject"
+              value={selectedSubject ? toSubjectKey(selectedDomain, selectedSubject) : ''}
+              options={
+                selectedDomain
+                  ? subjects.map(subject => toSubjectKey(selectedDomain, subject))
+                  : schoolSubjectKeys
+              }
+              searchOptions={schoolSubjectKeys}
+              onChange={handleSubjectPick}
+              renderOption={key => fromSubjectKey(key)[1]}
+              renderHint={key => {
+                const domain = fromSubjectKey(key)[0];
+                return domain === selectedDomain ? '' : prettifyDomain(domain);
+              }}
             />
             {getCourseType(
               selectedSubject.split(' - ')[0],
@@ -702,24 +720,6 @@ export default function FacultySelector({
                 onChange={handleSlotChange}
               />
             )}
-            <div className="col-span-2">
-              <ComboBox
-                label="Select or search subject"
-                value={selectedSubject ? toSubjectKey(selectedDomain, selectedSubject) : ''}
-                options={
-                  selectedDomain
-                    ? subjects.map(subject => toSubjectKey(selectedDomain, subject))
-                    : schoolSubjectKeys
-                }
-                searchOptions={schoolSubjectKeys}
-                onChange={handleSubjectPick}
-                renderOption={key => fromSubjectKey(key)[1]}
-                renderHint={key => {
-                  const domain = fromSubjectKey(key)[0];
-                  return domain === selectedDomain ? '' : prettifyDomain(domain);
-                }}
-              />
-            </div>
           </div>
 
           <div className="w-full h-[2px] bg-black mt-6 mb-6" />
