@@ -18,7 +18,7 @@
     preact "10.24.3"
     preact-render-to-string "6.5.11"
 
-"@auth/mongodb-adapter@^3.9.1":
+"@auth/mongodb-adapter@^3.11.3":
   version "3.11.3"
   resolved "https://registry.yarnpkg.com/@auth/mongodb-adapter/-/mongodb-adapter-3.11.3.tgz#a29c1e73ef18d23ba3eecb2135c01739dc3e42fb"
   integrity sha512-Fgecjf24MLo1975qKjeFhdiFLC4NGwpfCScS/LFqCTo7rIesxLyNqVZzSwtPiSizWlncCAQf3gURlQLK16DRIg==
