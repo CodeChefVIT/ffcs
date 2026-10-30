@@ -64,9 +64,7 @@ export const PC_MIC = {
   'MAT1014 - Discrete Mathematics and Graph Theory': [
     { slot: 'C1+TC1+TCC1+V2', venue: 'SJT711', faculty: 'DHARANI S' },
   ],
-  'MAT1022 - Linear Algebra': [
-    { slot: 'F2+TF2', venue: 'SJT824', faculty: 'MADHU V' },
-  ],
+  'MAT1022 - Linear Algebra': [{ slot: 'F2+TF2', venue: 'SJT824', faculty: 'MADHU V' }],
   'MDI3002 - Foundations of Data Science': [
     { slot: 'G1+TG1', venue: 'PRP221', faculty: 'GOVINDA K' },
     { slot: 'G2+TG2', venue: 'PRP219', faculty: 'ERAPANENI GAYATRI' },

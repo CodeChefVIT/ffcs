@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { notFound as nextNotFound, useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import axios from 'axios';
 
@@ -35,7 +35,7 @@ export default function SharedTimetablePage() {
 
   const [data, setData] = useState<dataProps[] | null>(null);
   const [title, setTitle] = useState<string>('');
-  const [notFound, setNotFound] = useState(false);
+  const [isNotFound, setIsNotFound] = useState(false);
   const [showSavePopup, setShowSavePopup] = useState(false);
   const [saveTTName, setSaveTTName] = useState<string>('');
   const [showLoginPopup, setShowLoginPopup] = useState(false);
@@ -63,14 +63,14 @@ export default function SharedTimetablePage() {
             )
           );
         } else {
-          setNotFound(true);
+          setIsNotFound(true);
         }
       } catch (error: unknown) {
         const status = axios.isAxiosError(error) ? error?.response?.status : undefined;
 
         if (status === 404) {
           console.log('Timetable not found');
-          router.push('/404');
+          setIsNotFound(true);
           return;
         }
 
@@ -80,15 +80,15 @@ export default function SharedTimetablePage() {
           return;
         }
         console.error('Unexpected error:', error);
-        setNotFound(true);
+        setIsNotFound(true);
       }
     };
 
     fetchTimeTable();
   }, [shareId, router]);
 
-  if (notFound) {
-    router.push('/404');
+  if (isNotFound) {
+    nextNotFound();
   }
 
   function showAlert(msg: string) {

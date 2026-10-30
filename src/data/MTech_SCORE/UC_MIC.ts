@@ -27,9 +27,7 @@ export const UC_MIC = {
     { slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' },
     { slot: 'NIL', venue: 'NIL', faculty: 'PLACEMENT AND TRAINING' },
   ],
-  'ESP1001 - ESPANOL FUNDAMENTAL': [
-    { slot: 'A2', venue: 'SMV116', faculty: 'SABYASACHI MISHRA' },
-  ],
+  'ESP1001 - ESPANOL FUNDAMENTAL': [{ slot: 'A2', venue: 'SMV116', faculty: 'SABYASACHI MISHRA' }],
   'MAT2001 - Statistics for Engineers': [
     { slot: 'B1+TB1', venue: 'SJT603', faculty: 'HEMADRI REDDY REGANTI' },
     { slot: 'L57+L58', venue: 'PRP445', faculty: 'HEMADRI REDDY REGANTI' },

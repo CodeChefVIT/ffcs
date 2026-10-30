@@ -1,2 +1,1 @@
-export const NC = {
-};
+export const NC = {};

@@ -1,2 +1,1 @@
-export const DLES = {
-};
+export const DLES = {};

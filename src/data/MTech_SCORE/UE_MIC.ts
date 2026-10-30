@@ -9,9 +9,7 @@ export const UE_MIC = {
     { slot: 'A1+TA1+TAA1+V1', venue: 'PRP530', faculty: 'JANANI P' },
     { slot: 'A2+TA2+TAA2+V3', venue: 'PRP426', faculty: 'DURGADEVI U' },
   ],
-  'CSI1006 - Mini Project': [
-    { slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' },
-  ],
+  'CSI1006 - Mini Project': [{ slot: 'NIL', venue: 'NIL', faculty: 'ACADEMICS' }],
   'CSI3023 - Advanced Server Side Programming': [
     { slot: 'B1', venue: 'SJT324', faculty: 'JUSTUS RAJU KARACKATTUVILAYIL' },
     { slot: 'L37+L38', venue: 'SJT416', faculty: 'JUSTUS RAJU KARACKATTUVILAYIL' },
