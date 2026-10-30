@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { useTimetable } from '../../lib/TimeTableContext';
 import Popup from '../ui/Popup';
 import { BasicToggleButton, ZButton } from '../ui/Buttons';
@@ -32,18 +32,6 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
 
   const [showInfo, setShowInfo] = useState(false);
   const [deleteAllPopupOpen, setDeleteAllPopupOpen] = useState(false);
-  const [isLargeScreen, setIsLargeScreen] = useState(true);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsLargeScreen(window.innerWidth >= 1024);
-    };
-
-    handleResize(); // Initial check
-    window.addEventListener('resize', handleResize);
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   const [alert, setAlert] = useState({
     open: false,
@@ -165,7 +153,7 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
   };
 
   return (
-    <div className="px-12">
+    <div className="h-full">
       <AlertModal
         open={alert.open}
         message={alert.message}
@@ -176,7 +164,7 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
       <AlertModal
         open={showInfo}
         message={
-          '**All Subjects Mode - ON**\nGenerated timetables strictly include all of the selected subjects.\n\n**All Subjects Mode - OFF**\nSubjects are prioritized based on their order. If a clash is detected then the subject with lower priority is excluded.'
+          '**All Subjects Mode - ON**\nGenerated timetables strictly include all of the selected subjects.\n\n**All Subjects Mode - OFF**\nSubjects are prioritized based on their order. If a clash is detected then the subject with lower priority is excluded.\n\n**Course priority**\nCourses higher in the list have higher priority. Use the arrows or drag and drop to reorder them.'
         }
         color="yellow"
         onClose={() => setShowInfo(false)}
@@ -184,87 +172,85 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
 
       <div
         id="course-card"
-        className="bg-[#A7D5D7] mt-4 font-poppins rounded-4xl border-[3px] border-black p-6 shadow-[4px_4px_0_0_black] text-black font-medium px-12 mb-16"
+        className="h-full flex flex-col bg-ffcs-card font-poppins rounded-[38px] border-3 border-black shadow-[5px_5px_0_0_black] text-black font-medium px-8 pt-7 pb-8"
       >
-        <div className="flex justify-between items-start mt-4">
-          <h2 className="text-3xl font-pangolin">Your Courses</h2>
-          <div className="text-sm text-[#B93C21] text-right mr-6">
-            *Use arrows or drag-drop to set course priority,
-            <br />
-            multiple timetables will be generated.
+        <div className="flex flex-wrap justify-between items-center gap-4">
+          <h2 className="text-[35px] font-pangolin">Your Courses</h2>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setShowInfo(true)}
+              aria-label="About All Subjects Mode and course priority"
+              className="bg-ffcs-yellow border-2 border-black rounded-full shadow-hard-xs w-7 h-7 flex items-center justify-center cursor-pointer active:shadow-none active:translate-x-[1px] active:translate-y-[1px]"
+              type="button"
+              title="About All Subjects Mode and course priority"
+            >
+              <Image src="/icons/qmark.svg" width={16} height={16} alt="" draggable={false} />
+            </button>
+            <span className="text-lg font-semibold">All Subjects Mode</span>
+            <BasicToggleButton
+              defaultState={allSubjectsMode}
+              onToggle={() => setAllSubjectsMode(prev => (prev === 'on' ? 'off' : 'on'))}
+            />
+            <span className="sr-only">{allSubjectsMode === 'on' ? 'On' : 'Off'}</span>
           </div>
         </div>
 
         <div
           id="course-list"
-          className="mt-6 space-y-4 max-h-[350px] overflow-y-auto pr-2 font-poppins w-full"
+          className="mt-6 space-y-4 max-h-[430px] overflow-y-auto pr-2 font-poppins w-full"
         >
           {selectedCourses.map((course, index) => (
             <div
               key={`${course.id}-${index}`}
-              className="course-row bg-[#ffffff]/40 rounded-3xl px-6 py-4 flex flex-row items-center justify-between gap-2 sm:space-x-4 w-full cursor-grab active:cursor-grabbing"
+              className="course-row bg-[#ffffff]/40 rounded-[22px] px-4 py-3 flex flex-row items-center gap-2.5 w-full text-[15px] text-black font-normal cursor-grab active:cursor-grabbing"
               draggable
               onDragStart={e => handleDragStart(e, index)}
               onDragEnter={() => handleDragEnter(index)}
               onDragEnd={handleDragEnd}
               onDragOver={e => e.preventDefault()}
             >
+              <div className="w-6 shrink-0 text-right font-inter">{index + 1}.</div>
+
               {/* Course Codes */}
-              <div className="flex items-center w-[120px] text-sm text-black font-normal">
-                <div className="flex items-start">
-                  <div className="w-6 text-right mr-4 text-sm font-inter">{index + 1}.</div>
-                  <div className={'flex flex-col px-4 gap-1'}>
-                    <p key={course.courseCode}>{course.courseCode}</p>
-                    {course.courseType === 'both' && !course.courseCode.endsWith('E') && (
-                      <p key={course.courseCodeLab + '_lab'}>{course.courseCodeLab}</p>
-                    )}
-                  </div>
-                </div>
+              <div className="w-[82px] shrink-0 flex flex-col gap-1">
+                <p key={course.courseCode}>{course.courseCode}</p>
+                {course.courseType === 'both' && !course.courseCode.endsWith('E') && (
+                  <p key={course.courseCodeLab + '_lab'}>{course.courseCodeLab}</p>
+                )}
               </div>
 
               {/* Course name */}
-              <div className="flex w-[480px] text-sm text-black font-normal">
-                <div className="flex flex-col gap-1 break-words max-w-full">
-                  <p key={course.courseName} className="break-words leading-snug">
-                    {course.courseName}
+              <div className="flex-1 min-w-0 flex flex-col gap-1 break-words">
+                <p key={course.courseName} className="break-words leading-snug">
+                  {course.courseName}
+                </p>
+                {course.courseType === 'both' && !course.courseCode.endsWith('E') && (
+                  <p key={course.courseNameLab + '_lab'} className="break-words leading-snug">
+                    {course.courseNameLab}
                   </p>
-                  {course.courseType === 'both' && !course.courseCode.endsWith('E') && (
-                    <p key={course.courseNameLab + '_lab'} className="break-words leading-snug">
-                      {course.courseNameLab}
-                    </p>
-                  )}
-                </div>
+                )}
               </div>
 
               {/* Slots */}
-              <div className="flex items-center w-[120px] text-sm text-left text-black font-normal">
-                <div className="flex flex-col gap-1">
-                  {course.courseType == 'lab' && (
-                    <p key={course.courseName + 'slot'} className="break-words leading-snug">
-                      (Lab)
-                    </p>
-                  )}
-                  {course.courseType != 'lab' && (
-                    <p key={course.courseName + 'slot'} className="break-words leading-snug">
-                      {course.courseSlots.map(slot => slot.slotName).join(', ')}
-                    </p>
-                  )}
-                </div>
+              <div className="w-[96px] shrink-0 break-words leading-snug">
+                {course.courseType == 'lab'
+                  ? '(Lab)'
+                  : course.courseSlots.map(slot => slot.slotName).join(', ')}
               </div>
 
               {/* Buttons */}
-              <div className="flex items-center justify-end gap-2 flex-shrink-0">
+              <div className="flex items-center gap-1 shrink-0">
                 <button
                   onClick={() => setCourseToView(course)}
                   onDragStart={e => e.stopPropagation()}
                   draggable={false}
                   aria-label={`View faculty priorities for ${course.courseCode}`}
                   aria-haspopup="dialog"
-                  className="bg-[#FFFFFF]/50 hover:bg-[#8BD5FF] text-black rounded-lg transition cursor-pointer w-10 h-10 flex items-center justify-center flex-shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                  className="bg-[#FFFFFF]/50 hover:bg-[#8BD5FF] text-black rounded-lg transition cursor-pointer w-8 h-8 flex items-center justify-center flex-shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
                   type="button"
                   title="View faculty priorities"
                 >
-                  <Image src="/icons/eye.svg" width={24} height={24} alt="" draggable={false} />
+                  <Image src="/icons/eye.svg" width={18} height={18} alt="" draggable={false} />
                 </button>
                 <button
                   onClick={() => {
@@ -272,7 +258,7 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
                     setDeletePopupOpen(true);
                   }}
                   aria-label="Delete Course"
-                  className="bg-[#FFFFFF]/50 hover:bg-[#F08585] text-black rounded-lg transition cursor-pointer w-10 h-10 flex items-center justify-center flex-shrink-0"
+                  className="bg-[#FFFFFF]/50 hover:bg-[#F08585] text-black rounded-lg transition cursor-pointer w-8 h-8 flex items-center justify-center flex-shrink-0"
                   type="button"
                   title="Delete Course"
                 >
@@ -281,18 +267,18 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
                     width={1}
                     height={1}
                     alt="delete"
-                    className="w-6 h-6"
+                    className="w-[18px] h-[18px]"
                     unselectable="on"
                     draggable={false}
                     priority
                   />
                 </button>
 
-                <div className="flex flex-col bg-[#FFFFFF]/50 rounded-xl overflow-hidden leading-none gap-0 p-1 flex-shrink-0 w-8 h-12 -mr-2">
+                <div className="flex flex-col items-center justify-center bg-[#FFFFFF]/50 rounded-lg overflow-hidden leading-none w-6 h-8 flex-shrink-0">
                   <button
                     onClick={() => moveCourseUp(index)}
                     aria-label="Move Course Up"
-                    className="px-1 py-0.5 m-0 leading-none transition rounded-t-lg cursor-pointer w-6 h-6 flex items-center justify-center"
+                    className="leading-none transition cursor-pointer w-6 h-3.5 flex items-center justify-center"
                     type="button"
                     title="Move Up"
                     disabled={index === 0}
@@ -312,7 +298,7 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
                   <button
                     onClick={() => moveCourseDown(index)}
                     aria-label="Move Course Down"
-                    className="px-1 py-0.5 m-0 leading-none transition rounded-b-lg cursor-pointer w-6 h-6 flex items-center justify-center"
+                    className="leading-none transition cursor-pointer w-6 h-3.5 flex items-center justify-center"
                     type="button"
                     title="Move Down"
                     disabled={index === selectedCourses.length - 1}
@@ -338,100 +324,26 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
           ))}
         </div>
 
-        {isLargeScreen ? (
-          <div className="flex justify-between items-center mt-8 mb-4 relative w-full">
-            {/* Toggle */}
-            <div className="mr-auto flex items-center gap-2">
-              <div className="mr-2">
-                <ZButton
-                  image="/icons/qmark.svg"
-                  color="yellow"
-                  type="small"
-                  onClick={() => setShowInfo(true)}
-                />
-              </div>
-              <span className="text-md text-black font-semibold mr-0">All Subjects Mode</span>
-              <BasicToggleButton
-                defaultState={allSubjectsMode}
-                onToggle={() => setAllSubjectsMode(prev => (prev === 'on' ? 'off' : 'on'))}
-              />
-              <span className="text-md text-black font-semibold ml-2">
-                {allSubjectsMode === 'on' ? 'ON' : 'OFF'}
-              </span>
-            </div>
+        <div className="flex justify-end mt-6">
+          <ZButton
+            type="regular"
+            text="Remove all"
+            image="/icons/trash.svg"
+            color="red"
+            onClick={() => setDeleteAllPopupOpen(true)}
+          />
+        </div>
 
-            {/* Generate */}
-            <div className="absolute left-1/2 -translate-x-1/2">
-              <ZButton
-                type="large"
-                text={loading ? 'Generating...' : 'Generate'}
-                image="/icons/thunder.svg"
-                color="blue"
-                disabled={loading}
-                onClick={handleGenerate}
-              />
-            </div>
-
-            {/* Delete All Button */}
-            <div className="ml-auto flex items-center">
-              <ZButton
-                type="regular"
-                text="Remove all"
-                image="/icons/trash.svg"
-                color="red"
-                onClick={() => setDeleteAllPopupOpen(true)}
-              />
-            </div>
-          </div>
-        ) : (
-          // Mobile / Tablet View
-
-          <div className="mt-8 mb-4 w-full flex flex-col gap-4">
-            {/* Top Row */}
-            <div className="w-full flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <div className="mr-2">
-                  <ZButton
-                    image="/icons/qmark.svg"
-                    color="yellow"
-                    type="small"
-                    onClick={() => setShowInfo(true)}
-                  />
-                </div>
-                <span className="text-md text-black font-semibold mr-2">All Subjects Mode</span>
-                <BasicToggleButton
-                  defaultState={allSubjectsMode}
-                  onToggle={() => setAllSubjectsMode(prev => (prev === 'on' ? 'off' : 'on'))}
-                />
-                <span className="text-md text-black font-semibold ml-4">
-                  {allSubjectsMode === 'on' ? 'ON' : 'OFF'}
-                </span>
-              </div>
-
-              <div className="flex items-center">
-                <ZButton
-                  type="regular"
-                  text="Remove all"
-                  image="/icons/trash.svg"
-                  color="red"
-                  onClick={() => setDeleteAllPopupOpen(true)}
-                />
-              </div>
-            </div>
-
-            {/* Bottom Row*/}
-            <div className="flex justify-center w-full py-4">
-              <ZButton
-                type="large"
-                text={loading ? 'Generating...' : 'Generate'}
-                image="/icons/thunder.svg"
-                color="blue"
-                disabled={loading}
-                onClick={handleGenerate}
-              />
-            </div>
-          </div>
-        )}
+        <div className="flex justify-center mt-auto pt-8">
+          <ZButton
+            type="large"
+            text={loading ? 'Generating...' : 'Generate'}
+            image="/icons/thunder.svg"
+            color="blue"
+            disabled={loading}
+            onClick={handleGenerate}
+          />
+        </div>
 
         {error && (
           <div className="mt-6 text-center text-[#CC3312] font-semibold" role="alert">

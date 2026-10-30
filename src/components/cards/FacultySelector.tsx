@@ -658,8 +658,8 @@ export default function FacultySelector({
   );
 
   return (
-    <div>
-      <div className="relative mb-20">
+    <div className="h-full">
+      <div className="relative h-full">
         {selectedSchool === 'My VTOP' && (
           <div className="absolute -top-8 left-8 z-10 flex h-10 items-center rounded-2xl border-3 border-black bg-ffcs-violet px-5 font-poppins text-base font-semibold shadow-hard">
             My VTOP
@@ -722,14 +722,14 @@ export default function FacultySelector({
             )}
           </div>
 
-          <div className="w-full h-[2px] bg-black mt-6 mb-6" />
+          <div className="w-full h-[3px] bg-black" />
 
-          <div className="grid grid-cols-2 gap-4 px-4 pb-4 h-full m-4">
-            <div className="bg-[#FFFFFF]/40 rounded-xl overflow-hidden flex flex-col">
-              <div className="bg-[#FFFFFF]/60 text-center text-[#000000]/80 p-4 font-semibold text-lg">
+          <div className="grid grid-cols-2 gap-6 px-8 py-9 flex-1">
+            <div className="bg-[#FBFDFC]/40 rounded-3xl overflow-hidden flex flex-col">
+              <div className="bg-[#FFFFFF]/60 text-center text-[#000000]/80 h-[66px] flex items-center justify-center font-medium text-[26px]">
                 Select Faculties
               </div>
-              <div className="pt-4 pb-4 px-6 overflow-y-auto space-y-2 scrollbar-thin h-86">
+              <div className="pt-4 pb-4 px-6 overflow-y-auto space-y-2 scrollbar-thin h-[367px]">
                 {faculties.map((faculty: string, index: number) => {
                   let labTooltip = '';
 
@@ -820,7 +820,7 @@ export default function FacultySelector({
                             </div>
                           </div>
                         )}
-                        <span className="text-[#000000] relative">{faculty}</span>
+                        <span className="text-[#000000] text-[19px] relative">{faculty}</span>
                         <label className="inline-flex items-center gap-1 cursor-pointer">
                           <input
                             type="checkbox"
@@ -830,7 +830,7 @@ export default function FacultySelector({
                             aria-label={`Select faculty ${faculty}`}
                             title={`Select faculty ${faculty}`}
                           />
-                          <div className="w-7 h-7 rounded-md border-3 border-black flex items-center justify-center peer-checked:bg-[#C1FF83]">
+                          <div className="w-8 h-8 rounded-lg border-[2.5px] border-black bg-white flex items-center justify-center peer-checked:bg-[#C1FF83]">
                             <Image
                               src={
                                 selectedFaculties.includes(faculty)
@@ -863,11 +863,11 @@ export default function FacultySelector({
             </div>
 
             <div className="flex flex-col h-full justify-between">
-              <div className="bg-[#FFFFFF]/40 rounded-xl overflow-hidden mb-4">
-                <div className="bg-[#FFFFFF]/60 text-center text-[#000000]/80 p-4 font-semibold text-lg">
+              <div className="bg-[#FBFDFC]/40 rounded-3xl overflow-hidden mb-4">
+                <div className="bg-[#FFFFFF]/60 text-center text-[#000000]/80 h-[66px] flex items-center justify-center font-medium text-[26px]">
                   Faculty Priority
                 </div>
-                <div className="h-64 overflow-y-auto space-y-2 pb-4 pt-4 px-6 scrollbar-thin">
+                <div className="h-[268px] overflow-y-auto space-y-3 pb-4 pt-4 px-6 scrollbar-thin">
                   {priorityList.map((faculty, index) => (
                     <div
                       key={index}
@@ -890,7 +890,7 @@ export default function FacultySelector({
                           <span className="text-[#000000] mr-5 font-inter font-semibold">
                             {index + 1}.
                           </span>
-                          <span className="text-[#000000]">{faculty}</span>
+                          <span className="text-[#000000] text-[19px]">{faculty}</span>
                         </div>
                         <div className="flex flex-col items-center gap-1 bg-[#FFFFFF]/50 px-2 py-1 rounded-lg">
                           <button
@@ -942,21 +942,21 @@ export default function FacultySelector({
                     </div>
                   ))}
                 </div>
-                <div className="text-xs text-[#CC3312] p-3 text-center font-semibold">
+                <div className="text-sm text-[#CC3312] px-3 pt-1 pb-3 text-center">
                   *Use arrows or drag-drop to set faculty priority.
                 </div>
               </div>
 
-              <div className="flex flex-row flex-wrap justify-center gap-4">
+              <div className="flex flex-row flex-wrap justify-center gap-x-3 gap-y-3 md:gap-x-4">
                 <ZButton
-                  type="long"
+                  type="wide"
                   text="Reset"
                   image="icons/reset.svg"
                   onClick={handleReset}
                   color="red"
                 />
                 <ZButton
-                  type="long"
+                  type="wide"
                   text="Confirm"
                   image="icons/check.svg"
                   onClick={handleConfirm}
