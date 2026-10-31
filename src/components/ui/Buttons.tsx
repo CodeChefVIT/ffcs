@@ -4,11 +4,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-type ButtonVariant = 'regular' | 'image' | 'long' | 'large' | 'small';
+type ButtonVariant = 'regular' | 'image' | 'long' | 'wide' | 'large' | 'small';
 
 type ZButtonProps = {
   type: ButtonVariant;
-  text?: string;
+  text?: React.ReactNode;
   color?: 'red' | 'yellow' | 'green' | 'green_2' | 'blue' | 'purple' | 'gray' | string;
   image?: string;
   imageSize?: number;
@@ -57,6 +57,8 @@ export function ZButton({
     small: 'h-10 w-10 rounded-full p-1 text-base gap-2.5',
     image: 'h-13 w-13 rounded-xl text-base gap-2.5',
     long: 'h-12 rounded-xl px-8 text-base gap-2.5',
+    // Sized by its label, so a pair fits a narrow column and wraps instead of squashing.
+    wide: 'h-[50px] rounded-[17px] px-3 text-base gap-1.5 whitespace-nowrap md:px-4 md:text-lg md:gap-2 2xl:px-5 2xl:text-xl',
     large: 'h-[60px] rounded-[20px] px-8 text-2xl gap-6',
   };
 
@@ -98,7 +100,7 @@ export function ZButton({
     >
       {text}
       {image && (
-        <span style={{ pointerEvents: 'none', display: 'flex' }}>
+        <span style={{ pointerEvents: 'none', display: 'flex', flexShrink: 0 }}>
           <Image
             src={image}
             alt=""
@@ -265,17 +267,16 @@ export function BasicToggleButton({ defaultState, onToggle }: BasicToggleButtonP
     <div
       className={`
         relative flex items-center
-        border-[3px] border-black
-        shadow-[4px_4px_0_0_black]
+        border-[2.5px] border-black
+        shadow-[3px_3px_0_0_black]
         transition-all duration-100
-        px-2 py-1
-        w-[60px]
-        h-[36px]
-        rounded-[12px]
+        w-[48px]
+        h-[29px]
+        rounded-[10px]
         select-none
         cursor-pointer
         font-poppins
-        active:shadow-[2px_2px_0_0_black]
+        active:shadow-[1px_1px_0_0_black]
         active:translate-x-[2px]
         active:translate-y-[2px]
       `}
@@ -292,8 +293,8 @@ export function BasicToggleButton({ defaultState, onToggle }: BasicToggleButtonP
           absolute
           top-1/2
           -translate-y-1/2
-          h-[24px]
-          w-[24px]
+          h-[19px]
+          w-[19px]
           bg-white
           border
           border-black
@@ -301,9 +302,9 @@ export function BasicToggleButton({ defaultState, onToggle }: BasicToggleButtonP
           duration-100
           ease-in-out
           z-[1]
-          rounded-[8px]
+          rounded-[6px]
         `}
-        style={selected === 'on' ? { right: 4 } : { left: 4 }}
+        style={selected === 'on' ? { right: 3 } : { left: 3 }}
       />
     </div>
   );

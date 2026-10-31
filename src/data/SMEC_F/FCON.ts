@@ -1,1 +1,30 @@
-export const CON = {};
+export const CON = {
+  'BAMEE306 - Kinematics and Dynamics of Machines': [
+    { slot: 'F2+TF2', venue: 'MB213', faculty: 'VENKATESAN K' },
+    { slot: 'F1+TF1', venue: 'MB213', faculty: 'NARENDIRANATH BABU T' },
+    { slot: 'F1+TF1', venue: 'MB214', faculty: 'EDWIN SUDHAGAR P' },
+    { slot: 'F1+TF1', venue: 'MB218', faculty: 'RAJESH M' },
+    { slot: 'F2+TF2', venue: 'MB218', faculty: 'RAJESH M' },
+    { slot: 'F2+TF2', venue: 'MB224', faculty: 'NAVEEN J' },
+    { slot: 'L13+L14', venue: 'ALM 407A', faculty: 'VENKATESAN K' },
+    { slot: 'L23+L24', venue: 'ALM 407A', faculty: 'VENKATESAN K' },
+    { slot: 'L39+L40', venue: 'ALM 407A', faculty: 'NARENDIRANATH BABU T' },
+    { slot: 'L55+L56', venue: 'ALM 407A', faculty: 'NARENDIRANATH BABU T' },
+    { slot: 'L31+L32', venue: 'ALM 407A', faculty: 'EDWIN SUDHAGAR P' },
+    { slot: 'L37+L38', venue: 'ALM 407A', faculty: 'EDWIN SUDHAGAR P' },
+    { slot: 'L15+L16', venue: 'ALM 407A', faculty: 'NAVEEN J' },
+    { slot: 'L21+L22', venue: 'ALM 407A', faculty: 'NAVEEN J' },
+    { slot: 'L5+L6', venue: 'ALM 407A', faculty: 'RAJESH M' },
+    { slot: 'L9+L10', venue: 'ALM 407A', faculty: 'RAJESH M' },
+    { slot: 'L41+L42', venue: 'ALM 407A', faculty: 'RAJESH M' },
+    { slot: 'L43+L44', venue: 'ALM 407A', faculty: 'RAJESH M' },
+  ],
+  'BAMEE402 - AI Driven Engineering Design': [
+    { slot: 'C1+TC1+TCC1', venue: 'GDNG07', faculty: 'VASUDEVAN R' },
+    { slot: 'C2+TC2+TCC2', venue: 'GDN121', faculty: 'EDWIN SUDHAGAR P' },
+    { slot: 'C1+TC1+TCC1', venue: 'MB213', faculty: 'DEEPAK KUMAR BISWAL' },
+    { slot: 'C2+TC2+TCC2', venue: 'MB212', faculty: 'DEEPAK KUMAR BISWAL' },
+    { slot: 'C1+TC1+TCC1', venue: 'MB214', faculty: 'SHARAN CHANDRAN M' },
+    { slot: 'C2+TC2+TCC2', venue: 'MB213', faculty: 'SHARAN CHANDRAN M' },
+  ],
+};

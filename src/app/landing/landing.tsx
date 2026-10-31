@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 
 import Hero from '@/components/ui/Hero';
@@ -23,10 +23,12 @@ function Planner({
   facultyData,
   storageKey,
   school,
+  onVtopHelp,
 }: {
   facultyData: FacultyData;
   storageKey: string;
   school: string;
+  onVtopHelp: () => void;
 }) {
   const [selectedCourses, setSelectedCourses] = useState<fullCourseData[]>(() => {
     if (typeof window === 'undefined') return [];
@@ -81,6 +83,30 @@ function Planner({
     });
   };
 
+  // The course whose pencil was pressed, if any.
+  const [editingCourseId, setEditingCourseId] = useState<string | null>(null);
+  const editingCourse = selectedCourses.find(course => course.id === editingCourseId) ?? null;
+  const [regenerateKey, setRegenerateKey] = useState(0);
+
+  const cancelEdit = useCallback(() => setEditingCourseId(null), []);
+
+  // Saving replaces the course's slots and faculties, keeping its place in Your Courses.
+  const saveEdit = (editedCourse: fullCourseData) => {
+    setSelectedCourses(prevCourses =>
+      prevCourses.map(course => (course.id === editedCourse.id ? editedCourse : course))
+    );
+    setEditingCourseId(null);
+    setRegenerateKey(key => key + 1);
+  };
+
+  // Deleting the course being edited, on its own or with Remove all, cancels the edit.
+  const updateCourses = (updatedCourses: fullCourseData[]) => {
+    setSelectedCourses(updatedCourses);
+    if (editingCourseId && !updatedCourses.some(course => course.id === editingCourseId)) {
+      setEditingCourseId(null);
+    }
+  };
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -92,30 +118,41 @@ function Planner({
   }, [selectedCourses, storageKey]);
 
   return (
-    <>
-      <div className="w-4xl max-w-[calc(100%-2rem)] mx-4">
-        <FacultySelector
-          key={school}
-          selectedSchool={school}
-          dataOverride={facultyData}
-          storageKey={storageKey}
-          onConfirm={facultySelectorOnConfirm}
-        />
-      </div>
-      <TimetableProvider>
-        <div className="w-full px-8">
-          <CourseCard
-            selectedCourses={selectedCourses}
-            onDelete={id => setSelectedCourses(prev => prev.filter(c => c.id !== id))}
-            onUpdate={updatedCourses => setSelectedCourses(updatedCourses)}
+    <TimetableProvider>
+      <div className="relative z-10 w-full max-w-[1827px] px-8 mb-16 flex flex-col items-center gap-10 min-[1440px]:flex-row min-[1440px]:items-stretch min-[1440px]:gap-12 2xl:gap-[68px]">
+        <div className="w-full max-w-[943px] min-[1440px]:flex-[943_1_0%]">
+          <FacultySelector
+            key={school}
+            selectedSchool={school}
+            dataOverride={facultyData}
+            storageKey={storageKey}
+            onConfirm={facultySelectorOnConfirm}
+            courses={selectedCourses}
+            editingCourse={editingCourse}
+            onSaveEdit={saveEdit}
+            onCancelEdit={cancelEdit}
+            onVtopHelp={onVtopHelp}
           />
         </div>
-
-        <div className="w-screen p-0 m-0">
-          <ViewTimeTable />
+        <div className="w-full max-w-[943px] min-[1440px]:max-w-[752px] min-[1440px]:min-w-[640px] min-[1440px]:flex-[752_1_0%]">
+          <CourseCard
+            selectedCourses={selectedCourses}
+            onDelete={id => {
+              setSelectedCourses(prev => prev.filter(c => c.id !== id));
+              if (id === editingCourseId) setEditingCourseId(null);
+            }}
+            onUpdate={updateCourses}
+            editingCourseId={editingCourseId}
+            onEdit={course => setEditingCourseId(course.id)}
+            regenerateKey={regenerateKey}
+          />
         </div>
-      </TimetableProvider>
-    </>
+      </div>
+
+      <div className="w-screen p-0 m-0">
+        <ViewTimeTable />
+      </div>
+    </TimetableProvider>
   );
 }
 
@@ -206,6 +243,7 @@ export default function View() {
           school={school}
           facultyData={facultyData}
           storageKey={storageKey}
+          onVtopHelp={() => setShowSchoolPopup(true)}
         />
       </div>
       {showSchoolPopup && (

@@ -95,13 +95,6 @@ export default function Navbar({ page, school, vtopOn, onSchoolClick }: NavbarPr
                 )}
               </>
             )}
-            <div className="flex gap-4 mx-5 items-center max-xl:order-first max-xl:basis-full max-xl:justify-center max-xl:mx-0">
-              <div className="rounded-xl bg-[#FFEA79] text-black border-3 border-black shadow-[4px_4px_0_0_black] px-6 py-2 text-sm font-medium">
-                Can&apos;t find faculty for your branch? Use the My VTOP option to directly fetch
-                faculties from your VTOP.
-              </div>
-            </div>
-
             {(page === 'slots' || page === 'saved' || page === 'shared') && (
               <>
                 <FFCSButton />

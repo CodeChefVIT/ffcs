@@ -7,6 +7,7 @@ import { ZButton } from '../ui/Buttons';
 import { data as bundledData } from '@/data/faculty';
 import { fullCourseData } from '@/lib/type';
 import AlertModal from '../ui/AlertModal';
+import { useToast } from '../ui/Toast';
 import { course_type_map } from '@/lib/course_codes_map';
 import ComboBox, { MultiSelector } from '@/components/ui/ComboBox';
 
@@ -261,13 +262,29 @@ export default function FacultySelector({
   onConfirm,
   dataOverride: data = bundledData,
   storageKey = 'selectedCourses',
-  selectedSchool,
+  selectedSchool: chosenSchool,
+  courses = [],
+  editingCourse = null,
+  onSaveEdit,
+  onCancelEdit,
+  onVtopHelp,
 }: {
   onConfirm: (course: fullCourseData) => void;
   dataOverride?: FacultyData;
   storageKey?: string;
   selectedSchool: string;
+  // The courses already added, used to re-tick a course's faculties.
+  courses?: fullCourseData[];
+  // The course whose pencil was pressed. The box fills with it and Confirm saves over it.
+  editingCourse?: fullCourseData | null;
+  onSaveEdit?: (course: fullCourseData) => void;
+  onCancelEdit?: () => void;
+  // Lets students whose course isn't listed switch to My VTOP. Opens the school picker.
+  onVtopHelp?: () => void;
 }) {
+  // While editing, the box uses the school the course was added under, not the navbar's.
+  const [editSchool, setEditSchool] = useState<string | null>(null);
+  const selectedSchool = editingCourse && editSchool ? editSchool : chosenSchool;
   const [selectedLabShift, setSelectedLabShift] = useState<'' | ShiftKey>('');
   const [labShiftOptions, setLabShiftOptions] = useState<Record<ShiftKey, string[]>>({
     morning: [],
@@ -283,6 +300,7 @@ export default function FacultySelector({
   const [slots, setSlots] = useState<string[]>([]);
   const [faculties, setFaculties] = useState<string[]>([]);
   const [popup, setPopup] = useState({ showPopup: false, message: '' });
+  const toast = useToast();
 
   const LOCAL_STORAGE_KEY = storageKey;
 
@@ -299,15 +317,16 @@ export default function FacultySelector({
     setLabShiftOptions({ morning: [], evening: [] });
   };
 
-  const handleConfirm = () => {
+  // Builds the course from the box, or shows what's missing and returns null.
+  const buildCourse = (): fullCourseData | null => {
     if (!selectedDomain) {
       setPopup({ showPopup: true, message: 'Please select a domain.' });
-      return;
+      return null;
     }
 
     if (!selectedSubject) {
       setPopup({ showPopup: true, message: 'Please select a subject.' });
-      return;
+      return null;
     }
     const courseCode = selectedSubject.split(' - ')[0];
     const courseCodeType = getCourseType(
@@ -317,14 +336,14 @@ export default function FacultySelector({
 
     if (!selectedLabShift && courseCodeType === 'P' && !courseCode.startsWith('BSTS')) {
       setPopup({ showPopup: true, message: 'Please select a lab slot.' });
-      return;
+      return null;
     }
     if (
       selectedSlots.length === 0 &&
       (courseCodeType === 'L' || courseCodeType === 'E' || courseCode.startsWith('BSTS'))
     ) {
       setPopup({ showPopup: true, message: 'Please select a theory slot.' });
-      return;
+      return null;
     }
 
     if (priorityList.length === 0) {
@@ -332,9 +351,7 @@ export default function FacultySelector({
         showPopup: true,
         message: 'Please select at least one faculty.',
       });
-      return;
-    } else {
-      setPopup({ showPopup: true, message: 'Successfully added course' });
+      return null;
     }
 
     const id = selectedSubject;
@@ -394,7 +411,7 @@ export default function FacultySelector({
           showPopup: true,
           message: `Please select a faculty for slot ${emptySlot}.`,
         });
-        return;
+        return null;
       }
       if (courseType == 'both' || courseCodeType === 'E') {
         courseSlots = selectedSlots.flatMap(slot =>
@@ -426,7 +443,7 @@ export default function FacultySelector({
         });
       }
     }
-    const courseData: fullCourseData = {
+    return {
       id,
       courseType: courseCodeType === 'E' ? 'both' : courseType,
       courseCode,
@@ -436,8 +453,24 @@ export default function FacultySelector({
           courseCodeLab,
           courseNameLab,
         }),
+      school: selectedSchool,
+      domain: selectedDomain,
       courseSlots: courseSlots!,
     };
+  };
+
+  const handleConfirm = () => {
+    const courseData = buildCourse();
+    if (!courseData) return;
+    const id = courseData.id;
+
+    if (editingCourse) {
+      // Saving replaces the course as it is in the box, in the same place in Your Courses.
+      toast({ message: `Saved changes to ${courseData.courseCode}` });
+      onSaveEdit?.(courseData);
+      return;
+    }
+    toast({ message: 'Course successfully added' });
 
     try {
       if (typeof window !== 'undefined') {
@@ -612,40 +645,107 @@ export default function FacultySelector({
   const previousSlots = useRef<string[]>([]);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
     const isFirstSlot = previousSlots.current.length === 0;
     previousSlots.current = selectedSlots;
     if (!selectedSubject || (selectedSlots.length === 0 && !selectedLabShift)) return;
 
-    try {
-      const savedCoursesJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
-      const savedCourses: fullCourseData[] = savedCoursesJSON ? JSON.parse(savedCoursesJSON) : [];
+    const course = courses.find(c => c.id === selectedSubject);
+    if (!course) return;
 
-      const course = savedCourses.find(c => c.id === selectedSubject);
-
-      if (!course) return;
-
-      const matchingSlots = course.courseSlots.filter(slot => {
-        if (selectedLabShift) {
-          const shiftSlots = labShiftOptions[selectedLabShift] || [];
-          return shiftSlots.includes(slot.slotName);
-        }
-        return isFirstSlot && selectedSlots.includes(slot.slotName);
-      });
-      if (matchingSlots.length > 0) {
-        const allFaculties = matchingSlots.flatMap(slot =>
-          slot.slotFaculties.map(f => f.facultyName)
-        );
-
-        const uniqueFaculties = Array.from(new Set(allFaculties));
-
-        setSelectedFaculties(prev => Array.from(new Set([...prev, ...uniqueFaculties])));
-        setPriorityList(prev => Array.from(new Set([...prev, ...uniqueFaculties])));
+    const matchingSlots = course.courseSlots.filter(slot => {
+      if (selectedLabShift) {
+        const shiftSlots = labShiftOptions[selectedLabShift] || [];
+        return shiftSlots.includes(slot.slotName);
       }
-    } catch (err) {
-      console.error('Error restoring faculties from localStorage', err);
+      return isFirstSlot && selectedSlots.includes(slot.slotName);
+    });
+    if (matchingSlots.length > 0) {
+      const allFaculties = matchingSlots.flatMap(slot =>
+        slot.slotFaculties.map(f => f.facultyName)
+      );
+
+      const uniqueFaculties = Array.from(new Set(allFaculties));
+
+      setSelectedFaculties(prev => Array.from(new Set([...prev, ...uniqueFaculties])));
+      setPriorityList(prev => Array.from(new Set([...prev, ...uniqueFaculties])));
     }
-  }, [LOCAL_STORAGE_KEY, selectedSubject, selectedSlots, selectedLabShift, labShiftOptions]);
+  }, [courses, selectedSubject, selectedSlots, selectedLabShift, labShiftOptions]);
+
+  // A pressed pencil fills the box with its course. Saving or cancelling the edit clears it.
+  const wasEditing = useRef(false);
+  useEffect(() => {
+    if (!editingCourse) {
+      if (wasEditing.current) {
+        wasEditing.current = false;
+        setEditSchool(null);
+        setSelectedDomain('');
+        setSelectedSubject('');
+        setSelectedSlots([]);
+        setSubjects([]);
+        setSlots([]);
+        setFaculties([]);
+        setSelectedFaculties([]);
+        setPriorityList([]);
+        setSelectedLabShift('');
+        setLabShiftOptions({ morning: [], evening: [] });
+      }
+      return;
+    }
+    wasEditing.current = true;
+
+    // Use where the course was added. Courses saved before that was stored are looked up in
+    // the navbar's school first, then in every school.
+    const hasSubject = (school: string, domain: string) =>
+      !!data[school]?.[domain]?.[editingCourse.id];
+    let origin: { school: string; domain: string } | null = null;
+    if (
+      editingCourse.school &&
+      editingCourse.domain &&
+      hasSubject(editingCourse.school, editingCourse.domain)
+    ) {
+      origin = { school: editingCourse.school, domain: editingCourse.domain };
+    } else {
+      const schools = [chosenSchool, ...Object.keys(data).filter(s => s !== chosenSchool)];
+      for (const school of schools) {
+        const domain = Object.keys(data[school] ?? {}).find(d => hasSubject(school, d));
+        if (domain) {
+          origin = { school, domain };
+          break;
+        }
+      }
+    }
+    if (!origin) {
+      setPopup({
+        showPopup: true,
+        message: `${editingCourse.courseCode} isn't in the faculty data any more, so it can't be edited.`,
+      });
+      onCancelEdit?.();
+      return;
+    }
+
+    // Faculties keep their priority order: each slot lists them in the order they were ranked.
+    const facultyNames = [
+      ...new Set(
+        editingCourse.courseSlots.flatMap(slot => slot.slotFaculties.map(f => f.facultyName))
+      ),
+    ];
+    setEditSchool(origin.school);
+    setSelectedDomain(origin.domain);
+    setSelectedSubject(editingCourse.id);
+    if (editingCourse.courseType === 'lab') {
+      const firstLab = parseInt(
+        editingCourse.courseSlots[0]?.slotName.split('+')[0].replace('L', '') ?? '',
+        10
+      );
+      setSelectedSlots([]);
+      setSelectedLabShift(firstLab <= 30 ? 'morning' : 'evening');
+    } else {
+      setSelectedSlots(editingCourse.courseSlots.map(slot => slot.slotName));
+      setSelectedLabShift('');
+    }
+    setSelectedFaculties(facultyNames);
+    setPriorityList(facultyNames);
+  }, [editingCourse, data, chosenSchool, onCancelEdit]);
 
   const [tooltipFacultyIndex, setTooltipFacultyIndex] = React.useState<number | null>(null);
 
@@ -658,15 +758,22 @@ export default function FacultySelector({
   );
 
   return (
-    <div>
-      <div className="relative mb-20">
-        {selectedSchool === 'My VTOP' && (
-          <div className="absolute -top-8 left-8 z-10 flex h-10 items-center rounded-2xl border-3 border-black bg-ffcs-violet px-5 font-poppins text-base font-semibold shadow-hard">
-            My VTOP
-          </div>
-        )}
-        <div className="font-poppins relative bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[4px_4px_0_0_black] mx-auto overflow-hidden">
-          <div className="grid grid-cols-2 gap-x-5 gap-y-4 m-4 px-4 pt-2">
+    <div className="h-full">
+      <div className="relative h-full">
+        <div className="absolute -top-8 left-8 z-10 flex items-end gap-3 font-poppins">
+          {editingCourse && (
+            <div className="flex min-w-[276px] items-center justify-center rounded-2xl border-2 border-black bg-ffcs-yellow px-[22px] py-2 text-lg font-semibold shadow-[3px_3px_0_0_black]">
+              Editing {editingCourse.courseCode}
+            </div>
+          )}
+          {selectedSchool === 'My VTOP' && (
+            <div className="flex h-10 items-center rounded-2xl border-3 border-black bg-ffcs-violet px-5 text-base font-semibold shadow-hard">
+              My VTOP
+            </div>
+          )}
+        </div>
+        <div className="font-poppins relative h-full flex flex-col bg-ffcs-card rounded-[38px] border-3 border-black shadow-[5px_5px_0_0_black] overflow-hidden">
+          <div className="grid grid-cols-2 gap-x-5 gap-y-4 px-9 pt-7 pb-7">
             <div className="col-span-2">
               <ComboBox
                 label="Select domain"
@@ -674,6 +781,7 @@ export default function FacultySelector({
                 options={domains}
                 onChange={handleDomainChange}
                 renderOption={prettifyDomain}
+                disabled={!!editingCourse}
               />
             </div>
             <ComboBox
@@ -686,6 +794,19 @@ export default function FacultySelector({
               }
               searchOptions={schoolSubjectKeys}
               onChange={handleSubjectPick}
+              disabled={!!editingCourse}
+              footer={
+                selectedSchool !== 'My VTOP' && onVtopHelp
+                  ? {
+                      label: (
+                        <>
+                          Not listed? Fetch your faculties with <b>My VTOP</b>
+                        </>
+                      ),
+                      onClick: onVtopHelp,
+                    }
+                  : undefined
+              }
               renderOption={key => fromSubjectKey(key)[1]}
               renderHint={key => {
                 const domain = fromSubjectKey(key)[0];
@@ -722,14 +843,14 @@ export default function FacultySelector({
             )}
           </div>
 
-          <div className="w-full h-[2px] bg-black mt-6 mb-6" />
+          <div className="w-full h-[3px] bg-black" />
 
-          <div className="grid grid-cols-2 gap-4 px-4 pb-4 h-full m-4">
-            <div className="bg-[#FFFFFF]/40 rounded-xl overflow-hidden flex flex-col">
-              <div className="bg-[#FFFFFF]/60 text-center text-[#000000]/80 p-4 font-semibold text-lg">
+          <div className="grid grid-cols-2 gap-6 px-8 py-9 flex-1">
+            <div className="bg-[#FBFDFC]/40 rounded-3xl overflow-hidden flex flex-col">
+              <div className="bg-[#FFFFFF]/60 text-center text-[#000000]/80 h-[66px] flex items-center justify-center font-medium text-[26px]">
                 Select Faculties
               </div>
-              <div className="pt-4 pb-4 px-6 overflow-y-auto space-y-2 scrollbar-thin h-86">
+              <div className="pt-4 pb-4 px-6 overflow-y-auto space-y-2 scrollbar-thin h-[367px]">
                 {faculties.map((faculty: string, index: number) => {
                   let labTooltip = '';
 
@@ -820,7 +941,7 @@ export default function FacultySelector({
                             </div>
                           </div>
                         )}
-                        <span className="text-[#000000] relative">{faculty}</span>
+                        <span className="text-[#000000] text-[19px] relative">{faculty}</span>
                         <label className="inline-flex items-center gap-1 cursor-pointer">
                           <input
                             type="checkbox"
@@ -830,7 +951,7 @@ export default function FacultySelector({
                             aria-label={`Select faculty ${faculty}`}
                             title={`Select faculty ${faculty}`}
                           />
-                          <div className="w-7 h-7 rounded-md border-3 border-black flex items-center justify-center peer-checked:bg-[#C1FF83]">
+                          <div className="w-8 h-8 rounded-lg border-[2.5px] border-black bg-white flex items-center justify-center peer-checked:bg-[#C1FF83]">
                             <Image
                               src={
                                 selectedFaculties.includes(faculty)
@@ -863,11 +984,11 @@ export default function FacultySelector({
             </div>
 
             <div className="flex flex-col h-full justify-between">
-              <div className="bg-[#FFFFFF]/40 rounded-xl overflow-hidden mb-4">
-                <div className="bg-[#FFFFFF]/60 text-center text-[#000000]/80 p-4 font-semibold text-lg">
+              <div className="bg-[#FBFDFC]/40 rounded-3xl overflow-hidden mb-4">
+                <div className="bg-[#FFFFFF]/60 text-center text-[#000000]/80 h-[66px] flex items-center justify-center font-medium text-[26px]">
                   Faculty Priority
                 </div>
-                <div className="h-64 overflow-y-auto space-y-2 pb-4 pt-4 px-6 scrollbar-thin">
+                <div className="h-[268px] overflow-y-auto space-y-3 pb-4 pt-4 px-6 scrollbar-thin">
                   {priorityList.map((faculty, index) => (
                     <div
                       key={index}
@@ -890,7 +1011,7 @@ export default function FacultySelector({
                           <span className="text-[#000000] mr-5 font-inter font-semibold">
                             {index + 1}.
                           </span>
-                          <span className="text-[#000000]">{faculty}</span>
+                          <span className="text-[#000000] text-[19px]">{faculty}</span>
                         </div>
                         <div className="flex flex-col items-center gap-1 bg-[#FFFFFF]/50 px-2 py-1 rounded-lg">
                           <button
@@ -942,26 +1063,52 @@ export default function FacultySelector({
                     </div>
                   ))}
                 </div>
-                <div className="text-xs text-[#CC3312] p-3 text-center font-semibold">
+                <div className="text-sm text-[#CC3312] px-3 pt-1 pb-3 text-center">
                   *Use arrows or drag-drop to set faculty priority.
                 </div>
               </div>
 
-              <div className="flex flex-row flex-wrap justify-center gap-4">
-                <ZButton
-                  type="long"
-                  text="Reset"
-                  image="icons/reset.svg"
-                  onClick={handleReset}
-                  color="red"
-                />
-                <ZButton
-                  type="long"
-                  text="Confirm"
-                  image="icons/check.svg"
-                  onClick={handleConfirm}
-                  color="green"
-                />
+              <div className="flex flex-row flex-wrap justify-center gap-x-3 gap-y-3 md:gap-x-4">
+                {editingCourse ? (
+                  <>
+                    <ZButton
+                      type="wide"
+                      text="Cancel"
+                      onClick={() => onCancelEdit?.()}
+                      color="red"
+                    />
+                    <ZButton
+                      type="wide"
+                      // "Save changes" doesn't fit beside Cancel in the narrower columns.
+                      text={
+                        <>
+                          <span className="min-[1680px]:hidden">Save</span>
+                          <span className="hidden min-[1680px]:inline">Save changes</span>
+                        </>
+                      }
+                      image="icons/check.svg"
+                      onClick={handleConfirm}
+                      color="green"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <ZButton
+                      type="wide"
+                      text="Reset"
+                      image="icons/reset.svg"
+                      onClick={handleReset}
+                      color="red"
+                    />
+                    <ZButton
+                      type="wide"
+                      text="Confirm"
+                      image="icons/check.svg"
+                      onClick={handleConfirm}
+                      color="green"
+                    />
+                  </>
+                )}
               </div>
             </div>
           </div>
