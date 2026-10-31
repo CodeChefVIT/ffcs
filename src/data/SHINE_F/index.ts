@@ -5,9 +5,9 @@ import { CON } from './FCON';
 import { OEC } from './OEC';
 
 export const SHINE_BHTF = {
-  NC: NC,
-  UCC: UCC,
-  PCC: PCC,
-  FCON: CON,
-  OEC: OEC,
+  'Non-Credit Courses': NC,
+  'University Core Courses': UCC,
+  'Programme Core Courses': PCC,
+  'Concentration Courses': CON,
+  'Open Electives': OEC,
 };
