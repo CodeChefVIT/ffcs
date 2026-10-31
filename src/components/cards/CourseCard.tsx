@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useTimetable } from '../../lib/TimeTableContext';
 import Popup from '../ui/Popup';
 import { BasicToggleButton, ZButton } from '../ui/Buttons';
@@ -8,16 +8,26 @@ import { generateTT } from '@/lib/utils';
 import { fullCourseData } from '@/lib/type';
 import { setGlobalCourses } from '@/lib/globalCourses';
 import AlertModal from '../ui/AlertModal';
-import FacultyPriorityModal from '../ui/FacultyPriorityModal';
 
 type CourseCardProps = {
   selectedCourses: fullCourseData[];
   onDelete: (id: string) => void;
   onUpdate: (updatedCourses: fullCourseData[]) => void;
+  editingCourseId?: string | null;
+  onEdit?: (course: fullCourseData) => void;
+  // Goes up by one each time an edit is saved, so the timetables showing are generated again.
+  regenerateKey?: number;
 };
 
-export default function CourseCard({ selectedCourses, onDelete, onUpdate }: CourseCardProps) {
-  const { setTimetableData } = useTimetable();
+export default function CourseCard({
+  selectedCourses,
+  onDelete,
+  onUpdate,
+  editingCourseId = null,
+  onEdit,
+  regenerateKey = 0,
+}: CourseCardProps) {
+  const { timetableData, setTimetableData } = useTimetable();
 
   const draggedItemIndex = useRef<number | null>(null);
   const dragOverItemIndex = useRef<number | null>(null);
@@ -26,7 +36,6 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
   const [error, setError] = useState<string | null>(null);
   const [deletePopupOpen, setDeletePopupOpen] = useState(false);
   const [courseToDelete, setCourseToDelete] = useState<fullCourseData | null>(null);
-  const [courseToView, setCourseToView] = useState<fullCourseData | null>(null);
 
   const [allSubjectsMode, setAllSubjectsMode] = useState<'on' | 'off'>('on');
 
@@ -111,7 +120,7 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
     onUpdate(updatedCourses);
   };
 
-  const handleGenerate = async () => {
+  const generate = (scrollToTimetables: boolean) => {
     if (selectedCourses.length === 0) {
       setError('Please add at least one course to generate a timetable.');
       return;
@@ -140,10 +149,12 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
           color: 'red',
         });
 
-        setTimeout(() => {
-          const el = document.getElementById('timetable-view');
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
+        if (scrollToTimetables) {
+          setTimeout(() => {
+            const el = document.getElementById('timetable-view');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
+        }
       }
     } catch {
       setError('Failed to generate timetable. Please try again.');
@@ -151,6 +162,16 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
       setLoading(false);
     }
   };
+
+  const handleGenerate = () => generate(true);
+
+  // Saving an edit regenerates the timetables, if any are showing, without scrolling away.
+  const lastRegenerateKey = useRef(regenerateKey);
+  useEffect(() => {
+    if (regenerateKey === lastRegenerateKey.current) return;
+    lastRegenerateKey.current = regenerateKey;
+    if (timetableData && timetableData.length > 0) generate(false);
+  });
 
   return (
     <div className="h-full">
@@ -241,16 +262,16 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
               {/* Buttons */}
               <div className="flex items-center gap-1 shrink-0">
                 <button
-                  onClick={() => setCourseToView(course)}
+                  onClick={() => onEdit?.(course)}
                   onDragStart={e => e.stopPropagation()}
                   draggable={false}
-                  aria-label={`View faculty priorities for ${course.courseCode}`}
-                  aria-haspopup="dialog"
-                  className="bg-[#FFFFFF]/50 hover:bg-[#8BD5FF] text-black rounded-lg transition cursor-pointer w-8 h-8 flex items-center justify-center flex-shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                  aria-label={`Edit ${course.courseCode}`}
+                  aria-pressed={editingCourseId === course.id}
+                  className="bg-[#FFFFFF]/50 hover:bg-ffcs-violet text-black rounded-lg transition cursor-pointer w-8 h-8 flex items-center justify-center flex-shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
                   type="button"
-                  title="View faculty priorities"
+                  title="Edit course"
                 >
-                  <Image src="/icons/eye.svg" width={18} height={18} alt="" draggable={false} />
+                  <Image src="/icons/pencil.svg" width={16} height={16} alt="" draggable={false} />
                 </button>
                 <button
                   onClick={() => {
@@ -324,15 +345,17 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
           ))}
         </div>
 
-        <div className="flex justify-end mt-6">
-          <ZButton
-            type="regular"
-            text="Remove all"
-            image="/icons/trash.svg"
-            color="red"
-            onClick={() => setDeleteAllPopupOpen(true)}
-          />
-        </div>
+        {selectedCourses.length > 0 && (
+          <div className="flex justify-end mt-6">
+            <ZButton
+              type="regular"
+              text="Remove all"
+              image="/icons/trash.svg"
+              color="red"
+              onClick={() => setDeleteAllPopupOpen(true)}
+            />
+          </div>
+        )}
 
         <div className="flex justify-center mt-auto pt-8">
           <ZButton
@@ -351,21 +374,6 @@ export default function CourseCard({ selectedCourses, onDelete, onUpdate }: Cour
           </div>
         )}
       </div>
-
-      {courseToView && (
-        <FacultyPriorityModal
-          course={courseToView}
-          onClose={() => setCourseToView(null)}
-          onSave={courseSlots => {
-            onUpdate(
-              selectedCourses.map(course =>
-                course.id === courseToView.id ? { ...course, courseSlots } : course
-              )
-            );
-            setCourseToView(null);
-          }}
-        />
-      )}
 
       {deletePopupOpen && courseToDelete && (
         <Popup

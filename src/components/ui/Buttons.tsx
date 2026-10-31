@@ -8,7 +8,7 @@ type ButtonVariant = 'regular' | 'image' | 'long' | 'wide' | 'large' | 'small';
 
 type ZButtonProps = {
   type: ButtonVariant;
-  text?: string;
+  text?: React.ReactNode;
   color?: 'red' | 'yellow' | 'green' | 'green_2' | 'blue' | 'purple' | 'gray' | string;
   image?: string;
   imageSize?: number;

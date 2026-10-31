@@ -261,13 +261,26 @@ export default function FacultySelector({
   onConfirm,
   dataOverride: data = bundledData,
   storageKey = 'selectedCourses',
-  selectedSchool,
+  selectedSchool: chosenSchool,
+  courses = [],
+  editingCourse = null,
+  onSaveEdit,
+  onCancelEdit,
 }: {
   onConfirm: (course: fullCourseData) => void;
   dataOverride?: FacultyData;
   storageKey?: string;
   selectedSchool: string;
+  // The courses already added, used to re-tick a course's faculties.
+  courses?: fullCourseData[];
+  // The course whose pencil was pressed. The box fills with it and Confirm saves over it.
+  editingCourse?: fullCourseData | null;
+  onSaveEdit?: (course: fullCourseData) => void;
+  onCancelEdit?: () => void;
 }) {
+  // While editing, the box uses the school the course was added under, not the navbar's.
+  const [editSchool, setEditSchool] = useState<string | null>(null);
+  const selectedSchool = editingCourse && editSchool ? editSchool : chosenSchool;
   const [selectedLabShift, setSelectedLabShift] = useState<'' | ShiftKey>('');
   const [labShiftOptions, setLabShiftOptions] = useState<Record<ShiftKey, string[]>>({
     morning: [],
@@ -299,15 +312,16 @@ export default function FacultySelector({
     setLabShiftOptions({ morning: [], evening: [] });
   };
 
-  const handleConfirm = () => {
+  // Builds the course from the box, or shows what's missing and returns null.
+  const buildCourse = (): fullCourseData | null => {
     if (!selectedDomain) {
       setPopup({ showPopup: true, message: 'Please select a domain.' });
-      return;
+      return null;
     }
 
     if (!selectedSubject) {
       setPopup({ showPopup: true, message: 'Please select a subject.' });
-      return;
+      return null;
     }
     const courseCode = selectedSubject.split(' - ')[0];
     const courseCodeType = getCourseType(
@@ -317,14 +331,14 @@ export default function FacultySelector({
 
     if (!selectedLabShift && courseCodeType === 'P' && !courseCode.startsWith('BSTS')) {
       setPopup({ showPopup: true, message: 'Please select a lab slot.' });
-      return;
+      return null;
     }
     if (
       selectedSlots.length === 0 &&
       (courseCodeType === 'L' || courseCodeType === 'E' || courseCode.startsWith('BSTS'))
     ) {
       setPopup({ showPopup: true, message: 'Please select a theory slot.' });
-      return;
+      return null;
     }
 
     if (priorityList.length === 0) {
@@ -332,9 +346,7 @@ export default function FacultySelector({
         showPopup: true,
         message: 'Please select at least one faculty.',
       });
-      return;
-    } else {
-      setPopup({ showPopup: true, message: 'Successfully added course' });
+      return null;
     }
 
     const id = selectedSubject;
@@ -394,7 +406,7 @@ export default function FacultySelector({
           showPopup: true,
           message: `Please select a faculty for slot ${emptySlot}.`,
         });
-        return;
+        return null;
       }
       if (courseType == 'both' || courseCodeType === 'E') {
         courseSlots = selectedSlots.flatMap(slot =>
@@ -426,7 +438,7 @@ export default function FacultySelector({
         });
       }
     }
-    const courseData: fullCourseData = {
+    return {
       id,
       courseType: courseCodeType === 'E' ? 'both' : courseType,
       courseCode,
@@ -436,8 +448,24 @@ export default function FacultySelector({
           courseCodeLab,
           courseNameLab,
         }),
+      school: selectedSchool,
+      domain: selectedDomain,
       courseSlots: courseSlots!,
     };
+  };
+
+  const handleConfirm = () => {
+    const courseData = buildCourse();
+    if (!courseData) return;
+    const id = courseData.id;
+
+    if (editingCourse) {
+      // Saving replaces the course as it is in the box, in the same place in Your Courses.
+      setPopup({ showPopup: true, message: `Saved changes to ${courseData.courseCode}` });
+      onSaveEdit?.(courseData);
+      return;
+    }
+    setPopup({ showPopup: true, message: 'Successfully added course' });
 
     try {
       if (typeof window !== 'undefined') {
@@ -612,40 +640,107 @@ export default function FacultySelector({
   const previousSlots = useRef<string[]>([]);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
     const isFirstSlot = previousSlots.current.length === 0;
     previousSlots.current = selectedSlots;
     if (!selectedSubject || (selectedSlots.length === 0 && !selectedLabShift)) return;
 
-    try {
-      const savedCoursesJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
-      const savedCourses: fullCourseData[] = savedCoursesJSON ? JSON.parse(savedCoursesJSON) : [];
+    const course = courses.find(c => c.id === selectedSubject);
+    if (!course) return;
 
-      const course = savedCourses.find(c => c.id === selectedSubject);
-
-      if (!course) return;
-
-      const matchingSlots = course.courseSlots.filter(slot => {
-        if (selectedLabShift) {
-          const shiftSlots = labShiftOptions[selectedLabShift] || [];
-          return shiftSlots.includes(slot.slotName);
-        }
-        return isFirstSlot && selectedSlots.includes(slot.slotName);
-      });
-      if (matchingSlots.length > 0) {
-        const allFaculties = matchingSlots.flatMap(slot =>
-          slot.slotFaculties.map(f => f.facultyName)
-        );
-
-        const uniqueFaculties = Array.from(new Set(allFaculties));
-
-        setSelectedFaculties(prev => Array.from(new Set([...prev, ...uniqueFaculties])));
-        setPriorityList(prev => Array.from(new Set([...prev, ...uniqueFaculties])));
+    const matchingSlots = course.courseSlots.filter(slot => {
+      if (selectedLabShift) {
+        const shiftSlots = labShiftOptions[selectedLabShift] || [];
+        return shiftSlots.includes(slot.slotName);
       }
-    } catch (err) {
-      console.error('Error restoring faculties from localStorage', err);
+      return isFirstSlot && selectedSlots.includes(slot.slotName);
+    });
+    if (matchingSlots.length > 0) {
+      const allFaculties = matchingSlots.flatMap(slot =>
+        slot.slotFaculties.map(f => f.facultyName)
+      );
+
+      const uniqueFaculties = Array.from(new Set(allFaculties));
+
+      setSelectedFaculties(prev => Array.from(new Set([...prev, ...uniqueFaculties])));
+      setPriorityList(prev => Array.from(new Set([...prev, ...uniqueFaculties])));
     }
-  }, [LOCAL_STORAGE_KEY, selectedSubject, selectedSlots, selectedLabShift, labShiftOptions]);
+  }, [courses, selectedSubject, selectedSlots, selectedLabShift, labShiftOptions]);
+
+  // A pressed pencil fills the box with its course. Saving or cancelling the edit clears it.
+  const wasEditing = useRef(false);
+  useEffect(() => {
+    if (!editingCourse) {
+      if (wasEditing.current) {
+        wasEditing.current = false;
+        setEditSchool(null);
+        setSelectedDomain('');
+        setSelectedSubject('');
+        setSelectedSlots([]);
+        setSubjects([]);
+        setSlots([]);
+        setFaculties([]);
+        setSelectedFaculties([]);
+        setPriorityList([]);
+        setSelectedLabShift('');
+        setLabShiftOptions({ morning: [], evening: [] });
+      }
+      return;
+    }
+    wasEditing.current = true;
+
+    // Use where the course was added. Courses saved before that was stored are looked up in
+    // the navbar's school first, then in every school.
+    const hasSubject = (school: string, domain: string) =>
+      !!data[school]?.[domain]?.[editingCourse.id];
+    let origin: { school: string; domain: string } | null = null;
+    if (
+      editingCourse.school &&
+      editingCourse.domain &&
+      hasSubject(editingCourse.school, editingCourse.domain)
+    ) {
+      origin = { school: editingCourse.school, domain: editingCourse.domain };
+    } else {
+      const schools = [chosenSchool, ...Object.keys(data).filter(s => s !== chosenSchool)];
+      for (const school of schools) {
+        const domain = Object.keys(data[school] ?? {}).find(d => hasSubject(school, d));
+        if (domain) {
+          origin = { school, domain };
+          break;
+        }
+      }
+    }
+    if (!origin) {
+      setPopup({
+        showPopup: true,
+        message: `${editingCourse.courseCode} isn't in the faculty data any more, so it can't be edited.`,
+      });
+      onCancelEdit?.();
+      return;
+    }
+
+    // Faculties keep their priority order: each slot lists them in the order they were ranked.
+    const facultyNames = [
+      ...new Set(
+        editingCourse.courseSlots.flatMap(slot => slot.slotFaculties.map(f => f.facultyName))
+      ),
+    ];
+    setEditSchool(origin.school);
+    setSelectedDomain(origin.domain);
+    setSelectedSubject(editingCourse.id);
+    if (editingCourse.courseType === 'lab') {
+      const firstLab = parseInt(
+        editingCourse.courseSlots[0]?.slotName.split('+')[0].replace('L', '') ?? '',
+        10
+      );
+      setSelectedSlots([]);
+      setSelectedLabShift(firstLab <= 30 ? 'morning' : 'evening');
+    } else {
+      setSelectedSlots(editingCourse.courseSlots.map(slot => slot.slotName));
+      setSelectedLabShift('');
+    }
+    setSelectedFaculties(facultyNames);
+    setPriorityList(facultyNames);
+  }, [editingCourse, data, chosenSchool, onCancelEdit]);
 
   const [tooltipFacultyIndex, setTooltipFacultyIndex] = React.useState<number | null>(null);
 
@@ -660,13 +755,20 @@ export default function FacultySelector({
   return (
     <div className="h-full">
       <div className="relative h-full">
-        {selectedSchool === 'My VTOP' && (
-          <div className="absolute -top-8 left-8 z-10 flex h-10 items-center rounded-2xl border-3 border-black bg-ffcs-violet px-5 font-poppins text-base font-semibold shadow-hard">
-            My VTOP
-          </div>
-        )}
-        <div className="font-poppins relative bg-[#A7D5D7] rounded-4xl border-3 border-black shadow-[4px_4px_0_0_black] mx-auto overflow-hidden">
-          <div className="grid grid-cols-2 gap-x-5 gap-y-4 m-4 px-4 pt-2">
+        <div className="absolute -top-8 left-8 z-10 flex items-end gap-3 font-poppins">
+          {editingCourse && (
+            <div className="flex min-w-[276px] items-center justify-center rounded-2xl border-2 border-black bg-ffcs-yellow px-[22px] py-2 text-lg font-semibold shadow-[3px_3px_0_0_black]">
+              Editing {editingCourse.courseCode}
+            </div>
+          )}
+          {selectedSchool === 'My VTOP' && (
+            <div className="flex h-10 items-center rounded-2xl border-3 border-black bg-ffcs-violet px-5 text-base font-semibold shadow-hard">
+              My VTOP
+            </div>
+          )}
+        </div>
+        <div className="font-poppins relative h-full flex flex-col bg-ffcs-card rounded-[38px] border-3 border-black shadow-[5px_5px_0_0_black] overflow-hidden">
+          <div className="grid grid-cols-2 gap-x-5 gap-y-4 px-9 pt-7 pb-7">
             <div className="col-span-2">
               <ComboBox
                 label="Select domain"
@@ -674,6 +776,7 @@ export default function FacultySelector({
                 options={domains}
                 onChange={handleDomainChange}
                 renderOption={prettifyDomain}
+                disabled={!!editingCourse}
               />
             </div>
             <ComboBox
@@ -686,6 +789,7 @@ export default function FacultySelector({
               }
               searchOptions={schoolSubjectKeys}
               onChange={handleSubjectPick}
+              disabled={!!editingCourse}
               renderOption={key => fromSubjectKey(key)[1]}
               renderHint={key => {
                 const domain = fromSubjectKey(key)[0];
@@ -948,20 +1052,46 @@ export default function FacultySelector({
               </div>
 
               <div className="flex flex-row flex-wrap justify-center gap-x-3 gap-y-3 md:gap-x-4">
-                <ZButton
-                  type="wide"
-                  text="Reset"
-                  image="icons/reset.svg"
-                  onClick={handleReset}
-                  color="red"
-                />
-                <ZButton
-                  type="wide"
-                  text="Confirm"
-                  image="icons/check.svg"
-                  onClick={handleConfirm}
-                  color="green"
-                />
+                {editingCourse ? (
+                  <>
+                    <ZButton
+                      type="wide"
+                      text="Cancel"
+                      onClick={() => onCancelEdit?.()}
+                      color="red"
+                    />
+                    <ZButton
+                      type="wide"
+                      // "Save changes" doesn't fit beside Cancel in the narrower columns.
+                      text={
+                        <>
+                          <span className="min-[1680px]:hidden">Save</span>
+                          <span className="hidden min-[1680px]:inline">Save changes</span>
+                        </>
+                      }
+                      image="icons/check.svg"
+                      onClick={handleConfirm}
+                      color="green"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <ZButton
+                      type="wide"
+                      text="Reset"
+                      image="icons/reset.svg"
+                      onClick={handleReset}
+                      color="red"
+                    />
+                    <ZButton
+                      type="wide"
+                      text="Confirm"
+                      image="icons/check.svg"
+                      onClick={handleConfirm}
+                      color="green"
+                    />
+                  </>
+                )}
               </div>
             </div>
           </div>
