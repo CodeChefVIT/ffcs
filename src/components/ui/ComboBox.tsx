@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 type ComboBoxProps = {
   label: string;
@@ -14,6 +14,8 @@ type ComboBoxProps = {
   searchOptions?: string[];
   // Shows the value but can't be opened, changed or cleared.
   disabled?: boolean;
+  // A row pinned to the bottom of the open list, e.g. a way out when the option isn't there.
+  footer?: { label: ReactNode; onClick: () => void };
 };
 
 type MultiSelectorProps = {
@@ -79,6 +81,7 @@ export default function ComboBox({
   renderHint,
   searchOptions = options,
   disabled = false,
+  footer,
 }: ComboBoxProps) {
   const { isOpen, setIsOpen, ref } = useOpen();
   const [query, setQuery] = useState('');
@@ -157,6 +160,23 @@ export default function ComboBox({
               )}
             </li>
           ))}
+          {filteredOptions.length === 0 && (
+            <li className="px-3 py-2 text-sm font-medium text-ffcs-muted">No matches</li>
+          )}
+          {footer && (
+            <li className="sticky -bottom-1 -mx-1 -mb-1 mt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  footer.onClick();
+                }}
+                className="w-full cursor-pointer rounded-b-[13px] border-t-[2.5px] border-black bg-[#D3C4F7] px-4 py-2.5 text-left text-sm font-medium text-black hover:bg-ffcs-violet"
+              >
+                {footer.label}
+              </button>
+            </li>
+          )}
         </ul>
       )}
     </div>

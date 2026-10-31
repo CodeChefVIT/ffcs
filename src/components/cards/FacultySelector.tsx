@@ -267,6 +267,7 @@ export default function FacultySelector({
   editingCourse = null,
   onSaveEdit,
   onCancelEdit,
+  onVtopHelp,
 }: {
   onConfirm: (course: fullCourseData) => void;
   dataOverride?: FacultyData;
@@ -278,6 +279,8 @@ export default function FacultySelector({
   editingCourse?: fullCourseData | null;
   onSaveEdit?: (course: fullCourseData) => void;
   onCancelEdit?: () => void;
+  // Lets students whose course isn't listed switch to My VTOP. Opens the school picker.
+  onVtopHelp?: () => void;
 }) {
   // While editing, the box uses the school the course was added under, not the navbar's.
   const [editSchool, setEditSchool] = useState<string | null>(null);
@@ -792,6 +795,18 @@ export default function FacultySelector({
               searchOptions={schoolSubjectKeys}
               onChange={handleSubjectPick}
               disabled={!!editingCourse}
+              footer={
+                selectedSchool !== 'My VTOP' && onVtopHelp
+                  ? {
+                      label: (
+                        <>
+                          Not listed? Fetch your faculties with <b>My VTOP</b>
+                        </>
+                      ),
+                      onClick: onVtopHelp,
+                    }
+                  : undefined
+              }
               renderOption={key => fromSubjectKey(key)[1]}
               renderHint={key => {
                 const domain = fromSubjectKey(key)[0];
