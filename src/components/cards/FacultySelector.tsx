@@ -279,7 +279,7 @@ export default function FacultySelector({
   editingCourse?: fullCourseData | null;
   onSaveEdit?: (course: fullCourseData) => void;
   onCancelEdit?: () => void;
-  // Shows a tab for students whose branch has no faculties. Pressing it opens the school picker.
+  // Lets students whose course isn't listed switch to My VTOP. Opens the school picker.
   onVtopHelp?: () => void;
 }) {
   // While editing, the box uses the school the course was added under, not the navbar's.
@@ -771,18 +771,6 @@ export default function FacultySelector({
               My VTOP
             </div>
           )}
-          {!editingCourse && selectedSchool !== 'My VTOP' && onVtopHelp && (
-            <button
-              type="button"
-              onClick={onVtopHelp}
-              className="flex h-10 max-w-[calc(100vw-5rem)] cursor-pointer items-center rounded-2xl border-3 border-black bg-[#D3C4F7] px-4 text-sm font-medium shadow-hard transition-all duration-100 hover:bg-ffcs-violet active:translate-x-[2px] active:translate-y-[2px] active:shadow-hard-sm sm:px-5 sm:text-base"
-            >
-              <span className="truncate">
-                Can&apos;t find your faculty? Fetch them with{' '}
-                <b className="font-semibold">My VTOP</b>
-              </span>
-            </button>
-          )}
         </div>
         <div className="font-poppins relative h-full flex flex-col bg-ffcs-card rounded-[38px] border-3 border-black shadow-[5px_5px_0_0_black] overflow-hidden">
           <div className="grid grid-cols-2 gap-x-5 gap-y-4 px-9 pt-7 pb-7">
@@ -807,6 +795,18 @@ export default function FacultySelector({
               searchOptions={schoolSubjectKeys}
               onChange={handleSubjectPick}
               disabled={!!editingCourse}
+              footer={
+                selectedSchool !== 'My VTOP' && onVtopHelp
+                  ? {
+                      label: (
+                        <>
+                          Not listed? Fetch your faculties with <b>My VTOP</b>
+                        </>
+                      ),
+                      onClick: onVtopHelp,
+                    }
+                  : undefined
+              }
               renderOption={key => fromSubjectKey(key)[1]}
               renderHint={key => {
                 const domain = fromSubjectKey(key)[0];
