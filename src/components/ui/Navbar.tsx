@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { CCButton, FFCSButton, ZButton } from './Buttons';
 import { useRouter } from 'next/navigation';
 import { useSession, signIn, signOut } from 'next-auth/react';
@@ -95,12 +96,19 @@ export default function Navbar({ page, school, vtopOn, onSchoolClick }: NavbarPr
                 )}
               </>
             )}
-            <div className="flex gap-4 mx-5 items-center max-xl:order-first max-xl:basis-full max-xl:justify-center max-xl:mx-0">
-              <div className="rounded-xl bg-[#FFEA79] text-black border-3 border-black shadow-[4px_4px_0_0_black] px-6 py-2 text-sm font-medium">
-                Can&apos;t find faculty for your branch? Use the My VTOP option to directly fetch
-                faculties from your VTOP.
+            {onSchoolClick && !vtopOn && (
+              <div className="mx-5 flex items-center max-xl:order-first max-xl:mx-0 max-xl:basis-full max-xl:justify-center">
+                <div className="flex max-w-[34rem] items-center gap-3 rounded-2xl border-3 border-black bg-ffcs-violet py-2 pl-3 pr-5 font-poppins text-sm font-medium text-black shadow-hard">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-black bg-ffcs-yellow">
+                    <Image src="/icons/qmark.svg" width={14} height={14} alt="" draggable={false} />
+                  </span>
+                  <p>
+                    Can&apos;t find faculty for your branch? Choose <b>My VTOP</b> to fetch
+                    faculties straight from your VTOP.
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
 
             {(page === 'slots' || page === 'saved' || page === 'shared') && (
               <>
