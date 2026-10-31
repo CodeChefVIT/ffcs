@@ -23,10 +23,12 @@ function Planner({
   facultyData,
   storageKey,
   school,
+  onVtopHelp,
 }: {
   facultyData: FacultyData;
   storageKey: string;
   school: string;
+  onVtopHelp: () => void;
 }) {
   const [selectedCourses, setSelectedCourses] = useState<fullCourseData[]>(() => {
     if (typeof window === 'undefined') return [];
@@ -129,6 +131,7 @@ function Planner({
             editingCourse={editingCourse}
             onSaveEdit={saveEdit}
             onCancelEdit={cancelEdit}
+            onVtopHelp={onVtopHelp}
           />
         </div>
         <div className="w-full max-w-[943px] min-[1440px]:max-w-[752px] min-[1440px]:min-w-[640px] min-[1440px]:flex-[752_1_0%]">
@@ -240,6 +243,7 @@ export default function View() {
           school={school}
           facultyData={facultyData}
           storageKey={storageKey}
+          onVtopHelp={() => setShowSchoolPopup(true)}
         />
       </div>
       {showSchoolPopup && (
