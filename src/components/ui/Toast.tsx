@@ -14,9 +14,9 @@ type ToastOptions = {
 type ToastItem = ToastOptions & { id: number };
 
 const colors = {
-  green: 'bg-ffcs-popup-green',
-  red: 'bg-ffcs-popup-red',
-  yellow: 'bg-ffcs-popup-yellow',
+  green: 'bg-ffcs-green',
+  red: 'bg-ffcs-red',
+  yellow: 'bg-ffcs-yellow',
 };
 
 const ToastContext = createContext<(options: ToastOptions) => void>(() => {});
@@ -47,9 +47,9 @@ function ToastCard({ toast, onClose }: { toast: ToastItem; onClose: () => void }
       role="status"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      className={`${colors[toast.color ?? 'green']} pointer-events-auto relative flex w-full max-w-md animate-in slide-in-from-top-8 fade-in duration-300 items-center gap-3 overflow-hidden rounded-2xl border-3 border-black px-4 py-3 font-poppins text-base font-medium text-black shadow-hard`}
+      className={`${colors[toast.color ?? 'green']} pointer-events-auto relative flex w-fit max-w-full animate-in slide-in-from-top-8 fade-in duration-300 items-center gap-3 overflow-hidden rounded-2xl border-3 border-black py-2.5 pl-4 pr-3 font-poppins text-sm font-medium text-black shadow-hard sm:text-base`}
     >
-      <span className="flex-1">{toast.message}</span>
+      <span className="min-w-0">{toast.message}</span>
       {toast.onUndo && (
         <button
           type="button"
@@ -57,7 +57,7 @@ function ToastCard({ toast, onClose }: { toast: ToastItem; onClose: () => void }
             toast.onUndo?.();
             onClose();
           }}
-          className="cursor-pointer rounded-lg border-2 border-black bg-ffcs-yellow px-3 py-0.5 text-sm font-semibold shadow-hard-sm active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
+          className="cursor-pointer rounded-lg border-2 border-black bg-transparent px-3 py-0.5 text-sm font-semibold text-black shadow-hard-sm active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
         >
           Undo
         </button>
@@ -66,7 +66,7 @@ function ToastCard({ toast, onClose }: { toast: ToastItem; onClose: () => void }
         type="button"
         onClick={onClose}
         aria-label="Close"
-        className="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-lg bg-white/50 text-lg leading-none hover:bg-white/80"
+        className="shrink-0 cursor-pointer px-1 text-2xl leading-none text-black"
       >
         ×
       </button>
