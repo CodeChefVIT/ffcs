@@ -12,6 +12,8 @@ type ComboBoxProps = {
   renderHint?: (val: string) => string;
   // Options searched once the student types. Defaults to `options`.
   searchOptions?: string[];
+  // Shows the value but can't be opened, changed or cleared.
+  disabled?: boolean;
 };
 
 type MultiSelectorProps = {
@@ -31,11 +33,21 @@ const icon = (src: string, size: string) => (
   <Image src={src} alt="icon" width={20} height={20} className={size} draggable={false} />
 );
 
-function Chevron({ open, onClick }: { open: boolean; onClick?: () => void }) {
+function Chevron({
+  open,
+  onClick,
+  disabled = false,
+}: {
+  open: boolean;
+  onClick?: () => void;
+  disabled?: boolean;
+}) {
   return (
     <span
-      onClick={onClick}
-      className="flex items-center justify-center w-12 shrink-0 border-l-[2.5px] border-black bg-white/35 cursor-pointer"
+      onClick={disabled ? undefined : onClick}
+      className={`flex items-center justify-center w-12 shrink-0 border-l-[2.5px] border-black bg-white/35 ${
+        disabled ? 'cursor-not-allowed' : 'cursor-pointer'
+      }`}
     >
       {icon('/icons/chevron_down.svg', `w-3 h-3 ${open ? 'rotate-180' : ''}`)}
     </span>
@@ -66,6 +78,7 @@ export default function ComboBox({
   renderOption = option => option,
   renderHint,
   searchOptions = options,
+  disabled = false,
 }: ComboBoxProps) {
   const { isOpen, setIsOpen, ref } = useOpen();
   const [query, setQuery] = useState('');
@@ -77,7 +90,7 @@ export default function ComboBox({
   );
 
   const open = () => {
-    if (isOpen) return;
+    if (isOpen || disabled) return;
     setQuery('');
     setIsOpen(true);
   };
@@ -101,10 +114,11 @@ export default function ComboBox({
             setQuery(e.target.value);
             setIsOpen(true);
           }}
-          className="flex-1 min-w-0 px-4 bg-transparent text-lg font-medium text-black placeholder:text-ffcs-muted truncate outline-none"
+          disabled={disabled}
+          className="flex-1 min-w-0 px-4 bg-transparent text-lg font-medium text-black placeholder:text-ffcs-muted truncate outline-none disabled:cursor-not-allowed"
         />
 
-        {value && !isOpen && (
+        {value && !isOpen && !disabled && (
           <button
             type="button"
             aria-label="Clear"
@@ -117,6 +131,7 @@ export default function ComboBox({
         )}
         <Chevron
           open={isOpen}
+          disabled={disabled}
           onClick={() => {
             if (isOpen) return setIsOpen(false);
             open();
@@ -158,14 +173,18 @@ export function MultiSelector({ label, values, options, onChange }: MultiSelecto
   return (
     <div ref={ref} className="relative w-full font-semibold">
       <div className={`${boxClass} cursor-pointer`} onClick={() => setIsOpen(!isOpen)}>
-        <div className="flex flex-1 min-w-0 items-center gap-1 px-3">
+        {/* Tags sit 5px from the box's top, bottom and left. Their radius is the box's inner
+            radius (16px corner - 2.5px border) minus that 5px, so the corners stay parallel. */}
+        <div className="flex flex-1 min-w-0 items-center gap-1 pl-[5px] pr-3">
           {values.length === 0 && (
-            <span className="px-1 truncate text-lg font-medium text-ffcs-muted">{label}</span>
+            <span className="pl-[11px] pr-1 truncate text-lg font-medium text-ffcs-muted">
+              {label}
+            </span>
           )}
           {shown.map(slot => (
             <span
               key={slot}
-              className="flex items-center gap-1 shrink-0 h-6 pl-2 pr-1 rounded-md border-2 border-black bg-[#FFEA79] text-sm"
+              className="flex items-center gap-1 shrink-0 h-[calc(100%-10px)] px-2 rounded-[8.5px] bg-ffcs-yellow text-sm"
             >
               {slot}
               <button
