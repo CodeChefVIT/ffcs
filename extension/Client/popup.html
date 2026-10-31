@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My VTOP courses</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <h1>My VTOP courses</h1>
+    <p>
+      Log in to VTOP. Your available courses are fetched automatically in the background. Watch the
+      progress banner, then use Go to Inator.
+    </p>
+    <p id="status" role="status" aria-live="polite">Checking browser storage...</p>
+    <button id="capture">Sync from VTOP</button>
+    <a href="https://ffcs.codechefvit.com/#start" target="_blank" rel="noreferrer"
+      >Open FFCS-inator</a
+    >
+    <button id="clear" class="secondary">Delete captured data / stop sync</button>
+    <p class="note">
+      Course data stays in this browser. No password or cookies are saved. In FFCS-inator, click My
+      VTOP.
+    </p>
+    <script src="popup.js"></script>
+  </body>
+</html>

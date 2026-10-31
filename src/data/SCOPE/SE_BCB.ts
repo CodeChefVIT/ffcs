@@ -1,32 +1,33 @@
 export const SE_BCB = {
   'BBIT207L - Molecular Biology': [
-    { slot: 'A1+TA1', venue: 'PRP732', faculty: 'ABUL KALAM AZAD MANDAL' },
+    { slot: 'C2+TC2', venue: 'SJT603', faculty: 'ABUL KALAM AZAD MANDAL' },
+    { slot: 'C1+TC1', venue: 'SJT603', faculty: 'ABUL KALAM AZAD MANDAL' },
   ],
   'BBIT207P - Molecular Biology Lab': [
-    { slot: 'L43+L44', venue: 'SMV225', faculty: 'ABUL KALAM AZAD MANDAL' },
+    { slot: 'L57+L58', venue: 'SMV212', faculty: 'ABUL KALAM AZAD MANDAL' },
+    { slot: 'L23+L24', venue: 'SMV212', faculty: 'ABUL KALAM AZAD MANDAL' },
+    { slot: 'L57+L58', venue: 'SMV212', faculty: 'SIVA R' },
+    { slot: 'L23+L24', venue: 'SMV212', faculty: 'VENKATRAMAN M' },
   ],
-  'BBIT208L - Biochemistry': [{ slot: 'B1+TB1', venue: 'PRP332', faculty: 'DEVI RAJESWARI V' }],
+  'BBIT208L - Biochemistry': [
+    { slot: 'D1+TD1', venue: 'TT333', faculty: 'SABINA E.P' },
+    { slot: 'D2+TD2', venue: 'TT204', faculty: 'SABINA E.P' },
+  ],
   'BBIT324L - Cell Biology and Genetics': [
-    { slot: 'C1+TC1', venue: 'PRP330', faculty: 'NAVEEN KUMAR P' },
-    { slot: 'C2+TC2', venue: 'PRP330', faculty: 'NAVEEN KUMAR P' },
+    { slot: 'B1+TB1', venue: 'SJT109', faculty: 'SUNITA NAYAK' },
+    { slot: 'B2+TB2', venue: 'SJT113', faculty: 'SUNITA NAYAK' },
   ],
   'BBIT327L - Data Analytics in Bioinformatics': [
-    { slot: 'D1+TD1', venue: 'SJT627', faculty: 'BHARAT MANNA' },
+    { slot: 'F1+TF1', venue: 'SJT101', faculty: 'SAJITHA LULU S' },
   ],
   'BBIT417L - Analytical Bioinformatics': [
-    { slot: 'E2+TE2', venue: 'SJT208', faculty: 'MANOJ KUMAR P' },
-    { slot: 'E1+TE1', venue: 'SJT522', faculty: 'MOHANA PRIYA A' },
+    { slot: 'A1+TA1', venue: 'SJT101', faculty: 'MOHANA PRIYA A' },
   ],
   'BBIT417P - Analytical Bioinformatics Lab': [
-    { slot: 'L13+L14', venue: 'SMVG15', faculty: 'MANOJ KUMAR P' },
-    { slot: 'L45+L46', venue: 'SMVG15', faculty: 'MOHANA PRIYA A' },
+    { slot: 'L31+L32', venue: 'SJT316', faculty: 'MOHANA PRIYA A' },
   ],
-  'BBIT418L - Biological Databases': [
-    { slot: 'F1+TF1', venue: 'SJT324', faculty: 'SATARUPA BANERJEE' },
-    { slot: 'F2+TF2', venue: 'PRP333', faculty: 'SATARUPA BANERJEE' },
-  ],
+  'BBIT418L - Biological Databases': [{ slot: 'G1+TG1', venue: 'SJT104', faculty: 'RAJINIRAJA M' }],
   'BBIT418P - Biological Databases Lab': [
-    { slot: 'L5+L6', venue: 'SMVG15', faculty: 'SATARUPA BANERJEE' },
-    { slot: 'L37+L38', venue: 'SMVG15', faculty: 'SATARUPA BANERJEE' },
+    { slot: 'L57+L58', venue: 'SMVG15', faculty: 'RAJINIRAJA M' },
   ],
 };

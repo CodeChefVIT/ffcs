@@ -7,8 +7,8 @@ export const CON_BYB = {
     { slot: "A1+TA1", venue: "SJT302", faculty: "SHANTHARAJAH S P" },
     { slot: "L53+L54", venue: "SJT217", faculty: "SHANTHARAJAH S P" },
   ],
-  "BACSE320 - Penetration Testing and Vulnerability Assessment": [
-    { slot: "B2+TB2", venue: "PRP308", faculty: "ROHITH R" },
-    { slot: "L21+L22", venue: "PRP350", faculty: "ROHITH R" },
+  'BACSE320 - Penetration Testing and Vulnerability Assessment': [
+    { slot: 'B2+TB2', venue: 'PRP308', faculty: 'ROHITH R' },
+    { slot: 'L21+L22', venue: 'PRP350', faculty: 'ROHITH R' },
   ],
 };

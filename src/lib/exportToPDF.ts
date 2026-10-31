@@ -6,17 +6,25 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 import type { TDocumentDefinitions } from 'pdfmake/interfaces';
 import { getCurrentDateTime } from './utils';
 
-(pdfMake as typeof pdfMake & { vfs: Record<string, string> }).vfs =
-  pdfFonts.vfs as unknown as Record<string, string>;
+const vfs =
+  (pdfFonts as { vfs?: Record<string, string> })?.vfs ||
+  (pdfFonts as { pdfMake?: { vfs?: Record<string, string> } })?.pdfMake?.vfs ||
+  (pdfFonts as unknown as Record<string, string>);
+
+if (vfs) {
+  (pdfMake as typeof pdfMake & { vfs: Record<string, string> }).vfs = vfs;
+}
 
 interface TableCell {
   text: string;
   alignment: 'left' | 'center' | 'right';
   margin: [number, number];
   valign: 'top';
+  bold?: boolean;
+  color?: string;
 }
 
-export const exportToPDF = async (): Promise<void> => {
+export const exportToPDF = async (coursesToExport?: fullCourseData[]): Promise<void> => {
   const colors = {
     pageBg: '#FFFFFF',
     headerBg: '#7AC1C2',
@@ -26,9 +34,13 @@ export const exportToPDF = async (): Promise<void> => {
     text: '#000000',
   };
 
-  const courses: fullCourseData[] = getGlobalCourses();
+  const courses: fullCourseData[] =
+    coursesToExport && coursesToExport.length > 0 ? coursesToExport : getGlobalCourses();
+
   if (!courses || courses.length === 0) {
-    throw new Error('No course data available to export.');
+    throw new Error(
+      'No course data available to export. Please select courses on the home page first.'
+    );
   }
 
   const dateTime = getCurrentDateTime();

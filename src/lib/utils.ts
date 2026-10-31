@@ -27,16 +27,20 @@ export function generateTT(
           }
         }
       } else if (course.courseType === 'both') {
+        // Embedded courses have no separate lab course, so their lab uses the course's own code and name.
+        const labCode = course.courseCodeLab || course.courseCode;
+        const labName = course.courseNameLab || course.courseName;
         for (const slot of course.courseSlots) {
           for (const faculty of slot.slotFaculties) {
             if (faculty.facultyLabSlot) {
               const labSlots = faculty.facultyLabSlot.split(', ');
               for (const labSlot of labSlots) {
                 subjectOptions.push({
-                  courseCode: course.courseCode + '__' + course.courseCodeLab,
-                  courseName: course.courseName + '__' + course.courseNameLab,
+                  courseCode: course.courseCode + '__' + labCode,
+                  courseName: course.courseName + '__' + labName,
                   slotName: slot.slotName + '__' + labSlot,
                   facultyName: faculty.facultyName,
+                  labVenue: faculty.labVenues?.[labSlot],
                   ...((faculty as { venue?: string }).venue
                     ? { venue: (faculty as { venue?: string }).venue }
                     : {}),
@@ -165,7 +169,7 @@ function breakClubbed(combinations: timetableDisplayData[][]): timetableDisplayD
             courseName: labName,
             slotName: labSlots,
             facultyName: item.facultyName,
-            venue: item.venue,
+            venue: item.labVenue,
           },
         ];
       }

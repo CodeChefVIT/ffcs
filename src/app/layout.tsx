@@ -3,32 +3,33 @@ import './globals.css';
 import SessionProviderWrapper from './SessionProvider';
 import ServiceWorkerRegister from '../components/ServiceWorkerRegister/ServiceWorkerRegister';
 import Script from 'next/script';
+import { Analytics } from '@vercel/analytics/next';
 
 const pangolin = Pangolin({
   weight: '400',
   subsets: ['latin'],
-  variable: '--font-pangolin',
+  variable: '--next-font-pangolin',
   display: 'swap',
 });
 
 const poppins = Poppins({
   weight: ['400', '500', '600', '700'],
   subsets: ['latin'],
-  variable: '--font-poppins',
+  variable: '--next-font-poppins',
   display: 'swap',
 });
 
 const inter = Inter({
   weight: ['400', '500', '600', '700'],
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--next-font-inter',
   display: 'swap',
 });
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   weight: ['500'],
   subsets: ['latin'],
-  variable: '--font-plus-jakarta-sans',
+  variable: '--next-font-jakarta',
   display: 'swap',
 });
 
@@ -79,10 +80,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </Script>
       </head>
       <body
+        suppressHydrationWarning
         className={`${pangolin.variable} ${poppins.variable} ${inter.variable} ${plusJakartaSans.variable} antialiased bg-[#CEE4E5] select-none`}
       >
         <SessionProviderWrapper>{children}</SessionProviderWrapper>
         <ServiceWorkerRegister />
+        <Analytics />
       </body>
     </html>
   );
