@@ -2,7 +2,7 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
-const DURATION_MS = 5000;
+const DURATION_MS = 8000;
 
 type ToastOptions = {
   message: string;
@@ -24,7 +24,6 @@ const ToastContext = createContext<(options: ToastOptions) => void>(() => {});
 export const useToast = () => useContext(ToastContext);
 
 function ToastCard({ toast, onClose }: { toast: ToastItem; onClose: () => void }) {
-  const [secondsLeft, setSecondsLeft] = useState(Math.ceil(DURATION_MS / 1000));
   const [paused, setPaused] = useState(false);
   const remaining = useRef(DURATION_MS);
   const closeRef = useRef(onClose);
@@ -37,12 +36,8 @@ function ToastCard({ toast, onClose }: { toast: ToastItem; onClose: () => void }
     if (paused) return;
     const start = Date.now();
     const timeout = setTimeout(() => closeRef.current(), remaining.current);
-    const tick = setInterval(() => {
-      setSecondsLeft(Math.max(1, Math.ceil((remaining.current - (Date.now() - start)) / 1000)));
-    }, 200);
     return () => {
       clearTimeout(timeout);
-      clearInterval(tick);
       remaining.current -= Date.now() - start;
     };
   }, [paused]);
@@ -67,7 +62,6 @@ function ToastCard({ toast, onClose }: { toast: ToastItem; onClose: () => void }
           Undo
         </button>
       )}
-      <span className="w-4 text-center text-sm font-semibold tabular-nums">{secondsLeft}</span>
       <button
         type="button"
         onClick={onClose}
