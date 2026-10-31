@@ -7,6 +7,7 @@ import { ZButton } from '../ui/Buttons';
 import { data as bundledData } from '@/data/faculty';
 import { fullCourseData } from '@/lib/type';
 import AlertModal from '../ui/AlertModal';
+import { useToast } from '../ui/Toast';
 import { course_type_map } from '@/lib/course_codes_map';
 import ComboBox, { MultiSelector } from '@/components/ui/ComboBox';
 
@@ -296,6 +297,7 @@ export default function FacultySelector({
   const [slots, setSlots] = useState<string[]>([]);
   const [faculties, setFaculties] = useState<string[]>([]);
   const [popup, setPopup] = useState({ showPopup: false, message: '' });
+  const toast = useToast();
 
   const LOCAL_STORAGE_KEY = storageKey;
 
@@ -461,11 +463,11 @@ export default function FacultySelector({
 
     if (editingCourse) {
       // Saving replaces the course as it is in the box, in the same place in Your Courses.
-      setPopup({ showPopup: true, message: `Saved changes to ${courseData.courseCode}` });
+      toast({ message: `Saved changes to ${courseData.courseCode}` });
       onSaveEdit?.(courseData);
       return;
     }
-    setPopup({ showPopup: true, message: 'Successfully added course' });
+    toast({ message: 'Course successfully added' });
 
     try {
       if (typeof window !== 'undefined') {

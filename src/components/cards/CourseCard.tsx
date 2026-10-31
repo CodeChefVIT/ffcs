@@ -1,13 +1,13 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import { useTimetable } from '../../lib/TimeTableContext';
-import Popup from '../ui/Popup';
 import { BasicToggleButton, ZButton } from '../ui/Buttons';
 import Image from 'next/image';
 import { generateTT } from '@/lib/utils';
 import { fullCourseData } from '@/lib/type';
 import { setGlobalCourses } from '@/lib/globalCourses';
 import AlertModal from '../ui/AlertModal';
+import { useToast } from '../ui/Toast';
 
 type CourseCardProps = {
   selectedCourses: fullCourseData[];
@@ -34,13 +34,16 @@ export default function CourseCard({
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [deletePopupOpen, setDeletePopupOpen] = useState(false);
-  const [courseToDelete, setCourseToDelete] = useState<fullCourseData | null>(null);
+  const toast = useToast();
+  // Undo puts things back into the list as it is by then, not as it was when the toast opened.
+  const latestCourses = useRef(selectedCourses);
+  useEffect(() => {
+    latestCourses.current = selectedCourses;
+  });
 
   const [allSubjectsMode, setAllSubjectsMode] = useState<'on' | 'off'>('on');
 
   const [showInfo, setShowInfo] = useState(false);
-  const [deleteAllPopupOpen, setDeleteAllPopupOpen] = useState(false);
 
   const [alert, setAlert] = useState({
     open: false,
@@ -49,9 +52,20 @@ export default function CourseCard({
   });
 
   const handleDeleteAllCourses = () => {
+    const removed = selectedCourses;
+    if (removed.length === 0) return;
     onUpdate([]);
     setGlobalCourses([]);
     setTimetableData(null);
+    toast({
+      message: 'All courses removed',
+      color: 'red',
+      onUndo: () => {
+        const restored = [...removed, ...latestCourses.current];
+        onUpdate(restored);
+        setGlobalCourses(restored);
+      },
+    });
   };
 
   const resetDragRefs = () => {
@@ -59,20 +73,27 @@ export default function CourseCard({
     dragOverItemIndex.current = null;
   };
 
-  const confirmDeleteCourse = () => {
-    if (courseToDelete) {
-      const updatedCourses = selectedCourses.filter(c => c.id !== courseToDelete.id);
-      onDelete(courseToDelete.id);
-      onUpdate(updatedCourses);
+  const deleteCourse = (course: fullCourseData) => {
+    const index = selectedCourses.findIndex(c => c.id === course.id);
+    const updatedCourses = selectedCourses.filter(c => c.id !== course.id);
+    onDelete(course.id);
+    onUpdate(updatedCourses);
 
-      setGlobalCourses(updatedCourses);
-      if (updatedCourses.length === 0) {
-        setTimetableData(null);
-      }
+    setGlobalCourses(updatedCourses);
+    if (updatedCourses.length === 0) {
+      setTimetableData(null);
     }
 
-    setDeletePopupOpen(false);
-    setCourseToDelete(null);
+    toast({
+      message: `${course.courseCode} removed`,
+      color: 'red',
+      onUndo: () => {
+        const restored = [...latestCourses.current];
+        restored.splice(Math.min(index, restored.length), 0, course);
+        onUpdate(restored);
+        setGlobalCourses(restored);
+      },
+    });
   };
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
@@ -274,10 +295,7 @@ export default function CourseCard({
                   <Image src="/icons/pencil.svg" width={16} height={16} alt="" draggable={false} />
                 </button>
                 <button
-                  onClick={() => {
-                    setCourseToDelete(course);
-                    setDeletePopupOpen(true);
-                  }}
+                  onClick={() => deleteCourse(course)}
                   aria-label="Delete Course"
                   className="bg-[#FFFFFF]/50 hover:bg-[#F08585] text-black rounded-lg transition cursor-pointer w-8 h-8 flex items-center justify-center flex-shrink-0"
                   type="button"
@@ -352,7 +370,7 @@ export default function CourseCard({
               text="Remove all"
               image="/icons/trash.svg"
               color="red"
-              onClick={() => setDeleteAllPopupOpen(true)}
+              onClick={handleDeleteAllCourses}
             />
           </div>
         )}
@@ -374,33 +392,6 @@ export default function CourseCard({
           </div>
         )}
       </div>
-
-      {deletePopupOpen && courseToDelete && (
-        <Popup
-          type="rem_course"
-          dataBody={
-            courseToDelete.courseName +
-            (courseToDelete.courseNameLab ? ` & ${courseToDelete.courseNameLab}` : '')
-          }
-          action={confirmDeleteCourse}
-          closeLink={() => {
-            setDeletePopupOpen(false);
-            setCourseToDelete(null);
-          }}
-        />
-      )}
-
-      {deleteAllPopupOpen && (
-        <Popup
-          type="rem_allcourse"
-          dataBody=""
-          action={() => {
-            handleDeleteAllCourses();
-            setDeleteAllPopupOpen(false);
-          }}
-          closeLink={() => setDeleteAllPopupOpen(false)}
-        />
-      )}
     </div>
   );
 }
